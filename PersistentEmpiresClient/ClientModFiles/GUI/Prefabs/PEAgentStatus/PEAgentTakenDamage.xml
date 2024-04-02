@@ -1,0 +1,30 @@
+<Prefab>
+  <Constants>
+    <Constant Name="TakenDamage.Visual.Width.Horizontal" BrushName="Mission.TakenDamage" BrushLayer="HorizontalTop" BrushValueType="Width"/>
+    <Constant Name="TakenDamage.Visual.Height.Horizontal" BrushName="Mission.TakenDamage" BrushLayer="HorizontalTop" BrushValueType="Height"/>
+
+    <Constant Name="TakenDamage.Visual.Width.Vertical" BrushName="Mission.TakenDamage" BrushLayer="VerticalLeft" BrushValueType="Width"/>
+    <Constant Name="TakenDamage.Visual.Height.Vertical" BrushName="Mission.TakenDamage" BrushLayer="VerticalLeft" BrushValueType="Height"/>
+    <Constant Name="TakenDamage.Dimension" Value="150"/>
+  </Constants>
+  <Window>
+    <Widget DataSource="{TakenDamageController}" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" IsEnabled="false">
+      <Children>
+
+        <Widget DataSource="{TakenDamageList}" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent">
+          <ItemTemplate>
+            <TakenDamageItemBrushWidget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" DamageAmount="@Damage" IsBehind="@IsBehind" IsRanged="@IsRanged" ScreenPosOfAffectorAgent="@ScreenPosOfAffectorAgent" Command.OnRemove="ExecuteRemove" Brush.GlobalAlphaFactor="0.5" RangedOnScreenStayTime="0.3" MeleeOnScreenStayTime="0.7">
+              <Children>
+                <BrushWidget WidthSizePolicy = "Fixed" HeightSizePolicy = "StretchToParent" SuggestedWidth="!TakenDamage.Dimension" HorizontalAlignment="Left" Brush="Mission.TakenDamage.Left" />
+                <BrushWidget WidthSizePolicy = "Fixed" HeightSizePolicy = "StretchToParent" SuggestedWidth="!TakenDamage.Dimension" HorizontalAlignment="Right" Brush="Mission.TakenDamage.Right" />
+                <BrushWidget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="!TakenDamage.Dimension" VerticalAlignment="Top" MarginLeft="!TakenDamage.Dimension" MarginRight="!TakenDamage.Dimension" Brush="Mission.TakenDamage.Top" />
+                <BrushWidget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="!TakenDamage.Dimension" VerticalAlignment="Bottom" MarginLeft="!TakenDamage.Dimension" MarginRight="!TakenDamage.Dimension" Brush="Mission.TakenDamage.Bottom" />
+              </Children>
+            </TakenDamageItemBrushWidget>
+          </ItemTemplate>
+        </Widget>
+        
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

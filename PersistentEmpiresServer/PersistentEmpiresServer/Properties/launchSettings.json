@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "Server PE": {
+      "commandName": "Executable",
+      "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
+      "commandLineArgs": "_MODULES_*Native*Multiplayer*PersistentEmpires*_MODULES_ /dedicatedcustomserverconfigfile persistent_empires2.txt /port 7233 /no_watchdog /tickrate 120",
+      "workingDirectory": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
+    },
+    "Server Native": {
+      "commandName": "Executable",
+      "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
+      "commandLineArgs": "_MODULES_*Native*Multiplayer*_MODULES_ /dedicatedcustomserverconfigfile ds_config_sample_duel.txt /port 7233 /no_watchdog /tickrate 120",
+      "workingDirectory": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
+    },
+    "Server PE2": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
+      "commandLineArgs": "_MODULES_*Native*Multiplayer*PersistentEmpires*_MODULES_ /dedicatedcustomserverconfigfile persistent_empires2.txt /port 7233 /no_watchdog /tickrate 120",
+      "workingDirectory": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
+    },
+    "Server Native2": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
+      "commandLineArgs": "_MODULES_*Native*Multiplayer*_MODULES_ /dedicatedcustomserverconfigfile ds_config_sample_duel.txt /port 7233 /no_watchdog /tickrate 120",
+      "workingDirectory": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
+    }
+  }
+}

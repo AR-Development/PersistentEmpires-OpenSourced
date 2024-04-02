@@ -1,0 +1,22 @@
+<Prefab>
+  <VisualDefinitions>
+    <VisualDefinition Name="Target" EaseIn="true" TransitionDuration="0.20">
+      <VisualState SuggestedWidth="20" SuggestedHeight="20" PositionXOffset="50" State="Active" />
+      <VisualState SuggestedWidth="30" SuggestedHeight="30" State="Possible" />
+    </VisualDefinition>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsEnabled="false" IsVisible="@IsEnabled">
+      <Children>
+
+        <!--Lock Parents-->
+        <Widget DataSource="{AllTrackedAgents}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+          <ItemTemplate>
+            <AgentLockVisualBrushWidget VisualDefinition="Target" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" Position="@Position" LockState="@LockState" Brush="Mission.AgentLock.Visual" />
+          </ItemTemplate>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

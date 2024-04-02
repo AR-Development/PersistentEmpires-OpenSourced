@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentEmpiresLib", "PersistentEmpiresLib\PersistentEmpiresLib.csproj", "{EFF0BC43-D180-45A5-AEEB-94A21D052377}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		ReleaseClient|Any CPU = ReleaseClient|Any CPU
+		ReleaseServer|Any CPU = ReleaseServer|Any CPU
+		RunAsClientDebug|Any CPU = RunAsClientDebug|Any CPU
+		RunAsServerDebug|Any CPU = RunAsServerDebug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.ActiveCfg = ReleaseClient|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.Build.0 = ReleaseClient|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseServer|Any CPU.ActiveCfg = ReleaseServer|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseServer|Any CPU.Build.0 = ReleaseServer|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.RunAsClientDebug|Any CPU.ActiveCfg = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.RunAsClientDebug|Any CPU.Build.0 = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.RunAsServerDebug|Any CPU.ActiveCfg = RunAsServerDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.RunAsServerDebug|Any CPU.Build.0 = RunAsServerDebug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FFDB5EF-B581-45C4-96B0-8F36AB28D125}
+	EndGlobalSection
+EndGlobal

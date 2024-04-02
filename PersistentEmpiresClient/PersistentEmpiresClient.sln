@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentEmpiresClient", "PersistentEmpiresClient\PersistentEmpiresClient.csproj", "{03A0BEA7-F985-4752-9272-D6A994225587}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41} = {B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentEmpiresLib", "..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj", "{EFF0BC43-D180-45A5-AEEB-94A21D052377}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientModFiles", "ClientModFiles\ClientModFiles.csproj", "{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03A0BEA7-F985-4752-9272-D6A994225587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A0BEA7-F985-4752-9272-D6A994225587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A0BEA7-F985-4752-9272-D6A994225587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A0BEA7-F985-4752-9272-D6A994225587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Debug|Any CPU.ActiveCfg = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Debug|Any CPU.Build.0 = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.ActiveCfg = ReleaseClient|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.Build.0 = ReleaseClient|Any CPU
+		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7AF34132-4888-4A46-BF1C-D3D7AEC55CE6}
+	EndGlobalSection
+EndGlobal

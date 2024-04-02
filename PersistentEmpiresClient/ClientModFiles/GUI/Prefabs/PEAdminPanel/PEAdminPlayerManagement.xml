@@ -1,0 +1,123 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Popup.CloseButton.Width" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Width" />
+    <Constant Name="Banner.Height" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width.Scaled" MultiplyResult="0.20" Value="!Banner.Width" />
+    <Constant Name="Banner.Height.Scaled" MultiplyResult="0.28" Value="!Banner.Height" />
+  </Constants>
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent"
+			MarginBottom="50" MarginTop="50" MarginLeft="80" MarginRight="80">
+      <Children>
+        <Standard.Window Parameter.Title="Player Management">
+          <Children>
+            <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" MarginTop="10" MarginBottom="40" MarginRight="10" MarginLeft="0">
+              <Children>
+                <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
+                  <Children>
+                    <ListPanel MarginBottom="5" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+                      <Children>
+                        <TextWidget WidthSizePolicy="StretchToParent" Text="Search By Player Or Faction Name" MarginTop="45"></TextWidget>
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="55" MarginLeft="15" MarginRight="15" MarginTop="15" Sprite="General\CharacterCreation\name_input_area">
+                          <Children>
+                            <EditableTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ClanNaming.NameInput.Text" Text="@SearchedPlayerName" GamepadNavigationIndex="0" />
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ListPanel>
+                    <ScrollablePanel Id="EntriesListScrollablePanel" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="EntriesListRect\EntriesList" ClipRect="EntriesListRect" MouseScrollAxis="Vertical" VerticalScrollbar="..\..\EntriesListScrollbar\Scrollbar" MarginLeft="0" AutoHideScrollBars="false"  Sprite="SPGeneral\GameMenu\panel_frame">
+                      <Children>
+                        <Widget Id="EntriesListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                          <Children>
+                            <ListPanel MarginLeft="50" MarginRight="70" MarginTop="10" DataSource="{FilteredPlayers}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" Id="EntriesList">
+                              <ItemTemplate>
+                                <ButtonWidget Command.Click="ExecuteSelect" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="60" MarginLeft="15" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="PE.FactionMember.Button" IsSelected="@IsSelected">
+                                  <Children>
+                                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" >
+                                      <Children>
+                                        <TextWidget WidthSizePolicy="StretchToParent" MarginLeft="35" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Text="@PlayerName" Brush="GameMenu.Leaderboard.Entry.Name.Text" />
+                                        <TextWidget WidthSizePolicy="StretchToParent" MarginLeft="35" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Text="@FactionName" Brush="GameMenu.Leaderboard.Entry.Name.Text" />
+                                      </Children>
+                                    </ListPanel>
+                                  </Children>
+                                </ButtonWidget>
+                              </ItemTemplate>
+                            </ListPanel>
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ScrollablePanel>
+
+					  <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginBottom="0" MarginLeft="40" MarginRight="60">
+						  <Children>
+						    <GridWidget Id="ButtonGrid" DataSource="{AdminButtons}" HeightSizePolicy="CoverChildren" DefaultCellHeight = "30" WidthSizePolicy="StretchToParent" DefaultCellWidth="100" HorizontalAlignment="Left" VerticalAlignment="Center" ColumnCount="11">
+							    <ItemTemplate>
+								    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="Execute" IsEnabled="@IsEnabled">
+									    <Children>
+										    <TextWidget MarginLeft="20" MarginRight="20" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="@Caption" IsEnabled="true" />
+									    </Children>
+								    </ButtonWidget>
+							    </ItemTemplate>
+						    </GridWidget>
+						  </Children>
+					  </Widget>
+					  <!--<ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecutePermBan" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Perm Ban" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteTempBan" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Temp Ban" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteKick" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Kick" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteKill" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Kill" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteFade" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Fade" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteFreeze" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Freeze/Unfreeze" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteTpToMe" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="TP To Me" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteTpTo" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="TP To" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="60"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteHeal" IsEnabled="@CanApply">
+                          <Children>
+                            <TextWidget MarginLeft="60" MarginRight="60" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Heal" IsEnabled="true" />
+                          </Children>
+                        </ButtonWidget>-->
+                  </Children>
+                </ListPanel>
+                <Standard.VerticalScrollbar Id="EntriesListScrollbar" HorizontalAlignment="Right" VerticalAlignment="Center" HeightSizePolicy="Fixed" SuggestedHeight="300" />				  
+              </Children>
+            </ListPanel>
+          </Children>
+        </Standard.Window>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

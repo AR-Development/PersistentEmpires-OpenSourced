@@ -1,0 +1,38 @@
+<Window>
+  <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+    <Children>
+      <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsAgentStatusAvailable">
+        <Children>
+          <PEAgentStatus />
+        </Children>
+      </Widget>
+
+      <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsInteractionAvailable">
+        <Children>
+          <PEAgentFocus />
+        </Children>
+      </Widget>
+      <!--<Compass />-->
+
+      <ValueBasedVisibilityWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="150" WatchType="BiggerThan" IndexToBeVisibleFloat="0" IndexToWatchFloat="@CameraToggleProgress">
+        <Children>
+
+          <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop">
+            <Children>
+              <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="AgentHUD.Interaction.Text" Text="@CameraToggleText" />
+
+              <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedWidth="220" SuggestedHeight="18" MarginTop="10">
+                <Children>
+                  <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="220" SuggestedHeight="18" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="SelectionBorder@2x_9" Color="#CCCCCCFF" />
+                  <FillBar WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="210" SuggestedHeight="8" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="HealthBarBrush" InitialAmountAsFloat="@CameraToggleProgress" IsVertical="false" MaxAmount="1" />
+                </Children>
+              </Widget>
+
+            </Children>
+          </ListPanel>
+        </Children>
+      </ValueBasedVisibilityWidget>
+
+    </Children>
+  </Widget>
+</Window>

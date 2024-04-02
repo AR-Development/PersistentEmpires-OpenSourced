@@ -1,0 +1,35 @@
+<Prefab>
+  <Constants>
+
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" IsVisible="@IsActive">
+      <Children>
+        <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" MarginTop="20" HeightSizePolicy="CoverChildren">
+          <Children>
+            <ListPanel StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" MarginTop="20" HeightSizePolicy="CoverChildren">
+              <Children>
+                <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" Text="You are dead. You will be respawn in"></TextWidget>
+                <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginLeft="10" MarginRight="10" HeightSizePolicy="CoverChildren" IntText="@SpawnTimer"></TextWidget>
+                <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" Text="seconds"></TextWidget>
+              </Children>
+            </ListPanel>
+            <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" Text="Press ~ to change spawning castle, Press 1-5 to change spawning position"></TextWidget>
+            <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" IsVisible="@IsCastleSelected">
+              <Children>
+                <ListPanel DataSource="{SelectedCastle}" StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+                  <Children>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" Text="You will going to spawn at"></TextWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginLeft="10" MarginRight="10" HeightSizePolicy="CoverChildren" Text="@CastleName"></TextWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </Widget>
+            <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" Text="You will going to spawn at Wilderness" IsHidden="@IsCastleSelected"></TextWidget>
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

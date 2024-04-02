@@ -1,0 +1,18 @@
+<Prefab>
+  <Window>
+    <NameMarkerScreenWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Brush.AlphaFactor="0" Brush.Color="#000000FF" TargetAlphaValue="0.0" MarkersContainer="MarkersContainer">
+      <Children>
+
+        <Widget Id="MarkersContainer" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+          <Children>
+            <Widget DataSource="{PeerTargets}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+              <ItemTemplate>
+                <PEMarkerPeer />
+              </ItemTemplate>
+            </Widget>
+          </Children>
+        </Widget>
+      </Children>
+    </NameMarkerScreenWidget>
+  </Window>
+</Prefab>

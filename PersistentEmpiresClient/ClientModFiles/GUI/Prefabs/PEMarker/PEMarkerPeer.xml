@@ -1,0 +1,34 @@
+<Prefab>
+  <Constants>
+    <Constant Name="PowerBar.Flag.Width" BrushLayer="Default" BrushName="MPHUD.PowerBar.Flag"
+      BrushValueType="Width" />
+    <Constant Name="PowerBar.Flag.Height" BrushLayer="Default" BrushName="MPHUD.PowerBar.Flag"
+      BrushValueType="Height" />
+
+    <Constant Name="Flag.Identifier.Dimension" Value="40" />
+  </Constants>
+  <Window>
+    <MultiplayerMissionMarkerListPanel WidthSizePolicy="CoverChildren"
+      HeightSizePolicy="CoverChildren" Distance="@Distance"
+      FarAlphaTarget="0.5" FarDistanceCutoff="30" IsMarkerEnabled="true"
+      StackLayout.LayoutMethod="VerticalBottomToTop" MarkerType="@MarkerType"
+      PeerWidget="PeerWidget" Position="@ScreenPosition" IsSpawnFlag="false">
+      <Children>
+        <Widget Id="PeerWidget" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+          HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Children>
+            <ListPanel DataSource="{ChatMessages}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+              StackLayout.LayoutMethod="VerticalBottomToTop">
+              <ItemTemplate>
+                <TextWidget Id="NameTextWidget" WidthSizePolicy="Fixed" SuggestedWidth="400"
+                  HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+                  VerticalAlignment="Center" Brush="PEPeerMarker.TextBrush" ClipContents="false" Brush.FontColor="@Color" Brush.FontSize="@FontSize"
+                  OverrideDefaultStateSwitchingEnabled="true" Text="@Message" />
+              </ItemTemplate>
+            </ListPanel>
+          </Children>
+        </Widget>
+      </Children>
+    </MultiplayerMissionMarkerListPanel>
+  </Window>
+</Prefab>

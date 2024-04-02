@@ -1,0 +1,71 @@
+<Prefab>
+  <Constants>
+    <Constant Name="TypingArea.Height" Value="40" />
+    <Constant Name="TypingArea.Width" Value="350" />
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" SuggestedWidth="750" MarginBottom="50" MarginTop="50">
+      <Children>
+        <Standard.Window Parameter.Title="Voice Chat Options">
+          <Children>
+            <ListPanel MarginLeft="30" MarginRight="30" MarginTop="50" StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"  MinIndex="0" MaxIndex="100">
+              <Children>
+                <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Input Device" IsEnabled="true" />
+
+                <Standard.DropdownWithHorizontalControl MarginTop="20" Id="SelectionOption" Parameter.SelectorDataSource="{Microphones}" Parameter.ShowNextAndPrevious="false"  GamepadNavigationIndex="0" />
+
+                <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Input Volume" IsEnabled="true" MarginTop="20" />
+                
+                <Standard.Slider HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="15" WidthSizePolicy="Fixed" MarginLeft="9" SuggestedWidth="250" ValueInt="@InputGain" IsEnabled="@TestingEnabled" />
+
+                <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="100" SuggestedWidth="500" MarginTop="50"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteTest" IsEnabled="true">
+                  <Children>
+                    <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="@TestText" IsEnabled="true" />
+                  </Children>
+                </ButtonWidget>
+                <Widget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="3" MarginTop="15" MarginBottom="25" MarginLeft="7" MarginRight="7" VerticalAlignment="Bottom" Sprite="horizontal_gradient_divider_9" Color="#FEE9CAFF" AlphaFactor="0.8" />
+                
+                <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Output Device" IsEnabled="true" />
+
+                <Standard.DropdownWithHorizontalControl MarginTop="20" Id="SelectionOption" Parameter.SelectorDataSource="{OutputDevices}" Parameter.ShowNextAndPrevious="false" GamepadNavigationIndex="0" />
+
+                <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Output Volume" IsEnabled="true" MarginTop="20" />
+
+                <Standard.Slider HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="15" WidthSizePolicy="Fixed" MarginLeft="9" SuggestedWidth="250" ValueInt="@OutputGain" />
+
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="45" >
+                  <Children>
+                    <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@VoiceChatEnabled" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+                    <TextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginLeft="5" Text="Enable Voice Chat" />
+                  </Children>
+                </ListPanel>
+                
+                <ListPanel MarginTop="50" StackLayout.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"  MinIndex="0" MaxIndex="100">
+                  <Children>
+                    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100" SuggestedWidth="500" MarginTop="50"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteApply" IsEnabled="true">
+                      <Children>
+                        <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Apply" IsEnabled="true" />
+                      </Children>
+                    </ButtonWidget>
+                    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100" SuggestedWidth="500" MarginTop="50"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteClose" IsEnabled="true">
+                      <Children>
+                        <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Close" IsEnabled="true" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </ListPanel>
+
+          </Children>
+        </Standard.Window>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

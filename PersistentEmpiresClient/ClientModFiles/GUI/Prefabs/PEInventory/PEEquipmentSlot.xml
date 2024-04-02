@@ -1,0 +1,36 @@
+<Prefab>
+  <Parameters>
+    <Parameter Name="ItemDataSource" DefaultValue="" />
+    <Parameter Name="EquipmentBrush" DefaultValue="PE.InventorySlot.HeadArmor" />
+    <Parameter Name="EquipmentIndex" DefaultValue="0" />
+    <Parameter Name="HorizontalAlignment" DefaultValue="Left" />
+  </Parameters>
+  <Constants>
+
+  </Constants>
+  <Window>
+    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="140" SuggestedWidth="140"  DataSource="*ItemDataSource" >
+      <Children>
+
+        <BrushWidget Id="Background" AcceptDrop="true" Command.Drop="RequestExecuteTransfer" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\frame_small" Color="#FFFFFFFF">
+          <Children>
+            <BrushWidget MarginLeft="10" MarginRight="10" MarginTop="10" MarginBottom="10" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="PE.InventorySlot.Background">
+              <Children></Children>
+            </BrushWidget>
+            <BrushWidget WidthSizePolicy="Fixed" MarginLeft="25" MarginRight="25" MarginTop="25" MarginBottom="25" HeightSizePolicy="Fixed" SuggestedHeight="90" SuggestedWidth="90" Brush="*EquipmentBrush" Color="#FFFFFFFF">
+              <Children></Children>
+            </BrushWidget>
+          </Children>
+        </BrushWidget>
+
+        <ButtonWidget HorizontalAlignment="*HorizontalAlignment" MarginLeft="20" MarginRight="20" MarginTop="30" Command.AlternateClick="ExecuteAlternateClick" Command.Click="ExecuteClickAction" AcceptDrag="true" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="80" Command.HoverBegin="ShowTooltip" Command.HoverEnd="HideTooltip">
+          <Children>
+            <ImageIdentifierWidget Id="ImageIdentifier" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode">
+            </ImageIdentifierWidget>
+
+          </Children>
+        </ButtonWidget>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>
