@@ -1,0 +1,97 @@
+<Prefab>
+  <Constants>
+
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" MarginTop="20" MarginBottom="80">
+      <Children>
+        <BrushWidget Id="DropZone" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" AcceptDrop="true" Command.Drop="ExecuteDropItem"></BrushWidget>
+        <!-- Left Panel Armors -->
+        <Widget Id="LeftArmors" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" HeightSizePolicy="CoverChildren" PositionYOffset="130">
+          <Children>
+            <ListPanel VerticalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+              <Children>
+                <PEEquipmentSlot Parameter.HorizontalAlignment="Right" Parameter.ItemDataSource="{HelmSlot}" Parameter.EquipmentBrush="PE.InventorySlot.HeadArmor" HorizontalAlignment="Left"  MarginLeft="1" />
+                <PEEquipmentSlot Parameter.HorizontalAlignment="Right" Parameter.ItemDataSource="{CapSlot}" Parameter.EquipmentBrush="PE.InventorySlot.CapeArmor" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="1" />
+                <PEEquipmentSlot Parameter.HorizontalAlignment="Right" Parameter.ItemDataSource="{BodySlot}" Parameter.EquipmentBrush="PE.InventorySlot.BodyArmor" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="1" />
+                <PEEquipmentSlot Parameter.HorizontalAlignment="Right" Parameter.ItemDataSource="{HandSlot}" Parameter.EquipmentBrush="PE.InventorySlot.HandArmor" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="1" />
+                <PEEquipmentSlot Parameter.HorizontalAlignment="Right" Parameter.ItemDataSource="{LegSlot}" Parameter.EquipmentBrush="PE.InventorySlot.LegArmor" HorizontalAlignment="Left"  MarginTop="-20" MarginLeft="1" />
+              </Children>
+            </ListPanel>
+          </Children>
+        </Widget>
+
+        <!-- Right Panel Armors -->
+        <Widget Id="RightEquipments" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right">
+          <Children>
+            <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="100">
+              <Children>
+                <PEEquipmentSlot Parameter.ItemDataSource="{Item0}" Parameter.EquipmentBrush="PE.InventorySlot.Equipment" HorizontalAlignment="Left"  MarginLeft="5" />
+                <PEEquipmentSlot Parameter.ItemDataSource="{Item1}" Parameter.EquipmentBrush="PE.InventorySlot.Equipment" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="5" />
+                <PEEquipmentSlot Parameter.ItemDataSource="{Item2}" Parameter.EquipmentBrush="PE.InventorySlot.Equipment" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="5" />
+                <PEEquipmentSlot Parameter.ItemDataSource="{Item3}" Parameter.EquipmentBrush="PE.InventorySlot.Equipment" HorizontalAlignment="Left" MarginTop="-20" MarginLeft="5" />
+              </Children>
+            </ListPanel>
+          </Children>
+        </Widget>
+
+        <Widget HorizontalAlignment="Center" SuggestedHeight="350" SuggestedWidth="800" PositionYOffset="-120" MarginBottom="50">
+          <Children>
+            <Standard.Window Parameter.Title="">
+              <Children>
+                <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Center">
+                  <Children>
+                    <GridWidget Id="InventoryGrid" DataSource="{InventoryItems}" DefaultCellHeight = "140" DefaultCellWidth="140" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnCount="5" MarginTop="30" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+                      <ItemTemplate>
+                        <PEInventorySlot DataSource="{..\..}" />
+                      </ItemTemplate>
+                    </GridWidget>
+                    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="Fixed" SuggestedWidth="250" HeightSizePolicy="Fixed" SuggestedHeight="70"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteRevealItemBag" IsEnabled="true">
+                      <Children>
+                        <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Reveal Item Bag" IsEnabled="true" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </Standard.Window>
+          </Children>
+        </Widget>
+
+        <Widget HorizontalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="800" SuggestedHeight="500" VerticalAlignment="Center" MarginBottom="50" IsVisible="@IsRequestedInventory">
+          <Children>
+            <Standard.Window Parameter.Title="Chest"  WidthSizePolicy="CoverChildren">
+              <Children>
+                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+                    <ScrollablePanel Id="ScrollablePanel" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" VerticalAlignment="Center" AutoHideScrollBars="true" ClipRect="ClipRect" InnerPanel="ClipRect\InventoryGrid" VerticalScrollbar="..\VerticalScrollbar">
+                      <Children>
+                        <Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true" VerticalAlignment="Center">
+                          <Children>
+                            <GridWidget Id="InventoryGrid" DataSource="{RequestedInventoryItems}" DefaultCellHeight = "140" DefaultCellWidth="140" HorizontalAlignment="Center" VerticalAlignment="Top" ColumnCount="5" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+                              <ItemTemplate>
+                                <PEInventorySlot DataSource="{..\..}" />
+                              </ItemTemplate>
+                            </GridWidget>
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ScrollablePanel>
+                    <ScrollbarWidget Id="VerticalScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="8" HorizontalAlignment="Right" VerticalAlignment="Center" MarginTop="0" MarginBottom="0" AlignmentAxis="Vertical" Handle="VerticalScrollbarHandle" MaxValue="100" MinValue="0">
+                      <Children>
+                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center" Sprite="BlankWhiteSquare_9" AlphaFactor="0.2" Color="#5a4033FF" />
+                        <ImageWidget Id="VerticalScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="8" SuggestedHeight="10" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+                      </Children>
+                    </ScrollbarWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </Standard.Window>
+          </Children>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

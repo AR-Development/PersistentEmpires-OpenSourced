@@ -1,0 +1,94 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Popup.CloseButton.Width" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Width" />
+    <Constant Name="Banner.Height" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width.Scaled" MultiplyResult="0.20" Value="!Banner.Width" />
+    <Constant Name="Banner.Height.Scaled" MultiplyResult="0.28" Value="!Banner.Height" />
+  </Constants>
+  <VisualDefinitions></VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000CC">
+      <Children>
+
+        <!--Done Button-->
+
+        <Standard.PopupCloseButton HorizontalAlignment="Center" Command.Click="OnApply" VerticalAlignment="Center" PositionXOffset="-160" MarginTop="585" Parameter.ButtonText="@ButtonText" IsEnabled="@CanApply" />
+        <Standard.PopupCloseButton HorizontalAlignment="Center" Command.Click="OnCancel" VerticalAlignment="Center" MarginTop="585" PositionXOffset="160" Parameter.ButtonText="Go Back" />
+        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="655" SuggestedHeight="555" HorizontalAlignment="Center" VerticalAlignment="Center" MarginBottom="6" Brush="GameMenu.Tournament.Frame" DoNotAcceptEvents="true">
+          <Children>
+
+
+            <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" MarginTop="10" MarginBottom="10" MarginRight="10" MarginLeft="0">
+              <Children>
+
+                <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
+                  <Children>
+                    <ListPanel MarginBottom="5" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+                      <Children>
+                        <TextWidget WidthSizePolicy="StretchToParent" Text="Search For Player" MarginTop="45"></TextWidget>
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="55" MarginLeft="15" MarginRight="15" MarginTop="15" Sprite="General\CharacterCreation\name_input_area">
+                          <Children>
+                            <EditableTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ClanNaming.NameInput.Text" Text="@SearchPlayer" GamepadNavigationIndex="0" />
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ListPanel>
+
+                    <ScrollablePanel Id="EntriesListScrollablePanel" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="EntriesListRect\EntriesList" ClipRect="EntriesListRect" MouseScrollAxis="Vertical" VerticalScrollbar="..\..\EntriesListScrollbar\Scrollbar" MarginLeft="0" AutoHideScrollBars="false">
+                      <Children>
+
+                        <Widget Id="EntriesListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                          <Children>
+                            <!--Leaderboard Entry Tuple-->
+
+
+                            <ListPanel DataSource="{FilteredMembers}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" Id="EntriesList">
+                              <ItemTemplate>
+                                <ButtonWidget Command.Click="OnSelection" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="60" MarginLeft="15" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="PE.FactionMember.Button" IsSelected="@IsSelected">
+                                  <Children>
+                                    <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight">
+                                      <Children>
+                                        <Widget WidthSizePolicy="Fixed" MarginLeft="35" HeightSizePolicy="Fixed" SuggestedWidth="33" SuggestedHeight="27" Sprite="General\Icons\icon_quest_done_checkmark" HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="@IsGranted" />
+                                        <TextWidget WidthSizePolicy="CoverChildren" MarginLeft="10" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Text="@UserName" Brush="GameMenu.Leaderboard.Entry.Name.Text" />
+                                      </Children>
+                                    </ListPanel>
+                                  </Children>
+                                </ButtonWidget>
+                              </ItemTemplate>
+                            </ListPanel>
+
+
+                          </Children>
+                        </Widget>
+
+                      </Children>
+                    </ScrollablePanel>
+                  </Children>
+                </ListPanel>
+                <Standard.VerticalScrollbar Id="EntriesListScrollbar" HorizontalAlignment="Right" VerticalAlignment="Bottom" HeightSizePolicy="StretchToParent" />
+
+              </Children>
+            </ListPanel>
+
+            <!--Frame-->
+            <!--<BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="25" MarginRight="25" MarginTop="21" MarginBottom="32" Brush="Frame1.Border" IsEnabled="false" />-->
+
+          </Children>
+
+        </BrushWidget>
+
+        <!--Top Panel Name Text-->
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="592" SuggestedHeight="161" HorizontalAlignment="Center" VerticalAlignment="Center" PositionYOffset="-336" Sprite="StdAssets\tabbar_popup" VerticalFlip="true" IsDisabled="true">
+          <Children>
+            <RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="35" VerticalAlignment="Center" Brush="Recruitment.Popup.Title.Text" Brush.FontSize="40" IsDisabled="true" Text="@Title" />
+          </Children>
+        </Widget>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

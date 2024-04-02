@@ -1,0 +1,33 @@
+<Prefab>
+  <Constants>
+    <Constant Name="TypingArea.Height" Value="40" />
+    <Constant Name="TypingArea.Width" Value="350" />
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="Fixed" VerticalAlignment="Bottom" WidthSizePolicy="Fixed" SuggestedHeight="200" SuggestedWidth="750" MarginBottom="5" MarginTop="50" IsVisible="@IsActive">
+      <Children>
+
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+          <Children>
+            <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" Text="@ProgressTitle"></TextWidget>
+            <FillBarWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="20" SuggestedWidth="230" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="3" FillWidget="FillWidget" InitialAmount="@PastDuration" MaxAmount="@CountDownTime">
+              <Children>
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5" HorizontalAlignment="Left" VerticalAlignment="Center" Sprite="StdAssets\Popup\progress_bar_canvas" />
+                <Widget ClipContents="true" Id="FillWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="16" HorizontalAlignment="Left" VerticalAlignment="Center">
+                  <Children>
+                    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="230" SuggestedHeight="18" HorizontalAlignment="Left" VerticalAlignment="Center" Sprite="StdAssets\Popup\progress_bar_fill" ColorFactor="1.1" />
+                    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="escape_menu_gradient_9"/>
+                  </Children>
+                </Widget>
+                <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="-5" MarginRight="-5" Sprite="StdAssets\Popup\progress_bar_frame" ColorFactor="2.1"/>
+              </Children>
+            </FillBarWidget>
+
+          </Children>
+        </ListPanel>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

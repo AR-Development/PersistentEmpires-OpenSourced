@@ -1,0 +1,49 @@
+<Prefab>
+  <Window>
+    <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center">
+      <Children>
+        <Widget IsHidden="@IsSelected" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  Sprite="flat_panel_9" AlphaFactor="0.6">
+          <Children>
+            <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15" MarginBottom="15">
+              <Children>
+                <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="Animation Menu" IsEnabled="true" />
+                <ListPanel DataSource="{SubMenus}" StackLayout.LayoutMethod="VerticalBottomToTop" VerticalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="10" MarginBottom="10">
+                  <ItemTemplate>
+                    <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="@Name" IsEnabled="true" />
+                  </ItemTemplate>
+                </ListPanel>
+                <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="0 - Clear Animation" IsEnabled="true" />
+
+              </Children>
+            </ListPanel>
+
+          </Children>
+        </Widget>
+        <Widget IsVisible="@IsSelected" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  Sprite="flat_panel_9" AlphaFactor="0.6">
+          <Children>
+            <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" DataSource="{SelectedMenu}">
+              <Children>
+                <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15" MarginBottom="15">
+                  <Children>
+                    <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="@Name" IsEnabled="true" />
+                    <ListPanel DataSource="{Page}" StackLayout.LayoutMethod="VerticalBottomToTop" VerticalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="10" MarginBottom="10">
+                      <ItemTemplate>
+                        <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="@Name" IsEnabled="true" />
+                      </ItemTemplate>
+                    </ListPanel>
+                    <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="9- Previous" IsEnabled="true" />
+                    <TextWidget WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" Text="0- Next" IsEnabled="true" />
+                  </Children>
+                </ListPanel>
+              </Children>
+            </Widget>
+            <!--<ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15" MarginBottom="15">
+              <Children>
+              </Children>
+            </ListPanel>-->
+          </Children>
+        </Widget>
+      </Children>
+    </ListPanel>
+  </Window>
+</Prefab>

@@ -1,0 +1,42 @@
+<Prefab>
+  <Parameters>
+    <Parameter Name="ItemDataSource" DefaultValue="" />
+  </Parameters>
+  <Constants>
+
+  </Constants>
+  <Window>
+    <ButtonWidget DataSource="*ItemDataSource" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" Brush="PE.Market.ItemSlot" Command.Click="ExecuteSelect" Command.HoverBegin="ExecuteHoverStart" Command.HoverEnd="ExecuteHoverEnd" DoNotPassEventsToChildren="true" IsSelected="@IsSelected">
+      <Children>
+        <ListPanel MarginBottom="10" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+            <ImageIdentifierWidget HorizontalAlignment="Left" VerticalAlignment="Center" Id="ImageIdentifier" DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="165" SuggestedHeight="70" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" MarginBottom="10"></ImageIdentifierWidget>
+            <TextWidget Text="@ItemName" VerticalAlignment="Center" WidthSizePolicy="Fixed" SuggestedWidth="205"></TextWidget>
+            <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop">
+              <Children>
+                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+                    <BrushWidget VerticalAlignment="Center" HorizontalAlignment="Right" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Sprite="SPGeneral\InventoryPartyExtension\Extension\gold_icon"></BrushWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="PE.Text.Success" IntText="@BuyPrice"></TextWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="PE.Text.Success" Text=" B"></TextWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" Text=" / "></TextWidget>
+                    <BrushWidget VerticalAlignment="Center" HorizontalAlignment="Right" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Sprite="SPGeneral\InventoryPartyExtension\Extension\gold_icon"></BrushWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="PE.Text.Danger" IntText="@SellPrice"></TextWidget>
+                    <TextWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="PE.Text.Danger" Text=" S"></TextWidget>
+
+                  </Children>
+                </ListPanel>
+                <ListPanel MarginLeft="100" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+                    <TextWidget HorizontalAlignment="Center" Text="Stock:" Brush="PE.SmallText.Info" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"></TextWidget>
+                    <TextWidget HorizontalAlignment="Center" MarginLeft="5" IntText="@Stock" Brush="PE.SmallText.Info" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"></TextWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </ListPanel>
+          </Children>
+        </ListPanel>
+      </Children>
+    </ButtonWidget>
+  </Window>
+</Prefab>

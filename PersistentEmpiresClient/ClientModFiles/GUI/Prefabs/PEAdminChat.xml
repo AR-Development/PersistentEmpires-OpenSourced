@@ -1,0 +1,26 @@
+<Prefab>
+  <Constants>
+    <Constant Name="TypingArea.Height" Value="40" />
+    <Constant Name="TypingArea.Width" Value="350" />
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="Fixed" VerticalAlignment="Top" WidthSizePolicy="Fixed" SuggestedHeight="200" SuggestedWidth="750" MarginBottom="50" MarginTop="50">
+      <Children>
+
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+          <Children>
+            <TextWidget Text="Admin Chat" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginBottom="10"></TextWidget>
+            <Widget WidthSizePolicy="StretchToParent" VerticalAlignment="Center" HeightSizePolicy="Fixed" SuggestedHeight="55" MarginLeft="15" MarginRight="15" Sprite="StdAssets\Popup\text_input">
+              <Children>
+                <EditableTextWidget Id="EditableLocalChat" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="MP.ChatLog.Text" Text="@TextInput"  MarginLeft="15" MarginRight="15"   GamepadNavigationIndex="0" />
+              </Children>
+            </Widget>
+
+          </Children>
+        </ListPanel>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

@@ -1,0 +1,19 @@
+<Prefab>
+  <Window>
+    <NameMarkerScreenWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Brush.AlphaFactor="0" Brush.Color="#000000FF" TargetAlphaValue="0.0" MarkersContainer="MarkersContainer">
+      <Children>
+
+        <Widget Id="MarkersContainer" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsActive">
+          <Children>
+            <Widget DataSource="{CastleMarkers}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+              <ItemTemplate>
+                <PEMapCastleMarker />
+              </ItemTemplate>
+            </Widget>
+            <PEMapPlayerMarker Parameter.ItemDataSource="{PlayerMapMarker}" />
+          </Children>
+        </Widget>
+      </Children>
+    </NameMarkerScreenWidget>
+  </Window>
+</Prefab>

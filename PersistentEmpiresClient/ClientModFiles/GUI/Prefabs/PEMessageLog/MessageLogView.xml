@@ -1,0 +1,49 @@
+﻿<Prefab>
+	<Constants>
+	</Constants>
+	<Window>
+		<!--<Standard.Background />-->
+		<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" SuggestedWidth="1000" MarginLeft ="100" MarginRight ="10" MarginTop="140" MarginBottom="80">
+			<Children>
+				<Standard.Window Parameter.Title="Message log"  WidthSizePolicy="StretchToParent">
+					<Children>
+						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" PositionYOffset="10">
+							<Children>
+								<!--Left Panel-->
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left">
+									<Children>
+										<!-- Filter?? Add Keep syncronized tag-->
+										<!--<TextWidget HeightSizePolicy ="Fixed" WidthSizePolicy="Fixed" SuggestedHeight="30" SuggestedWidth="200" HorizontalAlignment="Left" Text="Selected item:" PositionXOffset="0" Brush="PER.Text"/>
+										<TextWidget HeightSizePolicy ="Fixed" WidthSizePolicy="Fixed" SuggestedHeight="30" SuggestedWidth="200" HorizontalAlignment="Left" Text="@SelectedItem" PositionXOffset="200" Brush="PER.Text"/>-->
+										<ListPanel HeightSizePolicy ="CoverChildren" WidthSizePolicy="StretchToParent" PositionXOffset="0" PositionYOffset="0">
+											<Children>
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+													<Children>
+														<ScrollablePanel WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" AutoHideScrollBars="true" ClipRect="ItemListRect" InnerPanel="ItemListRect\ItemListPanel" MouseScrollAxis="Vertical" VerticalScrollbar="..\ItemListScrollbar2\Scrollbar">
+															<Children>
+																<Widget Id="ItemListRect" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" ClipContents="true">
+																	<Children>
+																		<ListPanel Id="ItemListPanel" DataSource="{Items}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+																			<ItemTemplate>
+																				<LogItem />
+																			</ItemTemplate>
+																		</ListPanel>
+																	</Children>
+																</Widget>
+															</Children>
+														</ScrollablePanel>
+														<Standard.VerticalScrollbar Id="ItemListScrollbar2" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+													</Children>
+												</ListPanel>
+											</Children>
+										</ListPanel>
+									</Children>
+								</Widget>
+							</Children>
+						</ListPanel>
+					</Children>
+				</Standard.Window>
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

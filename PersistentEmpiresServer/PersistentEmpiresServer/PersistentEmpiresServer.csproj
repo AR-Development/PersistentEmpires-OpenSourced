@@ -1,0 +1,114 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TaleworldsReferencePath>..\..\PersistentEmpiresLib\PersistentEmpiresLib\ServerReferences</TaleworldsReferencePath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyTitle>PersistentEmpiresServer</AssemblyTitle>
+        <Product>PersistentEmpiresServer</Product>
+        <Copyright>Copyright ©  2023</Copyright>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+		<Deterministic>true</Deterministic>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyTitle>PersistentEmpiresServer</AssemblyTitle>
+		<Product>PersistentEmpiresServer</Product>
+		<Copyright>Copyright ©  2023</Copyright>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Deterministic>true</Deterministic>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>true</Optimize>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<DefineConstants>TRACE;SERVER</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+    <ItemGroup>
+        <Reference Include="TaleWorlds.Core">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Core.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.Diamond">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Diamond.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.DotNet">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.DotNet.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.Engine">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Engine.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.Library">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Library.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.Localization">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Localization.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.ModuleManager">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ModuleManager.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.DedicatedCustomServer.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade.Diamond">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.ObjectSystem">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ObjectSystem.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.PlayerServices">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.PlayerServices.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj">
+            <Private>True</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\PersistentEmpiresHarmony\PersistentEmpiresHarmony.csproj">
+            <Private>True</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\PersistentEmpiresSave\PersistentEmpiresSave.csproj">
+            <Private>True</Private>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp"
+                          Version="4.7.0" />
+        <PackageReference Include="System.Data.DataSetExtensions"
+                          Version="4.5.0" />
+    </ItemGroup>
+</Project>

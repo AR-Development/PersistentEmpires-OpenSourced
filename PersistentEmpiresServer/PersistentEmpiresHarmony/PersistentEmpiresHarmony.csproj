@@ -1,0 +1,91 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TaleworldsReferencePath>..\..\PersistentEmpiresLib\PersistentEmpiresLib\ServerReferences</TaleworldsReferencePath>
+        <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyTitle>PersistentEmpiresHarmony</AssemblyTitle>
+        <Product>PersistentEmpiresHarmony</Product>
+        <Copyright>Copyright ©  2023</Copyright>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<Deterministic>true</Deterministic>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<Deterministic>true</Deterministic>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>true</Optimize>
+		<DefineConstants>TRACE;SERVER</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+    <ItemGroup>
+        <None Remove="References\0Harmony.dll" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="0Harmony.dll" />
+        <Resource Include="0Harmony.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="References\0Harmony.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="TaleWorlds.Core">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.Diamond">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Diamond.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.DotNet">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.DotNet.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.Engine">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Engine.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.Library">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Library.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.dll</HintPath>
+        </Reference>
+        <Reference Include="TaleWorlds.MountAndBlade.Diamond">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="TaleWorlds.ObjectSystem">
+            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ObjectSystem.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Lib.Harmony"
+                          Version="2.2.2" />
+        <PackageReference Include="Microsoft.CSharp"
+                          Version="4.7.0" />
+        <PackageReference Include="System.Data.DataSetExtensions"
+                          Version="4.5.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="0Harmony.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="0Harmony.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,33 @@
+<Prefab>
+  <Parameters>
+    <Parameter Name="ItemDataSource" DefaultValue="" />
+  </Parameters>
+  <Constants>
+
+  </Constants>
+  <Window>
+    <MultiplayerMissionMarkerListPanel DataSource="*ItemDataSource" WidthSizePolicy="CoverChildren"
+      HeightSizePolicy="CoverChildren" Distance="@Distance"
+      FarAlphaTarget="1" FarDistanceCutoff="100" IsMarkerEnabled="true"
+      StackLayout.LayoutMethod="VerticalBottomToTop" MarkerType="@MarkerType"
+      PeerWidget="PeerWidget" Position="@ScreenPosition" IsSpawnFlag="false">
+      <Children>
+        <Widget Id="PeerWidget" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+          HorizontalAlignment="Center" VerticalAlignment="Center">
+
+          <Children>
+            <ListPanel StackLayout.LayoutMethod="VerticalTopToBottom" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+              <Children>
+                <TextWidget Id="NameTextWidget" WidthSizePolicy="Fixed" SuggestedWidth="400"
+                      HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+                      VerticalAlignment="Center" ClipContents="false" Brush.FontSize="23"
+                      OverrideDefaultStateSwitchingEnabled="true" Text="Player" />
+                <Widget WidthSizePolicy="Fixed"  HeightSizePolicy="Fixed" SuggestedWidth="42" SuggestedHeight="33" Sprite="SPGeneral\SPScoreboard\leader_crown_icon" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Children>
+            </ListPanel>
+          </Children>
+        </Widget>
+      </Children>
+    </MultiplayerMissionMarkerListPanel>
+  </Window>
+</Prefab>

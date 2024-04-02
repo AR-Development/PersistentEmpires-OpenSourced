@@ -1,0 +1,54 @@
+<Prefab>
+  <Constants>
+    <Constant Name="TypingArea.Height" Value="40" />
+    <Constant Name="TypingArea.Width" Value="350" />
+  </Constants>
+
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="Fixed" VerticalAlignment="Center" WidthSizePolicy="Fixed" SuggestedHeight="500" SuggestedWidth="750" MarginBottom="50" MarginTop="50">
+      <Children>
+        <Standard.Window Parameter.Title="Money Chest">
+          <Children>
+            <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+              <Children>
+                <ListPanel MarginTop="65" StackLayout.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+                  <Children>
+                    <TextWidget VerticalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Text="Amount"></TextWidget>
+                    <Widget WidthSizePolicy="StretchToParent" VerticalAlignment="Center" HeightSizePolicy="Fixed" SuggestedHeight="55" MarginLeft="15" MarginRight="15" Sprite="StdAssets\Popup\text_input">
+                      <Children>
+                        <IntegerInputTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ClanNaming.NameInput.Text" IntText="@Amount" MaxInt="1000000" GamepadNavigationIndex="0" />
+                      </Children>
+                    </Widget>
+                  </Children>
+                </ListPanel>
+                <ListPanel MarginTop="10" StackLayout.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+                  <Children>
+                    <TextWidget HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" Brush.FontSize="28" HeightSizePolicy="CoverChildren" Text="Money Chest Balance: "></TextWidget>
+                    <TextWidget HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="PE.Text.Success" Brush.FontSize="28" MarginLeft="10" IntText="@Balance"></TextWidget>
+                    <TextWidget HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" Brush.FontSize="28" HeightSizePolicy="CoverChildren" MarginLeft="5" Text="Denar"></TextWidget>
+
+                  </Children>
+                </ListPanel>
+                <ListPanel StackLayout.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10">
+                  <Children>
+                    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteDeposit" IsEnabled="true">
+                      <Children>
+                        <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Deposit Money" IsEnabled="true" />
+                      </Children>
+                    </ButtonWidget>
+                    <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100"  HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteWithdraw" IsEnabled="true">
+                      <Children>
+                        <TextWidget  WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="MPLobby.PlayButton.Text" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Withdraw Money" IsEnabled="true" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </ListPanel>
+          </Children>
+        </Standard.Window>
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

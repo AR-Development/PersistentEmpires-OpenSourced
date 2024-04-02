@@ -1,0 +1,274 @@
+<Brushes>
+  <Brush Name="PESpawn.Hint">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#F3DCB8FF" TextBlur="0" TextOutlineAmount="0" TextGlowRadius="0" FontSize="27" />
+    </Styles>
+  </Brush>
+  <Brush Name="PESpawn.PressFToSpawn">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#F3DCB8FF" TextBlur="0" TextOutlineAmount="0" TextGlowRadius="10" FontSize="31" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.BannerButtonBrush" FontColor="#FAF4DEFF" TransitionDuration="0">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="StdAssets\banner_new" OverlayXOffset="0" OverlayYOffset="-3" />
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" ColorFactor="1.2" />
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" ColorFactor="0.7" />
+      </Style>
+      <Style Name="Disabled">
+        <BrushLayer Name="Default" ColorFactor="0.6"/>
+      </Style>
+      <Style Name="Selected">
+        <BrushLayer Name="Default" ColorFactor="1.4"/>
+      </Style>
+    </Styles>
+  </Brush>
+
+  <Brush Name="PE.FactionMember.Button" FontColor="#FAF4DEFF" TransitionDuration="0.070">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="BlankWhiteSquare_9" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0" Color="#00213BFF" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" AlphaFactor="0.5" Color="#00213BFF" />
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" AlphaFactor="0.7" Color="#00213BFF" />
+      </Style>
+      <Style Name="Selected">
+        <BrushLayer Name="Default" AlphaFactor="0.7" Color="#00213BFF" />
+      </Style>
+      <Style Name="Disabled">
+        <BrushLayer Name="Default" AlphaFactor="0.5" Color="#424242ff" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.FactionLord">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="SPGeneral\SPScoreboard\leader_crown_icon"/>
+    </Layers>
+  </Brush>
+  
+  <Brush Name="AdminPanel.TextInput.Slider">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="frame_small_9" ExtendTop="3" ExtendBottom="3"/>
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" AlphaFactor="0.7" ColorFactor="1" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" AlphaFactor="0.9" ColorFactor="1.2" />
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+      <Style Name="Selected">
+        <BrushLayer Name="Default" AlphaFactor="1" />
+      </Style>
+      <Style Name="Disabled">
+        <BrushLayer Name="Default" AlphaFactor="0.5" ColorFactor="0.7" />
+      </Style>
+    </Styles>
+
+  </Brush>
+  <Brush Name="AdminPanel.TextInput.Text" Font="FiraSansExtraCondensed-Regular" TextVerticalAlignment="Center">
+    <Styles>
+      <Style Name="Default" FontColor="#F7C895FF" TextGlowColor="#FFFFFF00" TextOutlineColor="#FFFFFF00" TextOutlineAmount="0" TextGlowRadius="0" TextBlur="0" FontSize="18" />
+      <Style Name="Hovered" FontColor="#ABA298FF" TextGlowColor="#FFFFFF00" TextOutlineColor="#FFFFFF00" TextOutlineAmount="0" TextGlowRadius="0" TextBlur="0" FontSize="18" />
+      <Style Name="Pressed" FontColor="#FFB96EFF" TextGlowColor="#FFFFFF00" TextOutlineColor="#FFFFFF00" TextOutlineAmount="0" TextGlowRadius="0" TextBlur="0" FontSize="18" />
+      <Style Name="Disabled" FontColor="#D5B88B00" TextGlowColor="#00000000" />
+    </Styles>
+  </Brush>
+
+
+  <Brush Name="AdminPanel.Header" Font="FiraSansExtraCondensed-Regular" TextHorizontalAlignment="Center">
+    <Styles>
+      <Style Name="Default" FontColor="#DE9A43FF" TextBlur="0" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0.1" TextOutlineColor="#000000FF" FontSize="46" />
+    </Styles>
+  </Brush>
+
+
+  <Brush Name="PE.InventorySlot.Background">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="BlankWhiteSquare_9" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" Color="#000000FF" />
+      </Style>
+    </Styles>
+  </Brush>
+
+  <Brush Name="PE.InventorySlot.HeadArmor">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="head" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.BodyArmor">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="body" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.CapeArmor">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="cape" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.HandArmor">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="hand" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.LegArmor">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="leg" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.Equipment">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="equipment" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.InventorySlot.DropItem">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="drop" />
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.FactionDiplomacy.FactionButton">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="SPGeneral\MapOverlay\Army\leader_frame" AlphaFactor="0" />
+    </Layers>
+    <Styles>
+      <Style Name="Hovered" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+      <Style Name="Selected" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.8" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PE.SmallText.Info" Font="Galahad" TextHorizontalAlignment="Center">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#2196f3FF" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0" TextOutlineColor="#FFFFFF00" FontSize="22" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.Text.Info" Font="Galahad" TextHorizontalAlignment="Center">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#2196f3FF" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0" TextOutlineColor="#FFFFFF00" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.Text.Danger" Font="Galahad" TextHorizontalAlignment="Center">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#f44336FF" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0" TextOutlineColor="#FFFFFF00" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.Text.Warning" Font="Galahad" TextHorizontalAlignment="Center">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#ffc107FF" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0" TextOutlineColor="#FFFFFF00" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.Text.Success" Font="Galahad" TextHorizontalAlignment="Center">
+    <Layers>
+    </Layers>
+    <Styles>
+      <Style Name="Default" FontColor="#4caf50FF" TextGlowColor="#000000FF" TextGlowRadius="0" TextOutlineAmount="0" TextOutlineColor="#FFFFFF00" />
+    </Styles>
+  </Brush>
+  <Brush Name="PE.Market.ItemSlot">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="SPGeneral\OverlayPopup\portrait_slot" AlphaFactor="0.3" />
+    </Layers>
+    <Styles>
+      <Style Name="Hovered" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="0.5" />
+      </Style>
+      <Style Name="Selected" FontSize="25">
+        <BrushLayer Name="Default" AlphaFactor="1" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="Mission.MainAgentHUD.HungerBar.Fill">
+    <Layers>
+      <BrushLayer Name="DefaultFill" Sprite="mission_health_bar_fill_small_9" HueFactor="77" />
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="Mission.MainAgentHUD.HungerBar.FillGlow">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="General\Mission\health_bar_fill_glow_small" HueFactor="77" />
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="PEPeerMarker.TextBrush" FontSize="24" Font="FiraSansExtraCondensed-Regular">
+    <Styles>
+      <Style Name="Default" FontColor="#E89543FF" TextGlowColor="#000000FF" TextOutlineColor="#00000000" TextOutlineAmount="0.3" TextSoftBorder="0" TextGlowRadius="0" TextBlur="0"/>
+    </Styles>
+  </Brush>
+</Brushes>
