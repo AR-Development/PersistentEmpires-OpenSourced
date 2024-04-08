@@ -16,7 +16,6 @@ namespace PersistentEmpires.Views.Views
         {
             base.OnMissionScreenInitialize();
             string ip = NetworkMain.GameClient.LastBattleServerAddressForClient;
-            Whitelister.CheckWhitelist(ip);
         }
     }
 }

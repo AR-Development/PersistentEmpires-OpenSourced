@@ -138,7 +138,6 @@ namespace PersistentEmpires.Views.Views
             {
                 this.IsActive = false;
                 this.VoiceChatEnabled = false;
-                SentryForView.ReportToSentry(e);
             }
 
             int waveInDevices = WaveIn.DeviceCount;
@@ -199,7 +198,6 @@ namespace PersistentEmpires.Views.Views
             {
                 this.IsActive = false;
                 this.VoiceChatEnabled = false;
-                SentryForView.ReportToSentry(e);
             }
 
             // this.CloseOptions();
