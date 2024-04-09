@@ -179,35 +179,37 @@ namespace PersistentEmpiresLib.SceneScripts
         }
 
         private void DespawnNearest(Agent userAgent)
-        {
-            foreach (GameEntity spawnedEntity in this.SpawnedPrefabs.ToArray())
+        { 
+            var spawnedEntity = this.SpawnedPrefabs.OrderBy(s => s.GetGlobalFrame().origin.X).FirstOrDefault();
             {
-                Vec3 spawnedEntityOrigin = spawnedEntity.GetGlobalFrame().origin;
-                Vec3 spawnerOrigin = this.SpawningPoint.GetGlobalFrame().origin;
-                SpawnableItem sItem = this.SpawnableItems.FirstOrDefault(s => s.PrefabName == spawnedEntity.Name);
-                if (sItem.SpawnerItem == null) continue;
-                float distance = spawnedEntityOrigin.Distance(spawnerOrigin);
-                if (distance <= this.DespawnArea)
+                if (spawnedEntity != null)
                 {
-                    // Remove the object add it as to the agent's inventory, if no place drop on ground.
-                    // userAgent.Equipment
-                    NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
-                    PersistentEmpireRepresentative empireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
-                    if (empireRepresentative.GetInventory().HasEnoughRoomFor(sItem.SpawnerItem, 1))
-                    {
-                        empireRepresentative.GetInventory().AddCountedItemSynced(sItem.SpawnerItem, 1, ItemHelper.GetMaximumAmmo(sItem.SpawnerItem));
-                        this.DespawnSpawnedPrefab(spawnedEntity);
-                        LoggerHelper.LogAnAction(userAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerDespawnedPrefab, null, new object[] {
-                            sItem
-                        });
-                        break;
+                    Vec3 spawnedEntityOrigin = spawnedEntity.GetGlobalFrame().origin;
+                    Vec3 spawnerOrigin = this.SpawningPoint.GetGlobalFrame().origin;
+                    SpawnableItem sItem = this.SpawnableItems.FirstOrDefault(s => s.PrefabName == spawnedEntity.Name);
+                    if (sItem.SpawnerItem != null) {
+                        float distance = spawnedEntityOrigin.Distance(spawnerOrigin);
+                        if (distance <= this.DespawnArea)
+                        {
+                            // Remove the object add it as to the agent's inventory, if no place drop on ground.
+                            // userAgent.Equipment
+                            NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
+                            PersistentEmpireRepresentative empireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+                            if (empireRepresentative.GetInventory().HasEnoughRoomFor(sItem.SpawnerItem, 1))
+                            {
+                                empireRepresentative.GetInventory().AddCountedItemSynced(sItem.SpawnerItem, 1, ItemHelper.GetMaximumAmmo(sItem.SpawnerItem));
+                                this.DespawnSpawnedPrefab(spawnedEntity);
+                                LoggerHelper.LogAnAction(userAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerDespawnedPrefab, null, new object[] { sItem });
+                        }
+                        else
+                        {
+                            InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                        }
+                        }
                     }
-                    else
-                    {
-                        InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
-                    }
+
                 }
-            }
+            } 
         }
     }
 }
