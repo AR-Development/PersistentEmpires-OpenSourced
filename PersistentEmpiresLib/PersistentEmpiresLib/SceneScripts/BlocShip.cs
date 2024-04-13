@@ -5,6 +5,7 @@ using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,6 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
             float heightUnder = Mission.Current.Scene.GetTerrainHeight(this.GameEntity.GlobalPosition.AsVec2, true);
             if (base.GameEntity.GlobalPosition.Z - heightUnder <= 1f)
             {
+                Debugger.Break();
                 if (base.IsMovingBackward) this.StopMovingBackward();
                 if (base.IsMovingDown) this.StopMovingDown();
                 if (base.IsMovingForward) this.StopMovingForward();
@@ -86,6 +88,37 @@ namespace PersistentEmpiresLib.SceneScripts
                 // this.Disable();
             }
         }
+
+        //private void checkHittingObject(MatrixFrame oldFrame)
+        //{
+
+        //    if (base.GameEntity == null) return;
+        //    if (oldFrame == null) return;
+
+
+            
+
+        //    var objPhysicsMaterialData = Mission.Current.Scene.GetTerrainPhysicsMaterialIndexData(oldFrame.origin.)
+
+
+
+
+        //    if ()
+        //    {
+        //        if (base.IsMovingBackward) this.StopMovingBackward();
+        //        if (base.IsMovingDown) this.StopMovingDown();
+        //        if (base.IsMovingForward) this.StopMovingForward();
+        //        if (base.IsMovingUp) this.StopMovingUp();
+        //        if (base.IsTurningLeft) this.StopTurningLeft();
+        //        if (base.IsTurningRight) this.StopTurningRight();
+        //        base.GameEntity.SetFrame(ref oldFrame);
+        //        Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), this.GameEntity.GlobalPosition, false, true, -1, -1);
+        //        this.SetHitPoint(this.HitPoint - 10, new Vec3(0, 0, 0));
+
+        //    }
+        //}
+
+
         protected override void OnTick(float dt)
         {
             if (base.GameEntity == null) return;

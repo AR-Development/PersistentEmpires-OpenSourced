@@ -59,12 +59,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (agent.MissionPeer == null) return false;
             if (agent.IsActive() == false) return false;
             return this.IsPlayerWounded(agent.MissionPeer.GetNetworkPeer());
-        } 
+        }
 
-        public bool IsPlayerWounded(NetworkCommunicator player) {
+        public bool IsPlayerWounded(NetworkCommunicator player)
+        {
             if (this.IsWounded.ContainsKey(player) == false) return false;
             return this.IsWounded[player];
         }
+
+ 
 
 #if SERVER
         public override void OnPlayerConnectedToServer(NetworkCommunicator networkPeer)

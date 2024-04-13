@@ -1,6 +1,7 @@
 ﻿using PersistentEmpires.Views.Views;
 using PersistentEmpires.Views.Views.AdminPanel;
 using PersistentEmpires.Views.Views.FactionManagement;
+using PersistentEmpiresClient.Views.DragonV;
 using System.Collections.Generic;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Multiplayer.View.MissionViews;
@@ -72,6 +73,7 @@ namespace PersistentEmpires.Views
             list.Add(new PEChatBox());
             // list.Add(new SentryMissionView());
             list.Add(MultiplayerViewCreator.CreateMultiplayerMissionDeathCardUIHandler(null));
+            list.Add(new DVSDiscordRoleView());
 
             return list.ToArray();
         }

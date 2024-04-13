@@ -16,12 +16,17 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ModuleManager;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.MountAndBlade.DedicatedCustomServer;
+using PersistentEmpiresMission.MissionBehaviors;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
     public class AdminServerBehavior : MissionNetwork
     {
         private PatreonRegistryBehavior patreonRegistry;
+
+        private DiscordRoleRegistryBehavior discordRoleRegistry;
+
+
         public string BanFile = "BannedPlayers.txt";
         public string AdminFile = "AdminPlayers.txt";
         public bool DisableGlobalChat = false;
@@ -145,6 +150,9 @@ namespace PersistentEmpiresServer.ServerMissions
             AdminServerBehavior.Instance = this;
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             this.patreonRegistry = base.Mission.GetMissionBehavior<PatreonRegistryBehavior>();
+            //
+            this.discordRoleRegistry = base.Mission.GetMissionBehavior<DiscordRoleRegistryBehavior>();
+
             nameChangeGold = ConfigManager.GetIntConfig("NameChangeGold", 5000);
             cooldown = ConfigManager.GetIntConfig("NameChangeCooldownInSeconds", 3600);
 

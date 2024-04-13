@@ -20,6 +20,7 @@
 		<DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
+		<OutputPath>bin\RunAsClientDebug</OutputPath>
     </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<TargetFramework>net6.0</TargetFramework>
@@ -39,6 +40,7 @@
 		<DefineConstants>TRACE;SERVER</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
+		<OutputPath>bin\RunAsClientRelease</OutputPath>
 	</PropertyGroup>
     <ItemGroup>
         <Reference Include="TaleWorlds.Core">

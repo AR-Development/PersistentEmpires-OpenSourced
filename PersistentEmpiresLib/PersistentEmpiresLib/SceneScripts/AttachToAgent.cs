@@ -19,7 +19,7 @@ namespace PersistentEmpiresLib.SceneScripts
     {
         // public override ScriptComponentBehavior.TickRequirement GetTickRequirement() => !this.GameEntity.IsVisibleIncludeParents() ? base.GetTickRequirement() : ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel;
 
-        public bool AttachableToHorse = false;
+        public bool AttachableToHorse = true;
         public string AttachableHorseType = "";
         public int StrayDurationSeconds = 7200;
         private long WillBeDeletedAt = 0;

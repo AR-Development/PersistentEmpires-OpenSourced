@@ -11,6 +11,7 @@ using PersistentEmpiresServer.ChatCommands.Commands;
 using PersistentEmpiresHarmony.Patches;
 using NetworkMessages.FromClient;
 using TaleWorlds.Diamond;
+using PersistentEmpiresMission.MissionBehaviors;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
@@ -20,6 +21,8 @@ namespace PersistentEmpiresServer.ServerMissions
         public static ChatCommandSystem Instance;
         public bool DisableGlobalChat;
         private PatreonRegistryBehavior patreonRegistry;
+        private DiscordRoleRegistryBehavior discordRoleRegistry;
+
         public Dictionary<NetworkCommunicator, bool> Muted;
         public override void OnBehaviorInitialize()
         {
@@ -32,6 +35,7 @@ namespace PersistentEmpiresServer.ServerMissions
             localChat.OnPrefixHandleLocalChatFromClient += this.OnPrefixHandleLocalChatFromClient;
 
             this.patreonRegistry = base.Mission.GetMissionBehavior<PatreonRegistryBehavior>();
+            this.discordRoleRegistry = this.Mission.GetMissionBehavior<DiscordRoleRegistryBehavior>();
             this.Initialize();
         }
 
@@ -65,7 +69,7 @@ namespace PersistentEmpiresServer.ServerMissions
                 InformationComponent.Instance.BroadcastMessage("(Admin) " + networkPeer.GetComponent<MissionPeer>().DisplayedName + ": " + message.Message, Color.ConvertStringToColor("#FDD835FF").ToUnsignedInteger());
                 return false;
             }
-            if (persistentEmpireRepresentative.IsAdmin || this.patreonRegistry.IsPlayerPatreon(networkPeer)) return true;
+            if (persistentEmpireRepresentative.IsAdmin || this.patreonRegistry.IsPlayerPatreon(networkPeer) || this.discordRoleRegistry.IsPlayerDiscord(networkPeer)) return true;
             if (this.DisableGlobalChat) return false;
             if (this.Muted.ContainsKey(networkPeer))
             {

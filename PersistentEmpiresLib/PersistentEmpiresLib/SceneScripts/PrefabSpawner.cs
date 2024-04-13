@@ -24,10 +24,12 @@ namespace PersistentEmpiresLib.SceneScripts
     {
         public string PrefabName;
         public ItemObject SpawnerItem;
-        public SpawnableItem(string prefabName, string spawnerItemId)
+        public int MaxSpawnAmount;
+        public SpawnableItem(string prefabName, string spawnerItemId, int maxSpawnAmount = 30)
         {
             this.PrefabName = prefabName;
-            this.SpawnerItem = MBObjectManager.Instance.GetObject<ItemObject>(spawnerItemId);
+            this.SpawnerItem = MBObjectManager.Instance.GetObject<ItemObject>(spawnerItemId); 
+            this.MaxSpawnAmount = maxSpawnAmount;   
         }
     }
     public class PE_PrefabSpawner : PE_UsableFromDistance
@@ -37,9 +39,8 @@ namespace PersistentEmpiresLib.SceneScripts
         public Vec3 SpawnOffset = new Vec3();
         public string PrefabSpawnerName = "Siege Unit Deployer";
         public string SpawnerCategoryName = "Siege Units";
-        public float DespawnArea = 5f;
-        private GameEntity SpawningPoint;
-        public int MaxSpawnAmount = 30;
+        public float DespawnArea = 5;
+        private GameEntity SpawningPoint; 
         public override ScriptComponentBehavior.TickRequirement GetTickRequirement() => GameNetwork.IsServer ? base.GetTickRequirement() : ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel;
         public List<SpawnableItem> SpawnableItems { get; private set; }
         public List<GameEntity> SpawnedPrefabs { get; private set; }
@@ -121,7 +122,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     if (spawnableItem.SpawnerItem == null) this.DespawnNearest(userAgent);
                     else
                     {
-                        if (this.SpawnedPrefabs.Count < this.MaxSpawnAmount)
+                        if (this.SpawnedPrefabs.Count < spawnableItem.MaxSpawnAmount)
                         {
                             this.SpawnSpawnableItem(userAgent, spawnableItem);
                         }
@@ -189,8 +190,10 @@ namespace PersistentEmpiresLib.SceneScripts
                     SpawnableItem sItem = this.SpawnableItems.FirstOrDefault(s => s.PrefabName == spawnedEntity.Name);
                     if (sItem.SpawnerItem != null) {
                         float distance = spawnedEntityOrigin.Distance(spawnerOrigin);
-                        if (distance <= this.DespawnArea)
+                        if (distance <= 5)
                         {
+                            //InformationComponent.Instance.SendMessage("Distance: " + distance, new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                            //InformationComponent.Instance.SendMessage("DespawnArea: " + 5, new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer()); 
                             // Remove the object add it as to the agent's inventory, if no place drop on ground.
                             // userAgent.Equipment
                             NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();

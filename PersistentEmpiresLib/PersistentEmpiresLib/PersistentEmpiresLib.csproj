@@ -15,6 +15,7 @@
     <DefineConstants>CLIENT</DefineConstants>
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\RunAsClientDebug</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'RunAsServerDebug' ">
     <ReferenceFolder>.\ServerReferences</ReferenceFolder>
@@ -31,6 +32,7 @@
     <DefineConstants>SERVER</DefineConstants>
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>bin\RunAsServerDebug</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'ReleaseClient'">
     <ReferenceFolder>.\ClientReferences</ReferenceFolder>
@@ -246,6 +248,7 @@
     <Compile Include="NetworkMessages\Server\CraftingCompleted.cs" />
     <Compile Include="NetworkMessages\Server\CraftingStarted.cs" />
     <Compile Include="NetworkMessages\Server\CustomBubbleMessage.cs" />
+    <Compile Include="NetworkMessages\Server\DiscordRoleRegister.cs" />
     <Compile Include="NetworkMessages\Server\ExecuteInventoryTransfer.cs" />
     <Compile Include="NetworkMessages\Server\FactionLordPollClosed.cs" />
     <Compile Include="NetworkMessages\Server\FactionLordPollOpened.cs" />
@@ -332,6 +335,7 @@
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\CustomNameBehavior.cs" />
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\DayNightCycleBehavior.cs" />
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\DecapitationBehavior.cs" />
+    <Compile Include="PersistentEmpiresMission\MissionBehaviors\DiscordRoleRegistryBehavior.cs" />
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\DoctorBehavior.cs" />
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\DrowningBehavior.cs" />
     <Compile Include="PersistentEmpiresMission\MissionBehaviors\FactionPollComponent.cs" />

@@ -18,7 +18,9 @@ namespace PersistentEmpires.Views.Views
 {
     public class PEDiscordView : MissionView
     {
-        public long applicationId = 1066379293204172971;
+        // my app id: 
+        // PE app id: 1066379293204172971
+        public long applicationId = 1220322074581798942;
 
         private Discord.Discord discord;
 

@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using PersistentEmpiresServer.SpawnBehavior;
 using System;
@@ -76,11 +77,14 @@ namespace PersistentEmpiresServer
                         new AutorestartBehavior(),
                         new AnimationBehavior(),
                         new ChatCommandSystem(),
-                        new WhitelistBehavior()
+                        new WhitelistBehavior(),
 						// new AgentHumanAILogic(),
 						// new EquipmentControllerLeaveLogic(),
 						// new MultiplayerPreloadHelper()
-					};
+                        //
+                        new DiscordRoleRegistryBehavior()
+
+                    };
             }, true, true);
         }
     }

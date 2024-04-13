@@ -15,6 +15,8 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace PersistentEmpiresLib
 {
+
+    // Player
     public class PersistentEmpireRepresentative : MissionRepresentativeBase
     {
         private Faction _playerFaction;
