@@ -30,7 +30,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static int QueryBankBalance(NetworkCommunicator player)
         {
-            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new
+            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
             {
                 PlayerId = player.VirtualPlayer.Id.ToString()
             });

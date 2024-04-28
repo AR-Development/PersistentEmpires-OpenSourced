@@ -52,7 +52,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static IEnumerable<DBInventory> GetAllInventories()
         {
             Debug.Print("[Save Module] LOADING ALL INVENTORIES FROM DB");
-            return DBConnection.Connection.Query<DBInventory>("SELECT * FROM Inventories WHERE IsPlayerInventory = 0");
+            return DBConnection.Connection.Query<DBInventory>("SELECT InventoryId, InventorySerialized FROM Inventories WHERE IsPlayerInventory = 0");
         }
 
         public static DBInventory GetInventory(string inventoryId)
