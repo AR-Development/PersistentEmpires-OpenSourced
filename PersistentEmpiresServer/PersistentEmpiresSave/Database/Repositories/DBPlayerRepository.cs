@@ -28,7 +28,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static bool OnPlayerUpdateCustomName(NetworkCommunicator peer, string customName)
         {
-            string fetchFirst = "SELECT * FROM Players WHERE LOWER(CustomName) = @customName OR LOWER(Name) = @customName";
+            string fetchFirst = "SELECT CustomName FROM Players WHERE LOWER(CustomName) = @customName OR LOWER(Name) = @customName";
             IEnumerable<DBPlayer> players = DBConnection.Connection.Query<DBPlayer>(fetchFirst, new
             {
                 CustomName = customName.ToLower()
@@ -41,7 +41,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 CustomName = customName,
                 PlayerId = peer.VirtualPlayer.Id.ToString()
             });
-            IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT * FROM PlayerNames WHERE PlayerName = @PlayerName", new
+            IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
                 PlayerName = customName
             });
