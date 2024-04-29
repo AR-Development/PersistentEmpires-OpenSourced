@@ -22,7 +22,7 @@ jobs:
     # Install .NET Framework Developer Pack
     - name: Install .NET Framework Developer Pack
       run: |
-      choco install dotnetfx --version 4.7.2 --ignore-checksums -y
+        choco install dotnetfx --version 4.7.2 --ignore-checksums -y
   
     # Restore and build server project
     - name: Restore dependencies - Server
