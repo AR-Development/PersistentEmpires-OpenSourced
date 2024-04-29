@@ -30,7 +30,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             moneyPouchBehavior = base.Mission.GetMissionBehavior<MoneyPouchBehavior>();
             if(GameNetwork.IsServer)
             {
-                dropChance = ConfigManager.GetIntConfig("BehadingChance", 25);
+                dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
             }
         }
         public override void OnRemoveBehavior()

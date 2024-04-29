@@ -24,7 +24,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static bool IsPlayerWhitelisted(string playerId)
         {
-            int count = DBConnection.Connection.Query("SELECT * FROM whitelist WHERE PlayerId = @PlayerId AND Active = 1", new
+            int count = DBConnection.Connection.Query("SELECT * FROM Whitelist WHERE PlayerId = @PlayerId AND Active = 1", new
             {
                 PlayerId = playerId
             }).Count();
