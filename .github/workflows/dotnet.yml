@@ -21,9 +21,12 @@ jobs:
 
     # Install Bannerlord Modding Kit
     - name: Install Bannerlord Modding Kit
+      env:
+        STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+        STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       run: |
         $steamcmdPath = "$env:USERPROFILE\steamcmd"
-        & "$steamcmdPath\steamcmd.exe" +login anonymous +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
+        & "$steamcmdPath\steamcmd.exe" +login $env:STEAM_USERNAME $env:STEAM_PASSWORD +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
 
     # Install .NET Framework
     - name: Setup .NET Framework
