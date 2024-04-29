@@ -14,25 +14,24 @@ jobs:
     - uses: actions/checkout@v4
 
     # Install SteamCMD
-    - name: Install SteamCMD
-      run: |
-        Invoke-WebRequest -Uri "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip" -OutFile "steamcmd.zip"
-        Expand-Archive -Path "steamcmd.zip" -DestinationPath "$env:USERPROFILE\steamcmd"
+    # - name: Install SteamCMD
+    #   run: |
+    #     Invoke-WebRequest -Uri "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip" -OutFile "steamcmd.zip"
+    #     Expand-Archive -Path "steamcmd.zip" -DestinationPath "$env:USERPROFILE\steamcmd"
 
-    # Install Bannerlord Modding Kit
-    - name: Install Bannerlord Modding Kit
-      env:
-        STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-        STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
-      run: |
-        $steamcmdPath = "$env:USERPROFILE\steamcmd"
-        & "$steamcmdPath\steamcmd.exe" +login $env:STEAM_USERNAME $env:STEAM_PASSWORD +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
+    # CInstall Bannerlord Modding Kit
+    # - name: Install Bannerlord Modding Kit
+    #   env:
+    #     STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+    #     STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+    #   run: |
+    #     $steamcmdPath = "$env:USERPROFILE\steamcmd"
+    #     & "$steamcmdPath\steamcmd.exe" +login $env:STEAM_USERNAME $env:STEAM_PASSWORD +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
 
-        # Check the exit code of SteamCMD and throw an error if it's not 0
-        if ($LASTEXITCODE -ne 0) {
-          Write-Host "SteamCMD failed with exit code $LASTEXITCODE" # Optional: Print error message
-          exit 1  # Exit with non-zero status to indicate failure
-        }
+    #     # Check the exit code of SteamCMD and print a message if it fails
+    #     if ($LASTEXITCODE -ne 0) {
+    #       Write-Host "SteamCMD failed with exit code $LASTEXITCODE" # Optional: Print error message
+    #     }
         
     # Install .NET Framework
     - name: Setup .NET Framework
