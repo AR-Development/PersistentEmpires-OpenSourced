@@ -8,48 +8,75 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET
+
+    # Install Mono for .NET Framework 4.0 SDK
+    - name: Install Mono for .NET Framework 4.0 SDK
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mono-complete
+
+    # Setup .NET Core SDK
+    - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
+    # Restore and build server project
     - name: Restore dependencies - Server
       run: dotnet restore PersistentEmpiresServer/PersistentEmpiresServer.csproj
       working-directory: PersistentEmpiresServer
+
     - name: Build - Server
       run: dotnet build PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-restore
       working-directory: PersistentEmpiresServer
+
+    # Test server project
     - name: Test - Server
       run: dotnet test PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresServer
+
+    # Restore and build client project
     - name: Restore dependencies - Client
       run: dotnet restore PersistentEmpiresClient/PersistentEmpiresClient.csproj
       working-directory: PersistentEmpiresClient
+
     - name: Build - Client
       run: dotnet build PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-restore
       working-directory: PersistentEmpiresClient
+
+    # Test client project
     - name: Test - Client
       run: dotnet test PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresClient
+
+    # Restore and build harmony project
     - name: Restore dependencies - Harmony
       run: dotnet restore PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj
       working-directory: PersistentEmpiresHarmony
+
     - name: Build - Harmony
       run: dotnet build PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-restore
       working-directory: PersistentEmpiresHarmony
+
+    # Test harmony project
     - name: Test - Harmony
       run: dotnet test PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresHarmony
+
+    # Restore and build save project
     - name: Restore dependencies - Save
       run: dotnet restore PersistentEmpiresSave/PersistentEmpiresSave.csproj
       working-directory: PersistentEmpiresSave
+
     - name: Build - Save
       run: dotnet build PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-restore
       working-directory: PersistentEmpiresSave
+
+    # Test save project
     - name: Test - Save
       run: dotnet test PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresSave
