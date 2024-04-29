@@ -199,7 +199,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             persistentEmpireRepresentative.SpawnTimer.Reset(Mission.Current.CurrentTime, (float)MissionLobbyComponent.GetSpawnPeriodDurationForPeer(peer.GetComponent<MissionPeer>()));
             if (persistentEmpireRepresentative.KickedFromFaction)
             {
-                persistentEmpireRepresentative.SetClass("pe_serf");
+                persistentEmpireRepresentative.SetClass(PersistentEmpireRepresentative.defaultClass);
                 persistentEmpireRepresentative.KickedFromFaction = false;
             }
         }
