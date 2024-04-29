@@ -157,7 +157,7 @@ GeneralConfig.xml
 Persistent Empires features an API 
 
 With it, you can submit GET/POST requests in order to remotely perform functions on the server.
-This can be extremely powerful if your intention is to create moderation tools such as through and external panel or a discord bot. 
+This can be extremely powerful if your intention is to create moderation tools such as through an external panel or a discord bot. 
 
 You can find the configuration file under `YourServerLocation/Modules/PersistentEmpires/ModuleData/Configs/ApiConfig.xml`
 
