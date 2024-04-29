@@ -28,6 +28,12 @@ jobs:
         $steamcmdPath = "$env:USERPROFILE\steamcmd"
         & "$steamcmdPath\steamcmd.exe" +login $env:STEAM_USERNAME $env:STEAM_PASSWORD +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
 
+        # Check the exit code of SteamCMD and throw an error if it's not 0
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "SteamCMD failed with exit code $LASTEXITCODE" # Optional: Print error message
+          exit 1  # Exit with non-zero status to indicate failure
+        }
+        
     # Install .NET Framework
     - name: Setup .NET Framework
       uses: actions/setup-dotnet@v2
