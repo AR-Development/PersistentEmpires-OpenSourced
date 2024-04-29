@@ -13,6 +13,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # Install SteamCMD
+    - name: Install SteamCMD
+      run: |
+        Invoke-WebRequest -Uri "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip" -OutFile "steamcmd.zip"
+        Expand-Archive -Path "steamcmd.zip" -DestinationPath "$env:USERPROFILE\steamcmd"
+
+    # Install Bannerlord Modding Kit
+    - name: Install Bannerlord Modding Kit
+      run: |
+        $steamcmdPath = "$env:USERPROFILE\steamcmd"
+        & "$steamcmdPath\steamcmd.exe" +login anonymous +force_install_dir "$steamcmdPath\steamapps\common\MountBlade II Bannerlord Modding Kit" +app_update 1393600 validate +quit
+
     # Install .NET Framework
     - name: Setup .NET Framework
       uses: actions/setup-dotnet@v2
