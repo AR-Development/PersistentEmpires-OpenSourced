@@ -11,31 +11,34 @@ or you may use MYSQL8 (8.0.36 should work fine) (https://dev.mysql.com/downloads
 
 You need Mount & Blade II: Bannerlord Dedicated Server ( can be installed from steamcmd https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip )
 
-steamcmd.exe +force_install_dir "C:\Desktop\YourServerFolderLocation" +login your_steam_username "your_steam_password" +app_update 1863440 validate
+`steamcmd.exe +force_install_dir "C:\Desktop\YourServerFolderLocation" +login your_steam_username "your_steam_password" +app_update 1863440 validate`
 
 ## Installation
 
-After installing the dedicated server, you will see a folder called `Modules` inside of your dedicated server location.
+- After installing the dedicated server, you will see a folder called `Modules` inside of your dedicated server location.
 
-Extract PersistentEmpires Modules file and folders `YourServerLocation/Modules/PersistentEmpires`
+- Extract PersistentEmpires Modules file and folders `YourServerLocation/Modules/PersistentEmpires`
 
-Extract `PersistentEmpires/bin/Win64_ShippingServer` to `YourServerLocation/bin/Win64_ShippingServer`
+- Extract `PersistentEmpires/bin/Win64_ShippingServer` to `YourServerLocation/bin/Win64_ShippingServer`
 
-Install a MySQL explorer (Navicat, DBeaver, phpmyadmin or mysqlworkbench)
+- Install a MySQL explorer (Navicat, DBeaver, phpmyadmin or mysqlworkbench)
 
-[image]
-DBeaver Setup
+<p align="center">
+  <img src="https://github.com/Heavybob/PersistentEmpires-OpenSourced/assets/4519067/e83817b5-a4e7-44a3-81c0-bb099206452a" alt="DBeaver Setup">
+</p>
+<p align="center"><em>DBeaver Setup</em></p>
 
-Authorize to your MariaDB setup and create a database, lets name it pe_production
+- Authorize to your MariaDB setup and create a database, lets name it pe_production
 
-[image]
+<p align="center">
+  <img src="https://github.com/Heavybob/PersistentEmpires-OpenSourced/assets/4519067/a7c801f7-92a7-430b-a77d-7ee90d3dcff5" alt="image">
+</p>
+<p align="center"><em>Created a database called pe_production, ignore other databases</em></p>
 
-Created a database called pe_production, ignore other databases
-
-Now you need to set up your database connection for your PE server. To do that go to file
+- Now you need to set up your database connection for your PE server. To do that go to file
 `YourServerFolder/Modules/PersistentEmpires/ModuleData/Configs/SaveConfig.xml`
 
-If you edit the file you see the file content like this:
+- If you edit the file you see the file content like this:
 
 SaveConfig.xml
 ```xml
@@ -46,9 +49,9 @@ SaveConfig.xml
 </DatabaseConfig>
 ```
 
-Set the User ID, Password and Database field for your database.
+- Set the User ID, Password and Database field for your database.
 
-You need to create this file at this location.  `YourServerLocation/Modules/Native/persistent_empires.txt`
+- You need to create this file at this location.  `YourServerLocation/Modules/Native/persistent_empires.txt`
 
 persistent_empires.txt
 ```txt
@@ -70,16 +73,18 @@ add_map_to_automated_battle_pool pe_test3
 end_game_after_mission_is_over
 start_game_and_mission
 ```
-Create your starter bat file and you are ready to go.
+- Create your starter bat file and you are ready to go.
 
+```.bat
 start DedicatedCustomServer.Starter.exe /dedicatedcustomserverconfigfile persistent_empires.txt /port 7211 /DisableErrorReporting /multiplayer /dedicatedcustomserverauthtoken INSERTCUSTOMSERVERAUTHTOKENHERE _MODULES_*Native*Multiplayer*PersistentEmpires*_MODULES_
+```
 
-Don't forget to set your `/dedicatedcustomserverauthtoken` that you must obtain from bannerlord.
-Refer to https://moddocs.bannerlord.com/multiplayer/hosting_server/
+- Don't forget to set your `/dedicatedcustomserverauthtoken` that you must obtain from bannerlord.
+- Refer to https://moddocs.bannerlord.com/multiplayer/hosting_server/
 
-Ensure you've also set the correct map you intend to use in your persistent_empires.txt
+- Ensure you've also set the correct map you intend to use in your persistent_empires.txt
 
-Maps must only be placed into the `Multiplayer` module. `YourServerLocation/Modules/Multiplayer/SceneObj` and must be targeted with `add_map_to_automated_battle_pool` in your persistent_empires.txt in order to appear as downloadable via the ingame download panel. 
+- Maps must only be placed into the `Multiplayer` module. `YourServerLocation/Modules/Multiplayer/SceneObj` and must be targeted with `add_map_to_automated_battle_pool` in your persistent_empires.txt in order to appear as downloadable via the ingame download panel. 
 
 ## Server Configuration
 
