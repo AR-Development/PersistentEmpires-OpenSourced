@@ -18,8 +18,17 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.x'
-  
-    # Restore and build server project
+      
+    # Restore and build PersistentEmpiresLib
+    - name: Restore dependencies - PersistentEmpiresLib
+      run: dotnet restore PersistentEmpiresLib/PersistentEmpiresLib.csproj
+      working-directory: PersistentEmpiresLib
+
+    - name: Build - PersistentEmpiresLib
+      run: dotnet build PersistentEmpiresLib/PersistentEmpiresLib.csproj --no-restore
+      working-directory: PersistentEmpiresLib
+
+    # Restore and build PersistentEmpiresServer
     - name: Restore dependencies - Server
       run: dotnet restore PersistentEmpiresServer/PersistentEmpiresServer.csproj
       working-directory: PersistentEmpiresServer
@@ -28,12 +37,12 @@ jobs:
       run: dotnet build PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-restore
       working-directory: PersistentEmpiresServer
 
-    # Test server project
+    # Test PersistentEmpiresServer
     - name: Test - Server
       run: dotnet test PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresServer
 
-    # Restore and build client project
+    # Restore and build PersistentEmpiresClient
     - name: Restore dependencies - Client
       run: dotnet restore PersistentEmpiresClient/PersistentEmpiresClient.csproj
       working-directory: PersistentEmpiresClient
@@ -42,12 +51,12 @@ jobs:
       run: dotnet build PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-restore
       working-directory: PersistentEmpiresClient
 
-    # Test client project
+    # Test PersistentEmpiresClient
     - name: Test - Client
       run: dotnet test PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresClient
 
-    # Restore and build harmony project
+    # Restore and build Harmony
     - name: Restore dependencies - Harmony
       run: dotnet restore PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj
       working-directory: PersistentEmpiresHarmony
@@ -56,12 +65,12 @@ jobs:
       run: dotnet build PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-restore
       working-directory: PersistentEmpiresHarmony
 
-    # Test harmony project
+    # Test Harmony
     - name: Test - Harmony
       run: dotnet test PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresHarmony
 
-    # Restore and build save project
+    # Restore and build PersistentEmpiresSave
     - name: Restore dependencies - Save
       run: dotnet restore PersistentEmpiresSave/PersistentEmpiresSave.csproj
       working-directory: PersistentEmpiresSave
@@ -70,7 +79,7 @@ jobs:
       run: dotnet build PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-restore
       working-directory: PersistentEmpiresSave
 
-    # Test save project
+    # Test PersistentEmpiresSave
     - name: Test - Save
       run: dotnet test PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-build --verbosity normal
       working-directory: PersistentEmpiresSave
