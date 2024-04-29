@@ -8,16 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
-
-    # Install Mono for .NET Framework 4.0 SDK
-    - name: Install Mono for .NET Framework 4.0 SDK
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y mono-complete
 
     # Setup .NET Core SDK
     - name: Setup .NET Core SDK
