@@ -23,10 +23,6 @@ jobs:
     - name: Install .NET Framework Developer Pack
       run: |
         choco install netfx-4.8-devpack --pre --ignore-checksums -y
-
-    # Restore NuGet packages
-    - name: Restore NuGet Packages
-      run: nuget restore
   
     # Restore and build server project
     - name: Restore dependencies - Server
