@@ -12,7 +12,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>PersistentEmpiresClient</RootNamespace>
         <AssemblyName>PersistentEmpiresClient</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>net472</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
         <DebugSymbols>true</DebugSymbols>
@@ -31,7 +31,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>PersistentEmpiresClient</RootNamespace>
         <AssemblyName>PersistentEmpiresClient</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>net472</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
         <DebugSymbols>false</DebugSymbols>
