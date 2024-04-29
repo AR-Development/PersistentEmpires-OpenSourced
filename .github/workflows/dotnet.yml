@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -20,9 +17,39 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Restore dependencies - Server
+      run: dotnet restore PersistentEmpiresServer/PersistentEmpiresServer.csproj
+      working-directory: PersistentEmpiresServer
+    - name: Build - Server
+      run: dotnet build PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-restore
+      working-directory: PersistentEmpiresServer
+    - name: Test - Server
+      run: dotnet test PersistentEmpiresServer/PersistentEmpiresServer.csproj --no-build --verbosity normal
+      working-directory: PersistentEmpiresServer
+    - name: Restore dependencies - Client
+      run: dotnet restore PersistentEmpiresClient/PersistentEmpiresClient.csproj
+      working-directory: PersistentEmpiresClient
+    - name: Build - Client
+      run: dotnet build PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-restore
+      working-directory: PersistentEmpiresClient
+    - name: Test - Client
+      run: dotnet test PersistentEmpiresClient/PersistentEmpiresClient.csproj --no-build --verbosity normal
+      working-directory: PersistentEmpiresClient
+    - name: Restore dependencies - Harmony
+      run: dotnet restore PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj
+      working-directory: PersistentEmpiresHarmony
+    - name: Build - Harmony
+      run: dotnet build PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-restore
+      working-directory: PersistentEmpiresHarmony
+    - name: Test - Harmony
+      run: dotnet test PersistentEmpiresHarmony/PersistentEmpiresHarmony.csproj --no-build --verbosity normal
+      working-directory: PersistentEmpiresHarmony
+    - name: Restore dependencies - Save
+      run: dotnet restore PersistentEmpiresSave/PersistentEmpiresSave.csproj
+      working-directory: PersistentEmpiresSave
+    - name: Build - Save
+      run: dotnet build PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-restore
+      working-directory: PersistentEmpiresSave
+    - name: Test - Save
+      run: dotnet test PersistentEmpiresSave/PersistentEmpiresSave.csproj --no-build --verbosity normal
+      working-directory: PersistentEmpiresSave
