@@ -13,12 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Setup .NET Core SDK
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
     # Install .NET Framework Developer Pack
     - name: Install .NET Framework Developer Pack
       run: |
