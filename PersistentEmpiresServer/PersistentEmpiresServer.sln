@@ -59,8 +59,8 @@ Global
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Debug|Any CPU.Build.0 = RunAsServerDebug|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Debug|x64.ActiveCfg = RunAsServerDebug|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Debug|x64.Build.0 = RunAsServerDebug|Any CPU
-		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.ActiveCfg = RunAsClientDebug|Any CPU
-		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.Build.0 = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.ActiveCfg = ReleaseServer|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|Any CPU.Build.0 = ReleaseServer|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|x64.ActiveCfg = ReleaseServer|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.Release|x64.Build.0 = ReleaseServer|Any CPU
 	EndGlobalSection

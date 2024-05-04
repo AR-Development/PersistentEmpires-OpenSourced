@@ -23,6 +23,7 @@
         <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <OutputPath>bin\Debug\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <DefineConstants />
@@ -42,6 +43,7 @@
         <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <OutputPath>bin\Release\</OutputPath>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="System.Web" />
