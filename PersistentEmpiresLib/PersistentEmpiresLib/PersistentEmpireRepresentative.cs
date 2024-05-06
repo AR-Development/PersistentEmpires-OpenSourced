@@ -17,9 +17,11 @@ namespace PersistentEmpiresLib
 {
     public class PersistentEmpireRepresentative : MissionRepresentativeBase
     {
+        public static string defaultClass = "pe_peasant";
+
         private Faction _playerFaction;
         private int _factionIndex = -1;
-        private string _classId = "pe_peasant";
+        private string _classId = defaultClass;
         private Inventory playerInventory;
         private int hunger = 0;
         private PE_SpawnFrame nextSpawnFrame = null;
