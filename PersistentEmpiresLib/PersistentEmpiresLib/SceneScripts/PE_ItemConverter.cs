@@ -26,7 +26,8 @@ namespace PersistentEmpiresLib.SceneScripts
         public string OutputItemId = "pe_poison_dagger";
         public string RelevantSkill = "Chemist";
         public int RequiredSkill = 10;
-
+        public bool HideItemOnAnimation = false;
+        private EquipmentIndex HiddenItemIndex = EquipmentIndex.None;
         protected override bool LockUserFrames
         {
             get
@@ -94,7 +95,16 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 if (GameNetwork.IsServer)
                 {
-                    EquipmentIndex mainHandIndex = userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+                    EquipmentIndex mainHandIndex;
+                    if (HideItemOnAnimation)
+                    {
+                        mainHandIndex = HiddenItemIndex;
+                    }
+                    else
+                    {
+                        mainHandIndex = userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+                    }
+
                     bool flag = true;
                     if (mainHandIndex == EquipmentIndex.None)
                     {
@@ -109,12 +119,13 @@ namespace PersistentEmpiresLib.SceneScripts
                         flag = false;
                     }
 
-                    if(flag)
+                    if (flag)
                     {
                         ItemObject item = MBObjectManager.Instance.GetObject<ItemObject>(this.OutputItemId);
                         MissionWeapon weapon = new MissionWeapon(item, null, null);
                         userAgent.RemoveEquippedWeapon(mainHandIndex);
                         userAgent.EquipWeaponWithNewEntity(mainHandIndex, ref weapon);
+                        userAgent.TryToWieldWeaponInSlot(mainHandIndex, Agent.WeaponWieldActionType.Instant, true);
                     }
                 }
             }
@@ -129,6 +140,7 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             if (GameNetwork.IsServer)
             {
+                HiddenItemIndex = EquipmentIndex.None;
                 if (base.HasUser)
                 {
                     userAgent.StopUsingGameObjectMT(false);
@@ -136,12 +148,12 @@ namespace PersistentEmpiresLib.SceneScripts
                 }
 
                 EquipmentIndex mainHandIndex = userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-                if(mainHandIndex == EquipmentIndex.None)
+                if (mainHandIndex == EquipmentIndex.None)
                 {
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                if(userAgent.Equipment[mainHandIndex].IsEmpty)
+                if (userAgent.Equipment[mainHandIndex].IsEmpty)
                 {
                     userAgent.StopUsingGameObjectMT(false);
                     return;
@@ -151,10 +163,11 @@ namespace PersistentEmpiresLib.SceneScripts
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
+                HiddenItemIndex = mainHandIndex;
 
                 SkillObject relevantSkill = MBObjectManager.Instance.GetObject<SkillObject>(this.RelevantSkill);
                 int skillValue = userAgent.Character.GetSkillValue(relevantSkill);
-                if(skillValue < this.RequiredSkill)
+                if (skillValue < this.RequiredSkill)
                 {
                     userAgent.StopUsingGameObjectMT(false);
                     return;
@@ -162,6 +175,11 @@ namespace PersistentEmpiresLib.SceneScripts
             }
             if (this.Animation != "")
             {
+                if (HideItemOnAnimation)
+                {
+                    userAgent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
+                }
+
                 ActionIndexCache actionIndexCache = ActionIndexCache.Create(this.Animation);
                 userAgent.SetActionChannel(0, actionIndexCache, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
             }
