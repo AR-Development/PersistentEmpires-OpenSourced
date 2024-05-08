@@ -107,7 +107,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                             GameNetwork.EndModuleEventAsServer();
                         }
                     }
-                    updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(craftingAction.craftable.CraftableItem, craftingAction.craftable.OutputCount, ItemHelper.GetMaximumAmmo(craftingAction.craftable.CraftableItem));
+                    updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(craftingAction.craftable.Item, craftingAction.craftable.OutputCount, ItemHelper.GetMaximumAmmo(craftingAction.craftable.Item));
                     foreach (int i in updatedSlots)
                     {
                         GameNetwork.BeginModuleEventAsServer(player);
@@ -224,7 +224,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
-            if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(requestedCraft.CraftableItem, requestedCraft.OutputCount))
+            if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(requestedCraft.Item, requestedCraft.OutputCount))
             {
                 InformationComponent.Instance.SendMessage("You have not enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;

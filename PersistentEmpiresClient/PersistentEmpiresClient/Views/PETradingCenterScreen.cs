@@ -21,7 +21,7 @@ using PersistentEmpiresClient.Views;
 
 namespace PersistentEmpires.Views.Views
 {
-    public class PETradingCenterScreen : PEBaseItemList<PEStockpileMarketItemVM, MarketItem>
+    public class PETradingCenterScreen : PEBaseItemList<PETradeCenterVM, PEStockpileMarketItemVM, MarketItem>
     {
         private TradingCenterBehavior tradingCenterBehavior;
         private PE_TradeCenter ActiveEntity;
@@ -43,7 +43,7 @@ namespace PersistentEmpires.Views.Views
                 {
                     int index = indexes[i];
                     int stock = stocks[i];
-                    this._dataSource.FilteredItemList[index].Stock = stock;
+                    this._dataSource.ItemsList[index].Stock = stock;
                 }
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
@@ -53,7 +53,7 @@ namespace PersistentEmpires.Views.Views
         {
             if(this.IsActive)
             {
-                this._dataSource.FilteredItemList[itemIndex].Stock = newStock;
+                this._dataSource.ItemsList[itemIndex].Stock = newStock;
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
         }
@@ -81,6 +81,9 @@ namespace PersistentEmpires.Views.Views
             if (this.IsActive) return;
             this.ActiveEntity = tradeCenter;
             this._dataSource.TradeCenter = tradeCenter;
+            this._dataSource.Buy = Buy;
+            this._dataSource.Sell = Sell;
+            this._dataSource.GetPrices = GetPrices;
             base.OnOpen(tradeCenter.MarketItems, playerInventory, "PETradingCenter");
         }
 

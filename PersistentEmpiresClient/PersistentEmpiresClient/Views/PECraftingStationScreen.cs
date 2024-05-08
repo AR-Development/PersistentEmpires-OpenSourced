@@ -17,10 +17,11 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ScreenSystem;
 using PersistentEmpiresClient.Views;
 using PersistentEmpiresClient.ViewsVM;
+using PersistentEmpiresLib.Database.DBEntities;
 
 namespace PersistentEmpires.Views.Views
 {
-    public class PECraftingStationScreen : PEBaseItemList<PECraftingStationItemVM, Craftable>
+    public class PECraftingStationScreen : PEBaseItemList<PECraftingStationVM, PECraftingStationItemVM, Craftable>
     {
         private CraftingComponent _craftingComponent;
         private PE_CraftingStation ActiveEntity;
@@ -65,6 +66,7 @@ namespace PersistentEmpires.Views.Views
             if (this.IsActive) return;
             this.ActiveEntity = craftingStation;
             this._dataSource.CraftingStation = craftingStation;
+            this._dataSource.Craft = ExecuteCraft;
             base.OnOpen(craftingStation.Craftables, playerInventory, "PECraftingStation");
         }
 

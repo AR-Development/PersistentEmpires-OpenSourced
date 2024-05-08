@@ -22,7 +22,7 @@ using PersistentEmpiresClient.Views;
 
 namespace PersistentEmpires.Views.Views
 {
-    public class PEStockpileMarketScreen : PEBaseItemList<PEStockpileMarketItemVM, MarketItem>
+    public class PEStockpileMarketScreen : PEBaseItemList<PEStockpileMarketVM, PEStockpileMarketItemVM, MarketItem>
     {
         private StockpileMarketComponent _stockpileMarketComponent;
         private PE_StockpileMarket ActiveEntity;
@@ -44,7 +44,7 @@ namespace PersistentEmpires.Views.Views
                 {
                     int index = indexes[i];
                     int stock = stocks[i];
-                    this._dataSource.FilteredItemList[index].Stock = stock;
+                    this._dataSource.ItemsList[index].Stock = stock;
                 }
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
@@ -52,9 +52,11 @@ namespace PersistentEmpires.Views.Views
 
         private void OnUpdate(PE_StockpileMarket stockpileMarket, int itemIndex, int newStock)
         {
-            if(this.IsActive)
+            if (this.IsActive)
             {
-                this._dataSource.FilteredItemList[itemIndex].Stock = newStock;
+                Console.WriteLine(itemIndex);
+                Console.WriteLine(this._dataSource.FilteredItemList.ToString());
+                this._dataSource.ItemsList[itemIndex].Stock = newStock;
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
         }
@@ -76,8 +78,7 @@ namespace PersistentEmpires.Views.Views
             }
             if(this._gauntletLayer.Input.IsControlDown()  && clickedSlot.Item != null && clickedSlot.Count > 0)
             {
-                PEStockpileMarketVM dataSource = (PEStockpileMarketVM) _dataSource;
-                PEStockpileMarketItemVM item = dataSource.FilteredItemList.ToList().FirstOrDefault(itemVm => itemVm.MarketItem.Item.StringId == clickedSlot.Item.StringId);
+                PEStockpileMarketItemVM item = _dataSource.FilteredItemList.ToList().FirstOrDefault(itemVm => itemVm.MarketItem.Item.StringId == clickedSlot.Item.StringId);
                 if (item != null) this.Sell(item);
             }
         }
@@ -98,6 +99,9 @@ namespace PersistentEmpires.Views.Views
             if (this.IsActive) return;
             this.ActiveEntity = stockpileMarket;
             this._dataSource.StockpileMarket = stockpileMarket;
+            this._dataSource.Buy = Buy;
+            this._dataSource.Sell = Sell;
+            this._dataSource.UnpackBoxes = UnpackBoxes;
             base.OnOpen(stockpileMarket.MarketItems, playerInventory, "PEStockpileMarket");
         }
 

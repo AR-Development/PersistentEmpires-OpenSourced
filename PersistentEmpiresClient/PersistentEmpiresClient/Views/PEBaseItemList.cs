@@ -18,9 +18,10 @@ using TaleWorlds.ScreenSystem;
 
 namespace PersistentEmpiresClient.Views
 {
-    public class PEBaseItemList<T, U> : PEBaseInventoryScreen
+    public class PEBaseItemList<T, U, V> : PEBaseInventoryScreen
+        where T : PEBaseItemListVM<U, V>
     {
-        public dynamic _dataSource;
+        public T _dataSource;
 
         public override void OnMissionTick(float dt)
         {
@@ -43,7 +44,7 @@ namespace PersistentEmpiresClient.Views
             base.OnMissionScreenInitialize();
         }
 
-        public void OnOpen(List<U> items, Inventory playerInventory, string movieName)
+        public void OnOpen(List<V> items, Inventory playerInventory, string movieName)
         {
             if (this.IsActive) return;
             this._dataSource.RefreshValues(items, playerInventory);

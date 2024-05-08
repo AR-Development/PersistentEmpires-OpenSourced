@@ -29,7 +29,7 @@ namespace PersistentEmpiresLib.SceneScripts
     public struct Craftable {
         public List<CraftingRecipe> Recipe;
         public int OutputCount;
-        public ItemObject CraftableItem;
+        public ItemObject Item;
         public int Tier;
         public int RequiredEngineering;
         public int CraftTime;
@@ -37,7 +37,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public Craftable(List<CraftingRecipe> receipts, String itemId, int outputCount, int tier, int requiredEngineering, int craftTime, string relevantSkill)
         {
             this.Recipe = receipts;
-            this.CraftableItem = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
+            this.Item = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
             this.OutputCount = outputCount;
             this.Tier = tier;
             this.RequiredEngineering = requiredEngineering;

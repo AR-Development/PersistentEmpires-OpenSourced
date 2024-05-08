@@ -29,21 +29,21 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void RefreshValues(PE_StockpileMarket stockpileMarket, Inventory inventory, Action<PEStockpileMarketItemVM> buy, Action<PEStockpileMarketItemVM> sell, Action unpackBoxes) {
             this.StockpileMarket = stockpileMarket;
-            this._buy = buy;
-            this._sell = sell;
-            this._unpackBoxes = unpackBoxes;
+            this.Buy = buy;
+            this.Sell = sell;
+            this.UnpackBoxes = unpackBoxes;
         }
 
         public void ExecuteBuy() {
-            this._buy(this.SelectedItem);
+            this.Buy(this.SelectedItem);
         }
 
         public void ExecuteSell() {
-            this._sell(this.SelectedItem);
+            this.Sell(this.SelectedItem);
         }
 
         public void ExecuteUnpackBoxes() {
-            this._unpackBoxes();
+            this.UnpackBoxes();
         }
 
         [DataSourceProperty]
@@ -83,5 +83,8 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         public PE_StockpileMarket StockpileMarket { get => stockpileMarket; set => stockpileMarket = value; }
+        public Action<PEStockpileMarketItemVM> Buy { get => _buy; set => _buy = value; }
+        public Action<PEStockpileMarketItemVM> Sell { get => _sell; set => _sell = value; }
+        public Action UnpackBoxes { get => _unpackBoxes; set => _unpackBoxes = value; }
     }
 }
