@@ -29,21 +29,21 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void RefreshValues(PE_TradeCenter tradeCenter, Inventory inventory, Action<PEStockpileMarketItemVM> buy, Action<PEStockpileMarketItemVM> sell, Action<PEStockpileMarketItemVM> getPrices) {
             this.TradeCenter = tradeCenter;
-            this._buy = buy;
-            this._sell = sell;
-            this._getPrices = getPrices;
+            this.Buy = buy;
+            this.Sell = sell;
+            this.GetPrices = getPrices;
         }
 
         public void ExecuteBuy() {
-            this._buy(this.SelectedItem);
+            this.Buy(this.SelectedItem);
         }
 
         public void ExecuteSell() {
-            this._sell(this.SelectedItem);
+            this.Sell(this.SelectedItem);
         }
 
         public void ExecuteGetPrices() {
-            this._getPrices(this.SelectedItem);
+            this.GetPrices(this.SelectedItem);
         }
 
         [DataSourceProperty]
@@ -83,5 +83,8 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         public PE_TradeCenter TradeCenter { get => tradeCenter; set => tradeCenter = value; }
+        public Action<PEStockpileMarketItemVM> Buy { get => _buy; set => _buy = value; }
+        public Action<PEStockpileMarketItemVM> Sell { get => _sell; set => _sell = value; }
+        public Action<PEStockpileMarketItemVM> GetPrices { get => _getPrices; set => _getPrices = value; }
     }
 }

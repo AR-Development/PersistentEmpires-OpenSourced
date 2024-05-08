@@ -101,13 +101,12 @@ namespace PersistentEmpiresClient.ViewsVM
             this.CultureFilter = new SelectorVM<SelectorItemVM>(new List<string>(this.cultureFilterDict.Keys), 0, this.OnCultureFilterSelected);
             this.TierFilter = new SelectorVM<SelectorItemVM>(new List<string>(this.tierFilterDict.Keys), 0, this.OnTierFilterSelected);
             this.ItemTypeFilter = new SelectorVM<SelectorItemVM>(new List<string>(this.itemTypeDict.Keys), 0, this.OnItemTypeFilterSelected);
-
         }
 
         public virtual void AddItem(object obj, int index) { }
 
         public void RefreshValues(List<U> items, Inventory playerInventory) {
-            this.items = items;
+            this.ItemsList = items;
 
             this.PlayerInventory = new PEInventoryVM(this._handleClickItem);
             this.PlayerInventory.SetItems(playerInventory);
@@ -146,12 +145,12 @@ namespace PersistentEmpiresClient.ViewsVM
 
         public void OnTick()
         {
-            if (lastRenderedIndex == items.Count) return;
+            if (lastRenderedIndex == ItemsList.Count) return;
 
-            int maxIndex = (items.Count - lastRenderedIndex) > maxItemsRenderedPerTick ? lastRenderedIndex + maxItemsRenderedPerTick : items.Count;
+            int maxIndex = (ItemsList.Count - lastRenderedIndex) > maxItemsRenderedPerTick ? lastRenderedIndex + maxItemsRenderedPerTick : ItemsList.Count;
             for (int i = lastRenderedIndex; i < maxIndex - 1; i++)
             {
-                dynamic item = items[i];
+                dynamic item = ItemsList[i];
                 if (this.NameFilter != null && this.NameFilter != "" && !item.Item.Name.ToString().ToLower().Contains(this.NameFilter)) continue;
                 if (stockFilter != null && (((bool)stockFilter && !(item.Stock > 0)) || (!(bool)stockFilter && (item.Stock != 0)))) continue;
                 if (cultureFilter != null && item.Item.Culture.StringId != cultureFilter) continue;
@@ -163,6 +162,8 @@ namespace PersistentEmpiresClient.ViewsVM
 
             lastRenderedIndex = maxIndex;
         }
+
+        public List<U> ItemsList { get => items; set => items = value; }
 
         [DataSourceProperty]
         public MBBindingList<T> FilteredItemList

@@ -34,19 +34,19 @@ namespace PersistentEmpires.Views.ViewsVM
             {
                 craftingRecipes.Add(new PECraftingRecipeVM(recipe.Item, recipe.NeededCount));
             }
-            this.FilteredItemList.Add(new PECraftingStationItemVM(item.CraftableItem, item.OutputCount, item.Tier, CraftingStation.upgradeableBuilding.CurrentTier, craftingRecipes, this.ExecuteCraft, i, item.CraftTime));
+            this.FilteredItemList.Add(new PECraftingStationItemVM(item.Item, item.OutputCount, item.Tier, CraftingStation.upgradeableBuilding.CurrentTier, craftingRecipes, this.ExecuteCraft, i, item.CraftTime));
         }
 
         public void RefreshValues(PE_CraftingStation craftingStation, Inventory inventory, Action<PECraftingStationItemVM> craft)
         {
             this.CraftingStation = craftingStation;
-            this._craft = craft;
+            this.Craft = craft;
             base.RefreshValues(craftingStation.Craftables, inventory);
         }
 
         private void ExecuteCraft(PECraftingStationItemVM obj)
         {
-            this._craft(obj); 
+            this.Craft(obj); 
         }
 
         [DataSourceProperty]
@@ -96,5 +96,6 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         public PE_CraftingStation CraftingStation { get => craftingStation; set => craftingStation = value; }
+        public Action<PECraftingStationItemVM> Craft { get => _craft; set => _craft = value; }
     }
 }
