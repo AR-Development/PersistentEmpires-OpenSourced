@@ -95,6 +95,6 @@ namespace PersistentEmpires.Views.ViewsVM
             }
         }
 
-        protected PE_CraftingStation CraftingStation { get => craftingStation; set => craftingStation = value; }
+        public PE_CraftingStation CraftingStation { get => craftingStation; set => craftingStation = value; }
     }
 }
