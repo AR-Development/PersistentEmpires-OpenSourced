@@ -75,6 +75,12 @@ namespace PersistentEmpiresSave.Database.Repositories
             });
         }
 
+        // Identifiers TODO
+        public static void InsertIdentifiers(string playerId, string discordId)
+        {
+
+        }
+
         private static DBPlayer CreateDBPlayer(NetworkCommunicator peer)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
