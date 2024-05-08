@@ -86,7 +86,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (craftingAction.startedAt + craftingAction.craftable.CraftTime <= DateTimeOffset.Now.ToUnixTimeSeconds())
                 {
                     // Crafting complete bra.
-                    bool hasEveryItem = craftingAction.craftable.Receipts.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
+                    bool hasEveryItem = craftingAction.craftable.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
                     if (!hasEveryItem)
                     {
                         InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
@@ -97,7 +97,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         continue;
                     }
                     List<int> updatedSlots;
-                    foreach (CraftingReceipt r in craftingAction.craftable.Receipts)
+                    foreach (CraftingRecipe r in craftingAction.craftable.Recipe)
                     {
                         updatedSlots = persistentEmpireRepresentative.GetInventory().RemoveCountedItemSynced(r.Item, r.NeededCount);
                         foreach (int i in updatedSlots)
@@ -229,7 +229,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 InformationComponent.Instance.SendMessage("You have not enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
-            bool hasEveryItem = requestedCraft.Receipts.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
+            bool hasEveryItem = requestedCraft.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
             if (!hasEveryItem)
             {
                 InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);

@@ -21,7 +21,7 @@
     <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Program Files %28x86%29\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PersistentEmpires\bin\Win64_Shipping_Client\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DefineConstants />
@@ -241,7 +241,7 @@
     <Compile Include="ViewsVM\AdminPanel\PEAdminPlayerManagementVM.cs" />
     <Compile Include="ViewsVM\AnimationMenu\PEAnimationSubMenuVM.cs" />
     <Compile Include="ViewsVM\AnimationMenu\PEAnimationVM.cs" />
-    <Compile Include="ViewsVM\CraftingStation\PECraftingReceiptVM.cs" />
+    <Compile Include="ViewsVM\CraftingStation\PECraftingRecipeVM.cs" />
     <Compile Include="ViewsVM\CraftingStation\PECraftingStationItemVM.cs" />
     <Compile Include="ViewsVM\FactionManagement\ManagementMenu\ManagementItemVM.cs" />
     <Compile Include="ViewsVM\FactionManagement\PEFactionChangeBannerVM.cs" />
@@ -260,6 +260,7 @@
     <Compile Include="ViewsVM\PEBankVM.cs" />
     <Compile Include="ViewsVM\PECraftingStationVM.cs" />
     <Compile Include="ViewsVM\PEDeathVM.cs" />
+    <Compile Include="ViewsVM\PEBaseItemListVM.cs" />
     <Compile Include="ViewsVM\PEHungerVM.cs" />
     <Compile Include="ViewsVM\PEImportExportVM.cs" />
     <Compile Include="ViewsVM\PEInventoryVM.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Views\PEBankView.cs" />
     <Compile Include="Views\PEBannerRenderConsumer.cs" />
     <Compile Include="Views\PEBaseInventoryScreen.cs" />
+    <Compile Include="Views\PEBaseItemList.cs" />
     <Compile Include="Views\PEChatBox.cs" />
     <Compile Include="Views\PEConsumeFoodView.cs" />
     <Compile Include="Views\PECraftingStationScreen.cs" />

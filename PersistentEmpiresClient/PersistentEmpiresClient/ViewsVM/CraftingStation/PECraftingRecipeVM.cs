@@ -8,12 +8,12 @@ using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.CraftingStation
 {
-    public class PECraftingReceiptVM : ViewModel
+    public class PECraftingRecipeVM : ViewModel
     {
         public ItemObject Item;
         private int _count;
         private ImageIdentifierVM _imageIdentifier;
-        public PECraftingReceiptVM(ItemObject item, int count)
+        public PECraftingRecipeVM(ItemObject item, int count)
         {
             this.Item = item;
             this.ImageIdentifier = new ImageIdentifierVM(item);
