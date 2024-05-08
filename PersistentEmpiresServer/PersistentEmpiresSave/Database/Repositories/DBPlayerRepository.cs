@@ -75,10 +75,66 @@ namespace PersistentEmpiresSave.Database.Repositories
             });
         }
 
-        // Identifiers TODO
+        // Identifiers WIP
         public static void InsertIdentifiers(string playerId, string discordId)
         {
+            string selectQuery = "SELECT user_id FROM Identifiers WHERE identifier = @Identifier AND identifier_type = @IdentifierType";
+            string insertQuery = "INSERT INTO Identifiers (identifier, identifier_type, user_id) VALUES (@Identifier, @IdentifierType, @UserId)";
+            string updateQuery = "UPDATE Identifiers SET user_id = @UserId WHERE identifier = @Identifier AND identifier_type = @IdentifierType";
+            string updateAllQuery = "UPDATE Identifiers SET user_id = @LowerUserId WHERE user_id = @HigherUserId";
 
+            using (IDbConnection connection = DBConnection.Connection)
+            {
+                connection.Open();
+                using (IDbTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Check if player identifier exists and get its user_id
+                        string playerUserId = connection.ExecuteScalar<string>(selectQuery, new { Identifier = playerId, IdentifierType = "player" }, transaction);
+
+                        // Check if Discord identifier exists and get its user_id
+                        string discordUserId = connection.ExecuteScalar<string>(selectQuery, new { Identifier = discordId, IdentifierType = "discord" }, transaction);
+
+                        if (string.IsNullOrEmpty(playerUserId) && string.IsNullOrEmpty(discordUserId))
+                        {
+                            // Both identifiers don't exist, insert them with a new user_id
+                            string newUserId = Guid.NewGuid().ToString();
+                            connection.Execute(insertQuery, new { Identifier = playerId, IdentifierType = "player", UserId = newUserId }, transaction);
+                            connection.Execute(insertQuery, new { Identifier = discordId, IdentifierType = "discord", UserId = newUserId }, transaction);
+                        }
+                        else if (!string.IsNullOrEmpty(playerUserId) && string.IsNullOrEmpty(discordUserId))
+                        {
+                            // Player identifier exists, update Discord identifier with the existing user_id
+                            connection.Execute(insertQuery, new { Identifier = discordId, IdentifierType = "discord", UserId = playerUserId }, transaction);
+                        }
+                        else if (string.IsNullOrEmpty(playerUserId) && !string.IsNullOrEmpty(discordUserId))
+                        {
+                            // Discord identifier exists, update player identifier with the existing user_id
+                            connection.Execute(insertQuery, new { Identifier = playerId, IdentifierType = "player", UserId = discordUserId }, transaction);
+                        }
+                        else
+                        {
+                            // Both identifiers exist
+                            if (playerUserId != discordUserId)
+                            {
+                                // Identifiers belong to different user_ids, update all identifiers with the higher user_id to the lower user_id
+                                string lowerUserId = playerUserId.CompareTo(discordUserId) < 0 ? playerUserId : discordUserId;
+                                string higherUserId = playerUserId.CompareTo(discordUserId) >= 0 ? playerUserId : discordUserId;
+                                connection.Execute(updateAllQuery, new { LowerUserId = lowerUserId, HigherUserId = higherUserId }, transaction);
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Debug.Print("Error inserting identifiers: " + ex.ToString());
+                        throw;
+                    }
+                }
+            }
         }
 
         private static DBPlayer CreateDBPlayer(NetworkCommunicator peer)
