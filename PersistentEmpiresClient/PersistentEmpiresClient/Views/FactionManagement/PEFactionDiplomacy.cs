@@ -1,13 +1,7 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
 using PersistentEmpires.Views.ViewsVM.PETabMenu;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
 using PersistentEmpiresLib;
+using TaleWorlds.MountAndBlade;
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionDiplomacy : PEMenuItem
@@ -23,7 +17,7 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             this._factionManagementComponent.OnDiplomacyMenuClick += this.OnOpen;
             this._factionsBehavior.OnFactionMakePeace += this.OnFactionDeclaredAnything;
             this._factionsBehavior.OnFactionDeclaredWar += this.OnFactionDeclaredAnything;
-            
+
             this._dataSource = new PEFactionDiplomacyVM(this._factionsBehavior.Factions,
                 (TabFactionVM faction) =>
                 {
@@ -48,7 +42,8 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             }
         }
 
-        protected override void OnOpen() {
+        protected override void OnOpen()
+        {
             PersistentEmpireRepresentative persistentEmpireRepresentative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
             ((PEFactionDiplomacyVM)this._dataSource).RefreshValues(this._factionsBehavior.Factions, persistentEmpireRepresentative.GetFaction(), persistentEmpireRepresentative.GetFactionIndex());
             base.OnOpen();

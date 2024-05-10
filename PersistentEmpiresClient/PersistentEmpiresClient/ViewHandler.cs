@@ -1,19 +1,12 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
-using TaleWorlds.Engine;
-using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View;
+﻿using PersistentEmpires.Views.Views;
 using PersistentEmpiresHarmony.Patches;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.Helpers;
+using System.Collections.Generic;
+using TaleWorlds.Core;
+using TaleWorlds.Engine;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.View;
 
 namespace PersistentEmpires.Views
 {
@@ -54,9 +47,10 @@ namespace PersistentEmpires.Views
             }
         }
 
-        private static void UpdateAgentLabel(Agent agent) {
+        private static void UpdateAgentLabel(Agent agent)
+        {
             PEAgentLabelUIHandler peAgentLabel = Mission.Current.GetMissionBehavior<PEAgentLabelUIHandler>();
-            if(peAgentLabel != null)
+            if (peAgentLabel != null)
             {
                 PersistentEmpireRepresentative persistentEmpireRepresentative = agent.MissionPeer.GetNetworkPeer().GetComponent<PersistentEmpireRepresentative>();
                 Banner fBanner = persistentEmpireRepresentative == null || persistentEmpireRepresentative.GetFaction() == null ? null : persistentEmpireRepresentative.GetFaction().banner;

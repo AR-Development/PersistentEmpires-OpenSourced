@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.FactionManagement
@@ -26,17 +22,17 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
 
         public bool CanApplyValue()
         {
-            if(this.FactionName == "")
+            if (this.FactionName == "")
             {
                 this.FactionNameNotApplicable = "Cannot be empty";
                 return false;
             }
-            if(this.FactionName.Length < 3)
+            if (this.FactionName.Length < 3)
             {
                 this.FactionNameNotApplicable = "Faction Name Cannot Be Less Than 3 Chars";
                 return false;
             }
-            if(this.FactionName.Length > 100)
+            if (this.FactionName.Length > 100)
             {
                 this.FactionNameNotApplicable = "Faction Name Cannot Be Bigger Than 100 Chars";
                 return false;
@@ -60,11 +56,12 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         }
 
         [DataSourceProperty]
-        public string FactionName {
+        public string FactionName
+        {
             get => this._factionName;
             set
             {
-                if(value != this._factionName)
+                if (value != this._factionName)
                 {
                     this._factionName = value;
                     base.OnPropertyChangedWithValue(value, "FactionName");

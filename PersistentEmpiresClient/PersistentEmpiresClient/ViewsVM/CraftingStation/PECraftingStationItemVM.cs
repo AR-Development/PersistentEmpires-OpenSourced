@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -21,7 +17,8 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
 
         private Action<PECraftingStationItemVM> _executeCraft;
         private string _craftableName;
-        public PECraftingStationItemVM(ItemObject craftableItem, int outputCount, int tier, int currentTier, MBBindingList<PECraftingRecipeVM> craftingReceipts, Action<PECraftingStationItemVM> executeCraft, int index, int craftingDuration) {
+        public PECraftingStationItemVM(ItemObject craftableItem, int outputCount, int tier, int currentTier, MBBindingList<PECraftingRecipeVM> craftingReceipts, Action<PECraftingStationItemVM> executeCraft, int index, int craftingDuration)
+        {
             this.CraftableItem = craftableItem;
             this.ImageIdentifier = new ImageIdentifierVM(craftableItem);
             this.OutputCount = outputCount;
@@ -57,7 +54,7 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             get => this._craftingDuration;
             set
             {
-                if(value != this._craftingDuration)
+                if (value != this._craftingDuration)
                 {
                     this._craftingDuration = value;
                     base.OnPropertyChangedWithValue(value, "CraftingDuration");
@@ -70,7 +67,7 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             get => this._craftableName;
             set
             {
-                if(value != this._craftableName)
+                if (value != this._craftableName)
                 {
                     this._craftableName = value;
                     base.OnPropertyChangedWithValue(value, "CraftableName");
@@ -82,7 +79,7 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
         {
             get => this.CurrentTier >= this.Tier;
         }
-        
+
 
         [DataSourceProperty]
         public ImageIdentifierVM ImageIdentifier
@@ -111,11 +108,12 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             }
         }
         [DataSourceProperty]
-        public int OutputCount {
+        public int OutputCount
+        {
             get => this._outputCount;
             set
             {
-                if(value != this._outputCount)
+                if (value != this._outputCount)
                 {
                     this._outputCount = value;
                     base.OnPropertyChangedWithValue(value, "OutputCount");
@@ -123,10 +121,12 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             }
         }
         [DataSourceProperty]
-        public MBBindingList<PECraftingRecipeVM> CraftingReceipts {
+        public MBBindingList<PECraftingRecipeVM> CraftingReceipts
+        {
             get => this._craftingReceipts;
-            set { 
-                if(value != this._craftingReceipts)
+            set
+            {
+                if (value != this._craftingReceipts)
                 {
                     this._craftingReceipts = value;
                     base.OnPropertyChangedWithValue(value, "CraftingReceipts");

@@ -1,17 +1,11 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
-using PersistentEmpiresLib;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -62,7 +56,7 @@ namespace PersistentEmpires.Views.Views
         private void Open()
         {
             if (this.IsActive) return;
-            
+
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriority);
             this._gauntletLayer.IsFocusLayer = true;
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);

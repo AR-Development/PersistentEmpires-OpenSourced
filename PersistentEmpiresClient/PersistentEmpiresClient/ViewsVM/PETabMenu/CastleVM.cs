@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.PETabMenu
@@ -13,7 +8,8 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         private PE_CastleBanner _castleBanner;
         private string _castleName;
 
-        public PE_CastleBanner GetCastleBanner() {
+        public PE_CastleBanner GetCastleBanner()
+        {
             return this._castleBanner;
         }
         public CastleVM(PE_CastleBanner castleBanner)
@@ -23,10 +19,12 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
 
         [DataSourceProperty]
-        public string CastleName {
+        public string CastleName
+        {
             get => this._castleName;
-            set { 
-                if(this._castleName != value)
+            set
+            {
+                if (this._castleName != value)
                 {
                     this._castleName = value;
                     this.OnPropertyChangedWithValue(value, "CastleName");
@@ -34,6 +32,6 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             }
         }
 
-        
+
     }
 }

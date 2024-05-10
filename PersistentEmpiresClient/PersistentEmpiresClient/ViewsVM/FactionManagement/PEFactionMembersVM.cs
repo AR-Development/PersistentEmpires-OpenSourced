@@ -1,9 +1,6 @@
 ﻿using PersistentEmpiresLib.Factions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -21,7 +18,8 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         private string _searchPlayer;
         private MBBindingList<PEFactionMemberItemVM> _filteredMembers;
 
-        public PEFactionMembersVM(string _title, string _buttonText, Action onCancel ,Action<PEFactionMemberItemVM> onApply, Action close) {
+        public PEFactionMembersVM(string _title, string _buttonText, Action onCancel, Action<PEFactionMemberItemVM> onApply, Action close)
+        {
             this.Members = new MBBindingList<PEFactionMemberItemVM>();
             this.Title = _title;
             this.ButtonText = _buttonText;
@@ -42,14 +40,16 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             this._filteredMembers = new MBBindingList<PEFactionMemberItemVM>();
         }
 
-        public void RefreshItems(Faction faction, bool excludeMySelf = false) {
+        public void RefreshItems(Faction faction, bool excludeMySelf = false)
+        {
             this.SelectedMember = null;
             this.Members.Clear();
             foreach (NetworkCommunicator member in faction.members)
             {
                 if (excludeMySelf && member == GameNetwork.MyPeer) continue;
-                PEFactionMemberItemVM memberItemVm = new PEFactionMemberItemVM(member, (PEFactionMemberItemVM selected) => {
-                    if(this._selectedMember != null)
+                PEFactionMemberItemVM memberItemVm = new PEFactionMemberItemVM(member, (PEFactionMemberItemVM selected) =>
+                {
+                    if (this._selectedMember != null)
                     {
                         this._selectedMember.IsSelected = false;
                     }
@@ -61,7 +61,8 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             this.RefreshValues();
         }
 
-        public bool CanApplyValue() {
+        public bool CanApplyValue()
+        {
             return this.SelectedMember != null;
         }
 
@@ -78,7 +79,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             }
         }
 
-        
+
 
         [DataSourceProperty]
         public string ButtonText
@@ -86,7 +87,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._buttonText;
             set
             {
-                if(value != this._buttonText)
+                if (value != this._buttonText)
                 {
                     this._buttonText = value;
                     base.OnPropertyChangedWithValue(value, "ButtonText");
@@ -100,12 +101,12 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._searchPlayer;
             set
             {
-                if(value != this._searchPlayer)
+                if (value != this._searchPlayer)
                 {
                     this._searchPlayer = value;
                     base.OnPropertyChangedWithValue(value, "SearchPlayer");
                     this._filteredMembers = new MBBindingList<PEFactionMemberItemVM>();
-                    foreach(PEFactionMemberItemVM member in this.Members.Where(m => m.UserName.StartsWith(value)))
+                    foreach (PEFactionMemberItemVM member in this.Members.Where(m => m.UserName.StartsWith(value)))
                     {
                         this._filteredMembers.Add(member);
                     }
@@ -115,12 +116,15 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         }
 
         [DataSourceProperty]
-        public MBBindingList<PEFactionMemberItemVM> FilteredMembers {
-            get {
-                if(this.SearchPlayer == null || this.SearchPlayer == "")
+        public MBBindingList<PEFactionMemberItemVM> FilteredMembers
+        {
+            get
+            {
+                if (this.SearchPlayer == null || this.SearchPlayer == "")
                 {
                     return this.Members;
-                }else
+                }
+                else
                 {
                     return this._filteredMembers;
                 }
@@ -139,7 +143,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._selectedMember;
             set
             {
-                if ( value != this._selectedMember)
+                if (value != this._selectedMember)
                 {
                     this._selectedMember = value;
                     base.OnPropertyChangedWithValue(this._selectedMember, "SelectedMember");
@@ -154,7 +158,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._members;
             set
             {
-                if( value != this._members)
+                if (value != this._members)
                 {
                     this._members = value;
                     base.OnPropertyChangedWithValue(this._members, "Members");
@@ -163,11 +167,12 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         }
 
         [DataSourceProperty]
-        public string Title {
+        public string Title
+        {
             get => this._title;
             set
             {
-                if(value != this._title)
+                if (value != this._title)
                 {
                     this._title = value;
                     base.OnPropertyChangedWithValue(this._title, "Title");

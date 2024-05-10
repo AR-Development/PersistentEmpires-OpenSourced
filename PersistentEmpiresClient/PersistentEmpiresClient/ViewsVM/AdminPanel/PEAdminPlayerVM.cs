@@ -1,10 +1,5 @@
 ﻿using PersistentEmpiresLib;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -38,7 +33,7 @@ namespace PersistentEmpires.Views.Views.AdminPanel
             get => this._isSelected;
             set
             {
-                if(value != this._isSelected)
+                if (value != this._isSelected)
                 {
                     this._isSelected = value;
                     base.OnPropertyChangedWithValue(value, "IsSelected");
@@ -52,7 +47,7 @@ namespace PersistentEmpires.Views.Views.AdminPanel
             get => this._factionName;
             set
             {
-                if(value != this._factionName)
+                if (value != this._factionName)
                 {
                     this._factionName = value;
                     base.OnPropertyChangedWithValue(value, "FactionName");
@@ -66,7 +61,7 @@ namespace PersistentEmpires.Views.Views.AdminPanel
             get => this._playerName;
             set
             {
-                if(value != this._playerName)
+                if (value != this._playerName)
                 {
                     this._playerName = value;
                     base.OnPropertyChangedWithValue(value, "PlayerName");

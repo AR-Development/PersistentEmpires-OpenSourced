@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -15,7 +12,8 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         private Action _onCancel;
         private Action<string> _onApply;
         private Action _close;
-        public PEFactionChangeBannerVM(Action OnCancel, Action<string> OnApply, Action Close) {
+        public PEFactionChangeBannerVM(Action OnCancel, Action<string> OnApply, Action Close)
+        {
             this.BannerCode = "";
             this.BannerCodeNotApplicable = "Cannot be empty";
             this._onCancel = OnCancel;
@@ -97,13 +95,15 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             }
             return true;
         }
-        public bool CanApplyValue() {
+        public bool CanApplyValue()
+        {
             if (this.BannerCode == "")
             {
                 this.BannerCodeNotApplicable = "Cannot be empty";
                 return false;
             }
-            if((int)(this.BannerCode.Split('.').Count() / 10) <= 0) {
+            if ((int)(this.BannerCode.Split('.').Count() / 10) <= 0)
+            {
                 this.BannerCodeNotApplicable = "Invalid Banner Code";
                 return false;
             }
@@ -116,12 +116,14 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             return true;
         }
 
-        public void OnCancel() {
+        public void OnCancel()
+        {
             this._onCancel();
         }
 
-        public void OnApply() {
-            if(this.CanApplyValue())
+        public void OnApply()
+        {
+            if (this.CanApplyValue())
             {
                 this._close();
                 this._onApply(this.BannerCode);
@@ -135,7 +137,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._bannerCode;
             set
             {
-                if(value != this._bannerCode)
+                if (value != this._bannerCode)
                 {
                     this._bannerCode = value;
                     base.OnPropertyChangedWithValue(value, "BannerCode");
@@ -144,17 +146,18 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             }
         }
         [DataSourceProperty]
-        public bool CanApply {
+        public bool CanApply
+        {
             get => this.CanApplyValue();
         }
-        
+
         [DataSourceProperty]
         public string BannerCodeNotApplicable
         {
             get => this._bannerCodeNotApplicable;
             set
             {
-                if(value != this._bannerCodeNotApplicable)
+                if (value != this._bannerCodeNotApplicable)
                 {
                     this._bannerCodeNotApplicable = value;
                     base.OnPropertyChangedWithValue(value, "BannerCodeNotApplicable");

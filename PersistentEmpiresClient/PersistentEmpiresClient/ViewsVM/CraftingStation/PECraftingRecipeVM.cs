@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.CraftingStation
@@ -33,7 +28,8 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             InformationManager.HideTooltip();
         }
         [DataSourceProperty]
-        public int Count {
+        public int Count
+        {
             get => this._count;
             set
             {

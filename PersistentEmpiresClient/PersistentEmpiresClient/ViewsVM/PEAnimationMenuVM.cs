@@ -1,9 +1,5 @@
 ﻿using PersistentEmpires.Views.ViewsVM.AnimationMenu;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -16,22 +12,23 @@ namespace PersistentEmpires.Views.ViewsVM
         public delegate void AnimationSelected(string actionId);
         public event AnimationSelected OnAnimationSelected;
 
-        public PEAnimationMenuVM(List<PEAnimationSubMenuVM> categories) {
+        public PEAnimationMenuVM(List<PEAnimationSubMenuVM> categories)
+        {
             this.SubMenus = new MBBindingList<PEAnimationSubMenuVM>();
-            foreach(PEAnimationSubMenuVM category in categories)
+            foreach (PEAnimationSubMenuVM category in categories)
             {
-               
+
                 this.SubMenus.Add(category);
             }
         }
 
         public void SelectInput(int input)
         {
-            if(this.IsSelected)
+            if (this.IsSelected)
             {
-                if(input == 9)
+                if (input == 9)
                 {
-                    if(this.SelectedMenu.PageNumber == 0)
+                    if (this.SelectedMenu.PageNumber == 0)
                     {
                         this.SelectedMenu = null;
                     }
@@ -39,9 +36,10 @@ namespace PersistentEmpires.Views.ViewsVM
                     {
                         this.SelectedMenu.PageNumber -= 1;
                     }
-                }else if(input == 0)
+                }
+                else if (input == 0)
                 {
-                    if(this.SelectedMenu.PageNumber != this.SelectedMenu.NativePages.Count - 1)
+                    if (this.SelectedMenu.PageNumber != this.SelectedMenu.NativePages.Count - 1)
                     {
                         this.SelectedMenu.PageNumber = this.SelectedMenu.PageNumber + 1;
                     }
@@ -50,7 +48,7 @@ namespace PersistentEmpires.Views.ViewsVM
                 {
                     if ((input - 1) < this.SelectedMenu.Page.Count)
                     {
-                        if(this.OnAnimationSelected != null)
+                        if (this.OnAnimationSelected != null)
                         {
                             this.OnAnimationSelected(this.SelectedMenu.Page[input - 1].ActionId);
                         }
@@ -59,7 +57,8 @@ namespace PersistentEmpires.Views.ViewsVM
             }
             else
             {
-                if (input == 0) {
+                if (input == 0)
+                {
                     this.OnAnimationSelected("act_none");
                     return;
                 }
@@ -74,7 +73,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._selectedMenu;
             set
             {
-                if(value != this._selectedMenu)
+                if (value != this._selectedMenu)
                 {
                     this._selectedMenu = value;
                     base.OnPropertyChanged("IsSelected");
@@ -95,7 +94,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._subMenus;
             set
             {
-                if(value != this._subMenus)
+                if (value != this._subMenus)
                 {
                     this._subMenus = value;
                     base.OnPropertyChangedWithValue(value, "SubMenus");

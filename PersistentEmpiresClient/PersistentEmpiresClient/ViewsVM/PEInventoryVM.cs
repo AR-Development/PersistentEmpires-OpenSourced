@@ -1,11 +1,6 @@
 ﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpires.Views.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -67,7 +62,8 @@ namespace PersistentEmpires.Views.ViewsVM
                     true,
                     "Yes",
                     "No",
-                    () => {
+                    () =>
+                    {
                         GameNetwork.BeginModuleEventAsClient();
                         GameNetwork.WriteMessage(new RequestDropItemFromInventory(draggedItem.DropTag));
                         GameNetwork.EndModuleEventAsClient();
@@ -98,7 +94,7 @@ namespace PersistentEmpires.Views.ViewsVM
             GameNetwork.EndModuleEventAsClient();
             // Send Request to server, if server says it's OK, drag and drop the stuff
         }
-        
+
         public void TryMovingItem(PEItemVM item)
         {
             if (this._currentPlayerInventory == null) return;
@@ -134,13 +130,13 @@ namespace PersistentEmpires.Views.ViewsVM
                item.Item.ItemType != ItemObject.ItemTypeEnum.HeadArmor &&
                item.Item.ItemType != ItemObject.ItemTypeEnum.HandArmor &&
                item.Item.ItemType != ItemObject.ItemTypeEnum.LegArmor &&
-               item.Item.ItemType != ItemObject.ItemTypeEnum.ChestArmor 
+               item.Item.ItemType != ItemObject.ItemTypeEnum.ChestArmor
                 )
             {
                 // Its not an armor
-                if(this._item0.Item == null || this._item0.Count == 0)
+                if (this._item0.Item == null || this._item0.Count == 0)
                 {
-                    targetSlot = this._item0;    
+                    targetSlot = this._item0;
                 }
                 else if (this._item1.Item == null || this._item1.Count == 0)
                 {
@@ -157,11 +153,11 @@ namespace PersistentEmpires.Views.ViewsVM
             }
             else
             {
-                switch(item.Item.ItemType)
+                switch (item.Item.ItemType)
                 {
                     case ItemObject.ItemTypeEnum.BodyArmor:
                         targetSlot = this._bodySlot; break;
-                    case ItemObject.ItemTypeEnum.HeadArmor: 
+                    case ItemObject.ItemTypeEnum.HeadArmor:
                         targetSlot = this._helmSlot; break;
                     case ItemObject.ItemTypeEnum.HandArmor:
                         targetSlot = this._handSlot; break;
@@ -173,7 +169,7 @@ namespace PersistentEmpires.Views.ViewsVM
                         targetSlot = this._bodySlot; break;
                 }
             }
-            if(targetSlot != null)
+            if (targetSlot != null)
             {
                 this.RequestExecuteTransfer(targetSlot, item);
             }
@@ -185,24 +181,25 @@ namespace PersistentEmpires.Views.ViewsVM
             if (item.Item == null || item.Count == 0) return;
 
             PEItemVM targetSlot = null;
-            
-            foreach(PEItemVM inventorySlot in this._inventoryItems)
+
+            foreach (PEItemVM inventorySlot in this._inventoryItems)
             {
-                if(inventorySlot.Item != null && inventorySlot.Count > 0 && inventorySlot.Count < 10 && inventorySlot.Item.StringId.Equals(item.Item.StringId) && item.Item.Type == ItemObject.ItemTypeEnum.Thrown)
+                if (inventorySlot.Item != null && inventorySlot.Count > 0 && inventorySlot.Count < 10 && inventorySlot.Item.StringId.Equals(item.Item.StringId) && item.Item.Type == ItemObject.ItemTypeEnum.Thrown)
                 {
                     targetSlot = inventorySlot; break;
-                }else if(inventorySlot.Item == null)
+                }
+                else if (inventorySlot.Item == null)
                 {
                     targetSlot = inventorySlot; break;
                 }
             }
-            
-            if(targetSlot != null)
+
+            if (targetSlot != null)
             {
                 this.RequestExecuteTransfer(targetSlot, item);
             }
         }
-        
+
         public void SetEquipmentSlots(Equipment agentEquipment)
         {
             this.HelmSlot = new PEItemVM(agentEquipment[EquipmentIndex.Head], "Equipment_5", this.RequestExecuteTransfer, this._handleClickItem, this.TryUnequipItem);
@@ -217,7 +214,8 @@ namespace PersistentEmpires.Views.ViewsVM
             this.Item3 = new PEItemVM(agentEquipment[EquipmentIndex.Weapon3], "Equipment_3", this.RequestExecuteTransfer, this._handleClickItem, this.TryUnequipItem);
         }
 
-        public void ExecuteRevealItemBag() {
+        public void ExecuteRevealItemBag()
+        {
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestRevealItemBag());
             GameNetwork.EndModuleEventAsClient();

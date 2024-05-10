@@ -1,10 +1,7 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpires.Views.ViewsVM.PETabMenu;
+﻿using PersistentEmpires.Views.ViewsVM.PETabMenu;
+using PersistentEmpiresLib.Factions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.AdminPanel
@@ -38,7 +35,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 
         public void ExecuteSetName()
         {
-            if(this.CanApply && this.Name != null && this.Name != "")
+            if (this.CanApply && this.Name != null && this.Name != "")
             {
                 this._setName(this.SelectedFaction, this.Name);
             }
@@ -66,7 +63,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             get => this._name;
             set
             {
-                if(value != this._name)
+                if (value != this._name)
                 {
                     this._name = value;
                     base.OnPropertyChangedWithValue(value, "Name");

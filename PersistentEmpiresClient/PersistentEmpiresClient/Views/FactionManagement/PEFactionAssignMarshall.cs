@@ -1,14 +1,8 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using TaleWorlds.MountAndBlade;
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionAssignMarshall : PEMenuItem
@@ -21,11 +15,13 @@ namespace PersistentEmpires.Views.Views.FactionManagement
         {
             base.OnMissionScreenInitialize();
             this._factionManagementComponent.OnAssignMarshallClick += this.OnOpen;
-            this._dataSource = new PEFactionMembersVM("Assign Marshall", "Assign A Marshall", () => {
+            this._dataSource = new PEFactionMembersVM("Assign Marshall", "Assign A Marshall", () =>
+            {
                 this.CloseManagementMenu();
                 this._factionManagementComponent.OnFactionManagementClickHandler();
             },
-            (PEFactionMemberItemVM selectedMember) => {
+            (PEFactionMemberItemVM selectedMember) =>
+            {
                 int factionIndex = selectedMember.Peer.GetComponent<PersistentEmpireRepresentative>().GetFactionIndex();
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new FactionAssignMarshall(selectedMember.Peer));
@@ -35,7 +31,8 @@ namespace PersistentEmpires.Views.Views.FactionManagement
                 // this._factionsBehavior.AssignMarshall(selectedMember.Peer, factionIndex);
                 // this.CloseManagementMenu();
             },
-            () => {
+            () =>
+            {
                 this.CloseManagementMenu();
             });
         }
@@ -45,7 +42,7 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             if (persistentEmpireRepresentative == null) return;
             Faction faction = persistentEmpireRepresentative.GetFaction();
             PEFactionMembersVM dataSource = (PEFactionMembersVM)this._dataSource;
-            
+
 
             dataSource.RefreshItems(faction, true);
             foreach (var member in dataSource.Members)

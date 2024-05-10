@@ -29,7 +29,7 @@ namespace PersistentEmpiresAPI
             // app.UseHttpsRedirection();
             app.UseApiJwt();
             app.UseMvc();
-            
+
         }
     }
 

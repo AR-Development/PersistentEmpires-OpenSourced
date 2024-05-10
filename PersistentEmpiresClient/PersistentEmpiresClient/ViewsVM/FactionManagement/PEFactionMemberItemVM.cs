@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -49,11 +45,12 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._peer;
         }
         [DataSourceProperty]
-        public string UserName {
+        public string UserName
+        {
             get => this._userName;
             set
             {
-                if(value != this._userName)
+                if (value != this._userName)
                 {
                     this._userName = value;
                     base.OnPropertyChangedWithValue(value, "UserName");
@@ -61,7 +58,8 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             }
         }
 
-        public void OnSelection() {
+        public void OnSelection()
+        {
             this.ExecuteOnSelection(this);
         }
 
@@ -71,7 +69,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
             get => this._isSelected;
             set
             {
-                if(value != this._isSelected)
+                if (value != this._isSelected)
                 {
                     this._isSelected = value;
                     base.OnPropertyChangedWithValue(value, "IsSelected");

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
+﻿using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -15,11 +10,12 @@ namespace PersistentEmpires.Views.ViewsVM
         public PELocalChatVM() { }
 
         [DataSourceProperty]
-        public string TextInput {
+        public string TextInput
+        {
             get => this._textInput;
             set
             {
-                if(value != this._textInput)
+                if (value != this._textInput)
                 {
                     this._textInput = value;
                     base.OnPropertyChangedWithValue(value, "TextInput");
@@ -32,7 +28,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._isFocused;
             set
             {
-                if(value != this._isFocused)
+                if (value != this._isFocused)
                 {
                     this._isFocused = value;
                     base.OnPropertyChangedWithValue(value, "IsFocused");

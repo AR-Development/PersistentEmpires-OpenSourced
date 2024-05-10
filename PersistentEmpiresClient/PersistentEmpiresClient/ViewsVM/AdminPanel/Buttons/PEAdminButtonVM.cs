@@ -1,5 +1,4 @@
 ﻿using PersistentEmpires.Views.Views.AdminPanel;
-using System;
 using TaleWorlds.Library;
 
 namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons

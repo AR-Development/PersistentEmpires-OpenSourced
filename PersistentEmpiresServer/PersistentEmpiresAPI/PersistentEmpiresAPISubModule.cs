@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -60,7 +59,7 @@ namespace PersistentEmpiresAPI
             PersistentEmpiresAPISubModule.Instance = this;
             base.OnSubModuleLoad();
             InitialListedGameServerState.OnActivated += this.DedicatedCustomGameServerStateActivated;
-           
+
         }
 
         private void DedicatedCustomGameServerStateActivated()

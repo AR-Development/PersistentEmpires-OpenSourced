@@ -1,11 +1,6 @@
 ﻿using Messages.FromLobbyServer.ToClient;
 using PersistentEmpiresClient;
-using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade.Diamond;
 using TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection.Lobby.CustomGame;
 
@@ -18,7 +13,8 @@ namespace PersistentEmpires.Views
             try
             {
                 // CheckWhitelist(selectedServer.Address);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
             }
             return true;
@@ -31,8 +27,8 @@ namespace PersistentEmpires.Views
             var prefix = typeof(Whitelister).GetMethod("PatchJoinCustomGame", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
             HarmonyLibClient.Instance.PatchPrefix(original, prefix);
         }
-      
-        
+
+
         public static bool HandleJoinCustomGameResultMessage(JoinCustomGameResultMessage message)
         {
             return true;
