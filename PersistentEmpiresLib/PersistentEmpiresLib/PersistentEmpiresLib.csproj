@@ -16,6 +16,7 @@
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\RunAsClientDebug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'RunAsServerDebug' ">
     <ReferenceFolder>.\ServerReferences</ReferenceFolder>
@@ -33,6 +34,7 @@
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\RunAsServerDebug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'ReleaseClient'">
     <ReferenceFolder>.\ClientReferences</ReferenceFolder>
@@ -43,7 +45,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
@@ -58,7 +60,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <DebugType>portable</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
