@@ -61,7 +61,7 @@
                         <TextWidget WidthSizePolicy="StretchToParent" Text="Search For Item" MarginTop="45"></TextWidget>
                         <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="55" MarginLeft="15" MarginRight="15" MarginTop="15" Sprite="General\CharacterCreation\name_input_area">
                           <Children>
-                            <EditableTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ClanNaming.NameInput.Text" Text="@Filter" GamepadNavigationIndex="0" />
+                            <EditableTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ClanNaming.NameInput.Text" Text="@NameFilter" GamepadNavigationIndex="0" />
                           </Children>
                         </Widget>
                       </Children>
@@ -77,8 +77,8 @@
 
                         <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
                           <Children>
-                            <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Filter By Category" IsEnabled="true" />
-                            <Standard.DropdownWithHorizontalControl MarginRight="40" VerticalAlignment="Center" WidthSizePolicy="CoverChildren" Id="SelectionOption" Parameter.SelectorDataSource="{ItemCategoryFilter}" Parameter.ShowNextAndPrevious="false" GamepadNavigationIndex="0" />
+                            <TextWidget  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush.FontSize="25" Brush.TextVerticalAlignment="Center" Text="Filter By Type" IsEnabled="true" />
+                            <Standard.DropdownWithHorizontalControl MarginRight="40" VerticalAlignment="Center" WidthSizePolicy="CoverChildren" Id="SelectionOption" Parameter.SelectorDataSource="{ItemTypeFilter}" Parameter.ShowNextAndPrevious="false" GamepadNavigationIndex="0" />
                           </Children>
                         </ListPanel>
                         

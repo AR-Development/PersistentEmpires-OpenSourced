@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using PersistentEmpires.Views.Views.AdminPanel;
+﻿using PersistentEmpires.Views.Views.AdminPanel;
 using PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons;
 using System.Collections.Generic;
 using System.Linq;

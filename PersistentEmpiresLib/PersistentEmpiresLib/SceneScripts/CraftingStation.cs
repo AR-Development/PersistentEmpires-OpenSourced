@@ -17,27 +17,27 @@ using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
-    public struct CraftingReceipt {
+    public struct CraftingRecipe {
         public ItemObject Item;
         public int NeededCount;
-        public CraftingReceipt(String itemId, int neededCount)
+        public CraftingRecipe(String itemId, int neededCount)
         {
             this.Item = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
             this.NeededCount = neededCount;
         } 
     }
     public struct Craftable {
-        public List<CraftingReceipt> Receipts;
+        public List<CraftingRecipe> Recipe;
         public int OutputCount;
-        public ItemObject CraftableItem;
+        public ItemObject Item;
         public int Tier;
         public int RequiredEngineering;
         public int CraftTime;
         public SkillObject RelevantSkill;
-        public Craftable(List<CraftingReceipt> receipts, String itemId, int outputCount, int tier, int requiredEngineering, int craftTime, string relevantSkill)
+        public Craftable(List<CraftingRecipe> receipts, String itemId, int outputCount, int tier, int requiredEngineering, int craftTime, string relevantSkill)
         {
-            this.Receipts = receipts;
-            this.CraftableItem = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
+            this.Recipe = receipts;
+            this.Item = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
             this.OutputCount = outputCount;
             this.Tier = tier;
             this.RequiredEngineering = requiredEngineering;
@@ -66,12 +66,12 @@ namespace PersistentEmpiresLib.SceneScripts
                 if (receipt.Trim() == "") continue;
                 string leftSide = receipt.Split('=')[0];
                 string rightSide = receipt.Split('=')[1];
-                List<CraftingReceipt> cReceipts = new List<CraftingReceipt>();
+                List<CraftingRecipe> cReceipts = new List<CraftingRecipe>();
                 foreach(string r in rightSide.Split(','))
                 {
                     string itemId = r.Split('*')[0];
                     int count = int.Parse(r.Split('*')[1]);
-                    cReceipts.Add(new CraftingReceipt(itemId, count));
+                    cReceipts.Add(new CraftingRecipe(itemId, count));
                 }
                 int craftTime = int.Parse(leftSide.Split('*')[0]);
                 string craftableItemId = leftSide.Split('*')[1];

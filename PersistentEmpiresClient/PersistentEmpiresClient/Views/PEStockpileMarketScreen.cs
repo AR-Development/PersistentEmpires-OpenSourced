@@ -17,14 +17,16 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
+using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresClient.Views;
 
 namespace PersistentEmpires.Views.Views
 {
-    public class PEStockpileMarketScreen : PEBaseInventoryScreen
+    public class PEStockpileMarketScreen : PEBaseItemList<PEStockpileMarketVM, PEStockpileMarketItemVM, MarketItem>
     {
-        private PEStockpileMarketVM _dataSource;
         private StockpileMarketComponent _stockpileMarketComponent;
         private PE_StockpileMarket ActiveEntity;
+
         public override void OnMissionScreenInitialize() {
             base.OnMissionScreenInitialize();
             this._stockpileMarketComponent = base.Mission.GetMissionBehavior<StockpileMarketComponent>();
@@ -42,18 +44,19 @@ namespace PersistentEmpires.Views.Views
                 {
                     int index = indexes[i];
                     int stock = stocks[i];
-                    this._dataSource.ItemList[index].Stock = stock;
+                    this._dataSource.ItemsList[index].Stock = stock;
                 }
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
-            // throw new NotImplementedException();
         }
 
         private void OnUpdate(PE_StockpileMarket stockpileMarket, int itemIndex, int newStock)
         {
-            if(this.IsActive)
+            if (this.IsActive)
             {
-                this._dataSource.ItemList[itemIndex].Stock = newStock;
+                Console.WriteLine(itemIndex);
+                Console.WriteLine(this._dataSource.FilteredItemList.ToString());
+                this._dataSource.ItemsList[itemIndex].Stock = newStock;
                 this._dataSource.OnPropertyChanged("FilteredItemList");
             }
         }
@@ -61,24 +64,7 @@ namespace PersistentEmpires.Views.Views
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow) { 
             if(affectedAgent.IsMine)
             {
-                this.CloseImportExport();
-            }
-        }
-
-        private void CloseImportExportAux()
-        {
-            this.IsActive = false;
-            this._dataSource.Filter = "";
-            this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
-            base.MissionScreen.RemoveLayer(this._gauntletLayer);
-            this._gauntletLayer = null;
-        }
-        public override void OnMissionTick(float dt)
-        {
-            base.OnMissionTick(dt);
-            if (this._gauntletLayer != null && this.IsActive && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
-            {
-                this.CloseImportExport();
+                this.Close();
             }
         }
 
@@ -92,36 +78,51 @@ namespace PersistentEmpires.Views.Views
             }
             if(this._gauntletLayer.Input.IsControlDown()  && clickedSlot.Item != null && clickedSlot.Count > 0)
             {
-                PEStockpileMarketItemVM item = this._dataSource.ItemList.ToList().FirstOrDefault(itemVm => itemVm.MarketItem.Item.StringId == clickedSlot.Item.StringId);
+                PEStockpileMarketItemVM item = _dataSource.FilteredItemList.ToList().FirstOrDefault(itemVm => itemVm.MarketItem.Item.StringId == clickedSlot.Item.StringId);
                 if (item != null) this.Sell(item);
             }
         }
-        public void CloseImportExport()
+
+        public override void Close()
         {
             if (this.IsActive)
             {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new RequestCloseStockpileMarket(this.ActiveEntity));
                 GameNetwork.EndModuleEventAsClient();
-                this.CloseImportExportAux();
+                this.CloseAux();
             }
         }
-        public void Buy(PEStockpileMarketItemVM stockpileMarketItemVM) {
+
+        private void OnOpen(PE_StockpileMarket stockpileMarket, Inventory playerInventory)
+        {
+            if (this.IsActive) return;
+            this.ActiveEntity = stockpileMarket;
+            this._dataSource.StockpileMarket = stockpileMarket;
+            this._dataSource.Buy = Buy;
+            this._dataSource.Sell = Sell;
+            this._dataSource.UnpackBoxes = UnpackBoxes;
+            base.OnOpen(stockpileMarket.MarketItems, playerInventory, "PEStockpileMarket");
+        }
+
+        public void Buy(PEStockpileMarketItemVM stockpileMarketItemVM)
+        {
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestBuyItem(this.ActiveEntity, stockpileMarketItemVM.ItemIndex));
             GameNetwork.EndModuleEventAsClient();
         }
-        public void Sell(PEStockpileMarketItemVM stockpileMarketItemVM) {
+
+        public void Sell(PEStockpileMarketItemVM stockpileMarketItemVM)
+        {
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestSellItem(this.ActiveEntity, stockpileMarketItemVM.ItemIndex));
             GameNetwork.EndModuleEventAsClient();
         }
 
-
-
-        public void UnpackBoxes() {
+        public void UnpackBoxes()
+        {
             List<PEItemVM> items = this._dataSource.PlayerInventory.InventoryItems.ToList();
-            for(int i = 0; i < items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 PEItemVM item = items[i];
                 if (item.Count == 0) continue;
@@ -132,28 +133,6 @@ namespace PersistentEmpires.Views.Views
                 GameNetwork.EndModuleEventAsClient();
                 break;
             }
-        }
-
-        private void OnOpen(PE_StockpileMarket stockpileMarket, Inventory playerInventory)
-        {
-            if (this.IsActive) return;
-            this.ActiveEntity = stockpileMarket;
-            
-            this._dataSource.RefreshValues(this.ActiveEntity, playerInventory, this.Buy, this.Sell, this.UnpackBoxes);
-            this._dataSource.PlayerInventory.SetEquipmentSlots(AgentHelpers.GetCurrentAgentEquipment(GameNetwork.MyPeer.ControlledAgent));
-            this._gauntletLayer = new GauntletLayer(50);
-            this._gauntletLayer.IsFocusLayer = true;
-            this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
-            this._gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
-            this._gauntletLayer.LoadMovie("PEStockpileMarket", this._dataSource);
-            base.MissionScreen.AddLayer(this._gauntletLayer);
-            ScreenManager.TrySetFocus(this._gauntletLayer);
-            this.IsActive = true;
-        }
-
-        protected override PEInventoryVM GetInventoryVM()
-        {
-            return this._dataSource.PlayerInventory;
         }
     }
 }
