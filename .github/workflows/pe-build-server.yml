@@ -1,0 +1,35 @@
+name: pe-build-server
+
+on: [workflow_call, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./PersistentEmpiresServer
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup MSBuild
+      uses: actions/setup-msbuild@v2
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v2
+
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
+    - name: Create Build Directory
+      run: mkdir _build
+      
+    - name: Restore dependencies
+      run: nuget restore
+    
+    - name: Build Solution
+      run: |
+        msbuild.exe PersistentEmpiresServer.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PersistentEmpiresServer
+        path: "./_build"
