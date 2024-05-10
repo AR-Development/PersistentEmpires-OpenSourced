@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -15,7 +10,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         public MissionObject MoneyChest;
         public bool Withdraw;
         public WithdrawDepositMoneychest() { }
-        public WithdrawDepositMoneychest(MissionObject mc,int amount, bool withdraw) {
+        public WithdrawDepositMoneychest(MissionObject mc, int amount, bool withdraw)
+        {
             this.Amount = amount;
             this.Withdraw = withdraw;
             this.MoneyChest = mc;
@@ -42,7 +38,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteIntToPacket(this.Amount,new CompressionInfo.Integer(0, 100000000, true));
+            GameNetworkMessage.WriteIntToPacket(this.Amount, new CompressionInfo.Integer(0, 100000000, true));
             GameNetworkMessage.WriteBoolToPacket(this.Withdraw);
             GameNetworkMessage.WriteMissionObjectIdToPacket(this.MoneyChest.Id);
         }

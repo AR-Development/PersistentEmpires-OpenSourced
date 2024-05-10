@@ -1,13 +1,8 @@
 ﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Extensions;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -877,7 +872,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 {
                     Mission.Current.MakeSound(SoundEvent.GetEventIdFromString(this.SoundEffectOnDestroy), globalFrame.origin, false, true, -1, -1);
                 }
-                
+
                 base.GameEntity.Remove(0);
             }
         }

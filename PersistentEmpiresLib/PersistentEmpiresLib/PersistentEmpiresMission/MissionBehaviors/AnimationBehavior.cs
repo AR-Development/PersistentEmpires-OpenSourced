@@ -1,10 +1,7 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
@@ -76,7 +73,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.isActive = ConfigManager.GetBoolConfig("AnimationsEnabled", false);
             }
@@ -105,7 +102,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void PlayAnimation(Agent agent, string animationId)
         {
 
-            
+
             if (agent.IsOnLand() == false) return;
             ActionIndexCache actionIndexCache = ActionIndexCache.Create(animationId);
             if (animationId == "act_none")
@@ -150,7 +147,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private bool HandleRequestAnimationFromClient(NetworkCommunicator player, RequestAnimation message)
         {
             if (player.ControlledAgent == null) return false;
-            if(this.isActive == false)
+            if (this.isActive == false)
             {
                 InformationComponent.Instance.SendMessage("This feature is disabled", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), player);
                 return true;

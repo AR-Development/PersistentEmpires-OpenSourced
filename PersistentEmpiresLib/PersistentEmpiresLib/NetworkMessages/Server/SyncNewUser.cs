@@ -3,9 +3,6 @@ using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
@@ -16,13 +13,15 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     [DefineGameNetworkMessageTypeForMod(GameNetworkMessageSendType.FromServer)]
     public sealed class SyncNewUser : GameNetworkMessage
     {
-        public Dictionary<int,Faction> Factions { get; set; }
+        public Dictionary<int, Faction> Factions { get; set; }
         public List<PE_CastleBanner> CastleBanners { get; set; }
-        public SyncNewUser() {
+        public SyncNewUser()
+        {
         }
 
 
-        public SyncNewUser(Dictionary<int,Faction> factions, List<PE_CastleBanner> castleBanners) {
+        public SyncNewUser(Dictionary<int, Faction> factions, List<PE_CastleBanner> castleBanners)
+        {
             this.Factions = factions;
             this.CastleBanners = castleBanners;
         }
@@ -43,7 +42,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             bool result = true;
             /// FACTION START
             int factionLength = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 201, true), ref result);
-            for(int i = 0; i < factionLength; i++)
+            for (int i = 0; i < factionLength; i++)
             {
                 int factionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
                 BasicCultureObject bco = (BasicCultureObject)GameNetworkMessage.ReadObjectReferenceFromPacket(MBObjectManager.Instance, CompressionBasic.GUIDCompressionInfo, ref result);
@@ -60,7 +59,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
                     this.Factions[factionIndex].members.Add(GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result));
                 }
                 int warDeclerationLength = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 200, true), ref result);
-                for(int j = 0; j < warDeclerationLength; j++)
+                for (int j = 0; j < warDeclerationLength; j++)
                 {
                     this.Factions[factionIndex].warDeclaredTo.Add(GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 200, true), ref result));
                 }
@@ -86,7 +85,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
             /// FACTION START
             GameNetworkMessage.WriteIntToPacket(this.Factions.Count, new CompressionInfo.Integer(0, 201, true));
-            foreach (int i in this.Factions.Keys) {
+            foreach (int i in this.Factions.Keys)
+            {
                 Faction faction = this.Factions[i];
                 GameNetworkMessage.WriteIntToPacket(i, new CompressionInfo.Integer(-1, 200, true));
                 GameNetworkMessage.WriteObjectReferenceToPacket(faction.basicCultureObject, CompressionBasic.GUIDCompressionInfo);
@@ -102,7 +102,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
                 }
                 int warDeclerationLength = faction.warDeclaredTo.Count;
                 GameNetworkMessage.WriteIntToPacket(warDeclerationLength, new CompressionInfo.Integer(0, 200, true));
-                for(int j = 0; j < warDeclerationLength; j++)
+                for (int j = 0; j < warDeclerationLength; j++)
                 {
                     GameNetworkMessage.WriteIntToPacket(faction.warDeclaredTo[j], new CompressionInfo.Integer(0, 200, true));
                 }

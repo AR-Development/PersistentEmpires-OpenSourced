@@ -1,13 +1,5 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.SceneScripts.Extensions;
+﻿using PersistentEmpiresLib.SceneScripts.Extensions;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -110,7 +102,7 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             if (base.GameEntity == null) return;
             base.OnTick(dt);
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 MatrixFrame frame = this.MoveObjectTick(dt);
                 base.SetFrameSynched(ref frame);

@@ -1,13 +1,11 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -207,7 +205,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 InformationComponent.Instance.SendMessage("This station is being used.", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }*/
-            if(craftingStation.upgradeableBuilding != null && craftingStation.upgradeableBuilding.CurrentTier < requestedCraft.Tier)
+            if (craftingStation.upgradeableBuilding != null && craftingStation.upgradeableBuilding.CurrentTier < requestedCraft.Tier)
             {
                 InformationComponent.Instance.SendMessage("Upgrade the building first", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;

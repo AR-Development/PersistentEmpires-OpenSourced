@@ -1,13 +1,7 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.ObjectSystem;
@@ -25,7 +19,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.factionIndex = factionIndex;
         }
 
-        public AddFaction() {
+        public AddFaction()
+        {
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -47,9 +42,9 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             Team team = Mission.MissionNetworkHelper.GetTeamFromTeamIndex(GameNetworkMessage.ReadTeamIndexFromPacket(ref result));
             string BannerKey = PENetworkModule.ReadBannerCodeFromPacket(ref result);
             int memberLength = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 500, true), ref result);
-            this.faction = new Faction(bco, new Banner(BannerKey) ,name);
+            this.faction = new Faction(bco, new Banner(BannerKey), name);
             this.faction.team = team;
-            for(int i = 0; i < memberLength; i++)
+            for (int i = 0; i < memberLength; i++)
             {
                 this.faction.members.Add(GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result));
             }
@@ -66,7 +61,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             PENetworkModule.WriteBannerCodeToPacket(faction.banner.Serialize());
             int memberLength = faction.members.Count;
             GameNetworkMessage.WriteIntToPacket(memberLength, new CompressionInfo.Integer(0, 500, true));
-            for(int i = 0; i < memberLength; i++)
+            for (int i = 0; i < memberLength; i++)
             {
                 GameNetworkMessage.WriteNetworkPeerReferenceToPacket(faction.members[i]);
             }

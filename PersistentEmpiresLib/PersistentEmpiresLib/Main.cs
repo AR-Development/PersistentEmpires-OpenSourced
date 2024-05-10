@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib
 {
@@ -14,7 +9,7 @@ namespace PersistentEmpiresLib
 
         public static bool IsAdmin(NetworkCommunicator player)
         {
-            if(IsAdminFunc != null) { return IsAdminFunc(player); }
+            if (IsAdminFunc != null) { return IsAdminFunc(player); }
             return false;
         }
 

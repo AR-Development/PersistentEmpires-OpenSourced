@@ -1,13 +1,8 @@
 ﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -53,8 +48,8 @@ namespace PersistentEmpiresLib.SceneScripts
             /*if (GameNetwork.IsClientOrReplay && base.HasUser)
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
-            }else*/ 
-            if(GameNetwork.IsServer && base.HasUser)
+            }else*/
+            if (GameNetwork.IsServer && base.HasUser)
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
             }
@@ -128,7 +123,7 @@ namespace PersistentEmpiresLib.SceneScripts
             base.OnUseStopped(userAgent, isSuccessful, preferenceIndex);
             if (GameNetwork.IsServer)
             {
-                Debug.Print("USINGLOG "+isSuccessful.ToString());
+                Debug.Print("USINGLOG " + isSuccessful.ToString());
                 Debug.Print("[USING LOG] AGENT USE STOPPED " + this.GetType().Name);
                 if (isSuccessful)
                 {
@@ -153,7 +148,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
             ActionIndexCache actionIndexCache = ActionIndexCache.act_none;
             userAgent.SetActionChannel(0, actionIndexCache, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
-            if(userAgent.IsMine)
+            if (userAgent.IsMine)
             {
                 PEInformationManager.StopCounter();
             }
@@ -171,7 +166,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     return;
                 }
                 EquipmentIndex wieldedItemIndex = userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-                if(wieldedItemIndex == EquipmentIndex.None)
+                if (wieldedItemIndex == EquipmentIndex.None)
                 {
                     userAgent.StopUsingGameObjectMT(false);
                     return;
@@ -183,38 +178,38 @@ namespace PersistentEmpiresLib.SceneScripts
                 int capturerFactionIndex = persistentEmpireRepresentative.GetFactionIndex();
                 Faction castleFaction = this.GetOwnerFaction();
 
-                if(castleFaction == null || this.FactionIndex == 0 || this.FactionIndex == 1)
+                if (castleFaction == null || this.FactionIndex == 0 || this.FactionIndex == 1)
                 {
                     // Cannot be capturable.
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                if(capturerFactionIndex == 0 || capturerFactionIndex == 1 || capturerFaction == null || capturerFactionIndex == this.FactionIndex)
+                if (capturerFactionIndex == 0 || capturerFactionIndex == 1 || capturerFaction == null || capturerFactionIndex == this.FactionIndex)
                 {
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                if(!capturerFaction.warDeclaredTo.Contains(this.FactionIndex) && !castleFaction.warDeclaredTo.Contains(capturerFactionIndex))
+                if (!capturerFaction.warDeclaredTo.Contains(this.FactionIndex) && !castleFaction.warDeclaredTo.Contains(capturerFactionIndex))
                 {
                     // No war decleration no.
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                foreach(NetworkCommunicator membersOfBeingCaptured in castleFaction.members)
+                foreach (NetworkCommunicator membersOfBeingCaptured in castleFaction.members)
                 {
                     InformationComponent.Instance.SendMessage(this.CastleName + " BEING CAPTURED. YOU NEED TO STOP IT.", new Color(1f, 0f, 0f).ToUnsignedInteger(), membersOfBeingCaptured);
                 }
                 ActionIndexCache actionIndexCache = ActionIndexCache.Create(this.CastleCaptureAnimation);
                 userAgent.SetActionChannel(0, actionIndexCache, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
             }
-            if(GameNetwork.IsClient)
+            if (GameNetwork.IsClient)
             {
-                if(userAgent.IsMine)
+                if (userAgent.IsMine)
                 {
                     PEInformationManager.StartCounter("Capturing the " + this.CastleName, this.CaptureDuration);
                 }
             }
-            
+
             this.UseStartedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             this.UseWillEndAt = this.UseStartedAt + this.CaptureDuration;
             userAgent.SetTargetPosition(userAgent.Position.AsVec2);

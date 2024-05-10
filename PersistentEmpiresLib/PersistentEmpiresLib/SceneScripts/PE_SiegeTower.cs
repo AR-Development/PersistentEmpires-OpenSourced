@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.SceneScripts
@@ -19,8 +14,8 @@ namespace PersistentEmpiresLib.SceneScripts
         }
         protected override void OnInit()
         {
-			base.OnInit();
-			base.DestructionComponent.BattleSide = BattleSideEnum.None;
+            base.OnInit();
+            base.DestructionComponent.BattleSide = BattleSideEnum.None;
         }
-	}
+    }
 }

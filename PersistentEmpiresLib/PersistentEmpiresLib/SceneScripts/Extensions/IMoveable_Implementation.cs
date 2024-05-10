@@ -1,19 +1,13 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using static TaleWorlds.MountAndBlade.SynchedMissionObject;
 
 namespace PersistentEmpiresLib.SceneScripts.Extensions
 {
-    
+
     public static class IMoveable_Implementation
     {
         public static void InitiateMoveSynch(this IMoveable moveable)
@@ -32,7 +26,7 @@ namespace PersistentEmpiresLib.SceneScripts.Extensions
                 moveable.GetAttachedObject().SetFrameSynched(ref currentFrame, GameNetwork.IsClient);
             }
         }
-        
+
         public static void RequestMovingUp(this IMoveable moveable)
         {
             if (GameNetwork.IsClient)

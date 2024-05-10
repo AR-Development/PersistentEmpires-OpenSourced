@@ -1,9 +1,5 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -20,7 +16,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             InformationComponent.Instance = this;
         }
 
-        public void BroadcastQuickInformation(String text) {
+        public void BroadcastQuickInformation(String text)
+        {
             GameNetwork.BeginBroadcastModuleEvent();
             GameNetwork.WriteMessage(new QuickInformation(text));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
@@ -40,7 +37,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public void SendMessage(String text, uint color, NetworkCommunicator player)
         {
             GameNetwork.BeginModuleEventAsServer(player);
-            GameNetwork.WriteMessage(new PEInformationMessage(text,color));
+            GameNetwork.WriteMessage(new PEInformationMessage(text, color));
             GameNetwork.EndModuleEventAsServer();
         }
         public void BroadcastMessage(String text, uint color)
@@ -56,7 +53,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
 
-        public void HandleOnAnnouncementFromServer(Announcement announcement) {
+        public void HandleOnAnnouncementFromServer(Announcement announcement)
+        {
             InformationManager.AddSystemNotification(announcement.Message);
         }
 
@@ -65,16 +63,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(quickInfo.Message));
         }
 
-		public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
-		{
-			GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-			if (GameNetwork.IsClient)
-			{
+        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        {
+            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
+            if (GameNetwork.IsClient)
+            {
                 networkMessageHandlerRegisterer.Register<QuickInformation>(this.HandleOnQuickInformationFromServer);
                 networkMessageHandlerRegisterer.Register<Announcement>(this.HandleOnAnnouncementFromServer);
                 networkMessageHandlerRegisterer.Register<PEInformationMessage>(this.HandleInformationMessageFromServer);
             }
-		}
+        }
 
         private void HandleInformationMessageFromServer(PEInformationMessage message)
         {

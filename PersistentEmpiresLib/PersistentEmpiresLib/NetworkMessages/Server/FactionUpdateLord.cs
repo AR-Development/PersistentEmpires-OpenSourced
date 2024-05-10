@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -13,7 +7,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class FactionUpdateLord : GameNetworkMessage
     {
         public FactionUpdateLord() { }
-        public FactionUpdateLord(int factionIndex, NetworkCommunicator player) {
+        public FactionUpdateLord(int factionIndex, NetworkCommunicator player)
+        {
             this.FactionIndex = factionIndex;
             this.Player = player;
         }
@@ -34,15 +29,15 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200,true), ref result);
+            this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
             this.Player = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
-           
+
             return result;
         }
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1, 200,true));
+            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1, 200, true));
             GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Player);
         }
     }

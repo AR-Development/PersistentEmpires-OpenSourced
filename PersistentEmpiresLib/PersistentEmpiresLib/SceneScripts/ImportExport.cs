@@ -1,9 +1,5 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -16,7 +12,8 @@ using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
-    public struct GoodItem {
+    public struct GoodItem
+    {
         public ItemObject ItemObj;
         public int ExportPrice;
         public int ImportPrice;
@@ -50,7 +47,8 @@ namespace PersistentEmpiresLib.SceneScripts
 
             this.TradeableItems = xmlDocument.DocumentElement.InnerText.Trim();
             this.goodItems = new List<GoodItem>();
-            foreach (string goodStr in this.TradeableItems.Split('|')) {
+            foreach (string goodStr in this.TradeableItems.Split('|'))
+            {
                 string[] goodSplitted = goodStr.Split(',');
                 ItemObject itemObject = MBObjectManager.Instance.GetObject<ItemObject>(goodSplitted[0]);
                 if (itemObject == null) continue;
@@ -79,7 +77,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 return;
             }
             base.OnUse(userAgent);
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.importExportComponent.OpenImportExportForPeer(userAgent.MissionPeer.GetNetworkPeer(), this);
                 userAgent.StopUsingGameObjectMT(true);

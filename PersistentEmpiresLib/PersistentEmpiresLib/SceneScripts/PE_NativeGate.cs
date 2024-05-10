@@ -1,17 +1,14 @@
-﻿using System;
+﻿using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.Source.Objects.Siege;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using TaleWorlds.MountAndBlade.Source.Objects.Siege;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
@@ -309,7 +306,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public bool CanPlayerUse(NetworkCommunicator player)
         {
             bool canPlayerUse = true;
-            if(this.CastleId > -1)
+            if (this.CastleId > -1)
             {
                 canPlayerUse = false;
                 Faction f = this.GetCastleBanner().GetOwnerFaction();
@@ -369,7 +366,7 @@ namespace PersistentEmpiresLib.SceneScripts
         // Token: 0x06002BD8 RID: 11224 RVA: 0x000AA4B4 File Offset: 0x000A86B4
         private void UpdateDoorBodies(bool updateAnyway)
         {
-            if(this.IsDestroyed) { return; }
+            if (this.IsDestroyed) { return; }
             if (this._attackOnlyDoorColliders.Count == 2)
             {
                 float animationParameterAtChannel = this._doorSkeleton.GetAnimationParameterAtChannel(0);
@@ -572,7 +569,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     {
                         if (standingPoint.GameEntity.HasTag("open"))
                         {
-                            if(this.CanPlayerUse(standingPoint.UserAgent.MissionPeer.GetNetworkPeer()))
+                            if (this.CanPlayerUse(standingPoint.UserAgent.MissionPeer.GetNetworkPeer()))
                             {
                                 this.OpenDoor();
                                 if (this.AutoOpen)
@@ -888,10 +885,10 @@ namespace PersistentEmpiresLib.SceneScripts
         // Token: 0x06002BEA RID: 11242 RVA: 0x000AB548 File Offset: 0x000A9748
         private void OnDestroyed(ScriptComponentBehavior attackerScriptComponentBehavior)
         {
-           
+
             if (!GameNetwork.IsClientOrReplay)
             {
-               
+
                 foreach (StandingPoint standingPoint in base.StandingPoints)
                 {
                     standingPoint.SetIsDeactivatedSynched(true);
@@ -905,9 +902,9 @@ namespace PersistentEmpiresLib.SceneScripts
 
             PE_RepairableDestructableComponent comp = base.GameEntity.GetFirstScriptOfType<PE_RepairableDestructableComponent>();
 
-            foreach(GameEntity entity in base.GameEntity.GetChildren().ToList())
+            foreach (GameEntity entity in base.GameEntity.GetChildren().ToList())
             {
-                if(entity != comp.BrokenState()) entity.SetVisibilityExcludeParents(false);
+                if (entity != comp.BrokenState()) entity.SetVisibilityExcludeParents(false);
             }
 
         }

@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.ObjectSystem;
@@ -15,7 +9,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class ResetAgentArmor : GameNetworkMessage
     {
         public ResetAgentArmor() { }
-        public ResetAgentArmor(Agent agent, Equipment equipment) {
+        public ResetAgentArmor(Agent agent, Equipment equipment)
+        {
             this.agent = agent;
             this.equipment = equipment;
         }

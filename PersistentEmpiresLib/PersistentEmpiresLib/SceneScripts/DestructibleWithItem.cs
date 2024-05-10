@@ -1,14 +1,9 @@
-﻿using NetworkMessages.FromServer;
+﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -108,7 +103,7 @@ namespace PersistentEmpiresLib.SceneScripts
             frame.origin = agent.Position;
             frame.origin.z += 1;
 
-            GameEntity entity = ItemHelper.SpawnWeaponWithNewEntityAux(this.Scene,spawnWeapon, Mission.WeaponSpawnFlags.WithPhysics | Mission.WeaponSpawnFlags.WithHolster, frame, -1, null, true);
+            GameEntity entity = ItemHelper.SpawnWeaponWithNewEntityAux(this.Scene, spawnWeapon, Mission.WeaponSpawnFlags.WithPhysics | Mission.WeaponSpawnFlags.WithHolster, frame, -1, null, true);
 
         }
 

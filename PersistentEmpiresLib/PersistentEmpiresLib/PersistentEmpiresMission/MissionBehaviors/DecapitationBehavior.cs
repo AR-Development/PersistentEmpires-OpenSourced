@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
@@ -28,7 +25,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             inventoryComponent = base.Mission.GetMissionBehavior<PlayerInventoryComponent>();
             moneyPouchBehavior = base.Mission.GetMissionBehavior<MoneyPouchBehavior>();
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
             }
@@ -56,9 +53,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionTick(dt);
             if (GameNetwork.IsServer) return;
 
-            foreach(Agent headAgent in this.headAgentDict.Keys.ToList())
+            foreach (Agent headAgent in this.headAgentDict.Keys.ToList())
             {
-                if(headAgent.AgentVisuals == null || headAgent.AgentVisuals.GetSkeleton() == null)
+                if (headAgent.AgentVisuals == null || headAgent.AgentVisuals.GetSkeleton() == null)
                 {
                     if (this.headAgentDict.ContainsKey(headAgent))
                     {
@@ -70,7 +67,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     EquipmentElement headItem = headAgent.SpawnEquipment[EquipmentIndex.Head];
                     string headItemMeshName = "head";
-                    if(headItem.IsEmpty == false)
+                    if (headItem.IsEmpty == false)
                     {
                         headItemMeshName = headItem.Item.MultiMeshName;
                     }
@@ -82,7 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         mesh.Name.Contains(headItemMeshName) == false
                        )
                     {
-                        
+
                         mesh.SetVisibilityMask(VisibilityMaskFlags.EditModeShadows);
                         mesh.ClearMesh();
                     }
@@ -96,16 +93,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         this.headAgentDict.Remove(headAgent);
                     }
                 }
-                
+
             }
             foreach (Agent bodyAgent in this.bodyAgentDict.Keys.ToList())
             {
-               
+
                 foreach (Mesh mesh in bodyAgent.AgentVisuals.GetSkeleton().GetAllMeshes()) // Remove head of the victim
                 {
                     EquipmentElement headItem = bodyAgent.SpawnEquipment[EquipmentIndex.Head];
                     string headItemName = "head";
-                    if(headItem.IsEmpty == false)
+                    if (headItem.IsEmpty == false)
                     {
                         headItemName = headItem.Item.MultiMeshName;
                     }

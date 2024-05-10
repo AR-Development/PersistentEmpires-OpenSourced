@@ -1,14 +1,4 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
-
-namespace PersistentEmpiresLib.Database.DBEntities
+﻿namespace PersistentEmpiresLib.Database.DBEntities
 {
     public class DBInventory
     {
@@ -19,6 +9,6 @@ namespace PersistentEmpiresLib.Database.DBEntities
         public string InventorySerialized { get; set; }
 
 
-      
+
     }
 }
