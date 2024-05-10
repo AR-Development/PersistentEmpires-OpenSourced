@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -12,7 +7,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class CustomBubbleMessage : GameNetworkMessage
     {
         public CustomBubbleMessage() { }
-        public CustomBubbleMessage(NetworkCommunicator sender,string Message)
+        public CustomBubbleMessage(NetworkCommunicator sender, string Message)
         {
             this.Message = Message;
             this.Sender = sender;

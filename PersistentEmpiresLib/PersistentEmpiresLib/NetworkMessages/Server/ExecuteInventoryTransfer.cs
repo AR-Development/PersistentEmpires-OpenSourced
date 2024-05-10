@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.ObjectSystem;
@@ -20,7 +14,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public ItemObject DroppedSlotItem { get; set; }
         public int DraggedSlotCount { get; set; }
         public int DroppedSlotCount { get; set; }
-        public ExecuteInventoryTransfer() { 
+        public ExecuteInventoryTransfer()
+        {
         }
 
         public ExecuteInventoryTransfer(string draggedSlot, string droppedSlot, ItemObject draggedSlotItem, ItemObject droppedSlotItem, int draggedSlotCount, int droppedSlotCount)

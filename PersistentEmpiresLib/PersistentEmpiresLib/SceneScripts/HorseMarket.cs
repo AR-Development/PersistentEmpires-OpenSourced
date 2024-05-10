@@ -1,13 +1,8 @@
 ﻿using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -119,16 +114,17 @@ namespace PersistentEmpiresLib.SceneScripts
                 NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
                 PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
                 if (persistentEmpireRepresentative == null) return;
-                if(userAgent.MountAgent != null)
+                if (userAgent.MountAgent != null)
                 {
                     // Sell Mount.
                     ItemObject horseItem = userAgent.MountAgent.SpawnEquipment[EquipmentIndex.Horse].Item;
-                    Debug.Print("HORSE ITEM IS "+horseItem.StringId);
-                    if (horseItem.StringId != this.HorseId) {
-                        InformationComponent.Instance.SendMessage("You can't sell this horse here.", new Color(1f,0f,0f).ToUnsignedInteger(), player);
+                    Debug.Print("HORSE ITEM IS " + horseItem.StringId);
+                    if (horseItem.StringId != this.HorseId)
+                    {
+                        InformationComponent.Instance.SendMessage("You can't sell this horse here.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                         return;
                     }
-                    if(userAgent.MountAgent.Health < (userAgent.MountAgent.HealthLimit * 75) / 100)
+                    if (userAgent.MountAgent.Health < (userAgent.MountAgent.HealthLimit * 75) / 100)
                     {
                         InformationComponent.Instance.SendMessage("Horse is injured. You can't sell it", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                         return;
@@ -146,12 +142,12 @@ namespace PersistentEmpiresLib.SceneScripts
                 }
                 else
                 {
-                    if(this.Stock == 0)
+                    if (this.Stock == 0)
                     {
                         InformationComponent.Instance.SendMessage("Stocks are empty.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                         return;
                     }
-                    if(!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.BuyPrice()))
+                    if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.BuyPrice()))
                     {
                         InformationComponent.Instance.SendMessage("You need " + this.BuyPrice() + " gold to buy a horse.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                         return;
@@ -163,7 +159,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     PE_TaxHandler taxHandler = this.GameEntity.GetFirstScriptOfType<PE_TaxHandler>();
                     if (taxHandler != null && taxHandler.CastleId != -1) taxHandler.AddTaxFeeToMoneyChest((this.BuyPrice() * taxHandler.TaxPercentage) / 100);
                     this.UpdateReserve(this.Stock - 1);
-                   
+
 
                     SaveSystemBehavior.HandleCreateOrSaveHorseMarket(this);
                     GameNetwork.BeginBroadcastModuleEvent();

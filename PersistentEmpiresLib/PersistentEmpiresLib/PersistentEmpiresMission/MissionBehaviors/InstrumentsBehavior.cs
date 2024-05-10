@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -54,7 +52,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 /*if (module.IsSelected || GameNetwork.IsServer)
                 {*/
-                    this.LoadInstruments(module.Id);
+                this.LoadInstruments(module.Id);
                 //}
             }
         }
@@ -100,16 +98,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestStartPlaying());
             GameNetwork.EndModuleEventAsClient();
-            
+
             return true;
         }
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
             if (GameNetwork.IsServer) return;
-            foreach(Agent key in this.AgentsPlayingSound.Keys.ToList())
+            foreach (Agent key in this.AgentsPlayingSound.Keys.ToList())
             {
-                if(key != null && key.IsActive())
+                if (key != null && key.IsActive())
                 {
                     this.AgentsPlayingSound[key].SetPosition(key.Position);
                 }
@@ -131,7 +129,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestStopPlaying());
             GameNetwork.EndModuleEventAsClient();
-            
+
         }
 
         private void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
@@ -176,7 +174,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (message.IsPlaying)
             {
                 this.StopAgentPlaying(message.PlayerAgent);
-                if(this.Instruments.Count > message.PlayingInstrumentIndex)
+                if (this.Instruments.Count > message.PlayingInstrumentIndex)
                 {
                     this.PlayAgentSound(message.PlayerAgent, this.Instruments[message.PlayingInstrumentIndex]);
                 }

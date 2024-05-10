@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -18,7 +15,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.IsActive = ConfigManager.GetBoolConfig("AutorestartActive", true);
                 this.IntervalHour = ConfigManager.GetIntConfig("AutorestartIntervalHours", 24);
@@ -29,7 +26,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if(_restartAt == 0)
+            if (_restartAt == 0)
             {
                 _restartAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (IntervalHour * 60 * 60);
                 return;
@@ -82,7 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 _checkpoints["10s"] = true;
             }
 
-            if(remainingSeconds <= 0)
+            if (remainingSeconds <= 0)
             {
                 throw new Exception("Server auto restart.");
             }

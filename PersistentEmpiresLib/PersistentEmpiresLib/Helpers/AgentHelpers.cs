@@ -1,15 +1,7 @@
 ﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -17,12 +9,13 @@ namespace PersistentEmpiresLib.Helpers
 {
     public class AgentHelpers
     {
-        public  delegate void ResetAgentMeshRequested(Agent agent);
+        public delegate void ResetAgentMeshRequested(Agent agent);
         public static event ResetAgentMeshRequested OnResetAgentMeshRequested;
 
         public delegate void ResetAgentArmorMeshRequested(Agent agent);
         public static event ResetAgentArmorMeshRequested OnResetAgentArmorMeshRequested;
-        public static void UpdateAgentVisuals(Agent agent) {
+        public static void UpdateAgentVisuals(Agent agent)
+        {
             Equipment equipment = AgentHelpers.GetCurrentAgentEquipment(agent);
             agent.UpdateSpawnEquipmentAndRefreshVisuals(equipment);
         }
@@ -42,16 +35,17 @@ namespace PersistentEmpiresLib.Helpers
 
         // [HandleProcessCorruptedStateExceptions]
         // [SecurityCritical]
-        public static void ResetAgentArmor(Agent agent, Equipment equipment) {
-            if(GameNetwork.IsServer)
+        public static void ResetAgentArmor(Agent agent, Equipment equipment)
+        {
+            if (GameNetwork.IsServer)
             {
                 GameNetwork.BeginBroadcastModuleEvent();
                 GameNetwork.WriteMessage(new ResetAgentArmor(agent, equipment));
                 GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
             }
-            if(agent != null && agent.IsActive() && agent.AgentVisuals.GetVisible())
+            if (agent != null && agent.IsActive() && agent.AgentVisuals.GetVisible())
             {
-                
+
                 try
                 {
 
@@ -67,19 +61,20 @@ namespace PersistentEmpiresLib.Helpers
                         OnResetAgentArmorMeshRequested(agent);
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.Print(e.Message);
                 }
             }
         }
 
-        public static void ResetAgentMesh(Agent agent) {
-            if (! GameNetwork.IsClientOrReplay) return;
+        public static void ResetAgentMesh(Agent agent)
+        {
+            if (!GameNetwork.IsClientOrReplay) return;
 
             if (OnResetAgentMeshRequested != null) OnResetAgentMeshRequested(agent);
 
-            
+
         }
 
         public static Agent RespawnAgentOnPlaceForFaction(Agent agent, Faction f, Equipment overrideEquipment = null, BasicCharacterObject overrideCharacter = null)
@@ -135,9 +130,9 @@ namespace PersistentEmpiresLib.Helpers
             agent.FadeOut(true, true);
             Agent newAgent = agent.Mission.SpawnAgent(agentBuildData);
             newAgent.Health = oldHealdth;
-            for(EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+            for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
             {
-                if(newAgent.Equipment[i].IsEmpty == false)
+                if (newAgent.Equipment[i].IsEmpty == false)
                 {
                     MissionWeapon weapon = new MissionWeapon(newAgent.Equipment[i].Item, null, null, (short)ammo[(int)i]);
                     newAgent.EquipWeaponWithNewEntity(i, ref weapon);
@@ -145,10 +140,11 @@ namespace PersistentEmpiresLib.Helpers
             }
             return newAgent;
         }
-        public static Agent RespawnAgentOnPlace(Agent agent, Equipment overrideEquipment = null, BasicCharacterObject overrideCharacter = null) {
+        public static Agent RespawnAgentOnPlace(Agent agent, Equipment overrideEquipment = null, BasicCharacterObject overrideCharacter = null)
+        {
             MissionPeer component = agent.MissionPeer;
             BasicCharacterObject character = agent.Character;
-            AgentBuildData agentBuildData = new AgentBuildData(overrideCharacter == null ? character: overrideCharacter);
+            AgentBuildData agentBuildData = new AgentBuildData(overrideCharacter == null ? character : overrideCharacter);
             Equipment equipment = new Equipment();
             int[] ammo = new int[5];
             for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
@@ -160,11 +156,11 @@ namespace PersistentEmpiresLib.Helpers
             {
                 equipment[i] = agent.SpawnEquipment[i];
             }
-            if(overrideEquipment != null)
+            if (overrideEquipment != null)
             {
-                for(int i = 0; i < 12; i++)
+                for (int i = 0; i < 12; i++)
                 {
-                    if(!overrideEquipment[i].IsInvalid() || !overrideEquipment[i].IsEmpty)
+                    if (!overrideEquipment[i].IsInvalid() || !overrideEquipment[i].IsEmpty)
                     {
                         equipment[i] = overrideEquipment[i];
                     }
@@ -174,7 +170,8 @@ namespace PersistentEmpiresLib.Helpers
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             uint clothingColor1 = component.Culture.Color;
             uint clothingColor2 = component.Culture.Color2;
-            if (persistentEmpireRepresentative != null && persistentEmpireRepresentative.GetFactionIndex() != -1) {
+            if (persistentEmpireRepresentative != null && persistentEmpireRepresentative.GetFactionIndex() != -1)
+            {
                 clothingColor1 = persistentEmpireRepresentative.GetFaction().banner.GetPrimaryColor();
                 clothingColor2 = persistentEmpireRepresentative.GetFaction().banner.GetFirstIconColor();
             }

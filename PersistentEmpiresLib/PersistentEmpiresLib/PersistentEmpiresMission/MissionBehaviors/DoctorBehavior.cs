@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
@@ -15,7 +10,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ItemId = "pe_doctorscalpel";
         public override void OnBehaviorInitialize()
         {
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.RequiredMedicineSkillForHealing = ConfigManager.GetIntConfig("RequiredMedicineSkillForHealing", 50);
                 this.MedicineHealingAmount = ConfigManager.GetIntConfig("MedicineHealingAmount", 15);
@@ -33,7 +28,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (affectorWeapon.Item != null && affectorWeapon.Item.StringId != this.ItemId) return;
             SkillObject medicineSkill = MBObjectManager.Instance.GetObject<SkillObject>("Medicine");
             if (affectorAgent.Character.GetSkillValue(medicineSkill) < RequiredMedicineSkillForHealing) return;
-            if (affectedAgent.MissionPeer == null) {
+            if (affectedAgent.MissionPeer == null)
+            {
                 affectedAgent.Health += MedicineHealingAmount;
                 if (affectedAgent.Health > affectedAgent.HealthLimit) affectedAgent.Health = affectedAgent.HealthLimit;
                 return;
@@ -41,7 +37,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             NetworkCommunicator peer = affectedAgent.MissionPeer.GetNetworkPeer();
             if (peer == null) return;
 
-            if(CombatlogBehavior.Instance != null && CombatlogBehavior.Instance.IsPlayerInCombatState(peer))
+            if (CombatlogBehavior.Instance != null && CombatlogBehavior.Instance.IsPlayerInCombatState(peer))
             {
                 return;
             }

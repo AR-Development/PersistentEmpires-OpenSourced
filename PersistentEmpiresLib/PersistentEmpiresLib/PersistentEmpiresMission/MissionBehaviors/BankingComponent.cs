@@ -2,11 +2,6 @@
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -71,7 +66,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (message.Deposit && this.BankAmountLimit > 0)
             {
                 int amount = BankingComponent.OnBankQuery(player);
-                if(amount + message.Amount > this.BankAmountLimit)
+                if (amount + message.Amount > this.BankAmountLimit)
                 {
                     InformationComponent.Instance.SendMessage("You can't have that much money in your bank.", Colors.Red.ToUnsignedInteger(), player);
                     return false;

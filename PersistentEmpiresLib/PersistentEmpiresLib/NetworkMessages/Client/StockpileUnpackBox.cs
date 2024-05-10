@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -14,11 +9,13 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     {
         public PE_StockpileMarket StockpileMarket;
         public int SlotId;
-        public StockpileUnpackBox(int SlotId, PE_StockpileMarket StockpileMarket) {
+        public StockpileUnpackBox(int SlotId, PE_StockpileMarket StockpileMarket)
+        {
             this.SlotId = SlotId;
             this.StockpileMarket = StockpileMarket;
         }
-        public StockpileUnpackBox() { 
+        public StockpileUnpackBox()
+        {
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -40,7 +37,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteIntToPacket(this.SlotId,new CompressionInfo.Integer(0, 100, true));
+            GameNetworkMessage.WriteIntToPacket(this.SlotId, new CompressionInfo.Integer(0, 100, true));
             GameNetworkMessage.WriteMissionObjectIdToPacket(this.StockpileMarket.Id);
         }
     }

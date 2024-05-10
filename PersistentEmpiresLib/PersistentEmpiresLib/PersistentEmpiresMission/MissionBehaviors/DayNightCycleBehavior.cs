@@ -1,10 +1,5 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -17,7 +12,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if(this.Mission.Scene.GetFirstEntityWithScriptComponent<PE_DayNightCycle>() != null)
+            if (this.Mission.Scene.GetFirstEntityWithScriptComponent<PE_DayNightCycle>() != null)
             {
                 this.DayNightCycle = this.Mission.Scene.GetFirstEntityWithScriptComponent<PE_DayNightCycle>().GetFirstScriptOfType<PE_DayNightCycle>();
             }
@@ -38,7 +33,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator player)
         {
             base.OnPlayerConnectedToServer(player);
-            if(this.DayNightCycle != null)
+            if (this.DayNightCycle != null)
             {
                 Debug.Print(" ===> DAYNIGHT CYCLE TIME SENT " + (this.DayNightCycle.TimeOfDay).ToString() + " <====== ");
                 GameNetwork.BeginModuleEventAsServer(player);
@@ -59,7 +54,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        
+
 
         private void HandleSetDayTimeFromServer(SetDayTime message)
         {

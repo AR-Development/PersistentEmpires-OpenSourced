@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpiresLib.SceneScripts;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -14,7 +8,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class UpdateCastle : GameNetworkMessage
     {
         public PE_CastleBanner CastleBanner { get; set; }
-        public UpdateCastle() { 
+        public UpdateCastle()
+        {
         }
 
         public UpdateCastle(PE_CastleBanner CastleBanner)
@@ -37,7 +32,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.CastleBanner = (PE_CastleBanner)Mission.MissionNetworkHelper.GetMissionObjectFromMissionObjectId(GameNetworkMessage.ReadMissionObjectIdFromPacket(ref result));
             this.CastleBanner.CastleIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 200), ref result);
             this.CastleBanner.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200), ref result);
-           
+
             return result;
         }
 

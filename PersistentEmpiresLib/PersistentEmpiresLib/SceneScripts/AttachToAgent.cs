@@ -1,11 +1,7 @@
 ﻿using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;

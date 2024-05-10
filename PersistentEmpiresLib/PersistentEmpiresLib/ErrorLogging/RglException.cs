@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersistentEmpiresLib.ErrorLogging
 {
@@ -12,7 +8,7 @@ namespace PersistentEmpiresLib.ErrorLogging
         private string oldStackTrace;
         public RglException(string message, StackTrace trace) : base(message)
         {
-            this.oldStackTrace = trace.ToString();            
+            this.oldStackTrace = trace.ToString();
         }
 
         public override string StackTrace => this.oldStackTrace;

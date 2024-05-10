@@ -1,10 +1,5 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -31,7 +26,8 @@ namespace PersistentEmpiresLib.SceneScripts
                 synchField.SetValue(this, synchFlags);
             }
         }
-        public void AddPhysicsSynchedPE(Vec3 initialVelocity, Vec3 angularVelocity, string physicsMaterial) {
+        public void AddPhysicsSynchedPE(Vec3 initialVelocity, Vec3 angularVelocity, string physicsMaterial)
+        {
             GameEntity gameEntity = base.GameEntity;
             gameEntity.AddPhysics(gameEntity.Mass, gameEntity.CenterOfMass, gameEntity.GetBodyShape(), initialVelocity, angularVelocity, PhysicsMaterial.GetFromName(physicsMaterial), false, 0);
             if (GameNetwork.IsServerOrRecorder)

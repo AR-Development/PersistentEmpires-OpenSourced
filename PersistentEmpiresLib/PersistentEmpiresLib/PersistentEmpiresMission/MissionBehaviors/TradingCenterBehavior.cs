@@ -1,13 +1,11 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -41,10 +39,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void AfterStart()
         {
             base.AfterStart();
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 List<PE_TradeCenter> tradeCenters = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_TradeCenter>().Select(g => g.GetFirstScriptOfType<PE_TradeCenter>()).ToList();
-                foreach(PE_TradeCenter tradeCenter in tradeCenters)
+                foreach (PE_TradeCenter tradeCenter in tradeCenters)
                 {
                     RandomizeTimer[tradeCenter] = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + tradeCenter.RandomizeDelayMinutes * 60;
                     tradeCenter.Randomize(randomizer);
@@ -80,11 +78,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionTick(dt);
             if (GameNetwork.IsClient) return;
 
-            foreach(PE_TradeCenter tradeCenter in this.RandomizeTimer.Keys.ToList())
+            foreach (PE_TradeCenter tradeCenter in this.RandomizeTimer.Keys.ToList())
             {
-                if (this.RandomizeTimer[tradeCenter] < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) {
+                if (this.RandomizeTimer[tradeCenter] < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                {
                     tradeCenter.Randomize(randomizer);
-                    for(int i = 0; i < tradeCenter.MarketItems.Count; i++)
+                    for (int i = 0; i < tradeCenter.MarketItems.Count; i++)
                     {
                         this.UpdateStockForPeers(tradeCenter, i);
                     }
@@ -98,7 +97,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             if (peer.ControlledAgent == null) return false;
             int skill = peer.ControlledAgent.Character.GetSkillValue(DefaultSkills.Trade);
-            if(skill < 10)
+            if (skill < 10)
             {
                 InformationComponent.Instance.SendMessage("You are not qualified enough", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), peer);
                 return false;
@@ -106,11 +105,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             PE_TradeCenter tradeCenter = (PE_TradeCenter)message.TradingCenter;
             MarketItem marketItem = tradeCenter.MarketItems[message.ItemIndex];
-            
+
             List<PE_TradeCenter> otherTradeCenters = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_TradeCenter>().Select(g => g.GetFirstScriptOfType<PE_TradeCenter>()).Where(p => p != tradeCenter).OrderByDescending(p => p.MarketItems[message.ItemIndex].SellPrice()).ToList();
 
             InformationComponent.Instance.SendMessage("Price List", Color.ConvertStringToColor("#03dac6ff").ToUnsignedInteger(), peer);
-            foreach(PE_TradeCenter oTradeCenter in otherTradeCenters)
+            foreach (PE_TradeCenter oTradeCenter in otherTradeCenters)
             {
                 MarketItem otherMarketItem = oTradeCenter.MarketItems[message.ItemIndex];
                 Color color = otherMarketItem.SellPrice() > marketItem.BuyPrice() ? Color.ConvertStringToColor("#00C853FF") : Color.ConvertStringToColor("#B71C1CFF");
@@ -144,13 +143,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
-        private bool HandleRequestCloseTradingCenterFromClient(NetworkCommunicator peer,RequestCloseTradingCenter message)
+        private bool HandleRequestCloseTradingCenterFromClient(NetworkCommunicator peer, RequestCloseTradingCenter message)
         {
             this.RemoveFromUpdateList(peer, message.TradingCenter);
             return true;
         }
 
-        private bool HandleRequestTradingSellItemFromClient(NetworkCommunicator peer,RequestTradingSellItem message)
+        private bool HandleRequestTradingSellItemFromClient(NetworkCommunicator peer, RequestTradingSellItem message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
@@ -225,7 +224,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        private bool HandleRequestTradingBuyItemFromClient(NetworkCommunicator peer,RequestTradingBuyItem message)
+        private bool HandleRequestTradingBuyItemFromClient(NetworkCommunicator peer, RequestTradingBuyItem message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
@@ -297,7 +296,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void HandleOpenTradingCenterFromServer(OpenTradingCenter message)
         {
             PE_TradeCenter tradeCenter = (PE_TradeCenter)message.TradingCenterEntity;
-            if(this.OnTradingCenterOpen != null)
+            if (this.OnTradingCenterOpen != null)
             {
                 this.OnTradingCenterOpen(tradeCenter, message.PlayerInventory);
             }

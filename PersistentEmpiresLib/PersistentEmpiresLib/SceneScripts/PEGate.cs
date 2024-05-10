@@ -1,13 +1,7 @@
 ﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.PersistentEmpiresGameModels;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.DotNet;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
@@ -71,7 +65,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
             userAgent.StopUsingGameObjectMT(true);
             if (GameNetwork.IsServer)
-            {   
+            {
                 if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - this.lastOpened > this.Delay)
                 {
                     bool canPlayerUse = true;
@@ -91,7 +85,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     else
                     {
                         Faction f = this.GetCastleBanner().GetOwnerFaction();
-                        InformationComponent.Instance.SendMessage("This door is locked by "+f.name, 0x0606c2d9, player);
+                        InformationComponent.Instance.SendMessage("This door is locked by " + f.name, 0x0606c2d9, player);
                         Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_close"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);
                     }
                 }
@@ -104,7 +98,7 @@ namespace PersistentEmpiresLib.SceneScripts
             if (this.isOpen)
             {
                 PE_RepairableDestructableComponent destructComponent = base.GameEntity.GetFirstScriptOfType<PE_RepairableDestructableComponent>();
-                if(destructComponent == null || destructComponent.IsBroken == false)
+                if (destructComponent == null || destructComponent.IsBroken == false)
                 {
                     this.CloseDoor();
                 }
@@ -112,7 +106,7 @@ namespace PersistentEmpiresLib.SceneScripts
             else this.OpenDoor();
         }
         public void OpenDoor()
-        {            
+        {
             base.SetFrameSynchedOverTime(ref this.openFrame, this.Duration);
             this.isOpen = true;
             Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_open"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);

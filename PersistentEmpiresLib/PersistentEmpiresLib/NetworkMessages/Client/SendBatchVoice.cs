@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -14,20 +10,21 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     {
         public byte[] PackedBuffer;
         public int[] BufferLens;
-        public SendBatchVoice() {
+        public SendBatchVoice()
+        {
         }
 
         public SendBatchVoice(byte[][] bufferBatch, int[] bufferLens)
         {
             int sum = 0;
-            for(int i = 0; i < bufferLens.Length; i++)
+            for (int i = 0; i < bufferLens.Length; i++)
             {
                 sum += bufferLens[i];
             }
 
             this.PackedBuffer = new byte[sum];
             int dstOffset = 0;
-            for(int i = 0; i < bufferLens.Length; i++)
+            for (int i = 0; i < bufferLens.Length; i++)
             {
                 Buffer.BlockCopy(bufferBatch[i], 0, this.PackedBuffer, dstOffset, bufferLens[i]);
                 dstOffset += bufferLens[i];
@@ -66,7 +63,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         protected override void OnWrite()
         {
             GameNetworkMessage.WriteIntToPacket(this.BufferLens.Length, new CompressionInfo.Integer(0, 10, true));
-            for(int i = 0; i < this.BufferLens.Length; i++)
+            for (int i = 0; i < this.BufferLens.Length; i++)
             {
                 GameNetworkMessage.WriteIntToPacket(this.BufferLens[i], new CompressionInfo.Integer(0, 1440, true));
             }

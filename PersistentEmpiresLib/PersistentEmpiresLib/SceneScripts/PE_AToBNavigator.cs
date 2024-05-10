@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -25,7 +20,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public string PortcullisTag = "";
         public string ElevationAnimation = "";
         public string LowerAnimation = "";
-        
+
         public string ToAUseTag = "toa_standpoint";
         public string ToBUseTag = "tob_standpoint";
 
@@ -55,7 +50,7 @@ namespace PersistentEmpiresLib.SceneScripts
             prop.SetValue(synchObject, syncFlags);
 
             MatrixFrame frame = this._portcullis.GetFrame();
-            
+
             frame.origin = this._pointA;
             this._portcullis.SetFrame(ref frame);
 
@@ -83,7 +78,7 @@ namespace PersistentEmpiresLib.SceneScripts
             }
             if (pointBEntity == null)
             {
-                MBEditor.AddEntityWarning(base.GameEntity, "Point b not found"); 
+                MBEditor.AddEntityWarning(base.GameEntity, "Point b not found");
                 return false;
             }
             if (portcullis.GetFirstScriptOfType<SynchedMissionObject>() == null)
@@ -113,13 +108,13 @@ namespace PersistentEmpiresLib.SceneScripts
                     MatrixFrame frame = this._portcullis.GetFrame();
 
                     if (
-                        frame.origin.Distance(this._pointA) <= 0.1f 
+                        frame.origin.Distance(this._pointA) <= 0.1f
                         && standingPoint.GameEntity.HasTag(this.ToAUseTag))
                     {
                         portcullisState = AToBNavigatorState.Idle;
                         standingPoint.UserAgent.StopUsingGameObjectMT(true);
                     }
-                    else if (frame.origin.Distance(this._pointB) <= 0.1f 
+                    else if (frame.origin.Distance(this._pointB) <= 0.1f
                         && standingPoint.GameEntity.HasTag(this.ToBUseTag))
                     {
                         portcullisState = AToBNavigatorState.Idle;

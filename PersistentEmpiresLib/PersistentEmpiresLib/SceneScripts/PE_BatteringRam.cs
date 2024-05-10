@@ -1,17 +1,14 @@
-﻿using NetworkMessages.FromServer;
+﻿using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.NetworkMessages.Server;
+using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.MountAndBlade.Objects.Siege;
 
 namespace PersistentEmpiresLib.SceneScripts
@@ -444,7 +441,7 @@ namespace PersistentEmpiresLib.SceneScripts
                                         Agent attackerAgent = null;
                                         foreach (StandingPoint standingPoint2 in base.StandingPoints)
                                         {
-                                           if(standingPoint2.UserAgent != null)
+                                            if (standingPoint2.UserAgent != null)
                                             {
                                                 attackerAgent = standingPoint2.UserAgent;
                                                 break;

@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -41,7 +35,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         protected override void OnWrite()
         {
             GameNetworkMessage.WriteMissionObjectIdToPacket(this.StockpileMarket.Id);
-            GameNetworkMessage.WriteIntToPacket(this.ItemIndex,new CompressionInfo.Integer(0, 4096, true));
+            GameNetworkMessage.WriteIntToPacket(this.ItemIndex, new CompressionInfo.Integer(0, 4096, true));
         }
     }
 }
