@@ -414,7 +414,7 @@
       <Version>1.5.1</Version>
     </PackageReference>
     <PackageReference Include="Websocket.Client">
-      <Version>3.2.61</Version>
+      <Version>4.7.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
