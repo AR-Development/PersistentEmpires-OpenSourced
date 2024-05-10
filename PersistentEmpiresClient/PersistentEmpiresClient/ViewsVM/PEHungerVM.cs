@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -14,7 +10,7 @@ namespace PersistentEmpires.Views.ViewsVM
     {
         private int _hunger;
 
-        public PEHungerVM(int Hunger, Mission mission, Camera missionCamera, Func<float> getCameraToggleProgress): base(mission, missionCamera, getCameraToggleProgress)
+        public PEHungerVM(int Hunger, Mission mission, Camera missionCamera, Func<float> getCameraToggleProgress) : base(mission, missionCamera, getCameraToggleProgress)
         {
             this.Hunger = Hunger;
         }
@@ -26,11 +22,12 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         [DataSourceProperty]
-        public int Hunger {
+        public int Hunger
+        {
             get => this._hunger;
             set
             {
-                if(value != this._hunger)
+                if (value != this._hunger)
                 {
                     this._hunger = value;
                     base.OnPropertyChangedWithValue(value, "Hunger");

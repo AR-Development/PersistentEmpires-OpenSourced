@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -27,10 +23,12 @@ namespace PersistentEmpires.Views.ViewsVM.ImportExport
             this._executeSelect = executeSelect;
         }
 
-        public void ExecuteSelect() {
+        public void ExecuteSelect()
+        {
             this._executeSelect(this);
         }
-        public void ExecuteHoverStart() {
+        public void ExecuteHoverStart()
+        {
             if (this.Item != null)
             {
                 InformationManager.ShowTooltip(typeof(ItemObject), new object[] {
@@ -39,7 +37,8 @@ namespace PersistentEmpires.Views.ViewsVM.ImportExport
             }
         }
 
-        public void ExecuteHoverEnd() {
+        public void ExecuteHoverEnd()
+        {
             InformationManager.HideTooltip();
         }
 
@@ -49,7 +48,7 @@ namespace PersistentEmpires.Views.ViewsVM.ImportExport
             get => this._isSelected;
             set
             {
-                if(value != this._isSelected)
+                if (value != this._isSelected)
                 {
                     this._isSelected = value;
                     base.OnPropertyChangedWithValue(value, "IsSelected");
@@ -75,11 +74,12 @@ namespace PersistentEmpires.Views.ViewsVM.ImportExport
             }
         }
         [DataSourceProperty]
-        public int ExportPrice {
+        public int ExportPrice
+        {
             get => this._exportPrice;
             set
             {
-                if(value != this._exportPrice)
+                if (value != this._exportPrice)
                 {
                     this._exportPrice = value;
                     base.OnPropertyChangedWithValue(value, "ExportPrice");
@@ -92,7 +92,7 @@ namespace PersistentEmpires.Views.ViewsVM.ImportExport
             get => this._imageIdentifier;
             set
             {
-                if(value != this._imageIdentifier)
+                if (value != this._imageIdentifier)
                 {
                     this._imageIdentifier = value;
                     base.OnPropertyChangedWithValue(value, "ImageIdentifier");

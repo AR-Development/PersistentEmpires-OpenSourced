@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection.FlagMarker.Targets;
@@ -16,7 +11,8 @@ namespace PersistentEmpires.Views.ViewsVM.MapMarkers
         private string _castleName;
         private ImageIdentifierVM _bannerImage;
 
-        public PE_CastleBanner GetBanner() {
+        public PE_CastleBanner GetBanner()
+        {
             return this._castleBanner;
         }
         public PECastleMapMarkerVM(PE_CastleBanner banner) : base(MissionMarkerType.Peer)
@@ -39,7 +35,7 @@ namespace PersistentEmpires.Views.ViewsVM.MapMarkers
             get => this._castleName;
             set
             {
-                if(value != this._castleName)
+                if (value != this._castleName)
                 {
                     this._castleName = value;
                     base.OnPropertyChangedWithValue(value, "CastleName");
@@ -47,7 +43,7 @@ namespace PersistentEmpires.Views.ViewsVM.MapMarkers
             }
         }
 
-       
+
 
         [DataSourceProperty]
         public ImageIdentifierVM BannerImage

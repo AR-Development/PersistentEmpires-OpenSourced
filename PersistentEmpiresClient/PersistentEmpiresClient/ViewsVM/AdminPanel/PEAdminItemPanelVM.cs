@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.AdminPanel
@@ -25,8 +21,9 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         public string ItemId
         {
             get => this._itemId;
-            set {
-                if(value != this._itemId)
+            set
+            {
+                if (value != this._itemId)
                 {
                     this._itemId = value;
                     base.OnPropertyChangedWithValue(value, "ItemId");
@@ -39,7 +36,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             get => this._count;
             set
             {
-                if(value != this._count)
+                if (value != this._count)
                 {
                     this._count = value;
                     base.OnPropertyChangedWithValue(value, "Count");

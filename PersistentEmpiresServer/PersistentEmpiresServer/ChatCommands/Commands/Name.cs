@@ -1,15 +1,11 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib;
+﻿using PersistentEmpiresLib;
+using PersistentEmpiresLib.Helpers;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System.Text.RegularExpressions;
 
 namespace PersistentEmpiresServer.ChatCommands.Commands
 {
@@ -60,7 +56,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 InformationComponent.Instance.SendMessage("Custom name cannot be empty", Colors.Red.ToUnsignedInteger(), networkPeer);
                 return false;
             }
-            if(!checkAlphaNumeric(newName))
+            if (!checkAlphaNumeric(newName))
             {
                 InformationComponent.Instance.SendMessage("Custom name should be alpha numeric", Colors.Red.ToUnsignedInteger(), networkPeer);
                 return false;

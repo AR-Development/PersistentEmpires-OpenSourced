@@ -1,14 +1,12 @@
 ﻿using NetworkMessages.FromServer;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpiresLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -233,7 +231,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         }*/
                         BasicCharacterObject selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>(representative.GetClassId());
 
-                        if(selectedCharacterObject == null)
+                        if (selectedCharacterObject == null)
                         {
                             Debug.Print("*PERSISTENT EMPIRES* Player class is null", 0, Debug.DebugColor.Red);
                             selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>("pe_peasant");

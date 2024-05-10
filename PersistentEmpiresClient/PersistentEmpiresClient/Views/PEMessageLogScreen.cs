@@ -75,7 +75,7 @@ namespace PersistentEmpires.Views.Views
                 _gauntletLayer = null;
                 return true;
             }
-            
+
             return false;
         }
 
@@ -111,7 +111,7 @@ namespace PersistentEmpires.Views.Views
 
         private void HandleLocalMessageFromServerForLog(LocalMessageServer message)
         {
-                AddToLog($"{message.Sender.UserName}: {message.Message}");
+            AddToLog($"{message.Sender.UserName}: {message.Message}");
         }
 
         public void AddToLog(string message)

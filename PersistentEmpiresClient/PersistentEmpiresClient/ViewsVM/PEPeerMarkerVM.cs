@@ -1,9 +1,6 @@
 ﻿using PersistentEmpires.Views.Views.Markers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -16,7 +13,7 @@ namespace PersistentEmpires.Views.ViewsVM
         private MBBindingList<PEChatBubbleVM> _chatMessages;
 
         public MissionPeer TargetPeer { get; private set; }
-        
+
         public PEPeerMarkerVM(MissionPeer peer) : base(MissionMarkerType.Peer)
         {
             this.ChatMessages = new MBBindingList<PEChatBubbleVM>();
@@ -25,8 +22,9 @@ namespace PersistentEmpires.Views.ViewsVM
             this.SetVisual();
         }
 
-        public void AddMessage(string message, string color) {
-            if(this.ChatMessages.Count > 5)
+        public void AddMessage(string message, string color)
+        {
+            if (this.ChatMessages.Count > 5)
             {
                 this.ChatMessages.RemoveAt(0);
             }
@@ -35,9 +33,9 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void FadeOldMessages()
         {
-            foreach(PEChatBubbleVM bubble in this.ChatMessages.ToList())
+            foreach (PEChatBubbleVM bubble in this.ChatMessages.ToList())
             {
-                if(bubble.CreatedAt + 3 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                if (bubble.CreatedAt + 3 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
                     this.ChatMessages.Remove(bubble);
                 }
@@ -61,7 +59,7 @@ namespace PersistentEmpires.Views.ViewsVM
             }
             base.UpdateScreenPosition(missionCamera);
             // base.OnPropertyChanged("FontSize");
-            foreach(PEChatBubbleVM vm in this.ChatMessages)
+            foreach (PEChatBubbleVM vm in this.ChatMessages)
             {
                 int value = (-24 * this.Distance) / 30;
                 vm.SetFontSize(value + 24);
@@ -96,7 +94,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._chatMessages;
             set
             {
-                if(value != this._chatMessages)
+                if (value != this._chatMessages)
                 {
                     this._chatMessages = value;
                     base.OnPropertyChangedWithValue(value, "ChatMessages");

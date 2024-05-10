@@ -1,19 +1,13 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpires.Views.ViewsVM;
+﻿using PersistentEmpires.Views.ViewsVM;
 using PersistentEmpires.Views.ViewsVM.AnimationMenu;
-using System;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
-using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.ScreenSystem;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -22,7 +16,7 @@ namespace PersistentEmpires.Views.Views
         private bool IsActive;
         private PEAnimationMenuVM _dataSource;
         private GauntletLayer _gauntletLayer;
-        
+
 
         public PEAnimationsView() { }
 
@@ -152,7 +146,7 @@ namespace PersistentEmpires.Views.Views
             bool result = base.OnEscape();
             if (this.IsActive)
             {
-                
+
                 this.CloseImportExportAux();
                 this.IsActive = false;
                 return true;

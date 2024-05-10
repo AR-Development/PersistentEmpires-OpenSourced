@@ -1,9 +1,4 @@
 ﻿using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
@@ -34,19 +29,19 @@ namespace PersistentEmpires.Views.Views
             this._agentVisualComponent.OnMyAgentSpawnedFromVisual += this.OnMyAgentSpawnedFromVisual;
             this._dataSource = new PESpawnHudVM();
         }
-                                                                                                                                                
+
         public void OnMyAgentVisualSpawned()
         {
             this.OnOpen();
         }
         public void OnMyAgentSpawnedFromVisual()
         {
-           this.OnClose();
+            this.OnClose();
         }
 
         private void OnOpen()
         {
-            if(isOpen)
+            if (isOpen)
             {
                 return;
             }

@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PersistentEmpiresLib.Factions;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
     public class DBFactionRepository
     {
-        public static void Initialize() {
+        public static void Initialize()
+        {
             SaveSystemBehavior.OnGetFactions += GetFactions;
             SaveSystemBehavior.OnCreateOrSaveFaction += CreateOrSaveFaction;
             SaveSystemBehavior.OnGetFaction += GetFaction;

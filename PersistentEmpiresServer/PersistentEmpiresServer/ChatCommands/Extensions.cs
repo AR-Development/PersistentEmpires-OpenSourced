@@ -12,7 +12,7 @@ namespace PersistentEmpiresServer.ChatCommands
         internal static void SendMessageToPlayers(this Command command, NetworkCommunicator player, int distance, string message)
         {
             var position = player.ControlledAgent.Position;
-            var  affectedPlayers = new List<AffectedPlayer>();
+            var affectedPlayers = new List<AffectedPlayer>();
 
             foreach (NetworkCommunicator otherPlayer in GameNetwork.NetworkPeers)
             {
@@ -20,7 +20,7 @@ namespace PersistentEmpiresServer.ChatCommands
 
                 var otherPlayerPosition = otherPlayer.ControlledAgent.Position;
                 var d = position.Distance(otherPlayerPosition);
-                
+
                 if (d < distance)
                 {
                     GameNetwork.BeginModuleEventAsServer(otherPlayer);

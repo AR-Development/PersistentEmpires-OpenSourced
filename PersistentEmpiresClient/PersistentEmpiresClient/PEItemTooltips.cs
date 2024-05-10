@@ -1,11 +1,7 @@
 ﻿using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresGameModels;
-using PersistentEmpiresLib.SceneScripts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
@@ -75,7 +71,8 @@ namespace PersistentEmpires.Views
                     }
                     propertyBasedTooltipVM.AddProperty(" ", " ", 0, TooltipProperty.TooltipPropertyFlags.None);
                 }
-            }else if(item.HasArmorComponent && item.Tier >= ItemObject.ItemTiers.Tier1)
+            }
+            else if (item.HasArmorComponent && item.Tier >= ItemObject.ItemTiers.Tier1)
             {
                 int minTierSkill = 0;
                 if (item.Tier > ItemObject.ItemTiers.Tier1)

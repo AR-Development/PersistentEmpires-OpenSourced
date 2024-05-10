@@ -1,9 +1,6 @@
 ﻿using NAudio.Wave;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 
@@ -17,18 +14,18 @@ namespace PersistentEmpires.Views.ViewsVM
         private int _outputGain;
         private bool _voiceChatEnabled;
         private Action onClose;
-        private Action<int,int> onStartTest;
+        private Action<int, int> onStartTest;
         private Action onStopTest;
         private Action<int, int, int, int, bool> onApply;
         private int selectedOutputDevice;
         private int selectedInputDevice;
         private bool _testing = false;
 
-        public PEVoiceChatOptionsVM(List<WaveInCapabilities> devices, List<WaveOutCapabilities> outputDevices, bool voiceChatEnabled, Action onClose, Action<int,int,int,int, bool> onApply, Action<int,int> onStartTest, Action onStopTest)
+        public PEVoiceChatOptionsVM(List<WaveInCapabilities> devices, List<WaveOutCapabilities> outputDevices, bool voiceChatEnabled, Action onClose, Action<int, int, int, int, bool> onApply, Action<int, int> onStartTest, Action onStopTest)
         {
             this.Microphones = new SelectorVM<SelectorItemVM>(0, OnChangeMicrophone);
             this.InputGain = 100;
-            for(int i = 0; i < devices.Count; i++)
+            for (int i = 0; i < devices.Count; i++)
             {
                 WaveInCapabilities device = devices[i];
                 this.Microphones.AddItem(new SelectorItemVM(device.ProductName));
@@ -63,7 +60,7 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void ExecuteTest()
         {
-            if(this.IsTesting)
+            if (this.IsTesting)
             {
                 this.IsTesting = false;
                 this.onStopTest();
@@ -71,7 +68,7 @@ namespace PersistentEmpires.Views.ViewsVM
             else
             {
                 this.IsTesting = true;
-                this.onStartTest(this.selectedInputDevice,InputGain);
+                this.onStartTest(this.selectedInputDevice, InputGain);
             }
         }
 
@@ -91,7 +88,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._testing;
             set
             {
-                if(value != this._testing)
+                if (value != this._testing)
                 {
                     this._testing = value;
                     base.OnPropertyChangedWithValue(value, "IsTesting");
@@ -119,7 +116,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._voiceChatEnabled;
             set
             {
-                if(value != this._voiceChatEnabled)
+                if (value != this._voiceChatEnabled)
                 {
                     this._voiceChatEnabled = value;
                     base.OnPropertyChangedWithValue(value, "VoiceChatEnabled");
@@ -147,7 +144,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._inputGain;
             set
             {
-                if(value != this._inputGain)
+                if (value != this._inputGain)
                 {
                     this._inputGain = value;
                     base.OnPropertyChangedWithValue(value, "InputGain");

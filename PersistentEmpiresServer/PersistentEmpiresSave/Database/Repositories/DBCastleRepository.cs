@@ -1,11 +1,8 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
@@ -33,7 +30,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static DBCastle CreateOrSaveCastle(int castleIndex, int factionIndex)
         {
-            if(GetCastle(castleIndex) == null)
+            if (GetCastle(castleIndex) == null)
             {
                 return CreateCastle(castleIndex, factionIndex);
             }
