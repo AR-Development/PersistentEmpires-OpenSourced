@@ -7,6 +7,8 @@ using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.Core;
@@ -98,10 +100,11 @@ namespace PersistentEmpiresSave.Database.Repositories
 
                         if (string.IsNullOrEmpty(playerUserId) && string.IsNullOrEmpty(discordUserId))
                         {
-                            // Both identifiers don't exist, insert them with a new user_id
-                            string newUserId = Guid.NewGuid().ToString();
-                            connection.Execute(insertQuery, new { Identifier = playerId, IdentifierType = "player", UserId = newUserId }, transaction);
-                            connection.Execute(insertQuery, new { Identifier = discordId, IdentifierType = "discord", UserId = newUserId }, transaction);
+                            // Both identifiers don't exist, generate a unique user_id using MD5
+                            string uniqueId = GenerateUniqueId(playerId, discordId);
+
+                            connection.Execute(insertQuery, new { Identifier = playerId, IdentifierType = "player", UserId = uniqueId }, transaction);
+                            connection.Execute(insertQuery, new { Identifier = discordId, IdentifierType = "discord", UserId = uniqueId }, transaction);
                         }
                         else if (!string.IsNullOrEmpty(playerUserId) && string.IsNullOrEmpty(discordUserId))
                         {
@@ -134,6 +137,17 @@ namespace PersistentEmpiresSave.Database.Repositories
                         throw;
                     }
                 }
+            }
+        }
+
+        private static string GenerateUniqueId(string playerId, string discordId)
+        {
+            string input = $"{playerId}_{discordId}_{DateTime.UtcNow.Ticks}";
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
 
