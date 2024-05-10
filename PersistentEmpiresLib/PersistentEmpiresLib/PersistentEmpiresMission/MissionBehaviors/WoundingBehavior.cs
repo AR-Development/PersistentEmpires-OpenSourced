@@ -6,8 +6,6 @@ using TaleWorlds.MountAndBlade;
 using System.Linq;
 using System;
 
-
-
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
     public class WoundingBehavior : MissionNetwork
