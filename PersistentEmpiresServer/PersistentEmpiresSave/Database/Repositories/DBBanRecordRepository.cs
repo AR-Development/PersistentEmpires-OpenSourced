@@ -48,18 +48,10 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static bool IsPlayerBanned(string playerId)
         {
-            int count = DBConnection.Connection.QueryFirstOrDefault<int>(@"
-                SELECT COUNT(*)
-                FROM BanRecords br
-                JOIN Identifiers i ON br.PlayerId = i.Identifier
-                WHERE br.BanEndsAt >= @CurrentTime
-                AND i.UserId = (
-                    SELECT UserId
-                    FROM Identifiers
-                    WHERE Identifier = @PlayerId
-                )",
-                new { CurrentTime = DateTime.UtcNow, PlayerId = playerId });
-
+            int count = DBConnection.Connection.Query("SELECT * FROM BanRecords WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId", new {
+                CurrentTime = DateTime.UtcNow,
+                PlayerId = playerId
+            }).Count();
             return count > 0;
         }
     }
