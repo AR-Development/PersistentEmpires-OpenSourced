@@ -86,24 +86,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="SharpRaven">
-      <HintPath>..\externals\SharpRaven.dll</HintPath>
-    </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\..\PersistentEmpiresServer\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=106.5.4.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\..\PersistentEmpiresServer\packages\RestSharp.106.5.4\lib\net452\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp.Serializers.Newtonsoft.Json, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\PersistentEmpiresServer\packages\RestSharp.Newtonsoft.Json.1.5.1\lib\net452\RestSharp.Serializers.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\PersistentEmpiresServer\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="Websocket.Client, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\PersistentEmpiresServer\packages\Websocket.Client.3.2.61\lib\netstandard2.0\Websocket.Client.dll</HintPath>
-    </Reference>
     <!-- Dlls
     ONLY in Shipping Sever -->
     <Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
@@ -111,9 +93,6 @@
     </Reference>
     <!-- Client/Server
     specific dlls -->
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ReferenceFolder)\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
       <HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
     </Reference>
@@ -425,8 +404,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="Update_Bannerlord_DLLs.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle">
+      <Version>1.8.9</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp.Newtonsoft.Json">
+      <Version>1.5.1</Version>
+    </PackageReference>
+    <PackageReference Include="Websocket.Client">
+      <Version>3.2.61</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

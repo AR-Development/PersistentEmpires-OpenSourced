@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TaleworldsReferencePath>..\..\PersistentEmpiresLib\PersistentEmpiresLib\ServerReferences</TaleworldsReferencePath>
-        <Platforms>AnyCPU;x64</Platforms>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -73,12 +73,9 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony"
-                          Version="2.2.2" />
-        <PackageReference Include="Microsoft.CSharp"
-                          Version="4.7.0" />
-        <PackageReference Include="System.Data.DataSetExtensions"
-                          Version="4.5.0" />
+        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     </ItemGroup>
     <ItemGroup>
         <None Update="0Harmony.dll">
