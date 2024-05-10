@@ -114,7 +114,7 @@ namespace PersistentEmpires.Views.Views
                 this._dataSource.SetRequestedItems(requestedInventory);
             }
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriority);
-            this._gauntletLayer.IsFocusLayer = false;
+            this._gauntletLayer.IsFocusLayer = true;
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             this._gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
             this._gauntletLayer.LoadMovie("PEPlayerInventory", this._dataSource);
