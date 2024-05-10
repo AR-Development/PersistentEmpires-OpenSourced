@@ -12,11 +12,11 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>CLIENT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\RunAsClientDebug\</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'RunAsServerDebug' ">
     <ReferenceFolder>.\ServerReferences</ReferenceFolder>
@@ -30,7 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>SERVER</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\RunAsServerDebug\</OutputPath>
@@ -40,12 +40,12 @@
     <ReferenceFolder>.\ClientReferences</ReferenceFolder>
     <OutputType>Library</OutputType>
     <Optimize>true</Optimize>
-    <DefineConstants>CLIENT</DefineConstants>
+    <DefineConstants>TRACE;CLIENT</DefineConstants>
     <DebugType>portable</DebugType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
@@ -55,12 +55,12 @@
     <ReferenceFolder>.\ServerReferences</ReferenceFolder>
     <OutputType>Library</OutputType>
     <Optimize>true</Optimize>
-    <DefineConstants>SERVER</DefineConstants>
+    <DefineConstants>TRACE;SERVER</DefineConstants>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <DebugType>portable</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
