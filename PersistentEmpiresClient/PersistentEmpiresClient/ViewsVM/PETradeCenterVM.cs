@@ -1,9 +1,9 @@
-﻿using PersistentEmpiresLib.Data;
+﻿using PersistentEmpires.Views.ViewsVM.StockpileMarket;
+using PersistentEmpiresClient.ViewsVM;
+using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM.StockpileMarket;
 using System;
 using TaleWorlds.Library;
-using PersistentEmpiresClient.ViewsVM;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -22,27 +22,32 @@ namespace PersistentEmpires.Views.ViewsVM
         public override void AddItem(object obj, int i)
         {
             MarketItem item = (MarketItem)obj;
-            this.FilteredItemList.Add(new PEStockpileMarketItemVM(item, i, (selected) => {
+            this.FilteredItemList.Add(new PEStockpileMarketItemVM(item, i, (selected) =>
+            {
                 this.SelectedItem = selected;
             }));
         }
 
-        public void RefreshValues(PE_TradeCenter tradeCenter, Inventory inventory, Action<PEStockpileMarketItemVM> buy, Action<PEStockpileMarketItemVM> sell, Action<PEStockpileMarketItemVM> getPrices) {
+        public void RefreshValues(PE_TradeCenter tradeCenter, Inventory inventory, Action<PEStockpileMarketItemVM> buy, Action<PEStockpileMarketItemVM> sell, Action<PEStockpileMarketItemVM> getPrices)
+        {
             this.TradeCenter = tradeCenter;
             this.Buy = buy;
             this.Sell = sell;
             this.GetPrices = getPrices;
         }
 
-        public void ExecuteBuy() {
+        public void ExecuteBuy()
+        {
             this.Buy(this.SelectedItem);
         }
 
-        public void ExecuteSell() {
+        public void ExecuteSell()
+        {
             this.Sell(this.SelectedItem);
         }
 
-        public void ExecuteGetPrices() {
+        public void ExecuteGetPrices()
+        {
             this.GetPrices(this.SelectedItem);
         }
 

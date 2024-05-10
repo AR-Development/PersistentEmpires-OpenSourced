@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -49,7 +46,7 @@ namespace PersistentEmpires.Views.ViewsVM
         {
             this.PeerTargets.ApplyActionOnAllItems(delegate (PEPeerMarkerVM pt)
             {
-                if(pt.ChatMessages.Count > 0)
+                if (pt.ChatMessages.Count > 0)
                 {
                     pt.UpdateScreenPosition(this._missionCamera);
                     pt.FadeOldMessages();

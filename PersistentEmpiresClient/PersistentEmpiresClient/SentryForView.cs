@@ -1,18 +1,11 @@
 ﻿using PersistentEmpiresClient;
-using PersistentEmpiresLib.ErrorLogging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.DotNet;
 using TaleWorlds.Engine;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.PlatformService;
 using TaleWorlds.ScreenSystem;
 
 namespace PersistentEmpires.Views
@@ -36,12 +29,12 @@ namespace PersistentEmpires.Views
 
         public static void RglExceptionThrown(StackTrace obj, Exception rglException)
         {
-            
+
         }
 
 
         private static void HandleExceptionalExit(object sender, UnhandledExceptionEventArgs args)
-        {            
+        {
             Exception e = (Exception)args.ExceptionObject;
         }
 

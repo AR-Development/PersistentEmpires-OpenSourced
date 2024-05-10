@@ -1,13 +1,8 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
@@ -15,7 +10,6 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
-using PersistentEmpiresLib;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -29,8 +23,9 @@ namespace PersistentEmpires.Views.Views
 
         private GauntletLayer _gauntletLayer;
 
-        public PEBankView() { 
-            
+        public PEBankView()
+        {
+
         }
 
         public override void OnMissionScreenInitialize()
@@ -75,7 +70,7 @@ namespace PersistentEmpires.Views.Views
         {
             if (this.IsActive) return;
             this.ActiveEntity = Bank;
-            this._dataSource.RefreshValues(amount, 100-taxes);
+            this._dataSource.RefreshValues(amount, 100 - taxes);
             this._gauntletLayer = new GauntletLayer(50);
             this._gauntletLayer.IsFocusLayer = true;
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
@@ -97,20 +92,20 @@ namespace PersistentEmpires.Views.Views
                 InformationManager.DisplayMessage(new InformationMessage("You can't do this action while dead", Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
-            if(vm.Amount <= 0)
+            if (vm.Amount <= 0)
             {
                 InformationManager.DisplayMessage(new InformationMessage("You can't deposit 0 amount", Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             Vec3 myPos = GameNetwork.MyPeer.ControlledAgent.Position;
             Vec3 bankPos = this.ActiveEntity.GameEntity.GetGlobalFrame().origin;
-            if(bankPos.Distance(myPos) > 5)
+            if (bankPos.Distance(myPos) > 5)
             {
                 InformationManager.DisplayMessage(new InformationMessage("You are away from the bank.", Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             PersistentEmpireRepresentative representative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
-            if(representative.HaveEnoughGold(vm.Amount) == false)
+            if (representative.HaveEnoughGold(vm.Amount) == false)
             {
                 InformationManager.DisplayMessage(new InformationMessage("You dont have enough money", Color.ConvertStringToColor("#FF0000FF")));
                 return;

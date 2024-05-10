@@ -24,11 +24,11 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
         public bool Execute(NetworkCommunicator player, string[] args)
         {
             if (player.ControlledAgent == null) return false;
-            
+
             var minInt = 0;
             var maxInt = 100;
             int tmp;
-            
+
             if (args.Count() > 1)
             {
                 if (int.TryParse(args[1], out tmp))
@@ -51,7 +51,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                     maxInt = tmp;
                 }
             }
-            
+
             var rnd = new Random();
             var random = rnd.Next(minInt, maxInt + 1);
             var message = $"{player.UserName} rolls {random} from between {minInt} to {maxInt}.";

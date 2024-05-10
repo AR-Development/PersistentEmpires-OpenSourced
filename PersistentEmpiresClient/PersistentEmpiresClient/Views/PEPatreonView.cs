@@ -1,10 +1,5 @@
 ﻿using PersistentEmpiresHarmony.Patches;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
@@ -15,8 +10,9 @@ namespace PersistentEmpires.Views.Views
     {
         public bool IsActive = false;
         public PatreonRegistryBehavior patreonRegistryBehavior;
-        public PEPatreonView() {
-            
+        public PEPatreonView()
+        {
+
         }
 
         public override void OnMissionScreenInitialize()
@@ -34,10 +30,10 @@ namespace PersistentEmpires.Views.Views
         {
             if (teamOnly) return true;
 
-            if(this.patreonRegistryBehavior.PatreonRegistry.ContainsKey(peer))
+            if (this.patreonRegistryBehavior.PatreonRegistry.ContainsKey(peer))
             {
                 PatreonData data = this.patreonRegistryBehavior.PatreonRegistry[peer];
-                InformationManager.DisplayMessage(new InformationMessage("("+data.Title.Split(' ')[0]+") " + peer.GetComponent<MissionPeer>().DisplayedName + ": " + message, data.Color));
+                InformationManager.DisplayMessage(new InformationMessage("(" + data.Title.Split(' ')[0] + ") " + peer.GetComponent<MissionPeer>().DisplayedName + ": " + message, data.Color));
                 return false;
             }
             return true;

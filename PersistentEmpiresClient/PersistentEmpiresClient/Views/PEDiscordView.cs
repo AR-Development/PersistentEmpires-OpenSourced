@@ -1,18 +1,9 @@
-﻿using Discord;
-using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
+﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -44,12 +35,13 @@ namespace PersistentEmpires.Views.Views
 
         public override void OnMissionScreenTick(float dt)
         {
-            if(this.DiscordNotWorks == false)
+            if (this.DiscordNotWorks == false)
             {
                 try
                 {
                     discord.RunCallbacks();
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     this.DiscordNotWorks = false;
                 }
@@ -58,7 +50,7 @@ namespace PersistentEmpires.Views.Views
 
         private void OnSynchronized()
         {
-            if(this.DiscordNotWorks)
+            if (this.DiscordNotWorks)
             {
                 InformationManager.DisplayMessage(new InformationMessage("Unable to connect discord.", Color.ConvertStringToColor("#d32f2fff")));
                 return;

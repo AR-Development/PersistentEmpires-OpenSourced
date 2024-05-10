@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -177,7 +174,7 @@ namespace PersistentEmpiresHarmony.Patches
             }
             else
             {
-                Debug.FailedAssert("Checking to see if we enter this condition.", "C:\\Develop\\MB3\\Source\\Bannerlord\\TaleWorlds.MountAndBlade\\Missions\\Multiplayer\\MissionNetworkLogics\\MissionNetworkComponent.cs", "SendAgentsToPeer", 1975);                
+                Debug.FailedAssert("Checking to see if we enter this condition.", "C:\\Develop\\MB3\\Source\\Bannerlord\\TaleWorlds.MountAndBlade\\Missions\\Multiplayer\\MissionNetworkLogics\\MissionNetworkComponent.cs", "SendAgentsToPeer", 1975);
             }
         }
 
@@ -284,7 +281,8 @@ namespace PersistentEmpiresHarmony.Patches
         {
             if (peerSyncingQueue.Count <= 0) return;
             SyncingTrack syncingTrack = peerSyncingQueue.Peek();
-            if(syncingTrack.peer.IsConnectionActive == false ) {
+            if (syncingTrack.peer.IsConnectionActive == false)
+            {
                 peerSyncingQueue.Dequeue();
                 return;
             }
@@ -293,7 +291,7 @@ namespace PersistentEmpiresHarmony.Patches
             List<MissionObject> toBeSend = chunkedMissionObjects[syncingTrack.chunkIndex];
             SynchronizeMissionObjectsToPeer(syncingTrack.peer, toBeSend);
             syncingTrack.chunkIndex = syncingTrack.chunkIndex + 1;
-            if(syncingTrack.chunkIndex >= chunkedMissionObjects.Count)
+            if (syncingTrack.chunkIndex >= chunkedMissionObjects.Count)
             {
                 peerSyncingQueue.Dequeue();
                 SyncupRuntimeObjects(syncingTrack.peer);
@@ -320,7 +318,7 @@ namespace PersistentEmpiresHarmony.Patches
             CallPrivateFunction("SendSpawnedMissionObjectsToPeer", __instance, new object[] { networkPeer });
 
             peerSyncingQueue.Enqueue(new SyncingTrack(networkPeer, 0, false));
-            Debug.Print("** PE Better Syncing ** " + networkPeer.UserName.ToString() + " add to sync queue. Sync queue len is "+peerSyncingQueue.Count, 0, Debug.DebugColor.Cyan);
+            Debug.Print("** PE Better Syncing ** " + networkPeer.UserName.ToString() + " add to sync queue. Sync queue len is " + peerSyncingQueue.Count, 0, Debug.DebugColor.Cyan);
 
             SendMissilesToPeer(networkPeer);
             return false;

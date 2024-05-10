@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresHarmony.Patches
 {
@@ -18,8 +12,9 @@ namespace PersistentEmpiresHarmony.Patches
 
         public delegate bool ClientEventPlayerMessageTeamHandler(NetworkCommunicator networkPeer, NetworkMessages.FromClient.PlayerMessageTeam message);
         public static event ClientEventPlayerMessageTeamHandler OnClientEventPlayerMessageTeam;
-        public static bool PrefixOnPlayerMessageReceived(NetworkCommunicator networkPeer, string message, bool toTeamOnly) {
-            if(OnGlobalChatReceived != null)
+        public static bool PrefixOnPlayerMessageReceived(NetworkCommunicator networkPeer, string message, bool toTeamOnly)
+        {
+            if (OnGlobalChatReceived != null)
             {
                 return OnGlobalChatReceived(networkPeer, message, toTeamOnly);
             }
@@ -28,7 +23,7 @@ namespace PersistentEmpiresHarmony.Patches
 
         public static bool PrefixClientEventPlayerMessageAll(NetworkCommunicator networkPeer, NetworkMessages.FromClient.PlayerMessageAll message)
         {
-            if(OnClientEventPlayerMessageAll != null)
+            if (OnClientEventPlayerMessageAll != null)
             {
                 return OnClientEventPlayerMessageAll(networkPeer, message);
             }

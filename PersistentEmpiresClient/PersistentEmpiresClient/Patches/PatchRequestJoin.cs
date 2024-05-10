@@ -1,10 +1,4 @@
 ﻿using Messages.FromLobbyServer.ToClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade.Diamond;
 
 namespace PersistentEmpiresHarmony.Patches
 {
@@ -15,9 +9,9 @@ namespace PersistentEmpiresHarmony.Patches
 
         public static bool PrefixOnJoinCustomGameResultMessage(JoinCustomGameResultMessage message)
         {
-            if(OnJoinCustomGameResultMessage != null)
+            if (OnJoinCustomGameResultMessage != null)
             {
-               return OnJoinCustomGameResultMessage(message);
+                return OnJoinCustomGameResultMessage(message);
             }
             return true;
         }

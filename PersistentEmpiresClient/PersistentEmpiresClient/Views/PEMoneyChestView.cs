@@ -1,13 +1,8 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
@@ -15,7 +10,6 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
-using PersistentEmpiresLib;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -44,7 +38,7 @@ namespace PersistentEmpires.Views.Views
 
         private void Mcb_OnUpdateGoldMC(PE_MoneyChest mc, int newAmount)
         {
-            if(this.ActiveEntity == mc)
+            if (this.ActiveEntity == mc)
             {
                 this._dataSource.Balance = newAmount;
             }

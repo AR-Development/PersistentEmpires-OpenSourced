@@ -1,10 +1,5 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;

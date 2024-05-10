@@ -3,18 +3,16 @@ using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using PersistentEmpiresLib.SceneScripts.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
     public class DBUpgradeableBuildingRepository
     {
-        public static void Initialize() {
+        public static void Initialize()
+        {
             SaveSystemBehavior.OnGetAllUpgradeableBuildings += GetAllUpgradeableBuildings;
             SaveSystemBehavior.OnGetUpgradeableBuilding += GetUpgradeableBuilding;
             SaveSystemBehavior.OnCreateOrSaveUpgradebleBuilding += CreateOrSaveUpgradebleBuilding;
@@ -33,7 +31,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static DBUpgradeableBuilding CreateOrSaveUpgradebleBuilding(PE_UpgradeableBuildings upgradeableBuildings)
         {
-            if(GetUpgradeableBuilding(upgradeableBuildings) == null)
+            if (GetUpgradeableBuilding(upgradeableBuildings) == null)
             {
                 return CreateUpgradeableBuilding(upgradeableBuildings);
             }
@@ -59,18 +57,20 @@ namespace PersistentEmpiresSave.Database.Repositories
             return db;
         }
 
-        public static IEnumerable<DBUpgradeableBuilding> GetAllUpgradeableBuildings() {
+        public static IEnumerable<DBUpgradeableBuilding> GetAllUpgradeableBuildings()
+        {
             Debug.Print("[Save Module] GET ALL UPGRADEABLE BUILDINGS");
             return DBConnection.Connection.Query<DBUpgradeableBuilding>("SELECT * FROM UpgradeableBuildings");
         }
 
         public static DBUpgradeableBuilding GetUpgradeableBuilding(PE_UpgradeableBuildings upgradeableBuildings)
         {
-            Debug.Print("[Save Module] LOADING UPGRADEABLE BUILDING FROM DB (" +upgradeableBuildings.GetMissionObjectHash()+")");
-             IEnumerable<DBUpgradeableBuilding> result = DBConnection.Connection.Query<DBUpgradeableBuilding>("SELECT * FROM UpgradeableBuildings WHERE MissionObjectHash = @MissionObjectHash", new { 
+            Debug.Print("[Save Module] LOADING UPGRADEABLE BUILDING FROM DB (" + upgradeableBuildings.GetMissionObjectHash() + ")");
+            IEnumerable<DBUpgradeableBuilding> result = DBConnection.Connection.Query<DBUpgradeableBuilding>("SELECT * FROM UpgradeableBuildings WHERE MissionObjectHash = @MissionObjectHash", new
+            {
                 MissionObjectHash = upgradeableBuildings.GetMissionObjectHash()
             });
-            Debug.Print("[Save Module] LOADING UPGRADEABLE BUILDING FROM DB (" + upgradeableBuildings .GetMissionObjectHash()+ ") RESULT COUNT "+result.Count());
+            Debug.Print("[Save Module] LOADING UPGRADEABLE BUILDING FROM DB (" + upgradeableBuildings.GetMissionObjectHash() + ") RESULT COUNT " + result.Count());
             if (result.Count() == 0) return null;
             return result.First();
         }

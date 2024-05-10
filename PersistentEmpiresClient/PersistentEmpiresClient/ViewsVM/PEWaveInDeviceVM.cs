@@ -1,9 +1,4 @@
 ﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -19,14 +14,14 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._name;
             set
             {
-                if(value != this._name)
+                if (value != this._name)
                 {
                     this._name = value;
                     base.OnPropertyChangedWithValue(value, "Name");
                 }
             }
         }
-        public PEWaveInDeviceVM(WaveInCapabilities device,int index)
+        public PEWaveInDeviceVM(WaveInCapabilities device, int index)
         {
             this.Name = device.ProductName;
             this.DeviceIndex = index;

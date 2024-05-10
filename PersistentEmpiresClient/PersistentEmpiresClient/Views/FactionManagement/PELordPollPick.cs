@@ -1,17 +1,8 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.Views.FactionManagement;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.MissionViews;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using TaleWorlds.MountAndBlade;
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PELordPollPick : PEMenuItem
@@ -19,21 +10,24 @@ namespace PersistentEmpires.Views.Views.FactionManagement
         private FactionPollComponent _factionPollComponent;
         public PELordPollPick() : base("PEFactionMembers")
         {
-            
+
         }
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
             this._factionPollComponent = base.Mission.GetMissionBehavior<FactionPollComponent>();
             this._factionManagementComponent.OnFactionLordPollClick += this.OnOpen;
-            this._dataSource = new PEFactionMembersVM("Vote A Player Lord", "Vote", () => {
+            this._dataSource = new PEFactionMembersVM("Vote A Player Lord", "Vote", () =>
+            {
                 this.CloseManagementMenu();
             },
-            (PEFactionMemberItemVM selectedMember) => {
+            (PEFactionMemberItemVM selectedMember) =>
+            {
                 this._factionPollComponent.RequestLordPlayerPoll(selectedMember.Peer);
                 this.CloseManagementMenu();
             },
-            () => {
+            () =>
+            {
                 this.CloseManagementMenu();
             });
         }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using TaleWorlds.Core;
 using TaleWorlds.DotNet;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Diamond;
@@ -53,7 +52,7 @@ namespace PersistentEmpiresHarmony
             base.OnApplicationTick(dt);
             PatchMissionNetworkComponent.OnTick();
         }
-        public override  void OnBeforeMissionBehaviorInitialize(Mission mission)
+        public override void OnBeforeMissionBehaviorInitialize(Mission mission)
         {
             List<MissionObject> cachedMissionObjects = mission.MissionObjects
                .Where(o => o is SynchedMissionObject)
@@ -87,7 +86,7 @@ namespace PersistentEmpiresHarmony
             HarmonyHandle = new HarmonyLib.Harmony("mentalrob.persistentempires.bannerlord");
             Debug.Print("** Persistent Harmony ** Harmony Handle Created.", 0, Debug.DebugColor.Yellow);
             var original = typeof(MultiplayerOptionsExtensions).GetMethod("GetOptionProperty", BindingFlags.Public | BindingFlags.Static);
-            Debug.Print("** Persistent Harmony ** Patched [MultiplayerOptionsExtensions::GetOptionProperty] " + original.FullDescription(), 0, Debug.DebugColor.Yellow); 
+            Debug.Print("** Persistent Harmony ** Patched [MultiplayerOptionsExtensions::GetOptionProperty] " + original.FullDescription(), 0, Debug.DebugColor.Yellow);
             var postfix = typeof(PatchMapTimeLimit).GetMethod("Postfix");
             HarmonyHandle.Patch(original, postfix: new HarmonyMethod(postfix));
             Debug.Print("** Persistent Harmony ** Patched [MultiplayerOptionsExtensions::GetOptionProperty]", 0, Debug.DebugColor.Yellow);
@@ -116,7 +115,7 @@ namespace PersistentEmpiresHarmony
             prefix = typeof(PatchRequestJoin).GetMethod("PrefixOnJoinCustomGameResultMessage", BindingFlags.Public | BindingFlags.Static);
             HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
             Debug.Print("** Persistent Harmony ** Patched [LobbyClient::OnJoinCustomGameResultMessage]", 0, Debug.DebugColor.Yellow);
-            
+
             original = typeof(GameNetwork).GetMethod("AddNewPlayerOnServer", BindingFlags.Public | BindingFlags.Static);
             prefix = typeof(PatchGameNetwork).GetMethod("PrefixAddNewPlayerOnServer", BindingFlags.Public | BindingFlags.Static);
             HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));

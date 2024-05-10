@@ -1,13 +1,8 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.GauntletUI.Mission;
@@ -140,19 +135,20 @@ namespace PersistentEmpires.Views.Views
             this._dataSource.IsInDeployement = this._isInDeployement;
             this._dataSource.Tick(dt);
 
-            if(this._missionMainAgentController != null && this._missionMainAgentController.InteractionComponent != null)
+            if (this._missionMainAgentController != null && this._missionMainAgentController.InteractionComponent != null)
             {
-                if (this._missionMainAgentController.InteractionComponent.CurrentFocusedObject != null) {
-                    if(this._missionMainAgentController.InteractionComponent.CurrentFocusedObject is PE_Gate)
+                if (this._missionMainAgentController.InteractionComponent.CurrentFocusedObject != null)
+                {
+                    if (this._missionMainAgentController.InteractionComponent.CurrentFocusedObject is PE_Gate)
                     {
                         PE_Gate gate = (PE_Gate)this._missionMainAgentController.InteractionComponent.CurrentFocusedObject;
-                        if(gate.GameEntity.HasScriptOfType<PE_RepairableDestructableComponent>())
+                        if (gate.GameEntity.HasScriptOfType<PE_RepairableDestructableComponent>())
                         {
                             PE_RepairableDestructableComponent comp = gate.GameEntity.GetFirstScriptOfType<PE_RepairableDestructableComponent>();
                             this._dataSource.InteractionInterface.OnFocusedHealthChanged(this._missionMainAgentController.InteractionComponent.CurrentFocusedObject, comp.HitPoint / comp.MaxHitPoint, true);
                         }
                     }
-                    
+
                     if (this._missionMainAgentController.InteractionComponent.CurrentFocusedObject is PE_NativeGate)
                     {
                         PE_NativeGate gate = (PE_NativeGate)this._missionMainAgentController.InteractionComponent.CurrentFocusedObject;
@@ -283,7 +279,7 @@ namespace PersistentEmpires.Views.Views
             }
         }
 
-       
+
 
         private void UnregisterInteractionEvents()
         {

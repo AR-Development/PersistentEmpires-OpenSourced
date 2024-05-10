@@ -1,16 +1,13 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using NetworkMessages.FromClient;
+using PersistentEmpiresHarmony.Patches;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresServer.ChatCommands.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresServer.ChatCommands.Commands;
-using PersistentEmpiresHarmony.Patches;
-using NetworkMessages.FromClient;
-using TaleWorlds.Diamond;
 
 namespace PersistentEmpiresServer.ServerMissions
 {

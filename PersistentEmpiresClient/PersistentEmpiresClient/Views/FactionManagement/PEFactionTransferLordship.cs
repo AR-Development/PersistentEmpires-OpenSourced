@@ -1,15 +1,9 @@
-﻿using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
+using PersistentEmpiresLib;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib;
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionTransferLordship : PEMenuItem
@@ -22,23 +16,28 @@ namespace PersistentEmpires.Views.Views.FactionManagement
         {
             base.OnMissionScreenInitialize();
             this._factionManagementComponent.OnAssignTransferLordshipClick += this.OnOpen;
-            this._dataSource = new PEFactionMembersVM("Transfer Lordship", "Set a new lord.", () => {
+            this._dataSource = new PEFactionMembersVM("Transfer Lordship", "Set a new lord.", () =>
+            {
                 this.CloseManagementMenu();
                 this._factionManagementComponent.OnFactionManagementClickHandler();
             },
-            (PEFactionMemberItemVM selectedMember) => {
-                InquiryData data = new InquiryData("Are you sure ?", "Are you sure to transfer your lordship to another player ?", true,true, "Yes", "No", () => {
+            (PEFactionMemberItemVM selectedMember) =>
+            {
+                InquiryData data = new InquiryData("Are you sure ?", "Are you sure to transfer your lordship to another player ?", true, true, "Yes", "No", () =>
+                {
                     GameNetwork.BeginModuleEventAsClient();
                     GameNetwork.WriteMessage(new RequestLordshipTransfer(selectedMember.Peer));
                     GameNetwork.EndModuleEventAsClient();
                     this.CloseManagementMenu();
-                }, () => {
+                }, () =>
+                {
                     this.CloseManagementMenu();
                 });
 
                 InformationManager.ShowInquiry(data);
             },
-            () => {
+            () =>
+            {
                 this.CloseManagementMenu();
             });
         }

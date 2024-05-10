@@ -1,11 +1,7 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
@@ -14,7 +10,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static void Initialize()
         {
-            
+
         }
 
         public static void AdminServerBehavior_OnBanPlayer(string PlayerId, string PlayerName, long BanEndsAt)
@@ -48,7 +44,8 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static bool IsPlayerBanned(string playerId)
         {
-            int count = DBConnection.Connection.Query("SELECT * FROM BanRecords WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId", new {
+            int count = DBConnection.Connection.Query("SELECT * FROM BanRecords WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId", new
+            {
                 CurrentTime = DateTime.UtcNow,
                 PlayerId = playerId
             }).Count();

@@ -3,11 +3,8 @@ using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using PersistentEmpiresLib.SceneScripts.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpiresSave.Database.Repositories
@@ -21,7 +18,8 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnCreateOrSaveHorseMarket += CreateOrSaveHorseMarket;
         }
 
-        private static DBHorseMarket CreateDBHorseMarket(PE_HorseMarket horseMarket) {
+        private static DBHorseMarket CreateDBHorseMarket(PE_HorseMarket horseMarket)
+        {
 
             return new DBHorseMarket
             {

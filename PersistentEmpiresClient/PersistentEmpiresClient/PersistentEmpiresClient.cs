@@ -1,15 +1,7 @@
 ﻿using PersistentEmpires.Views;
 using PersistentEmpiresLib.GameModes;
-using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresGameModels;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
