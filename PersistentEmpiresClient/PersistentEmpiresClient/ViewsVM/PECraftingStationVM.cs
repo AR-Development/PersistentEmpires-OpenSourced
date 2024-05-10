@@ -23,7 +23,7 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public PECraftingStationVM(Action<PEItemVM> _handleClickItem) : base(_handleClickItem)
         {
-            maxItemsRenderedPerTick = 30;
+            maxItemsRenderedPerTick = 15;
         }
 
         public override void AddItem(object obj, int i)
