@@ -89,7 +89,7 @@ namespace PersistentEmpiresClient.ViewsVM
         private int? tierFilter = null;
         private TaleWorlds.Core.ItemObject.ItemTypeEnum? itemTypeFilter = null;
 
-        protected int maxItemsRenderedPerTick = 50;
+        protected int maxItemsRenderedPerTick = 25;
 
         public PEBaseItemListVM(Action<PEItemVM> _handleClickItem)
         {
@@ -151,7 +151,7 @@ namespace PersistentEmpiresClient.ViewsVM
             for (int i = lastRenderedIndex; i < maxIndex - 1; i++)
             {
                 dynamic item = ItemsList[i];
-                if (this.NameFilter != null && this.NameFilter != "" && !item.Item.Name.ToString().ToLower().Contains(this.NameFilter)) continue;
+                if (this.NameFilter != null && this.NameFilter != "" && !item.Item.Name.ToString().ToLower().Contains(this.NameFilter.ToLower())) continue;
                 if (stockFilter != null && (((bool)stockFilter && !(item.Stock > 0)) || (!(bool)stockFilter && (item.Stock != 0)))) continue;
                 if (cultureFilter != null && item.Item.Culture.StringId != cultureFilter) continue;
                 if (tierFilter != null && item.Tier != tierFilter) continue;
