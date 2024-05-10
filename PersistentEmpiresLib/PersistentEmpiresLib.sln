@@ -13,8 +13,8 @@ Global
 		RunAsServerDebug|Any CPU = RunAsServerDebug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.ActiveCfg = ReleaseClient|Any CPU
-		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.Build.0 = ReleaseClient|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.ActiveCfg = RunAsClientDebug|Any CPU
+		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseClient|Any CPU.Build.0 = RunAsClientDebug|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseServer|Any CPU.ActiveCfg = ReleaseServer|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.ReleaseServer|Any CPU.Build.0 = ReleaseServer|Any CPU
 		{EFF0BC43-D180-45A5-AEEB-94A21D052377}.RunAsClientDebug|Any CPU.ActiveCfg = RunAsClientDebug|Any CPU
