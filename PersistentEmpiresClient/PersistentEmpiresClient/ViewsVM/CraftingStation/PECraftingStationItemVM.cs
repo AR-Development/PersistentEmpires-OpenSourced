@@ -16,12 +16,12 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
         private ImageIdentifierVM _imageIdentifier;
         private int _outputCount;
         private int _tier;
-        private MBBindingList<PECraftingReceiptVM> _craftingReceipts;
+        private MBBindingList<PECraftingRecipeVM> _craftingReceipts;
         private int _craftingDuration;
 
         private Action<PECraftingStationItemVM> _executeCraft;
         private string _craftableName;
-        public PECraftingStationItemVM(ItemObject craftableItem, int outputCount, int tier, int currentTier, MBBindingList<PECraftingReceiptVM> craftingReceipts, Action<PECraftingStationItemVM> executeCraft, int index, int craftingDuration) {
+        public PECraftingStationItemVM(ItemObject craftableItem, int outputCount, int tier, int currentTier, MBBindingList<PECraftingRecipeVM> craftingReceipts, Action<PECraftingStationItemVM> executeCraft, int index, int craftingDuration) {
             this.CraftableItem = craftableItem;
             this.ImageIdentifier = new ImageIdentifierVM(craftableItem);
             this.OutputCount = outputCount;
@@ -123,7 +123,7 @@ namespace PersistentEmpires.Views.ViewsVM.CraftingStation
             }
         }
         [DataSourceProperty]
-        public MBBindingList<PECraftingReceiptVM> CraftingReceipts {
+        public MBBindingList<PECraftingRecipeVM> CraftingReceipts {
             get => this._craftingReceipts;
             set { 
                 if(value != this._craftingReceipts)
