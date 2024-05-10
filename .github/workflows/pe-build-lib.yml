@@ -6,6 +6,7 @@ on:
       build_config:
         description: "Build configuration"
         required: true
+        type: choice
         options:
         - ReleaseServer
         - ReleaseClient
