@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -21,7 +19,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnBehaviorInitialize();
             random = new Random();
             Instance = this;
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.ItemId = ConfigManager.GetStrConfig("LockpickItem", "pe_lockpick");
 
@@ -31,11 +29,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            foreach(Agent a in pickedAgents.Keys.ToList())
+            foreach (Agent a in pickedAgents.Keys.ToList())
             {
                 if (pickedAgents.ContainsKey(a) == false) continue;
                 pickedAgents[a]--;
-                if(pickedAgents[a] == 0)
+                if (pickedAgents[a] == 0)
                 {
                     pickedAgents.Remove(a);
                     EquipmentIndex index = a.GetWieldedItemIndex(Agent.HandIndex.MainHand);
@@ -57,7 +55,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             int chance = random.Next(100);
 
-            if(chance >= 1 && chance < 25)
+            if (chance >= 1 && chance < 25)
             {
                 NetworkCommunicator player = picker.MissionPeer.GetNetworkPeer();
                 InformationComponent.Instance.SendMessage("Lockpicked successfully but your lockpick destroyed", Colors.Green.ToUnsignedInteger(), player);
@@ -77,7 +75,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 return true;
             }
 
-            if(chance >= 50 && chance < 75)
+            if (chance >= 50 && chance < 75)
             {
                 NetworkCommunicator player = picker.MissionPeer.GetNetworkPeer();
                 InformationComponent.Instance.SendMessage("Try again", Colors.Red.ToUnsignedInteger(), player);

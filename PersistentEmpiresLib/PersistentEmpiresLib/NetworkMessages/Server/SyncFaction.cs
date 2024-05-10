@@ -1,11 +1,6 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
@@ -18,7 +13,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public int FactionIndex;
         public Faction Faction;
         public SyncFaction() { }
-        public SyncFaction(int factionIndex, Faction faction) {
+        public SyncFaction(int factionIndex, Faction faction)
+        {
             this.FactionIndex = factionIndex;
             this.Faction = faction;
         }
@@ -43,7 +39,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.Faction = new Faction(new Banner(BannerKey), name);
             this.Faction.lordId = LordId;
             this.Faction.team = team;
-            
+
             int warDeclerationLength = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 200, true), ref result);
             for (int j = 0; j < warDeclerationLength; j++)
             {

@@ -1,12 +1,9 @@
 ﻿using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -121,7 +118,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 this._brokenState.SetVisibilityExcludeParents(false);
             }
             this.ParseRepairReceipts();
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this._persistentEmpireSceneSyncBehaviors = Mission.Current.GetMissionBehavior<PersistentEmpireSceneSyncBehaviors>();
             }
@@ -133,7 +130,7 @@ namespace PersistentEmpiresLib.SceneScripts
             if (this.HitPoint > this.MaxHitPoint) this.HitPoint = this.MaxHitPoint;
             if (this.HitPoint < 0) this.HitPoint = 0;
 
-            
+
 
             if (this.HitPoint == 0 && (this.AlwaysEffectOnDestroy || this.IsBroken == false))
             {
@@ -179,7 +176,8 @@ namespace PersistentEmpiresLib.SceneScripts
             }
         }
 
-        public void Reset() {
+        public void Reset()
+        {
             this.SetHitPoint(this.MaxHitPoint, Vec3.Zero, null);
         }
 
@@ -211,7 +209,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 if (persistentEmpireRepresentative == null) return false;
                 bool isAdmin = Main.IsPlayerAdmin(player);
 
-                if(missionWeapon.Item.StringId == "pe_adminhammer")
+                if (missionWeapon.Item.StringId == "pe_adminhammer")
                 {
                     this.SetHitPoint(this.MaxHitPoint, impactDirection, attackerScriptComponentBehavior);
                     InformationComponent.Instance.SendMessage((this.HitPoint + this.RepairDamage).ToString() + "/" + this.MaxHitPoint + ", repaired", 0x02ab89d9, player);
@@ -230,12 +228,12 @@ namespace PersistentEmpiresLib.SceneScripts
                     }
                     return false;
                 }
-                if(this.lastHittedAt + this._persistentEmpireSceneSyncBehaviors.RepairTimeoutAfterHit > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                if (this.lastHittedAt + this._persistentEmpireSceneSyncBehaviors.RepairTimeoutAfterHit > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
                     InformationComponent.Instance.SendMessage("You can't repair this object right now. You need to wait", 0x02ab89d9, player);
                     return false;
                 }
-                
+
 
                 foreach (RepairReceipt r in this.receipt)
                 {

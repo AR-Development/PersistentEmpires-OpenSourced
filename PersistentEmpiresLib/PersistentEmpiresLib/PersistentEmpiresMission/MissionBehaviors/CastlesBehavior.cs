@@ -2,11 +2,8 @@
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -34,9 +31,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_CastleBanner>(ref gameEntities);
             IEnumerable<DBCastle> dbCastles = SaveSystemBehavior.HandleGetCastles();
             Dictionary<int, DBCastle> savedCastles = new Dictionary<int, DBCastle>();
-            if(dbCastles != null)
+            if (dbCastles != null)
             {
-                foreach(DBCastle castle in dbCastles)
+                foreach (DBCastle castle in dbCastles)
                 {
                     savedCastles[castle.CastleIndex] = castle;
                 }

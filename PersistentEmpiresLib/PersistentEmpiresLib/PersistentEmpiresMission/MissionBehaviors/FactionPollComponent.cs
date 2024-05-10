@@ -1,16 +1,11 @@
-﻿using NetworkMessages.FromClient;
-using NetworkMessages.FromServer;
-using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -185,7 +180,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this._factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
 
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
                 this.LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
@@ -275,7 +270,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this._informationComponent.SendAnnouncementToPlayer("Your candidate is not in the same faction with you", pollCreatorPeer);
                 return;
             }
-            
+
             if (f.pollUnlockedAt > DateTimeOffset.UtcNow.ToUnixTimeSeconds() && f.lordId != targetPeer.VirtualPlayer.Id.ToString())
             {
                 this._informationComponent.SendMessage("You can't poll a different lord in 24 hours.", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
@@ -288,7 +283,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (!pollCreatorRepresentative.ReduceIfHaveEnoughGold(LordPollRequiredGold))
             {
-                InformationComponent.Instance.SendMessage("You need "+ LordPollRequiredGold.ToString()+ " dinar to start a poll", (new Color(1f, 0, 0)).ToUnsignedInteger(), pollCreatorPeer);
+                InformationComponent.Instance.SendMessage("You need " + LordPollRequiredGold.ToString() + " dinar to start a poll", (new Color(1f, 0, 0)).ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
             if (this._ongoingPolls.ContainsKey(targetRepresentative.GetFactionIndex()))
@@ -448,7 +443,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 flag = false;
             }
-            if(ongoingPoll.TargetPlayer.IsConnectionActive == false)
+            if (ongoingPoll.TargetPlayer.IsConnectionActive == false)
             {
                 flag = false;
             }

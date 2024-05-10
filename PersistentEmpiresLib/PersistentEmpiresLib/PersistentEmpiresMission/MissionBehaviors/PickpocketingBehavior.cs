@@ -1,9 +1,4 @@
-﻿using System; 
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
@@ -15,9 +10,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ItemId = "pe_stealing_dagger";
         private int ThousandPercentage = 50;
         private int RequiredPickpocketing = 10;
-        public override void OnBehaviorInitialize() {
+        public override void OnBehaviorInitialize()
+        {
             base.OnBehaviorInitialize();
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.ItemId = ConfigManager.GetStrConfig("PickpocketingItem", "pe_stealing_dagger");
                 this.ThousandPercentage = ConfigManager.GetIntConfig("PickpocketingPercentageThousands", 50);

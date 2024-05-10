@@ -1,11 +1,8 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
 
@@ -28,7 +25,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_MoneyChest>(ref moneyChestEntities);
             List<PE_MoneyChest> moneyChests = moneyChestEntities.Select(chest => chest.GetFirstScriptOfType<PE_MoneyChest>()).ToList();
 
-            foreach(PE_MoneyChest mc in moneyChests)
+            foreach (PE_MoneyChest mc in moneyChests)
             {
                 this.castleIdToMC[mc.CastleId] = mc;
             }
@@ -39,7 +36,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
         }
 
-        public void AddTaxFromHandler(PE_TaxHandler taxHandler, int amount) {
+        public void AddTaxFromHandler(PE_TaxHandler taxHandler, int amount)
+        {
             if (taxHandler.CastleId == -1) return;
             if (this.castleIdToMC.ContainsKey(taxHandler.CastleId) == false) return;
             this.castleIdToMC[taxHandler.CastleId].AddTax(amount);
@@ -63,7 +61,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (sender.ControlledAgent == null) return false;
             if (sender.ControlledAgent.Position.Distance(moneyChest.GameEntity.GlobalPosition) > moneyChest.Distance) return false;
 
-            if(message.Withdraw)
+            if (message.Withdraw)
             {
                 moneyChest.WithdrawGold(sender, message.Amount);
             }
@@ -78,7 +76,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             PE_MoneyChest moneyChest = (PE_MoneyChest)message.Chest;
             moneyChest.UpdateGold(message.Gold);
-            if(OnUpdateGoldMC != null)
+            if (OnUpdateGoldMC != null)
             {
                 OnUpdateGoldMC(moneyChest, (int)message.Gold);
             }

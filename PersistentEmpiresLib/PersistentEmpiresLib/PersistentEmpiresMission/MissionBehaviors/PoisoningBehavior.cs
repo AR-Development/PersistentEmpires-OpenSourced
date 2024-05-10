@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -20,8 +18,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            
-            if(GameNetwork.IsServer)
+
+            if (GameNetwork.IsServer)
             {
                 this.PoisionItemId = ConfigManager.GetStrConfig("PoisonItemId", "pe_poison_dagger");
                 this.AntidoteItemId = ConfigManager.GetStrConfig("AntidoteItemId", "pe_antidote");
@@ -31,13 +29,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if(this.LastCheckedAt + this.DamageIntervalSeconds < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            if (this.LastCheckedAt + this.DamageIntervalSeconds < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             {
                 this.LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
                 foreach (NetworkCommunicator player in this.Poisioned.Keys.ToList())
                 {
-                    if (player.ControlledAgent == null && this.Poisioned.ContainsKey(player)) {
+                    if (player.ControlledAgent == null && this.Poisioned.ContainsKey(player))
+                    {
                         this.Poisioned.Remove(player);
                     }
                     else
@@ -66,7 +65,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
-            if(affectedAgent.MissionPeer != null && affectedAgent.MissionPeer.GetNetworkPeer() != null && this.Poisioned.ContainsKey(affectedAgent.MissionPeer.GetNetworkPeer()))
+            if (affectedAgent.MissionPeer != null && affectedAgent.MissionPeer.GetNetworkPeer() != null && this.Poisioned.ContainsKey(affectedAgent.MissionPeer.GetNetworkPeer()))
             {
                 this.Poisioned.Remove(affectedAgent.MissionPeer.GetNetworkPeer());
             }
@@ -82,10 +81,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (affectorAgent.MissionPeer == null) return;
             if (blow.VictimBodyPart == BoneBodyPartType.None) return;
 
-            if(affectorWeapon.Item.StringId == this.PoisionItemId)
+            if (affectorWeapon.Item.StringId == this.PoisionItemId)
             {
                 EquipmentIndex mainHandIndex = affectorAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-                if(mainHandIndex != EquipmentIndex.None && affectorAgent.Equipment[mainHandIndex].Item.StringId == this.PoisionItemId)
+                if (mainHandIndex != EquipmentIndex.None && affectorAgent.Equipment[mainHandIndex].Item.StringId == this.PoisionItemId)
                 {
                     pickedAgents[affectorAgent] = 5;
                     // affectorAgent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
@@ -93,7 +92,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
                 this.Poisioned[affectedAgent.MissionPeer.GetNetworkPeer()] = true;
             }
-            else if(affectorWeapon.Item.StringId == this.AntidoteItemId && this.Poisioned.ContainsKey(affectedAgent.MissionPeer.GetNetworkPeer()))
+            else if (affectorWeapon.Item.StringId == this.AntidoteItemId && this.Poisioned.ContainsKey(affectedAgent.MissionPeer.GetNetworkPeer()))
             {
                 EquipmentIndex mainHandIndex = affectorAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
                 if (mainHandIndex != EquipmentIndex.None && affectorAgent.Equipment[mainHandIndex].Item.StringId == this.AntidoteItemId)

@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Engine;
+﻿using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -15,11 +9,12 @@ namespace PersistentEmpiresLib.SceneScripts
         public float MaxHitPoint = 100f;
         protected float _hitPoint;
 
-        public float HitPoint {
+        public float HitPoint
+        {
             get => this._hitPoint;
             set
             {
-                if(!this._hitPoint.Equals(value))
+                if (!this._hitPoint.Equals(value))
                 {
                     this._hitPoint = MathF.Max(value, 0f);
                 }

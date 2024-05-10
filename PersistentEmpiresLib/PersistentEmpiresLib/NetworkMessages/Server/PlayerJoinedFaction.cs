@@ -1,11 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using PersistentEmpiresLib.Factions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -30,7 +23,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.player = player;
         }
 
-        public PlayerJoinedFaction() { 
+        public PlayerJoinedFaction()
+        {
         }
 
         protected override string OnGetLogFormat()
@@ -44,7 +38,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.factionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
             this.joinedFrom = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
             this.player = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
-           
+
             return result;
         }
 

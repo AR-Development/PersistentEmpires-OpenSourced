@@ -1,16 +1,12 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.Objects.Siege;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
@@ -35,7 +31,8 @@ namespace PersistentEmpiresLib.SceneScripts
         private bool ladderBuilt = false;
         private bool initialized = false;
         private SiegeLadder siegeLadder;
-        protected override void OnInit() {
+        protected override void OnInit()
+        {
             this.HitPoint = 0;
             this.ParseRepairReceipts();
         }
@@ -46,14 +43,15 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             try
             {
-                if(initialized == false)
+                if (initialized == false)
                 {
                     this.siegeLadder = base.GameEntity.Parent.GetFirstScriptInFamilyDescending<SiegeLadder>();
                     if (this.siegeLadder == null) return;
                     this.siegeLadder.GameEntity.SetVisibilityExcludeParents(ladderBuilt);
                     initialized = true;
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
 
             }
@@ -76,7 +74,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public void SetLadderBuilt(bool built)
         {
             this.ladderBuilt = built;
-            if(this.siegeLadder != null)
+            if (this.siegeLadder != null)
             {
                 this.siegeLadder.GameEntity.SetVisibilityExcludeParents(built);
             }
@@ -90,7 +88,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
             this.HitPoint = hitPoint;
 
-            if(this.ladderBuilt && this.HitPoint <= 0)
+            if (this.ladderBuilt && this.HitPoint <= 0)
             {
                 if (this.ParticleEffectOnDestroy != "")
                 {
@@ -102,7 +100,8 @@ namespace PersistentEmpiresLib.SceneScripts
                 }
                 this.siegeLadder.GameEntity.SetVisibilityExcludeParents(false);
                 ladderBuilt = false;
-            }else if(this.ladderBuilt == false && this.HitPoint >= this.MaxHitPoint)
+            }
+            else if (this.ladderBuilt == false && this.HitPoint >= this.MaxHitPoint)
             {
                 if (this.ParticleEffectOnRepair != "")
                 {
@@ -164,7 +163,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     // LoggerHelper.LogAnAction(attackerAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerRepairesTheDestructable, null, new object[] { this.GetType().Name });
                 }
             }
-            else if(ladderBuilt == false || (ladderBuilt == true && this.siegeLadder.State == SiegeLadder.LadderState.OnLand))
+            else if (ladderBuilt == false || (ladderBuilt == true && this.siegeLadder.State == SiegeLadder.LadderState.OnLand))
             {
                 if (this.DestroyedByStoneOnly)
                 {

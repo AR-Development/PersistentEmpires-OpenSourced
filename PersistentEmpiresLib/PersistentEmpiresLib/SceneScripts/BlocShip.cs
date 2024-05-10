@@ -1,13 +1,9 @@
 ﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -184,7 +180,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 this.CheckIfLanded(oldFrame);
             }
-            if(destroyed)
+            if (destroyed)
             {
                 base.GameEntity.Remove(0);
                 destroyed = false;

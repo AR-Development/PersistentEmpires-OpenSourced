@@ -1,13 +1,8 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -70,7 +65,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 this.RespawnTime += MBRandom.RandomInt(this.RandomRespawnOffset);
             }
-            if(this.DropsItemObject == null)
+            if (this.DropsItemObject == null)
             {
                 Debug.Print(this.DropsItem + " CANNOT BE FOUND ON PE_ITEMGATHERING", 0, Debug.DebugColor.Red);
             }

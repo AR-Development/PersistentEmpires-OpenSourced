@@ -1,9 +1,6 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -43,12 +40,12 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public void Randomize(Random randomizer)
         {
-            foreach(MarketItem marketItem in this.MarketItems)
+            foreach (MarketItem marketItem in this.MarketItems)
             {
                 int randomStock = randomizer.Next(this.RandomMinStock, this.RandomMaxStock);
                 marketItem.UpdateReserve(randomStock);
             }
-        } 
+        }
 
         protected void LoadMarketItems(string innerText, int tier)
         {
@@ -84,7 +81,7 @@ namespace PersistentEmpiresLib.SceneScripts
             this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier2Items").InnerText, 2);
             this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier3Items").InnerText, 3);
             this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier4Items").InnerText, 4);
-            
+
         }
         public override void OnUse(Agent userAgent)
         {
@@ -103,7 +100,8 @@ namespace PersistentEmpiresLib.SceneScripts
             }
         }
 
-        public string GetCastleName() {
+        public string GetCastleName()
+        {
             return this.castlesBehavior.castles[this.CastleIndex].CastleName;
         }
 
