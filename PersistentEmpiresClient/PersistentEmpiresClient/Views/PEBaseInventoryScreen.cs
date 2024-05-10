@@ -11,7 +11,6 @@ using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.InputSystem;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -92,12 +91,12 @@ namespace PersistentEmpires.Views.Views
         {
             PEInventoryVM inventoryVM = this.GetInventoryVM();
             // InformationManager.DisplayMessage(new InformationMessage(this._gauntletLayer.Input.IsShiftDown().ToString()));
-            if(base.MissionScreen.InputManager.IsShiftDown() || this._gauntletLayer.Input.IsShiftDown())
+            if(base.MissionScreen.InputManager.IsShiftDown())
             {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new InventoryHotkey(clickedSlot.DropTag));
                 GameNetwork.EndModuleEventAsClient();
-            }else if(base.MissionScreen.InputManager.IsControlDown() || this._gauntletLayer.Input.IsControlDown())
+            }else if(base.MissionScreen.InputManager.IsControlDown())
             {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new InventorySplitItem(clickedSlot.DropTag));
