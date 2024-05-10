@@ -3,18 +3,16 @@ using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using PersistentEmpiresLib.SceneScripts.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
     public class DBStockpileMarketRepository
     {
-        public static void Initialize() {
+        public static void Initialize()
+        {
             SaveSystemBehavior.OnGetAllStockpileMarkets += GetAllStockpileMarkets;
             SaveSystemBehavior.OnGetStockpileMarket += GetStockpileMarket;
             SaveSystemBehavior.OnCreateOrSaveStockpileMarket += CreateOrSaveStockpileMarket;
@@ -29,7 +27,8 @@ namespace PersistentEmpiresSave.Database.Repositories
                 MarketItemsSerialized = stockpileMarket.SerializeStocks()
             };
         }
-        public static IEnumerable<DBStockpileMarket> GetAllStockpileMarkets() {
+        public static IEnumerable<DBStockpileMarket> GetAllStockpileMarkets()
+        {
             Debug.Print("[Save Module] LOADING ALL STOCKPILE MARKETS FROM DB");
             return DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets");
         }
@@ -37,12 +36,13 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ")");
             IEnumerable<DBStockpileMarket> result = DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets WHERE MissionObjectHash = @MissionObjectHash", new { MissionObjectHash = stockpileMarket.GetMissionObjectHash() });
-            Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ") RESULT COUNT "+result.Count());
+            Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ") RESULT COUNT " + result.Count());
             if (result.Count() == 0) return null;
             return result.First();
         }
-        public static DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket) {
-            
+        public static DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket)
+        {
+
             if (GetStockpileMarket(stockpileMarket) == null)
             {
                 return CreateStockpileMarket(stockpileMarket);
@@ -68,6 +68,6 @@ namespace PersistentEmpiresSave.Database.Repositories
             Debug.Print("[Save Module] UPDATED STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
             return dbMarket;
         }
-        
+
     }
 }

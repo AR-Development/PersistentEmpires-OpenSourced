@@ -1,11 +1,6 @@
-﻿using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
@@ -47,7 +42,7 @@ namespace PersistentEmpires.Views.Views
 
         private void OnPlayerJoinedFaction(int factionIndex, Faction faction, int joinedFromIndex, NetworkCommunicator player)
         {
-            if(player.GetComponent<MissionPeer>() != null)
+            if (player.GetComponent<MissionPeer>() != null)
             {
                 this._dataSource.AddPeerMarker(player.GetComponent<MissionPeer>());
             }

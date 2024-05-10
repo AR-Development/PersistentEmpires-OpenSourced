@@ -1,9 +1,5 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -20,7 +16,8 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
         private int _stock;
         private int _constant;
         private Action<PEStockpileMarketItemVM> _executeSelect;
-        public PEStockpileMarketItemVM(MarketItem marketItem, int itemIndex, Action<PEStockpileMarketItemVM> executeSelect) {
+        public PEStockpileMarketItemVM(MarketItem marketItem, int itemIndex, Action<PEStockpileMarketItemVM> executeSelect)
+        {
             this.MarketItem = marketItem;
             this.ImageIdentifier = new ImageIdentifierVM(marketItem.Item);
             this.ItemIndex = itemIndex;
@@ -31,7 +28,8 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
         }
 
         [DataSourceProperty]
-        public int BuyPrice {
+        public int BuyPrice
+        {
             get => this.MarketItem.BuyPrice();
         }
         [DataSourceProperty]
@@ -44,7 +42,7 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
             get => this._imageIdentifier;
             set
             {
-                if(value != this._imageIdentifier)
+                if (value != this._imageIdentifier)
                 {
                     this._imageIdentifier = value;
                     base.OnPropertyChangedWithValue(value, "ImageIdentifier");
@@ -57,7 +55,7 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
             get => this._stock;
             set
             {
-                if(value != this._stock)
+                if (value != this._stock)
                 {
                     this._stock = value;
                     base.OnPropertyChangedWithValue(value, "Stock");
@@ -72,7 +70,7 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
             get => this._constant;
             set
             {
-                if(value != this._constant)
+                if (value != this._constant)
                 {
                     this._constant = value;
                     base.OnPropertyChangedWithValue(value, "Constant");
@@ -87,7 +85,7 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
             get => this._itemName;
             set
             {
-                if(value != this._itemName)
+                if (value != this._itemName)
                 {
                     this._itemName = value;
                     base.OnPropertyChangedWithValue(value, "ItemName");
@@ -100,7 +98,7 @@ namespace PersistentEmpires.Views.ViewsVM.StockpileMarket
             get => this._isSelected;
             set
             {
-                if(value != this._isSelected)
+                if (value != this._isSelected)
                 {
                     this._isSelected = value;
                     base.OnPropertyChangedWithValue(value, "IsSelected");

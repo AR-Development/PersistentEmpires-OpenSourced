@@ -1,10 +1,5 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.MountAndBlade;
@@ -59,10 +54,12 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             base.OnMissionScreenFinalize();
         }
 
-        private void OnPollUpdated(int votesAccepted, int votesRejected) {
+        private void OnPollUpdated(int votesAccepted, int votesRejected)
+        {
             this._dataSource.OnPollUpdated(votesAccepted, votesRejected);
         }
-        private void OnLordPoll(MissionPeer pollStarter, MissionPeer lordCandidate) {
+        private void OnLordPoll(MissionPeer pollStarter, MissionPeer lordCandidate)
+        {
             this._isActive = true;
             this._dataSource.OnLordPoll(pollStarter, lordCandidate);
         }

@@ -1,18 +1,13 @@
 ﻿using Concentus.Structs;
 using NAudio;
-using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using NetworkMessages.FromServer;
+using PersistentEmpires.Views.ViewsVM;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -42,7 +37,8 @@ namespace PersistentEmpires.Views.Views
             try
             {
                 InputWaveProvider.AddSamples(outputByte, offset, length);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 InputWaveProvider.ClearBuffer();
             }
@@ -88,7 +84,7 @@ namespace PersistentEmpires.Views.Views
             opusEncoder.Bitrate = 16 * 1024;
 
             // opusDecoder = OpusDecoder.Create(48000, 1);
-           
+
             sourceStream = new WaveInEvent();
             sourceStream.BufferMilliseconds = bufferMs;
             sourceStream.NumberOfBuffers = 1;
@@ -113,10 +109,10 @@ namespace PersistentEmpires.Views.Views
             outputStream.Init(outputVolume);
             outputStream.Play();
 
-            
+
             // selfOutputStream.Play();
 
-            
+
         }
 
         public override void OnMissionScreenInitialize()
@@ -134,7 +130,8 @@ namespace PersistentEmpires.Views.Views
             try
             {
                 InitializeVoiceChatComponents();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 this.IsActive = false;
                 this.VoiceChatEnabled = false;
@@ -148,7 +145,8 @@ namespace PersistentEmpires.Views.Views
                 {
                     WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
                     devices.Add(deviceInfo);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     // 
                 }
@@ -161,7 +159,8 @@ namespace PersistentEmpires.Views.Views
                 try
                 {
                     outDevices.Add(WaveOut.GetCapabilities(waveOutDevice));
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     // 
                 }
@@ -183,18 +182,19 @@ namespace PersistentEmpires.Views.Views
             sourceStream.DeviceNumber = inputDevice;
 
             outputVolume.Volume = (outputGain / 100f);
-            this.inputGain = ( inputGain/ 100f );
+            this.inputGain = (inputGain / 100f);
             this.VoiceChatEnabled = vcEnabled;
 
             try
             {
-                if(this.IsActive == false)
+                if (this.IsActive == false)
                 {
                     outputStream.Play();
                     this.IsActive = true;
                     this.VoiceChatEnabled = true;
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 this.IsActive = false;
                 this.VoiceChatEnabled = false;
@@ -203,7 +203,7 @@ namespace PersistentEmpires.Views.Views
             // this.CloseOptions();
         }
 
-        private void StartTest(int device,int gain)
+        private void StartTest(int device, int gain)
         {
             if (this.IsActive == false || this.selfBufferedWaveProvider == null || this.sourceStream == null || this.selfOutputStream == null)
             {
@@ -264,7 +264,7 @@ namespace PersistentEmpires.Views.Views
             {
                 short[] pcmBuffer = new short[48 * bufferMs];
                 Buffer.BlockCopy(e.Buffer, 0, pcmBuffer, 0, e.BytesRecorded);
-                for(int i = 0; i < 48 * bufferMs; i++)
+                for (int i = 0; i < 48 * bufferMs; i++)
                 {
                     pcmBuffer[i] = (short)((float)pcmBuffer[i] * inputGain);
                 }
@@ -275,14 +275,15 @@ namespace PersistentEmpires.Views.Views
 
                 byte[][] byteBatch = new byte[encodeChunks.Length][];
                 int[] lengths = new int[encodeChunks.Length];
-                for(int i = 0; i < encodeChunks.Length; i++)
+                for (int i = 0; i < encodeChunks.Length; i++)
                 {
                     byteBatch[i] = new byte[1440];
                     int length = opusEncoder.Encode(encodeChunks[i], 0, 2880, byteBatch[i], 0, byteBatch[i].Length);
                     lengths[i] = length;
                 }
                 this._proximityChatComponent.SendEncodedVoiceToServer(byteBatch, lengths);
-            }else if(this.SelfRecording)
+            }
+            else if (this.SelfRecording)
             {
                 short[] pcmBuffer = new short[48 * bufferMs];
                 Buffer.BlockCopy(e.Buffer, 0, pcmBuffer, 0, e.BytesRecorded);
@@ -302,7 +303,7 @@ namespace PersistentEmpires.Views.Views
             if (this._playerVoiceData.ContainsKey(message.Peer))
             {
                 int srcOffset = 0;
-                for(int i = 0; i < message.BufferLens.Length; i++)
+                for (int i = 0; i < message.BufferLens.Length; i++)
                 {
                     short[] outPcm = new short[5000];
                     byte[] buffer = new byte[message.BufferLens[i]];
@@ -337,7 +338,7 @@ namespace PersistentEmpires.Views.Views
             int count = 0;
             foreach (NetworkCommunicator peer in this._tempHaveData.ToList())
             {
-                if(this._playerVoiceData.ContainsKey(peer) == false)
+                if (this._playerVoiceData.ContainsKey(peer) == false)
                 {
                     this._tempHaveData.Remove(peer);
                     continue;
@@ -362,7 +363,7 @@ namespace PersistentEmpires.Views.Views
                     short[] outputPcm = new short[pcmSize];
                     Buffer.BlockCopy(output, 0, outputPcm, 0, output.Length);
 
-                    
+
                     // Mix
                     for (int i = 0; i < pcmSize; i++)
                     {
@@ -390,7 +391,8 @@ namespace PersistentEmpires.Views.Views
                 try
                 {
                     bufferedWaveProvider.AddSamples(readedByte, 0, pcmSize * 2);
-                }catch(InvalidOperationException e)
+                }
+                catch (InvalidOperationException e)
                 {
                     bufferedWaveProvider.ClearBuffer();
                 }
@@ -413,10 +415,12 @@ namespace PersistentEmpires.Views.Views
                     this.IsRecording = false;
                     this.sourceStream.StopRecording();
                 }
-            }catch(MmException e)
+            }
+            catch (MmException e)
             {
                 InformationManager.DisplayMessage(new InformationMessage("Invalid microphone please change it from your options menu.", Color.ConvertStringToColor("#FF0000FF")));
-            }catch(InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 // InformationManager.DisplayMessage(new InformationMessage("Invalid microphone please change it from your options menu.", Color.ConvertStringToColor("#FF0000FF")));
             }

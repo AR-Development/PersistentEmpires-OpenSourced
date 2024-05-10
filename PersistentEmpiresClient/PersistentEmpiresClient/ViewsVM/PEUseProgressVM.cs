@@ -1,9 +1,5 @@
 ﻿using PersistentEmpiresLib.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -16,18 +12,21 @@ namespace PersistentEmpires.Views.ViewsVM
         private long _startedAt;
         private int _countDownTime;
 
-        public PEUseProgressVM() {
+        public PEUseProgressVM()
+        {
             PEInformationManager.OnStartCounter += this.StartCounter;
             PEInformationManager.OnStopCounter += this.StopCounter;
         }
-        public void StartCounter(string progressTitle,int seconds) {
+        public void StartCounter(string progressTitle, int seconds)
+        {
             this.CountDownTime = seconds;
             this._startedAt = DateTimeOffset.Now.ToUnixTimeSeconds();
             this.IsActive = true;
             this.ProgressTitle = progressTitle;
         }
 
-        public void StopCounter() {
+        public void StopCounter()
+        {
             this.CountDownTime = 0;
             this.PastDuration = 0;
             this.IsActive = false;
@@ -39,7 +38,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._countDownTime;
             set
             {
-                if(value != this._countDownTime)
+                if (value != this._countDownTime)
                 {
                     this._countDownTime = value;
                     base.OnPropertyChangedWithValue(value, "CountDownTime");
@@ -52,7 +51,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._isActive;
             set
             {
-                if(value != this._isActive)
+                if (value != this._isActive)
                 {
                     this._isActive = value;
                     base.OnPropertyChangedWithValue(value, "IsActive");
@@ -65,7 +64,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._progressTitle;
             set
             {
-                if(value != this._progressTitle)
+                if (value != this._progressTitle)
                 {
                     this._progressTitle = value;
                     base.OnPropertyChangedWithValue(value, "ProgressTitle");
@@ -78,7 +77,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._pastDuration;
             set
             {
-                if(value != this._pastDuration)
+                if (value != this._pastDuration)
                 {
                     this._pastDuration = value;
                     base.OnPropertyChangedWithValue(value, "PastDuration");
@@ -88,9 +87,9 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void Tick(float dt)
         {
-            if(this.IsActive)
+            if (this.IsActive)
             {
-                if(this.PastDuration > this.CountDownTime)
+                if (this.PastDuration > this.CountDownTime)
                 {
                     this.StopCounter();
                 }

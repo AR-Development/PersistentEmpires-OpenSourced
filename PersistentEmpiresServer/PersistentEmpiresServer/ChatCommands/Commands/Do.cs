@@ -25,9 +25,9 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
             if (player.ControlledAgent == null) return false;
 
             var message = String.Join(" ", args) + " (" + player.UserName + ")";
-            
+
             this.SendMessageToPlayers(player, 30, message);
-            
+
             return true;
         }
     }

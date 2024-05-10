@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.Views.Markers
@@ -28,7 +24,7 @@ namespace PersistentEmpires.Views.Views.Markers
             get => this._color;
             set
             {
-                if(value != this._color)
+                if (value != this._color)
                 {
                     this._color = value;
                     this.OnPropertyChangedWithValue(value, "Color");
@@ -42,7 +38,7 @@ namespace PersistentEmpires.Views.Views.Markers
             get => this._message;
             set
             {
-                if(value != this._message)
+                if (value != this._message)
                 {
                     this._message = value;
                     this.OnPropertyChangedWithValue(value, "Message");
@@ -50,13 +46,13 @@ namespace PersistentEmpires.Views.Views.Markers
             }
         }
 
-        [DataSourceProperty] 
+        [DataSourceProperty]
         public int FontSize
         {
             get => this._fontSize;
             set
             {
-                if(value != this._fontSize)
+                if (value != this._fontSize)
                 {
                     this._fontSize = value;
                     base.OnPropertyChangedWithValue(value, "FontSize");

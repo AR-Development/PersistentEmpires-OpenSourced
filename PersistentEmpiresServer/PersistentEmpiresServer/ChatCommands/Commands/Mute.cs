@@ -1,11 +1,6 @@
 ﻿using NetworkMessages.FromServer;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -55,7 +50,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 return true;
             }
 
-            if(ChatCommandSystem.Instance.Muted.ContainsKey(targetPeer))
+            if (ChatCommandSystem.Instance.Muted.ContainsKey(targetPeer))
             {
                 InformationComponent.Instance.SendMessage("Unmuted.", Colors.Green.ToUnsignedInteger(), networkPeer);
                 ChatCommandSystem.Instance.Muted.Remove(targetPeer);

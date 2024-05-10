@@ -1,15 +1,9 @@
-﻿using PersistentEmpiresLib.Data;
-using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM.CraftingStation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core.ViewModelCollection.Selector;
-using TaleWorlds.Library;
-using PersistentEmpires.Views.ViewsVM.StockpileMarket;
+﻿using PersistentEmpires.Views.ViewsVM.CraftingStation;
 using PersistentEmpiresClient.ViewsVM;
+using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.SceneScripts;
+using System;
+using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -28,8 +22,8 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public override void AddItem(object obj, int i)
         {
-            Craftable item = (Craftable) obj;
-            MBBindingList <PECraftingRecipeVM> craftingRecipes = new MBBindingList<PECraftingRecipeVM>();
+            Craftable item = (Craftable)obj;
+            MBBindingList<PECraftingRecipeVM> craftingRecipes = new MBBindingList<PECraftingRecipeVM>();
             foreach (CraftingRecipe recipe in item.Recipe)
             {
                 craftingRecipes.Add(new PECraftingRecipeVM(recipe.Item, recipe.NeededCount));
@@ -46,7 +40,7 @@ namespace PersistentEmpires.Views.ViewsVM
 
         private void ExecuteCraft(PECraftingStationItemVM obj)
         {
-            this.Craft(obj); 
+            this.Craft(obj);
         }
 
         [DataSourceProperty]

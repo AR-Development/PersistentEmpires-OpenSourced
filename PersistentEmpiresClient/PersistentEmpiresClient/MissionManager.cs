@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Multiplayer;
@@ -52,9 +47,9 @@ namespace PersistentEmpiresClient
                     new InstrumentsBehavior(),
                     new MoneyChestBehavior(),
                     new DecapitationBehavior(),
-                    new AnimationBehavior(),                    
+                    new AnimationBehavior(),
                 };
-            },true,true);
+            }, true, true);
         }
     }
 }

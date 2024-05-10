@@ -1,10 +1,6 @@
 ﻿using PersistentEmpiresClient;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersistentEmpiresHarmony.Patches
 {
@@ -12,12 +8,13 @@ namespace PersistentEmpiresHarmony.Patches
     {
         public static bool GetStackTraceRaw(int skipCount = 0)
         {
-            StackTrace myTrace = new StackTrace(0,true);
+            StackTrace myTrace = new StackTrace(0, true);
             try
             {
                 Exception rglException = new Exception("RGL Exception");
                 throw rglException;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 HarmonyLibClient.RglExceptionThrown(myTrace, e);
             }

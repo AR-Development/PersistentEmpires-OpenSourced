@@ -1,9 +1,6 @@
 ﻿using PersistentEmpires.Views.ViewsVM.PETabMenu;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -27,11 +24,11 @@ namespace PersistentEmpires.Views.ViewsVM
 
         private void OnPlayerKilled(MissionPeer killerPeer, MissionPeer killedPeer)
         {
-            if(peerToPlayerVM.ContainsKey(killerPeer.GetNetworkPeer()))
+            if (peerToPlayerVM.ContainsKey(killerPeer.GetNetworkPeer()))
             {
                 peerToPlayerVM[killerPeer.GetNetworkPeer()].KillCount = killerPeer.KillCount;
             }
-            if(peerToPlayerVM.ContainsKey(killedPeer.GetNetworkPeer()))
+            if (peerToPlayerVM.ContainsKey(killedPeer.GetNetworkPeer()))
             {
                 peerToPlayerVM[killedPeer.GetNetworkPeer()].DeathCount = killedPeer.DeathCount;
             }
@@ -39,13 +36,14 @@ namespace PersistentEmpires.Views.ViewsVM
 
         private void OnPeerPingUpdated(NetworkCommunicator obj)
         {
-            if(peerToPlayerVM.ContainsKey(obj))
+            if (peerToPlayerVM.ContainsKey(obj))
             {
                 peerToPlayerVM[obj].OnPropertyChanged("Ping");
             }
         }
 
-        public void AddMember(int factionIndex, TabPlayerVM player) {
+        public void AddMember(int factionIndex, TabPlayerVM player)
+        {
             this.peerToPlayerVM[player.GetPeer()] = player;
             this.Factions[factionIndex].AddMember(player);
             player.KillCount = player.GetPeer().GetComponent<MissionPeer>() == null ? 0 : player.GetPeer().GetComponent<MissionPeer>().KillCount;
@@ -78,7 +76,7 @@ namespace PersistentEmpires.Views.ViewsVM
                 }
             }
         }
-        
+
         [DataSourceProperty]
         public int AllMemberCount
         {
@@ -132,12 +130,15 @@ namespace PersistentEmpires.Views.ViewsVM
             }
         }
         [DataSourceProperty]
-        public TabFactionVM SelectedFaction {
-            get {
+        public TabFactionVM SelectedFaction
+        {
+            get
+            {
                 return _selectedFaction;
             }
-            set { 
-                if(value != this._selectedFaction)
+            set
+            {
+                if (value != this._selectedFaction)
                 {
                     this._selectedFaction = value;
                     base.OnPropertyChangedWithValue(value, "SelectedFaction");

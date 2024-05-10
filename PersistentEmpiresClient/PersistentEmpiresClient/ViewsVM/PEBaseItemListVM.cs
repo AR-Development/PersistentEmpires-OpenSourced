@@ -1,16 +1,9 @@
-﻿using PersistentEmpires.Views.ViewsVM.StockpileMarket;
-using PersistentEmpires.Views.ViewsVM;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
 using TaleWorlds.Core.ViewModelCollection.Selector;
-using PersistentEmpiresLib.Database.DBEntities;
-using PersistentEmpiresLib.SceneScripts;
-using System.Reflection;
-using PersistentEmpiresLib.Data;
+using TaleWorlds.Library;
 
 namespace PersistentEmpiresClient.ViewsVM
 {
@@ -105,7 +98,8 @@ namespace PersistentEmpiresClient.ViewsVM
 
         public virtual void AddItem(object obj, int index) { }
 
-        public void RefreshValues(List<U> items, Inventory playerInventory) {
+        public void RefreshValues(List<U> items, Inventory playerInventory)
+        {
             this.ItemsList = items;
 
             this.PlayerInventory = new PEInventoryVM(this._handleClickItem);

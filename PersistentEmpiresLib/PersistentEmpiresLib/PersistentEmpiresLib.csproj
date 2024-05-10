@@ -34,7 +34,7 @@
     <DebugType>portable</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\RunAsServerDebug\</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'ReleaseClient'">
     <ReferenceFolder>.\ClientReferences</ReferenceFolder>

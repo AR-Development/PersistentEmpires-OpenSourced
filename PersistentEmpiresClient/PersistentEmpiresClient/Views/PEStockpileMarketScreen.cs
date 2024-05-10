@@ -1,24 +1,15 @@
-﻿using PersistentEmpiresLib.Helpers;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpires.Views.ViewsVM.StockpileMarket;
+using PersistentEmpiresClient.Views;
 using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using PersistentEmpires.Views.ViewsVM.StockpileMarket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.InputSystem;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.ScreenSystem;
-using PersistentEmpiresLib.Database.DBEntities;
-using PersistentEmpiresClient.Views;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -27,7 +18,8 @@ namespace PersistentEmpires.Views.Views
         private StockpileMarketComponent _stockpileMarketComponent;
         private PE_StockpileMarket ActiveEntity;
 
-        public override void OnMissionScreenInitialize() {
+        public override void OnMissionScreenInitialize()
+        {
             base.OnMissionScreenInitialize();
             this._stockpileMarketComponent = base.Mission.GetMissionBehavior<StockpileMarketComponent>();
             this._stockpileMarketComponent.OnStockpileMarketOpen += this.OnOpen;
@@ -38,9 +30,9 @@ namespace PersistentEmpires.Views.Views
 
         private void OnUpdateMulti(PE_StockpileMarket stockpileMarket, List<int> indexes, List<int> stocks)
         {
-            if(this.IsActive)
+            if (this.IsActive)
             {
-                for(int i = 0; i < indexes.Count; i++)
+                for (int i = 0; i < indexes.Count; i++)
                 {
                     int index = indexes[i];
                     int stock = stocks[i];
@@ -61,8 +53,9 @@ namespace PersistentEmpires.Views.Views
             }
         }
 
-        public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow) { 
-            if(affectedAgent.IsMine)
+        public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
+        {
+            if (affectedAgent.IsMine)
             {
                 this.Close();
             }
@@ -76,7 +69,7 @@ namespace PersistentEmpires.Views.Views
                 GameNetwork.WriteMessage(new InventoryHotkey(clickedSlot.DropTag));
                 GameNetwork.EndModuleEventAsClient();
             }
-            if(this._gauntletLayer.Input.IsControlDown()  && clickedSlot.Item != null && clickedSlot.Count > 0)
+            if (this._gauntletLayer.Input.IsControlDown() && clickedSlot.Item != null && clickedSlot.Count > 0)
             {
                 PEStockpileMarketItemVM item = _dataSource.FilteredItemList.ToList().FirstOrDefault(itemVm => itemVm.MarketItem.Item.StringId == clickedSlot.Item.StringId);
                 if (item != null) this.Sell(item);

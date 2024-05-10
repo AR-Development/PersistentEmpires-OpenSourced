@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
     public class DBPlayerNameRepository
     {
-        public static void Initialize() {
+        public static void Initialize()
+        {
             SaveSystemBehavior.OnCreatePlayerNameIfNotExists += CreatePlayerNameIfNotExists;
         }
 
@@ -25,13 +23,14 @@ namespace PersistentEmpiresSave.Database.Repositories
             };
         }
 
-        public static void CreatePlayerNameIfNotExists(NetworkCommunicator player) {
+        public static void CreatePlayerNameIfNotExists(NetworkCommunicator player)
+        {
             DBPlayerName playerName = CreateDBPlayerName(player);
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT * FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
                 PlayerName = player.UserName
             });
-            if(playerNames.Count() == 0)
+            if (playerNames.Count() == 0)
             {
                 string insertSql = "INSERT INTO PlayerNames (PlayerName, PlayerId) VALUES (@PlayerName, @PlayerId)";
                 DBConnection.Connection.Execute(insertSql, playerName);

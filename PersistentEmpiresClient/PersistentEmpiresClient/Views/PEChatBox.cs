@@ -1,16 +1,8 @@
-﻿using PersistentEmpires.Views.ViewsVM.AdminPanel;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.InputSystem;
-using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
-using TaleWorlds.Engine.GauntletUI;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -54,7 +46,8 @@ namespace PersistentEmpires.Views.Views
                                     }
                                 }
                             }
-                        }catch(ArgumentNullException ex)
+                        }
+                        catch (ArgumentNullException ex)
                         {
 
                         }

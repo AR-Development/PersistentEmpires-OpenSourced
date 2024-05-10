@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.InputSystem;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 
@@ -24,10 +19,11 @@ namespace PersistentEmpires.Views.Views
         {
             base.OnMissionTick(dt);
             GameKey defendClick = HotKeyManager.GetCategory("CombatHotKeyCategory").GetGameKey("Defend");
-            if(base.MissionScreen.SceneLayer.Input.IsGameKeyPressed(defendClick.Id))
+            if (base.MissionScreen.SceneLayer.Input.IsGameKeyPressed(defendClick.Id))
             {
                 this.RequestedStartEat = this._agentHungerBehavior.RequestStartEat();
-            }else if(base.MissionScreen.SceneLayer.Input.IsGameKeyReleased(defendClick.Id) && this.RequestedStartEat)
+            }
+            else if (base.MissionScreen.SceneLayer.Input.IsGameKeyReleased(defendClick.Id) && this.RequestedStartEat)
             {
                 this._agentHungerBehavior.RequestStopEat();
             }

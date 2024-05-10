@@ -1,23 +1,13 @@
-﻿using PersistentEmpiresLib.Helpers;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpires.Views.ViewsVM.CraftingStation;
+using PersistentEmpiresClient.Views;
 using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using PersistentEmpires.Views.ViewsVM.CraftingStation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ScreenSystem;
-using PersistentEmpiresClient.Views;
-using PersistentEmpiresClient.ViewsVM;
-using PersistentEmpiresLib.Database.DBEntities;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -72,7 +62,7 @@ namespace PersistentEmpires.Views.Views
 
         public void ExecuteCraft(PECraftingStationItemVM selectedCraft)
         {
-            if(this._dataSource.IsCrafting)
+            if (this._dataSource.IsCrafting)
             {
                 InformationManager.DisplayMessage(new InformationMessage("You're already crafting. You need to wait.", new Color(1f, 0, 0)));
                 return;

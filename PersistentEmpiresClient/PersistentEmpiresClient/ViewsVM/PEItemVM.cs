@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -21,7 +17,7 @@ namespace PersistentEmpires.Views.ViewsVM
         public PEItemVM(ItemObject item, int count, string dropTag, Action<PEItemVM, PEItemVM> executeTranfser, Action<PEItemVM> handleClickItem, Action<PEItemVM> alternateClick = null)
         {
             this.Item = item;
-            if(item != null)
+            if (item != null)
             {
                 this.ImageIdentifier = new ImageIdentifierVM(item);
             }
@@ -37,8 +33,8 @@ namespace PersistentEmpires.Views.ViewsVM
         }
         public PEItemVM(EquipmentElement equipmentItem, string dropTag, Action<PEItemVM, PEItemVM> executeTranfser, Action<PEItemVM> hotkeyTransfer, Action<PEItemVM> alternateClick = null)
         {
-            
-            if(equipmentItem.IsEmpty)
+
+            if (equipmentItem.IsEmpty)
             {
                 this.Count = 0;
                 this.Item = null;
@@ -64,7 +60,8 @@ namespace PersistentEmpires.Views.ViewsVM
             this._executeTransfer = executeTranfser;
         }
 
-        public void UpdateFromItem() {
+        public void UpdateFromItem()
+        {
             if (this.Item != null)
             {
                 this.ImageIdentifier = new ImageIdentifierVM(this.Item);
@@ -74,9 +71,10 @@ namespace PersistentEmpires.Views.ViewsVM
                 this.ImageIdentifier = new ImageIdentifierVM();
             }
         }
-        public string DropTag{get;set;}
+        public string DropTag { get; set; }
 
-        public void ExecuteClickAction() {
+        public void ExecuteClickAction()
+        {
             this._handleClickItem(this);
         }
 
@@ -92,7 +90,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._count;
             set
             {
-                if(value != this._count)
+                if (value != this._count)
                 {
                     this._count = value;
                     base.OnPropertyChangedWithValue(value, "Count");
@@ -106,7 +104,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._showTooltip;
             set
             {
-                if(value != this._showTooltip)
+                if (value != this._showTooltip)
                 {
                     this._showTooltip = value;
                     base.OnPropertyChangedWithValue(value, "IsShowTooltip");
@@ -118,8 +116,9 @@ namespace PersistentEmpires.Views.ViewsVM
         public ImageIdentifierVM ImageIdentifier
         {
             get => this._imageIdentifierVM;
-            set { 
-                if(value != this._imageIdentifierVM)
+            set
+            {
+                if (value != this._imageIdentifierVM)
                 {
                     this._imageIdentifierVM = value;
                     base.OnPropertyChangedWithValue(value, "ImageIdentifier");
@@ -131,17 +130,18 @@ namespace PersistentEmpires.Views.ViewsVM
             this._executeTransfer(this, draggedItem);
         }
 
-        public void ShowTooltip() {
-            if(this.Item != null)
+        public void ShowTooltip()
+        {
+            if (this.Item != null)
             {
-                InformationManager.ShowTooltip(typeof(ItemObject), new object[] { 
+                InformationManager.ShowTooltip(typeof(ItemObject), new object[] {
                     new EquipmentElement(this.Item)
                 });
             }
         }
-        public void HideTooltip() {
+        public void HideTooltip()
+        {
             InformationManager.HideTooltip();
         }
     }
 }
- 
