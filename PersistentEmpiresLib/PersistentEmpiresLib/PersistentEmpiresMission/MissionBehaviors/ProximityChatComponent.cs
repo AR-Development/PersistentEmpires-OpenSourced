@@ -1,21 +1,7 @@
-﻿using NetworkMessages.FromClient;
-using NetworkMessages.FromServer;
-using PersistentEmpiresLib.NetworkMessages.Client;
+﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
-using TaleWorlds.Engine;
-using TaleWorlds.Engine.Options;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.Diamond;
-using TaleWorlds.MountAndBlade.Network.Messages;
-using TaleWorlds.PlayerServices;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -65,7 +51,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (this.OnOptionsClicked != null) this.OnOptionsClicked();
         }
 
-        
+
         public void SendEncodedVoiceToServer(byte[][] data, int[] length)
         {
             GameNetwork.BeginModuleEventAsClient();
@@ -91,7 +77,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     if (networkCommunicator.IsSynchronized && hearingAgent != null && hearingAgent.IsActive() && hearingAgent.Position.Distance(speakerAgent.Position) <= 31f)
                     {
                         GameNetwork.BeginModuleEventAsServerUnreliable(component2.Peer);
-                        GameNetwork.WriteMessage(new SendBatchVoiceToPlay(peer, message.PackedBuffer,message.BufferLens));
+                        GameNetwork.WriteMessage(new SendBatchVoiceToPlay(peer, message.PackedBuffer, message.BufferLens));
                         GameNetwork.EndModuleEventAsServerUnreliable();
                     }
                 }

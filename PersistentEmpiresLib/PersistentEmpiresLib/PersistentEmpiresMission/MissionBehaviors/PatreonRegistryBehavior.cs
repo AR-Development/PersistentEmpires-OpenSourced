@@ -1,10 +1,6 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -42,7 +38,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 return;
             }
-            
+
 
             foreach (NetworkCommunicator peer in this.PatreonRegistry.Keys.ToList())
             {
@@ -69,7 +65,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 networkMessageHandlerRegisterer.Register<PatreonRegister>(this.HandlePatreonRegisterFromServer);
             }
         }
-        public bool IsPlayerPatreon(NetworkCommunicator player) {
+        public bool IsPlayerPatreon(NetworkCommunicator player)
+        {
             return this.PatreonRegistry.ContainsKey(player);
         }
         private void HandlePatreonRegisterFromServer(PatreonRegister message)

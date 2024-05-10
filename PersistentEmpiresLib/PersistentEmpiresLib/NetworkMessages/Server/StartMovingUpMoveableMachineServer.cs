@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
+﻿using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -16,7 +10,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public MissionObject Machine { get; set; }
         public MatrixFrame Frame { get; private set; }
 
-        public StartMovingUpMoveableMachineServer(MissionObject machine, MatrixFrame frame) {
+        public StartMovingUpMoveableMachineServer(MissionObject machine, MatrixFrame frame)
+        {
             this.Machine = machine;
             this.Frame = frame;
         }

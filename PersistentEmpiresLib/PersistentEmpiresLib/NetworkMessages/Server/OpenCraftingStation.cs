@@ -1,12 +1,5 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
+﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
-using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -18,7 +11,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public MissionObject Station { get; set; }
         public Inventory PlayerInventory { get; set; }
         public OpenCraftingStation() { }
-        public OpenCraftingStation(MissionObject station, Inventory playerInventory )
+        public OpenCraftingStation(MissionObject station, Inventory playerInventory)
         {
             this.Station = station;
             this.PlayerInventory = playerInventory;
@@ -38,7 +31,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             bool result = true;
             this.Station = Mission.MissionNetworkHelper.GetMissionObjectFromMissionObjectId(GameNetworkMessage.ReadMissionObjectIdFromPacket(ref result));
             this.PlayerInventory = PENetworkModule.ReadInventoryPlayer(ref result);
-            
+
             return result;
         }
 

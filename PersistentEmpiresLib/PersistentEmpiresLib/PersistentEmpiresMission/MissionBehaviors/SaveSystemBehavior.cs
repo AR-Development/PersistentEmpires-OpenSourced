@@ -1,18 +1,12 @@
-﻿using PersistentEmpiresLib.Database;
+﻿using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.Database.DBEntities;
-using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.SceneScripts;
-using TaleWorlds.Core;
-using PersistentEmpiresLib.ErrorLogging;
-using SharpRaven.Data;
-using System.IO;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -448,7 +442,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             if (OnPlayerUpdateCustomName != null)
             {
-                var result = OnPlayerUpdateCustomName(peer, customName); 
+                var result = OnPlayerUpdateCustomName(peer, customName);
                 LogQuery(String.Format("OnPlayerUpdateCustomName Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
                 return result;
             }

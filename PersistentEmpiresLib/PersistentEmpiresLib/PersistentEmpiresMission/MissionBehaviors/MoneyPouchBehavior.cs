@@ -6,8 +6,6 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -32,7 +30,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
 
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 this.DropPercentage = ConfigManager.GetIntConfig("DeathMoneyDropPercentage", 25);
             }
@@ -117,7 +115,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        private void DropMoney(MatrixFrame frame, int amount) {
+        private void DropMoney(MatrixFrame frame, int amount)
+        {
             PE_MoneyBag moneyBag = (PE_MoneyBag)base.Mission.CreateMissionObjectFromPrefab("pe_moneybag", frame);
             this.MoneyBagCreatedAt[moneyBag] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             moneyBag.SetAmount(amount);
@@ -127,7 +126,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
-            if(IgnoreAgentDropLoot.ContainsKey(affectedAgent))
+            if (IgnoreAgentDropLoot.ContainsKey(affectedAgent))
             {
                 IgnoreAgentDropLoot.Remove(affectedAgent);
                 return;

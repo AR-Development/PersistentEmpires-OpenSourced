@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Library;
+﻿using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -19,7 +13,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public string PhysicsMaterial { get; set; }
 
         public AddPhysicsToMissionObject() { }
-        public AddPhysicsToMissionObject(MissionObject missionObject, Vec3 initialVelocity, Vec3 angularVelocity, string physicsMaterial) {
+        public AddPhysicsToMissionObject(MissionObject missionObject, Vec3 initialVelocity, Vec3 angularVelocity, string physicsMaterial)
+        {
             this.MissionObject = missionObject;
             this.InitialVelocity = initialVelocity;
             this.AngularVelocity = angularVelocity;
@@ -43,7 +38,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.AngularVelocity = GameNetworkMessage.ReadVec3FromPacket(CompressionMission.SpawnedItemAngularVelocityCompressionInfo, ref result);
             this.PhysicsMaterial = GameNetworkMessage.ReadStringFromPacket(ref result);
 
-            
+
 
             return result;
         }

@@ -1,23 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using PersistentEmpiresLib.SceneScripts.Extensions;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
-using Websocket.Client;
-using System.Text.RegularExpressions;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -278,7 +273,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (saveSystemBehavior != null)
             {
                 bool created;
-               
+
                 SaveSystemBehavior.HandleCreatePlayerNameIfNotExists(networkPeer);
                 DBPlayer dbPlayer = SaveSystemBehavior.HandleGetOrCreatePlayer(networkPeer, out created);
                 if (!created)
@@ -362,23 +357,23 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
-     
-        
 
-        
+
+
+
         public override void AfterStart()
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 ConfigManager.Initialize();
                 this.agentLabelEnabled = ConfigManager.GetBoolConfig("AgentLabelEnabled", true);
             }
-            
+
             int maxPlayer = MultiplayerOptions.OptionType.MaxNumberOfPlayers.GetIntValue(MultiplayerOptions.MultiplayerOptionsAccessMode.CurrentMapOptions);
             string serverName = MultiplayerOptions.OptionType.ServerName.GetStrValue(MultiplayerOptions.MultiplayerOptionsAccessMode.CurrentMapOptions);
 
-           
+
             IEnumerable<DBUpgradeableBuilding> dbUpgradeables = SaveSystemBehavior.HandleGetAllUpgradeableBuildings();
             List<PE_UpgradeableBuildings> upgradeables = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_UpgradeableBuildings>().Select(g => g.GetFirstScriptOfType<PE_UpgradeableBuildings>()).ToList();
 

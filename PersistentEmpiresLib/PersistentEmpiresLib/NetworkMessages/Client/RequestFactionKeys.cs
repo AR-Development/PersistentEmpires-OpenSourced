@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -18,7 +13,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
             // keyType == 0 Door
             // keyType == 1 Chest
             this.KeyType = keyType;
-        } 
+        }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
             return MultiplayerMessageFilter.None;
@@ -38,7 +33,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteIntToPacket(this.KeyType, new CompressionInfo.Integer(-1,10,true));
+            GameNetworkMessage.WriteIntToPacket(this.KeyType, new CompressionInfo.Integer(-1, 10, true));
         }
     }
 }

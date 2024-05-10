@@ -1,11 +1,8 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -88,7 +85,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public override string GetDescriptionText(GameEntity gameEntity = null)
         {
-            return new TextObject("{=}"+this.Name).ToString();
+            return new TextObject("{=}" + this.Name).ToString();
         }
 
         public override bool IsStray()
@@ -139,7 +136,7 @@ namespace PersistentEmpiresLib.SceneScripts
             }
         }
         protected override void OnTick(float dt)
-        {   
+        {
             if (base.GameEntity == null) return;
             base.OnTick(dt);
             if (GameNetwork.IsServer)
@@ -157,7 +154,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     }
                     this.ResetStrayDuration();
 
-                    if(this.PilotAgent.Position.Distance(base.GameEntity.GlobalPosition) > 5f)
+                    if (this.PilotAgent.Position.Distance(base.GameEntity.GlobalPosition) > 5f)
                     {
                         this.PilotAgent.StopUsingGameObjectMT(false);
                     }

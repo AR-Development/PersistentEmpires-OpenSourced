@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
@@ -35,7 +30,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
         {
             GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-            if(GameNetwork.IsClient)
+            if (GameNetwork.IsClient)
             {
                 networkMessageHandlerRegisterer.Register<AuthorizeAsAdmin>(this.HandleAuthorizeAsAdminFromServer);
             }

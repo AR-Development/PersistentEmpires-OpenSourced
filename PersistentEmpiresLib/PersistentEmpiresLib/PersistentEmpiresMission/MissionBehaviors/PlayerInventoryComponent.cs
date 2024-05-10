@@ -1,21 +1,17 @@
-﻿using PersistentEmpiresLib.Database.DBEntities;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.Network.Messages;
-using TaleWorlds.ObjectSystem;
-using PersistentEmpiresLib.Factions;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -77,23 +73,23 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 affectedAgent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
                 EquipmentIndex shieldIndex = affectedAgent.GetWieldedItemIndex(Agent.HandIndex.OffHand);
-                if(shieldIndex != EquipmentIndex.None)
+                if (shieldIndex != EquipmentIndex.None)
                 {
-                    
+
                     MissionWeapon weapon = new MissionWeapon(affectedAgent.Equipment[shieldIndex].Item, null, null, affectedAgent.Equipment[shieldIndex].Ammo);
                     affectedAgent.RemoveEquippedWeapon(shieldIndex);
                     affectedAgent.EquipWeaponWithNewEntity(shieldIndex, ref weapon);
                 }
             }
 
-            if(GameNetwork.IsServer && affectedAgent.MissionPeer != null && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled)
+            if (GameNetwork.IsServer && affectedAgent.MissionPeer != null && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled)
             {
                 NetworkCommunicator player = affectedAgent.MissionPeer.GetNetworkPeer();
                 if (this.OpenedByPeerInventory.ContainsKey(player))
                 {
                     if (this.OpenedByPeerInventory[player] != null)
                     {
-                        
+
                         this.OpenedByPeerInventory[player].RemoveOpenedBy(player);
                     }
                     this.OpenedByPeerInventory.Remove(player);
@@ -103,13 +99,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 GameNetwork.EndModuleEventAsServer();
             }
 
-            if(this.IgnoreAgentDropLoot.ContainsKey(affectedAgent))
+            if (this.IgnoreAgentDropLoot.ContainsKey(affectedAgent))
             {
                 this.IgnoreAgentDropLoot.Remove(affectedAgent);
                 return;
             }
 
-            if(WoundingBehavior.Instance.WoundingEnabled)
+            if (WoundingBehavior.Instance.WoundingEnabled)
             {
                 // NO ITEM DROPS ON WOUNDING.
                 return;
@@ -123,7 +119,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 affectedAgent.MissionPeer != null &&
                 (
                     (affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive) //||
-                    // (affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == true && CombatlogBehavior.Instance != null && CombatlogBehavior.Instance.IsPlayerInCombatState(affectedAgent.MissionPeer.GetNetworkPeer()))
+                                                                                                                                                           // (affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == true && CombatlogBehavior.Instance != null && CombatlogBehavior.Instance.IsPlayerInCombatState(affectedAgent.MissionPeer.GetNetworkPeer()))
                 )
             )
             {
@@ -140,7 +136,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                 bool killedByFriendly = false;
 
-                if(affectorAgent != null && affectorAgent.IsPlayerControlled && affectorAgent.MissionPeer != null)
+                if (affectorAgent != null && affectorAgent.IsPlayerControlled && affectorAgent.MissionPeer != null)
                 {
                     PersistentEmpireRepresentative attackerRepresentative = affectorAgent.MissionPeer.GetNetworkPeer().GetComponent<PersistentEmpireRepresentative>();
                     if (persistentEmpireRepresentative.GetFactionIndex() == attackerRepresentative.GetFactionIndex()) killedByFriendly = true;
@@ -160,7 +156,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                             {
                                 ammo = affectedAgent.Equipment[i].Amount;
                             }
-                            if(random.Next(100) > this.DestroyChance || killedByFriendly)
+                            if (random.Next(100) > this.DestroyChance || killedByFriendly)
                             {
                                 lootInventory.ExpandInventoryWithItem(equipments[i].Item, 1, ammo);
                             }
@@ -174,9 +170,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                 foreach (InventorySlot inventorySlot in playerInventory.Slots)
                 {
-                    if (inventorySlot.Item == null || inventorySlot.Count == 0) continue; 
-                   
-                    if(random.Next(100) > 5 || killedByFriendly)  // % 10 remove item
+                    if (inventorySlot.Item == null || inventorySlot.Count == 0) continue;
+
+                    if (random.Next(100) > 5 || killedByFriendly)  // % 10 remove item
                     {
                         lootInventory.ExpandInventoryWithItem(inventorySlot.Item, inventorySlot.Count, inventorySlot.Ammo);
                     }
@@ -238,7 +234,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_InventoryEntity>(ref gameEntities);
                 foreach (PE_InventoryEntity inventoryEntity in gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
                 {
-                    if(inventoryEntity.InteractionEntity == null)
+                    if (inventoryEntity.InteractionEntity == null)
                     {
                         Debug.Print("INVENTORY ERROR " + inventoryEntity.InventoryId);
                     }
@@ -326,17 +322,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (d < 30)
                 {
                     InformationComponent.Instance.SendMessage(player.UserName + " revealed his item bag.", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
-                    if(playerInventory.IsInventoryEmpty())
+                    if (playerInventory.IsInventoryEmpty())
                     {
                         InformationComponent.Instance.SendMessage("Bag is empty", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
                     }
                     else
                     {
-                        foreach(InventorySlot inventorySlot in playerInventory.Slots)
+                        foreach (InventorySlot inventorySlot in playerInventory.Slots)
                         {
-                            if(inventorySlot.Item != null && inventorySlot.Count > 0)
+                            if (inventorySlot.Item != null && inventorySlot.Count > 0)
                             {
-                                InformationComponent.Instance.SendMessage(player.UserName + " is carrying "+inventorySlot.Count + " amount of " + inventorySlot.Item.Name.ToString(), Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
+                                InformationComponent.Instance.SendMessage(player.UserName + " is carrying " + inventorySlot.Count + " amount of " + inventorySlot.Item.Name.ToString(), Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
                             }
                         }
                     }
@@ -466,8 +462,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             this.CustomInventories[droppedLoot.InventoryId].ExpandInventoryWithItem(droppedItem, droppedCount, droppedAmmo);
             // player.ControlledAgent.Get
-            LoggerHelper.LogAnAction(player, LogAction.PlayerDroppedItem, null, new object[] { 
-                droppedLoot.InventoryId, 
+            LoggerHelper.LogAnAction(player, LogAction.PlayerDroppedItem, null, new object[] {
+                droppedLoot.InventoryId,
                 inventory,
                 droppedItem,
                 droppedCount
@@ -547,7 +543,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 PENetworkModule.WriteInventorySlots(requestedInventory, player);
             }
-            if(requestedInventory != null)
+            if (requestedInventory != null)
             {
                 // LoggerHelper.LogAnAction(player, LogAction.PlayerOpensChest, null, new object[] { requestedInventory });
             }
@@ -786,7 +782,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (persistentEmpireRepresentative == null) return false;
             if (player.ControlledAgent == null) return false;
 
-            if(this.CustomInventories.ContainsKey(draggedFromInventory) && this.CustomInventories[draggedFromInventory].TiedEntity != null && this.CustomInventories[draggedFromInventory].TiedEntity.GameEntity != null && this.CustomInventories[draggedFromInventory].TiedEntity.GameEntity.GetGlobalFrame().origin.Distance(player.ControlledAgent.Position) > 10f)
+            if (this.CustomInventories.ContainsKey(draggedFromInventory) && this.CustomInventories[draggedFromInventory].TiedEntity != null && this.CustomInventories[draggedFromInventory].TiedEntity.GameEntity != null && this.CustomInventories[draggedFromInventory].TiedEntity.GameEntity.GetGlobalFrame().origin.Distance(player.ControlledAgent.Position) > 10f)
             {
                 return false;
             }
@@ -1009,7 +1005,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromChest, null, new object[] {
                         draggedFromInventory,
                         item,
-                        draggedCount - returnedAmount 
+                        draggedCount - returnedAmount
                     });
 
                 }

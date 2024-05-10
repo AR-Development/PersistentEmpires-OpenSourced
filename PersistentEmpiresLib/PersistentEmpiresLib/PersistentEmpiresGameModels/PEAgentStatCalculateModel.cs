@@ -1,10 +1,4 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -26,7 +20,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
                 {
                     int tier = (int)equipmentElement.Item.Tier;
                     int requiredEndurance = (tier + 1) * 10;
-                    if(skill >= requiredEndurance)
+                    if (skill >= requiredEndurance)
                     {
                         effectiveWeight += equipmentElement.GetEquipmentElementWeight();
                     }
@@ -52,7 +46,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
         public override float GetDismountResistance(Agent agent)
         {
             BasicCharacterObject characterObject = agent.Character;
-            if(characterObject != null)
+            if (characterObject != null)
             {
                 float effectiveSkill = characterObject.GetSkillValue(DefaultSkills.Riding);
                 return 0.0025f * (float)effectiveSkill;
@@ -79,7 +73,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
             }
             return num;
         }
-       
+
         private static void InitializeHorseAgentStats(Agent agent, Equipment spawnEquipment, AgentDrivenProperties agentDrivenProperties)
         {
             agentDrivenProperties.AiSpeciesIndex = agent.Monster.FamilyType;
@@ -225,14 +219,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
             }
             return 0;
         }
-        private int GetMinSkillForWeapon(ItemObject item) {
+        private int GetMinSkillForWeapon(ItemObject item)
+        {
             return this.GetMinSkillForTier(item.Tier);
         }
-        private float GetBaseSpeedMultiplier() {
+        private float GetBaseSpeedMultiplier()
+        {
 
             return 0.5f;
         }
-        private bool IsAgentWearingAboveItsSkill(Agent agent) {
+        private bool IsAgentWearingAboveItsSkill(Agent agent)
+        {
             float num4 = agent.Character.GetSkillValue(PersistentEmpireSkills.Endurance) > 0 ? agent.Character.GetSkillValue(PersistentEmpireSkills.Endurance) : 10;
 
             for (EquipmentIndex equipmentIndex = agent.IsHuman ? EquipmentIndex.NumAllWeaponSlots : EquipmentIndex.HorseHarness; equipmentIndex < (agent.IsHuman ? EquipmentIndex.ArmorItemEndSlot : EquipmentIndex.NumEquipmentSetSlots); equipmentIndex++)
@@ -337,7 +334,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
 
             // 7. Calculate maxSpeedMultiplier
             var athleticsSkill = character.GetSkillValue(DefaultSkills.Athletics) > 0 ? character.GetSkillValue(DefaultSkills.Athletics) : 80;
-            var b = 100 + (weaponsTotalWeight/2) + (this.GetEffectiveArmorEncumbrance(agent) / 3);
+            var b = 100 + (weaponsTotalWeight / 2) + (this.GetEffectiveArmorEncumbrance(agent) / 3);
             var maxSpeedMultiplier = ((2 * athleticsSkill) - b) / 100;
             if (this.IsAgentWearingAboveItsSkill(agent)) maxSpeedMultiplier = 0.01f;
             else if (maxSpeedMultiplier < 0.7f && !this.IsAgentWearingAboveItsSkill(agent)) maxSpeedMultiplier = 0.7f;
@@ -355,7 +352,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
             if (mainWeaponWeaponComponentData != null)
             {
                 var effectiveSkillForWeapon = this.GetEffectiveSkillForWeapon(agent, (WeaponComponentData)mainWeaponWeaponComponentData);
-                
+
                 if (perkHandler != null)
                 {
                     agentDrivenProperties.MissileSpeedMultiplier *= perkHandler.GetThrowingWeaponSpeed(mainWeaponWeaponComponentData) + 1f;
@@ -440,7 +437,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
 
             // 9. Handle AttributeShieldMissileCollisionBodySizeAdder
             agentDrivenProperties.AttributeShieldMissileCollisionBodySizeAdder = 0.3f;
-            
+
             // 10. Handle horse
             var mountAgent = agent.MountAgent;
             float num10 = (mountAgent != null) ? mountAgent.GetAgentDrivenPropertyValue(DrivenProperty.AttributeRiding) : 1f;

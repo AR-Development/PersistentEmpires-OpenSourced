@@ -1,9 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -40,7 +35,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             bool result = true;
             this.Player = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
             this.Gold = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, Int32.MaxValue, true), ref result);
-            
+
             return result;
         }
 

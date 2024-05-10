@@ -3,8 +3,6 @@ using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -38,21 +36,23 @@ namespace PersistentEmpiresLib.SceneScripts
             this.CurrentPrice = MathF.Pow(this.Constant, 1f / this.Stability);
             this.Tier = tier;
         }
-        public void UpdateReserve(int newStock) {
+        public void UpdateReserve(int newStock)
+        {
             if (newStock > 999) newStock = 999;
             if (newStock < 0) newStock = 0;
 
-            if(newStock < 1)
+            if (newStock < 1)
             {
                 this.CurrentPrice = MathF.Pow(this.Constant, 1f / this.Stability);
             }
             else
             {
-                this.CurrentPrice = MathF.Pow(this.Constant / (float)newStock, 1f/this.Stability);
+                this.CurrentPrice = MathF.Pow(this.Constant / (float)newStock, 1f / this.Stability);
             }
             this.Stock = newStock;
         }
-        public int BuyPrice() {
+        public int BuyPrice()
+        {
             float fakeStock = this.Stock;
             if (this.Stock < 2) return this.MaximumPrice;
             float denominator = MathF.Pow(fakeStock - 1, 1f / this.Stability);
@@ -61,12 +61,13 @@ namespace PersistentEmpiresLib.SceneScripts
             if (buyPrice < this.MinimumPrice) buyPrice = this.MinimumPrice;
             return buyPrice;
         }
-        public int SellPrice() {
+        public int SellPrice()
+        {
             float fakeStock = this.Stock;
             if (this.Stock < 1) fakeStock = 1;
             float denominator = MathF.Pow(fakeStock + 1, 1f / this.Stability);
             float numerator = this.Constant;
-            int price = Math.Abs((int)(MathF.Pow(this.CurrentPrice,1f / this.Stability) - (numerator / denominator)));
+            int price = Math.Abs((int)(MathF.Pow(this.CurrentPrice, 1f / this.Stability) - (numerator / denominator)));
             if (price < this.MinimumPrice) price = (this.MinimumPrice * 90) / 100;
             return (price * 85) / 100;
         }
@@ -85,7 +86,7 @@ namespace PersistentEmpiresLib.SceneScripts
     }
     public class PE_StockpileMarket : PE_UsableFromDistance, IMissionObjectHash
     {
-        
+
         public static int MAX_STOCK_COUNT = 1000;
         public string XmlFile = "examplemarket"; // itemId*minimum*maximum,itemId*minimum*maximum
         public string ModuleFolder = "PersistentEmpires";
@@ -107,10 +108,11 @@ namespace PersistentEmpiresLib.SceneScripts
         public List<MarketItem> MarketItems { get; private set; }
         public List<CraftingBox> CraftingBoxes { get; private set; }
         public StockpileMarketComponent stockpileMarketComponent { get; private set; }
-        protected void LoadMarketItems(string innerText, int tier) {
-            
+        protected void LoadMarketItems(string innerText, int tier)
+        {
+
             if (innerText == "") return;
-            foreach(string marketItemStr in innerText.Trim().Split('|'))
+            foreach (string marketItemStr in innerText.Trim().Split('|'))
             {
                 string[] values = marketItemStr.Split('*');
                 string itemId = values[0];
@@ -119,9 +121,9 @@ namespace PersistentEmpiresLib.SceneScripts
                 int stability = values.Length > 4 ? int.Parse(values[3]) : 10;
 
                 ItemObject item = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
-                if( item == null)
+                if (item == null)
                 {
-                    Debug.Print(" ERROR IN MARKET SERIALIZATION "+this.XmlFile + " ITEM ID "+itemId + " NOT FOUND !!! ",0, Debug.DebugColor.Red);
+                    Debug.Print(" ERROR IN MARKET SERIALIZATION " + this.XmlFile + " ITEM ID " + itemId + " NOT FOUND !!! ", 0, Debug.DebugColor.Red);
                 }
                 this.MarketItems.Add(new MarketItem(itemId, maxPrice, minPrice, stability, tier));
             }
@@ -130,7 +132,7 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             this.CraftingBoxes = new List<CraftingBox>();
             if (innerText == "") return;
-            foreach(string craftingBoxStr in innerText.Trim().Split('|'))
+            foreach (string craftingBoxStr in innerText.Trim().Split('|'))
             {
                 string[] values = craftingBoxStr.Split('*');
                 string itemId = values[0];
@@ -140,7 +142,8 @@ namespace PersistentEmpiresLib.SceneScripts
             }
         }
 
-        protected override void OnInit() {
+        protected override void OnInit()
+        {
             base.OnInit();
             TextObject actionMessage = new TextObject("Browse the Market");
             base.ActionMessage = actionMessage;
@@ -158,7 +161,7 @@ namespace PersistentEmpiresLib.SceneScripts
             this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier3Items").InnerText, 3);
             this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier4Items").InnerText, 4);
             this.LoadCraftingBoxes(xmlDocument.SelectSingleNode("/Market/CraftingBoxes").InnerText);
-        }   
+        }
         public override string GetDescriptionText(GameEntity gameEntity = null)
         {
             return "Stockpile Market";
@@ -176,16 +179,17 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if (GameNetwork.IsServer)
             {
-                this.stockpileMarketComponent.OpenStockpileMarketForPeer(this,userAgent.MissionPeer.GetNetworkPeer());
+                this.stockpileMarketComponent.OpenStockpileMarketForPeer(this, userAgent.MissionPeer.GetNetworkPeer());
                 userAgent.StopUsingGameObjectMT(true);
             }
         }
-        public void DeserializeStocks(string serialized) {
+        public void DeserializeStocks(string serialized)
+        {
             string[] elements = serialized.Split('|');
-            foreach(string s in elements)
+            foreach (string s in elements)
             {
                 ItemObject item = MBObjectManager.Instance.GetObject<ItemObject>(s.Split('*')[0]);
-                if(item == null)
+                if (item == null)
                 {
                     Debug.Print(" ERROR IN MARKET SERIALIZATION " + this.XmlFile + " ITEM ID " + s.Split('*')[0] + " NOT FOUND !!! ", 0, Debug.DebugColor.Red);
                 }
@@ -209,12 +213,12 @@ namespace PersistentEmpiresLib.SceneScripts
             if (attackerAgent == null) return false;
             NetworkCommunicator player = attackerAgent.MissionPeer.GetNetworkPeer();
             bool isAdmin = Main.IsPlayerAdmin(player);
-            if(isAdmin && weapon.Item != null && weapon.Item.StringId == "pe_adminstockfiller")
+            if (isAdmin && weapon.Item != null && weapon.Item.StringId == "pe_adminstockfiller")
             {
-                foreach(MarketItem marketItem in this.MarketItems)
+                foreach (MarketItem marketItem in this.MarketItems)
                 {
                     var currentStock = marketItem.Stock;
-                    if(currentStock + 10 < 900)
+                    if (currentStock + 10 < 900)
                     {
                         marketItem.UpdateReserve(currentStock + 10);
                     }

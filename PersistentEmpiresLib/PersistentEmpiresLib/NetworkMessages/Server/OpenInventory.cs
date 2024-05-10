@@ -1,15 +1,7 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
+﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
-using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
 {
@@ -42,7 +34,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             bool result = true;
             this.InventoryId = GameNetworkMessage.ReadStringFromPacket(ref result);
             this.PlayerInventory = PENetworkModule.ReadInventoryPlayer(ref result);
-            if(this.InventoryId != "")
+            if (this.InventoryId != "")
             {
                 this.RequestedInventory = PENetworkModule.ReadCustomInventory(this.InventoryId, ref result);
             }
@@ -53,7 +45,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
             GameNetworkMessage.WriteStringToPacket(this.InventoryId);
             PENetworkModule.WriteInventoryPlayer(this.PlayerInventory);
-            if(this.InventoryId != "")
+            if (this.InventoryId != "")
             {
                 PENetworkModule.WriteCustomInventory(this.RequestedInventory);
             }

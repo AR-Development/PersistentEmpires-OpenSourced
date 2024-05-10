@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -16,7 +10,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public long Gold;
 
         public UpdateMoneychestGold() { }
-        public UpdateMoneychestGold(MissionObject chest,long gold)
+        public UpdateMoneychestGold(MissionObject chest, long gold)
         {
             this.Chest = chest;
             this.Gold = gold;

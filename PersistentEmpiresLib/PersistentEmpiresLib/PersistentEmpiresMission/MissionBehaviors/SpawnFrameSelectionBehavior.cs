@@ -3,8 +3,6 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 using Debug = TaleWorlds.Library.Debug;
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
@@ -19,7 +17,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             this.DefaultSpawnFrames = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_SpawnFrame>().Select(g => g.GetFirstScriptOfType<PE_SpawnFrame>()).Where(p => p.FactionIndex == 0 && !p.SpawnFromCastle).ToList();
 
-           Debug.Print("** Persistent Empires ** Length of default spawn is : " + this.DefaultSpawnFrames.Count,0, Debug.DebugColor.Cyan);
+            Debug.Print("** Persistent Empires ** Length of default spawn is : " + this.DefaultSpawnFrames.Count, 0, Debug.DebugColor.Cyan);
         }
         public override void OnRemoveBehavior()
         {
@@ -36,7 +34,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        private bool HandlePreferredSpawnPoint(NetworkCommunicator peer,PreferredSpawnPoint message)
+        private bool HandlePreferredSpawnPoint(NetworkCommunicator peer, PreferredSpawnPoint message)
         {
             PE_SpawnFrame frame = message.SpawnFrame;
             bool canPeerSpawn = frame.CanPeerSpawnHere(peer);

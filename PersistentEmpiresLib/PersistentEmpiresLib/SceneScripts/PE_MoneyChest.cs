@@ -1,12 +1,6 @@
 ﻿using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -24,7 +18,8 @@ namespace PersistentEmpiresLib.SceneScripts
         public int CastleId = 0;
         public bool Lockpickable = true;
         public bool NoPerm = false;
-        protected override void OnInit() {
+        protected override void OnInit()
+        {
             base.OnInit();
             TextObject actionMessage = new TextObject("Money Chest");
             base.ActionMessage = actionMessage;
@@ -36,8 +31,9 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             return "Money Chest";
         }
-        public void UpdateGold(long gold) {
-            if(GameNetwork.IsServer)
+        public void UpdateGold(long gold)
+        {
+            if (GameNetwork.IsServer)
             {
                 GameNetwork.BeginBroadcastModuleEvent();
                 GameNetwork.WriteMessage(new UpdateMoneychestGold(this, gold));
@@ -70,7 +66,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 // this.WithdrawGold(attackerAgent.MissionPeer.GetNetworkPeer(), this.Gold > 1000000 ? 1000000 : (int)this.Gold);
                 PersistentEmpireRepresentative persistentEmpireRepresentative = attackerAgent.MissionPeer.GetNetworkPeer().GetComponent<PersistentEmpireRepresentative>();
                 long amount = this.Gold;
-                if(amount > 1000000)
+                if (amount > 1000000)
                 {
                     amount = 1000000;
                 }
@@ -94,7 +90,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), withdrawer);
                 return;
             }
-            if(amount > this.Gold)
+            if (amount > this.Gold)
             {
                 InformationComponent.Instance.SendMessage("Chest don't have that amount", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), withdrawer);
                 return;
@@ -103,7 +99,8 @@ namespace PersistentEmpiresLib.SceneScripts
             this.UpdateGold(this.Gold - amount);
         }
 
-        public bool CanUserUse(NetworkCommunicator player) {
+        public bool CanUserUse(NetworkCommunicator player)
+        {
             if (this.NoPerm) return true;
             if (this.GetFaction() == null) return false;
             if (this.IsBroken()) return true;
@@ -111,19 +108,20 @@ namespace PersistentEmpiresLib.SceneScripts
             return true;
         }
 
-        public void DepositGold(NetworkCommunicator depositer, int amount) {
+        public void DepositGold(NetworkCommunicator depositer, int amount)
+        {
             PersistentEmpireRepresentative persistentEmpireRepresentative = depositer.GetComponent<PersistentEmpireRepresentative>();
 
-            if(this.NoPerm == false)
+            if (this.NoPerm == false)
             {
-                if(this.GetFaction() == null || (this.GetFaction().lordId != depositer.VirtualPlayer.Id.ToString() && this.IsBroken() == false))
+                if (this.GetFaction() == null || (this.GetFaction().lordId != depositer.VirtualPlayer.Id.ToString() && this.IsBroken() == false))
                 {
                     InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
                     return;
                 }
             }
 
-            if(persistentEmpireRepresentative.ReduceIfHaveEnoughGold(amount) == false)
+            if (persistentEmpireRepresentative.ReduceIfHaveEnoughGold(amount) == false)
             {
                 InformationComponent.Instance.SendMessage("You don't have enough gold", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
                 return;
@@ -131,7 +129,7 @@ namespace PersistentEmpiresLib.SceneScripts
             this.UpdateGold(this.Gold + amount);
         }
 
-        
+
         public PE_CastleBanner GetCastleBanner()
         {
             // FactionsBehavior factionBehavior = Mission.Current.GetMissionBehavior<FactionsBehavior>();
@@ -143,7 +141,8 @@ namespace PersistentEmpiresLib.SceneScripts
             return null;
         }
 
-        public Faction GetFaction() {
+        public Faction GetFaction()
+        {
             if (this.GetCastleBanner() == null) return null;
             return this.GetCastleBanner().GetOwnerFaction();
         }
@@ -159,11 +158,11 @@ namespace PersistentEmpiresLib.SceneScripts
                 return;
             }
             base.OnUse(userAgent);
-            if(userAgent.IsMine && OnMoneyChestAccessed != null)
+            if (userAgent.IsMine && OnMoneyChestAccessed != null)
             {
                 OnMoneyChestAccessed(this);
             }
-            if(GameNetwork.IsServer)
+            if (GameNetwork.IsServer)
             {
                 userAgent.StopUsingGameObjectMT(true);
             }

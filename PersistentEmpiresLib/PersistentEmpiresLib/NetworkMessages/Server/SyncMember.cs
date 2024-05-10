@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -44,7 +38,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override void OnWrite()
         {
             GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Peer);
-            GameNetworkMessage.WriteIntToPacket(this.FactionIndex,new CompressionInfo.Integer(-1, 200, true));
+            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1, 200, true));
             GameNetworkMessage.WriteBoolToPacket(this.IsMarshall);
         }
     }

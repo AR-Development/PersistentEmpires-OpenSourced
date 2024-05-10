@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -12,8 +7,9 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     public sealed class RequestCloseStockpileMarket : GameNetworkMessage
     {
         public MissionObject StockpileMarketEntity;
-        public RequestCloseStockpileMarket() {}
-        public RequestCloseStockpileMarket(MissionObject missionObject) {
+        public RequestCloseStockpileMarket() { }
+        public RequestCloseStockpileMarket(MissionObject missionObject)
+        {
             this.StockpileMarketEntity = missionObject;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()

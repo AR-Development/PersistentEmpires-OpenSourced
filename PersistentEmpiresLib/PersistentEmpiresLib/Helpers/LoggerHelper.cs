@@ -1,13 +1,9 @@
-﻿using PersistentEmpiresLib.Database.DBEntities;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.Data;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.SceneScripts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -75,9 +71,10 @@ namespace PersistentEmpiresLib.Helpers
         public delegate void LogActionHandler(DBLog log);
         public static event LogActionHandler OnLogAction;
 
-        private static string AffectedPlayersToString(AffectedPlayer[] players) {
+        private static string AffectedPlayersToString(AffectedPlayer[] players)
+        {
             string[] str = new string[players.Length];
-            for(int i = 0; i < players.Length; i++)
+            for (int i = 0; i < players.Length; i++)
             {
                 str[i] = players[i].ToString();
             }
@@ -86,13 +83,15 @@ namespace PersistentEmpiresLib.Helpers
 
         private static string FormatLogForAgent(Agent agent, DateTime dateTime)
         {
-            if(agent.IsHuman && agent.IsPlayerControlled)
+            if (agent.IsHuman && agent.IsPlayerControlled)
             {
                 return FormatLogForPlayer(agent.MissionPeer.GetNetworkPeer(), dateTime, false);
-            }else if(agent.IsMount && agent.RiderAgent != null && agent.RiderAgent.IsHuman && agent.RiderAgent.IsPlayerControlled)
+            }
+            else if (agent.IsMount && agent.RiderAgent != null && agent.RiderAgent.IsHuman && agent.RiderAgent.IsPlayerControlled)
             {
                 return String.Format("A Horse Rided By {0}", FormatLogForPlayer(agent.RiderAgent.MissionPeer.GetNetworkPeer(), dateTime, false));
-            }else if(agent.IsMount)
+            }
+            else if (agent.IsMount)
             {
                 return "A Horse";
             }
@@ -103,7 +102,7 @@ namespace PersistentEmpiresLib.Helpers
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             string factionName = persistentEmpireRepresentative != null && persistentEmpireRepresentative.GetFaction() != null ? persistentEmpireRepresentative.GetFaction().name : "Unknown";
-            if(logDateTime)
+            if (logDateTime)
             {
                 return String.Format("[{0}][{1}]", factionName, player.UserName);
             }
@@ -117,7 +116,7 @@ namespace PersistentEmpiresLib.Helpers
             {
                 return affectedAgent.MissionPeer.GetNetworkPeer();
             }
-            else if(affectedAgent.IsMount && affectedAgent.RiderAgent != null && affectedAgent.RiderAgent.MissionPeer != null && affectedAgent.RiderAgent.MissionPeer.GetNetworkPeer().GetComponent<PersistentEmpireRepresentative>() != null)
+            else if (affectedAgent.IsMount && affectedAgent.RiderAgent != null && affectedAgent.RiderAgent.MissionPeer != null && affectedAgent.RiderAgent.MissionPeer.GetNetworkPeer().GetComponent<PersistentEmpireRepresentative>() != null)
             {
                 return affectedAgent.RiderAgent.MissionPeer.GetNetworkPeer();
             }
@@ -287,7 +286,7 @@ namespace PersistentEmpiresLib.Helpers
 
         public static string GetCoordinatesOfPlayer(NetworkCommunicator player)
         {
-            if(player.ControlledAgent != null && player.ControlledAgent.IsActive())
+            if (player.ControlledAgent != null && player.ControlledAgent.IsActive())
             {
                 return String.Format("({0},{1},{2})", player.ControlledAgent.Position.X, player.ControlledAgent.Position.Y, player.ControlledAgent.Position.Z);
             }
@@ -311,7 +310,7 @@ namespace PersistentEmpiresLib.Helpers
                 IssuerPlayerName = issuer.UserName,
                 LogMessage = logMessage
             };
-            if(OnLogAction != null)
+            if (OnLogAction != null)
             {
                 OnLogAction(dbLog);
             }

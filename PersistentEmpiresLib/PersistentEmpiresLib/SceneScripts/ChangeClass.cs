@@ -1,12 +1,7 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.PersistentEmpiresMission;
+﻿using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -134,7 +129,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
             }*/
-            if(GameNetwork.IsServer && base.HasUser)
+            if (GameNetwork.IsServer && base.HasUser)
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
             }
@@ -173,10 +168,10 @@ namespace PersistentEmpiresLib.SceneScripts
                 NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
                 PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
 
-                
+
                 if (isSuccessful)
                 {
-                    if (player.ControlledAgent.Character.StringId != heroClass.HeroCharacter.StringId  && !persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.DinarCost))
+                    if (player.ControlledAgent.Character.StringId != heroClass.HeroCharacter.StringId && !persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.DinarCost))
                     {
                         InformationComponent.Instance.SendMessage("You need " + this.DinarCost + " gold.", (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
                         return;
