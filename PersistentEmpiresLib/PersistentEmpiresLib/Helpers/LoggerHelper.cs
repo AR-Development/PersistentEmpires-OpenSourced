@@ -126,301 +126,163 @@ namespace PersistentEmpiresLib.Helpers
 
         private static string GenerateActionMessage(NetworkCommunicator issuer, string actionType, DateTime dateTime, AffectedPlayer[] affectedPlayers = null, object[] oParams = null)
         {
-            if(actionType == LogAction.PlayerJoined)
+            switch (actionType)
             {
-                return String.Format("{0} joined to the server.", FormatLogForPlayer(issuer, dateTime));
+                case nameof(LogAction.PlayerJoined):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} joined to the server.";
+                case nameof(LogAction.PlayerDisconnected):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} disconnected from the server.";
+                case nameof(LogAction.LocalChat):
+                case nameof(LogAction.TeamChat):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} said \"[{(string)oParams[0]}]\". Receivers: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerHitToAgent):
+                case nameof(LogAction.PlayerBumpedWithHorse):
+                case nameof(LogAction.PlayerKilledAnAgent):
+                    return HandlePlayerAttackAgent(issuer, dateTime, (MissionWeapon)oParams[0], (Agent)oParams[1], actionType);
+                case nameof(LogAction.PlayerDroppedLoot):
+                    return HandlePlayerDroppedLoot(issuer, dateTime, (Inventory)oParams[0]);
+                case nameof(LogAction.PlayerFactionChange):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} is joined to faction {((Faction)oParams[0])?.name ?? "Unknown"} from {((Faction)oParams[1])?.name ?? "Unknown"}";
+                case nameof(LogAction.PlayerClassChange):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} became a {((BasicCharacterObject)oParams[0]).Name}";
+                case nameof(LogAction.FactionLordChanged):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} became lord";
+                case nameof(LogAction.FactionDeclaredWar):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} declared war to {((Faction)oParams[0])?.name ?? "Unknown"}";
+                case nameof(LogAction.FactionMadePeace):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} made peace with {((Faction)oParams[0])?.name ?? "Unknown"}";
+                case nameof(LogAction.PlayerOpensChest):
+                case nameof(LogAction.PlayerClosesChest):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensChest ? "opened" : "closed")} a chest/loot of {((Inventory)oParams[0]).InventoryId}";
+                case nameof(LogAction.PlayerTransferredItemToChest):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to the chest({(string)oParams[0]})";
+                case nameof(LogAction.PlayerTransferredItemFromChest):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
+                case nameof(LogAction.PlayerOpensStockpile):
+                case nameof(LogAction.PlayerClosesStockpile):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensStockpile ? "accessed to" : "closed")} a stockpile market. Xml file of market is {((PE_StockpileMarket)oParams[0]).XmlFile}";
+                case nameof(LogAction.PlayerBuysStockpile):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} bought {((MarketItem)oParams[0]).Item.Name} from the stockpile market with a price of {((MarketItem)oParams[0]).BuyPrice()}.";
+                case nameof(LogAction.PlayerSellsStockpile):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} sold {((MarketItem)oParams[0]).Item.Name} to the stockpile market with a price of {((MarketItem)oParams[0]).SellPrice()}.";
+                case nameof(LogAction.PlayerSpawnedPrefab):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} spawned a prefab with item {((SpawnableItem)oParams[0]).SpawnerItem.Name}";
+                case nameof(LogAction.PlayerHitToDestructable):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} hit to a destructable with a script of {(string)oParams[0]}";
+                case nameof(LogAction.PlayerHitToAttachable):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} hit to a attachable(cart)";
+                case nameof(LogAction.PlayerRepairesTheDestructable):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} repairs a destructable with a script of {(string)oParams[0]}";
+                case nameof(LogAction.PlayerSpawn):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} spawned in the world";
+                case nameof(LogAction.PlayerDied):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} just died";
+                case nameof(LogAction.PlayerDroppedGold):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} dropped a gold bag with amount of {(int)oParams[0]}";
+                case nameof(LogAction.PlayerPickedUpGold):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} picked up a gold bag with amount of {(int)oParams[0]}";
+                case nameof(LogAction.PlayerDroppedItem):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} dropped an item({((ItemObject)oParams[2])?.Name.ToString() ?? "null"}*{(int)oParams[3]}) from inventory {(string)oParams[1]} to loot inventory {(string)oParams[0]}";
+                case nameof(LogAction.PlayerBecomesGodlike):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} became godlike";
+                case nameof(LogAction.PlayerSpawnsItem):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} spawned an item {((ItemObject)oParams[0]).Name}*{(int)oParams[1]}";
+                case nameof(LogAction.PlayerItemGathers):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} gathered an item from ItemGathering script {((ItemObject)oParams[0]).Name}";
+                case nameof(LogAction.PlayerBansPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} banned a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerTempBanPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} temp banned a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerKicksPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} kicked a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerFadesPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} fade a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerSpawnedMoney):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} spawned money with amount {(int)oParams[0]}";
+                case nameof(LogAction.PlayerDespawnedPrefab):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} de-spawned a prefab with item {((SpawnableItem)oParams[0]).SpawnerItem.Name}";
+                case nameof(LogAction.PlayerSlayPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} slayed a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerFreezePlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} Freezed a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerUnfreezePlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} Unfreezed a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerTpToPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} teleported to a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerTpToMePlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} teleported to himself a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerHealedPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} teleported to healed a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerRevealedMoneyPouch):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} revealed his money pouch({(int)oParams[0]}) Receivers: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerRevealedItemBag):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} revealed his item bag Receivers: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerCommitedSuicide):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} commited suicide";
+                case nameof(LogAction.PlayerDepositedToBank):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} deposited {(int)oParams[0]} amount of gold to bank";
+                case nameof(LogAction.PlayerWithdrawToBank):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} withdrawn {(int)oParams[0]} amount of gold from bank";
+                case nameof(LogAction.PlayerMountedHorse):
+                    return $"{FormatLogForAgent((Agent)oParams[0], dateTime)} mounted a horse";
+                case nameof(LogAction.PlayerDismountedHorse):
+                    return $"{FormatLogForAgent((Agent)oParams[0], dateTime)} dismounted a horse";
+                case nameof(LogAction.PlayerChangedName):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} changed his name to {(string)oParams[0]}";
+                default:
+                    return actionType;
             }
-            else if (actionType == LogAction.PlayerDisconnected)
-            {
-                return String.Format("{0} disconnected from the server.", FormatLogForPlayer(issuer, dateTime));
-            }
-            else if (actionType == LogAction.LocalChat)
-            {
-                return String.Format("{0} said \"[{1}]\". Receivers: {2}", FormatLogForPlayer(issuer, dateTime), (string)oParams[0], AffectedPlayersToString(affectedPlayers));
-            }else if(actionType == LogAction.TeamChat)
-            {
-                return String.Format("{0} said \"[{1}]\". Receivers: {2}", FormatLogForPlayer(issuer, dateTime), (string)oParams[0], AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerHitToAgent)
-            {
-                MissionWeapon missionWeapon = (MissionWeapon)oParams[0];
-                string attackedItem = missionWeapon.Item == null ? "fist" : missionWeapon.Item.Name.ToString();
-                Agent affectedAgent = (Agent)oParams[1];
+        }
 
-                string warStatus = "Neutral";
-                NetworkCommunicator affectedPeer = GetAffectedPeerFromAgent(affectedAgent);
-                if (affectedPeer != null)
-                {
-                    PersistentEmpireRepresentative persistentEmpireRepresentative = affectedPeer.GetComponent<PersistentEmpireRepresentative>();
-                    PersistentEmpireRepresentative issuerRepr = issuer.GetComponent<PersistentEmpireRepresentative>();
-                    if(issuerRepr.GetFaction() != null && persistentEmpireRepresentative.GetFaction() != null)
-                    {
-                        warStatus = issuerRepr.GetFaction().warDeclaredTo.Contains(persistentEmpireRepresentative.GetFactionIndex()) || persistentEmpireRepresentative.GetFaction().warDeclaredTo.Contains(issuerRepr.GetFactionIndex()) ? "Enemies" : "Neutral";
-                    }
-                }
+        private static string HandlePlayerAttackAgent(NetworkCommunicator issuer, DateTime dateTime, MissionWeapon missionWeapon, Agent affectedAgent, string actionType)
+        {
+            string attackedItem = missionWeapon.Item?.Name?.ToString() ?? "fist";
+            string warStatus = GetWarStatus(issuer, affectedAgent);
 
-                return String.Format("{0} attacked with {1} to {2} Their faction's was {3}", FormatLogForPlayer(issuer, dateTime), attackedItem, FormatLogForAgent(affectedAgent, dateTime),warStatus);
+            switch (actionType)
+            {
+                case nameof(LogAction.PlayerHitToAgent):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} attacked with {attackedItem} to {FormatLogForAgent(affectedAgent, dateTime)} Their faction's was {warStatus}";
+                case nameof(LogAction.PlayerBumpedWithHorse):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} bumped with a horse to {FormatLogForAgent(affectedAgent, dateTime)} Their faction's was {warStatus}";
+                case nameof(LogAction.PlayerKilledAnAgent):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} killed {FormatLogForAgent(affectedAgent, dateTime)} with {attackedItem} Their faction's was {warStatus}";
+                default:
+                    return string.Empty;
             }
-            else if (actionType == LogAction.PlayerBumpedWithHorse)
-            {
-                MissionWeapon missionWeapon = (MissionWeapon)oParams[0];
-                string attackedItem = missionWeapon.Item == null ? "fist" : missionWeapon.Item.Name.ToString();
-                Agent affectedAgent = (Agent)oParams[1];
-                string warStatus = "Neutral";
-                NetworkCommunicator affectedPeer = GetAffectedPeerFromAgent(affectedAgent);
-                if (affectedPeer != null)
-                {
-                    PersistentEmpireRepresentative persistentEmpireRepresentative = affectedPeer.GetComponent<PersistentEmpireRepresentative>();
-                    PersistentEmpireRepresentative issuerRepr = issuer.GetComponent<PersistentEmpireRepresentative>();
-                    if (issuerRepr.GetFaction() != null && persistentEmpireRepresentative.GetFaction() != null)
-                    {
-                        warStatus = issuerRepr.GetFaction().warDeclaredTo.Contains(persistentEmpireRepresentative.GetFactionIndex()) || persistentEmpireRepresentative.GetFaction().warDeclaredTo.Contains(issuerRepr.GetFactionIndex()) ? "Enemies" : "Neutral";
-                    }
-                }
-                return String.Format("{0} bumped with a horse to {1} Their faction's was {2}", FormatLogForPlayer(issuer, dateTime), FormatLogForAgent(affectedAgent, dateTime), warStatus);
-            }
-            else if (actionType == LogAction.PlayerKilledAnAgent)
-            {
-                MissionWeapon missionWeapon = (MissionWeapon)oParams[0];
-                string attackedItem = missionWeapon.Item == null ? "fist" : missionWeapon.Item.Name.ToString();
-                Agent affectedAgent = (Agent)oParams[1];
-                // NetworkCommunicator missionNetwork = affectedAgent.MissionPeer.GetNetworkPeer();
-                string warStatus = "Neutral";
-                NetworkCommunicator affectedPeer = GetAffectedPeerFromAgent(affectedAgent);
-                if (affectedPeer != null)
-                {
-                    PersistentEmpireRepresentative persistentEmpireRepresentative = affectedPeer.GetComponent<PersistentEmpireRepresentative>();
-                    PersistentEmpireRepresentative issuerRepr = issuer.GetComponent<PersistentEmpireRepresentative>();
-                    if (issuerRepr.GetFaction() != null && persistentEmpireRepresentative.GetFaction() != null)
-                    {
-                        warStatus = issuerRepr.GetFaction().warDeclaredTo.Contains(persistentEmpireRepresentative.GetFactionIndex()) || persistentEmpireRepresentative.GetFaction().warDeclaredTo.Contains(issuerRepr.GetFactionIndex()) ? "Enemies" : "Neutral";
-                    }
-                }
-                return String.Format("{0} killed {1} with {2} Their faction's was {3}", FormatLogForPlayer(issuer, dateTime), FormatLogForAgent(affectedAgent, dateTime), attackedItem, warStatus);
-            }else if(actionType == LogAction.PlayerDroppedLoot)
-            {
-                Inventory inventory = (Inventory)oParams[0];
-                
-                string[] droppedLootStr = inventory.Slots.Where(s => s.IsEmpty() == false).Select(s => {
-                    return s.Item + "*" + s.Count;
-                }).ToArray();
+        }
 
-                string droppedLoot = String.Join(",", droppedLootStr);
-                return String.Format("{0} is died and drop({1}) the following loot: {2}", FormatLogForPlayer(issuer, dateTime), inventory.InventoryId,droppedLoot);
-            }else if(actionType == LogAction.PlayerFactionChange)
+        private static string GetWarStatus(NetworkCommunicator issuer, Agent affectedAgent)
+        {
+            NetworkCommunicator affectedPeer = GetAffectedPeerFromAgent(affectedAgent);
+            if (affectedPeer == null)
             {
-                Faction joinedFrom = (Faction)oParams[0];
-                Faction joinedTo = (Faction)oParams[1];
-                return String.Format("{0} is joined to faction {1} from {2}", FormatLogForPlayer(issuer, dateTime), joinedFrom != null ? joinedFrom.name : "Unknown", joinedTo != null ? joinedTo.name : "Unknown");
-            }else if(actionType == LogAction.PlayerClassChange)
-            {
-                BasicCharacterObject bco = (BasicCharacterObject)oParams[0];
-                return String.Format("{0} became a {1}", FormatLogForPlayer(issuer, dateTime), bco.Name);
-            }else if(actionType == LogAction.FactionLordChanged)
-            {
-                return String.Format("{0} became lord", FormatLogForPlayer(issuer,dateTime));
-            }else if(actionType == LogAction.FactionDeclaredWar)
-            {
-                Faction declaredTo = (Faction)oParams[0];
-                return String.Format("{0} declared war to {1}", FormatLogForPlayer(issuer, dateTime), declaredTo != null ? declaredTo.name : "Unknown");
+                return "Neutral";
             }
-            else if (actionType == LogAction.FactionMadePeace)
-            {
-                Faction declaredTo = (Faction)oParams[0];
-                return String.Format("{0} made peace with {1}", FormatLogForPlayer(issuer, dateTime), declaredTo != null ? declaredTo.name : "Unknown");
-            }else if(actionType == LogAction.PlayerOpensChest)
-            {
-                Inventory inv = (Inventory)oParams[0];
-                return String.Format("{0} opened a chest/loot of {1}", FormatLogForPlayer(issuer, dateTime), inv.InventoryId);
-            }
-            else if (actionType == LogAction.PlayerClosesChest)
-            {
-                Inventory inv = (Inventory)oParams[0];
-                return String.Format("{0} closed a chest/loot of {1}", FormatLogForPlayer(issuer, dateTime), inv.InventoryId);
-            }
-            else if (actionType == LogAction.PlayerTransferredItemToChest)
-            {
-                // Inventory inv = (Inventory)oParams[0];
-                string droppedToInventory = (string)oParams[0];
-                ItemObject item = (ItemObject)oParams[1];
-                string itemName = item == null ? "null" : item.Name.ToString();
-                int count = (int)oParams[2];
-                return String.Format("{0} transferred {1}*{2} to the chest({3})", FormatLogForPlayer(issuer, dateTime), itemName, count, droppedToInventory);
-            }
-            else if (actionType == LogAction.PlayerTransferredItemFromChest)
-            {
-                // Inventory inv = (Inventory)oParams[0];
-                string draggedFromInventory = (string)oParams[0];
-                ItemObject item = (ItemObject)oParams[1];
-                string itemName = item == null ? "null" : item.Name.ToString();
-                int count = (int)oParams[2];
-                return String.Format("{0} transferred {1}*{2} from the chest({3})", FormatLogForPlayer(issuer, dateTime), itemName, count, draggedFromInventory);
-            }
-            else if(actionType == LogAction.PlayerOpensStockpile)
-            {
-                PE_StockpileMarket stockpileMarket = (PE_StockpileMarket)oParams[0];
-                return String.Format("{0} accessed to a stockpile market. Xml file of market is {1}", FormatLogForPlayer(issuer, dateTime), stockpileMarket.XmlFile);
-            }
-            else if (actionType == LogAction.PlayerClosesStockpile)
-            {
-                PE_StockpileMarket stockpileMarket = (PE_StockpileMarket)oParams[0];
-                return String.Format("{0} closed the stockpile market. Xml file of market is {1}", FormatLogForPlayer(issuer, dateTime), stockpileMarket.XmlFile);
-            }
-            else if (actionType == LogAction.PlayerBuysStockpile)
-            {
-                MarketItem marketItem = (MarketItem)oParams[0];
-                return String.Format("{0} bought {1} from the stockpile market with a price of {2}.", FormatLogForPlayer(issuer, dateTime), marketItem.Item.Name, marketItem.BuyPrice());
-            }
-            else if (actionType == LogAction.PlayerSellsStockpile)
-            {
-                MarketItem marketItem = (MarketItem)oParams[0];
-                return String.Format("{0} sold {1} to the stockpile market with a price of {2}.", FormatLogForPlayer(issuer, dateTime), marketItem.Item.Name, marketItem.SellPrice());
-            }else if(actionType == LogAction.PlayerSpawnedPrefab)
-            {
-                SpawnableItem spawnableItem = (SpawnableItem)oParams[0];
-                return String.Format("{0} spawned a prefab with item {1}", FormatLogForPlayer(issuer, dateTime), spawnableItem.SpawnerItem.Name);
-            }else if(actionType == LogAction.PlayerHitToDestructable)
-            {
-                string scriptName = (string)oParams[0];
-                return String.Format("{0} hit to a destructable with a script of {1}", FormatLogForPlayer(issuer, dateTime), scriptName);
-            }
-            else if (actionType == LogAction.PlayerHitToAttachable)
-            {
-                return String.Format("{0} hit to a attachable(cart)", FormatLogForPlayer(issuer, dateTime));
-            }
-            else if (actionType == LogAction.PlayerRepairesTheDestructable)
-            {
-                string scriptName = (string)oParams[0];
-                return String.Format("{0} repairs a destructable with a script of {1}", FormatLogForPlayer(issuer, dateTime), scriptName);
-            }
-            else if (actionType == LogAction.PlayerSpawn)
-            {
-                // Agent agent = (Agent)oParams[0];
-                return String.Format("{0} spawned in the world", FormatLogForPlayer(issuer, dateTime));
-            }
-            else if (actionType == LogAction.PlayerDied)
-            {
-                // Agent agent = (Agent)oParams[0];
-                return String.Format("{0} just died", FormatLogForPlayer(issuer, dateTime));
-            }
-            else if(actionType == LogAction.PlayerDroppedGold)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} dropped a gold bag with amount of {1}", FormatLogForPlayer(issuer, dateTime), amount);
 
+            PersistentEmpireRepresentative persistentEmpireRepresentative = affectedPeer.GetComponent<PersistentEmpireRepresentative>();
+            PersistentEmpireRepresentative issuerRepr = issuer.GetComponent<PersistentEmpireRepresentative>();
+
+            if (issuerRepr.GetFaction() == null || persistentEmpireRepresentative.GetFaction() == null)
+            {
+                return "Neutral";
             }
-            else if (actionType == LogAction.PlayerPickedUpGold)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} picked up a gold bag with amount of {1}", FormatLogForPlayer(issuer, dateTime), amount);
-            }else if(actionType == LogAction.PlayerDroppedItem)
-            {
-                string droppedToInventory = (string)oParams[0];
-                string inventory = (string)oParams[1];
-                ItemObject item = (ItemObject)oParams[2];
-                int droppedCount = (int)oParams[3];
-                string itemName = item == null ? "null" : item.Name.ToString();
-                return String.Format("{0} dropped an item({1}*{2}) from inventory {3} to loot inventory {4}", FormatLogForPlayer(issuer, dateTime), itemName, droppedCount, inventory, droppedToInventory);
-            }
-            else if (actionType == LogAction.PlayerBecomesGodlike)
-            {
-                return String.Format("{0} became godlike", FormatLogForPlayer(issuer, dateTime));
-            }else if(actionType == LogAction.PlayerSpawnsItem)
-            {
-                ItemObject item = (ItemObject)oParams[0];
-                int count = (int)oParams[1];
-                return String.Format("{0} spawned an item {1}*{2}", FormatLogForPlayer(issuer, dateTime), item.Name, count);
-            }
-            else if (actionType == LogAction.PlayerSpawnsItem)
-            {
-                ItemObject item = (ItemObject)oParams[0];
-                int count = (int)oParams[1];
-                return String.Format("{0} spawned an item {1}*{2}", FormatLogForPlayer(issuer, dateTime), item.Name, count);
-            }
-            else if (actionType == LogAction.PlayerItemGathers)
-            {
-                ItemObject item = (ItemObject)oParams[0];
-                return String.Format("{0} gathered an item from ItemGathering script {1}", FormatLogForPlayer(issuer, dateTime), item.Name);
-            }else if(actionType == LogAction.PlayerBansPlayer)
-            {
-                return String.Format("{0} banned a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerTempBanPlayer)
-            {
-                return String.Format("{0} temp banned a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerKicksPlayer)
-            {
-                return String.Format("{0} kicked a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerFadesPlayer)
-            {
-                return String.Format("{0} fade a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }else if(actionType == LogAction.PlayerSpawnedMoney)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} spawned money with amount {1}", FormatLogForPlayer(issuer, dateTime), null, amount);
-            }else if(actionType == LogAction.PlayerDespawnedPrefab)
-            {
-                SpawnableItem spawnableItem = (SpawnableItem)oParams[0];
-                return String.Format("{0} de-spawned a prefab with item {1}", FormatLogForPlayer(issuer, dateTime), spawnableItem.SpawnerItem.Name);
-            }
-            else if (actionType == LogAction.PlayerSlayPlayer)
-            {
-                return String.Format("{0} slayed a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerFreezePlayer)
-            {
-                return String.Format("{0} Freezed a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerUnfreezePlayer)
-            {
-                return String.Format("{0} Unfreezed a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerTpToPlayer)
-            {
-                return String.Format("{0} teleported to a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerTpToMePlayer)
-            {
-                return String.Format("{0} teleported to himself a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }else if(actionType == LogAction.PlayerHealedPlayer)
-            {
-                return String.Format("{0} teleported to healed a player: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }else if(actionType == LogAction.PlayerRevealedMoneyPouch)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} revealed his money pouch({1}) Receivers: {2}", FormatLogForPlayer(issuer, dateTime), amount, AffectedPlayersToString(affectedPlayers));
-            }
-            else if (actionType == LogAction.PlayerRevealedItemBag)
-            {
-                return String.Format("{0} revealed his item bag Receivers: {1}", FormatLogForPlayer(issuer, dateTime), AffectedPlayersToString(affectedPlayers));
-            }else if(actionType == LogAction.PlayerCommitedSuicide)
-            {
-                return String.Format("{0} commited suicide", FormatLogForPlayer(issuer, dateTime));
-            } else if(actionType == LogAction.PlayerDepositedToBank)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} deposited {1} amount of gold to bank", FormatLogForPlayer(issuer, dateTime), amount);
-            }
-            else if (actionType == LogAction.PlayerWithdrawToBank)
-            {
-                int amount = (int)oParams[0];
-                return String.Format("{0} withdrawn {1} amount of gold from bank", FormatLogForPlayer(issuer, dateTime), amount);
-            } else if(actionType == LogAction.PlayerMountedHorse)
-            {
-                Agent agent = (Agent)oParams[0];
-                return String.Format("{0} mounted a horse", FormatLogForAgent(agent, dateTime));
-            }else if(actionType == LogAction.PlayerDismountedHorse)
-            {
-                Agent agent = (Agent)oParams[0];
-                return String.Format("{0} dismounted a horse", FormatLogForAgent(agent, dateTime));
-            }else if(actionType == LogAction.PlayerChangedName)
-            {
-                string name = (string)oParams[0];
-                return String.Format("{0} changed his name to {1}", FormatLogForPlayer(issuer, dateTime), name);
-            }
-            return actionType;
+
+            return issuerRepr.GetFaction().warDeclaredTo.Contains(persistentEmpireRepresentative.GetFactionIndex()) ||
+                   persistentEmpireRepresentative.GetFaction().warDeclaredTo.Contains(issuerRepr.GetFactionIndex())
+                ? "Enemies"
+                : "Neutral";
+        }
+
+        private static string HandlePlayerDroppedLoot(NetworkCommunicator issuer, DateTime dateTime, Inventory inventory)
+        {
+            string[] droppedLootStr = inventory.Slots
+                .Where(s => !s.IsEmpty())
+                .Select(s => $"{s.Item}*{s.Count}")
+                .ToArray();
+
+            string droppedLoot = string.Join(",", droppedLootStr);
+            return $"{FormatLogForPlayer(issuer, dateTime)} is died and drop({inventory.InventoryId}) the following loot: {droppedLoot}";
         }
 
         public static string GetCoordinatesOfPlayer(NetworkCommunicator player)
