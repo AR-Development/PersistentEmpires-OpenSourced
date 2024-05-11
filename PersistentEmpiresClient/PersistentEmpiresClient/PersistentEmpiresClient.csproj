@@ -136,4 +136,8 @@
 		<PackageReference Include="RestSharp.Newtonsoft.Json" Version="1.5.1" />
 		<PackageReference Include="SharpRaven" Version="2.4.0" />
 	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<Exec Command="del &quot;$(TargetDir)*.pdb&quot;" />
+	</Target>
 </Project>

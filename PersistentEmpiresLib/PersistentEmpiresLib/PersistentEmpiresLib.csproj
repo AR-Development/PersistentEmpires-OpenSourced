@@ -2,7 +2,9 @@
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>PersistentEmpiresLib</RootNamespace>
-		<AssemblyName>PersistentEmpiresLib</AssemblyName>
+		<AssemblyTitle>PersistentEmpiresLib</AssemblyTitle>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<LangVersion>7.3</LangVersion>
 		<Product>PersistentEmpiresLib</Product>
 		<Copyright>Copyright © 2023</Copyright>
@@ -123,4 +125,7 @@
 		<None Include="Update_Bannerlord_DLLs.bat" />
 	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'ReleaseClient' Or '$(Configuration)' == 'ReleaseServer'">
+		<Exec Command="del &quot;$(TargetDir)*.pdb&quot;" />
+	</Target>
 </Project>
