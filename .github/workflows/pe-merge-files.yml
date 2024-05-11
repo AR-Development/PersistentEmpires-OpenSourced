@@ -23,30 +23,19 @@ jobs:
       with:
         name: ${{inputs.build_project}}-${{inputs.build_configuration}}
 
-    - name: Merge Client Files
+    - name: Merge files
       run: |
         shopt -s globstar
-        mkdir merged
-        ls
-        mv -f PersistentEmpiresClient/PersistentEmpiresClient/bin/${{inputs.build_configuration}}/*.dll merged/
-      if: ${{inputs.build_project == 'Client'}}
+        rsync -ax --exclude GUI --exclude ClientModFiles.deps.json --exclude SubModule.xml **/bin/*/. merged
 
     - name: Include ClientModFiles
       run: |
         shopt -s globstar
-        mkdir ClientModFiles
-        ls
-        mv -f PersistentEmpiresClient/ClientModFiles/bin/${{inputs.build_configuration}}/* ClientModFiles/ 
+        rsync -ax **/ClientModFiles/bin/*/. ClientModFiles
+        # TODO: Add other client assets in this step, such as sounds, models, etc
       if: ${{inputs.build_project == 'Client'}}
-    - name: Merge Server Files
-      run: |
-        shopt -s globstar
-        mkdir merged
-        ls
-        cp -arf PersistentEmpiresLib/PersistentEmpiresLib/bin/${{inputs.build_configuration}}Server/*.dll merged/
-        cp -r **/bin/*/. merged
-      if: ${{inputs.build_project == 'Server'}}
-    - name: Upload Client Artifacts
+
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{inputs.build_project}}-Merged
@@ -54,12 +43,3 @@ jobs:
         path: |
           merged
           ClientModFiles
-      if: ${{inputs.build_project == 'Client'}}
-    - name: Upload Server Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{inputs.build_project}}-Merged
-        retention-days: 1
-        path: |
-          merged
-      if: ${{inputs.build_project == 'Server'}}
