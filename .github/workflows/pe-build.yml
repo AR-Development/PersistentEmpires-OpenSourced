@@ -42,20 +42,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    #- name: Add MSBuild to PATH
-    #  uses: microsoft/setup-msbuild@v2
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
 
-    #- name: Build
-    #  working-directory: ${{env.GITHUB_WORKSPACE}}
-    #  run: msbuild -t:build -restore -p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-
-    - name: Get output directories
-      id: get-output-dirs
-      run: |
-        $output_dirs = Get-ChildItem -Directory -Recurse -Filter Properties | ForEach-Object {((Resolve-Path $_.FullName -Relative).Replace('\', '/') + "/**/*`n").Replace('./', '')}
-        echo "::set-output name=OUTPUT_DIRS::$output_dirs"
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild -t:build -restore -p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
-        path: "**/Properties"
+        path: '**/bin/*/'
