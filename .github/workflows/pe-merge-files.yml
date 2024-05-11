@@ -23,31 +23,18 @@ jobs:
       with:
         name: ${{inputs.build_project}}-${{inputs.build_configuration}}
 
-    - name: Merge Files
+    - name: Merge Client Files
       run: |
         shopt -s globstar
         mkdir merged
-        find . -mindepth 3 -maxdepth 3 -type d \( ! -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' merged \;
-        files_to_move=$(find merged -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
-        if [ -n "$files_to_move" ]; then
-          for file in $files_to_move; do
-            mv -fT "$file" merged
-          done
-        fi
-        rm -rf merged/bin
+        mv -f ${{inputs.build_project}}-${{inputs.build_configuration}}/PersistentEmpiresClient/PersistentEmpiresClient/bin/Release/*.dll merged/
+      if: ${{inputs.build_project == 'Client'}}
 
     - name: Include ClientModFiles
       run: |
         shopt -s globstar
         mkdir ClientModFiles
-        find . -mindepth 3 -maxdepth 3 -type d \( -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' ClientModFiles \;
-        files_to_move=$(find ClientModFiles -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
-        if [ -n "$files_to_move" ]; then
-          for file in $files_to_move; do
-            mv -fT "$file" ClientModFiles
-          done
-        fi
-        rm -rf ClientModFiles/bin
+        mv -f ${{inputs.build_project}}-${{inputs.build_configuration}}/PersistentEmpiresClient/ClientModFiles/bin/Release/* ClientModFiles/ 
       if: ${{inputs.build_project == 'Client'}}
 
     - name: Upload artifacts
