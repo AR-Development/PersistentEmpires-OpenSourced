@@ -1,0 +1,56 @@
+name: pe-lint
+
+on:
+  workflow_call:
+    inputs:
+      build_project:
+        description: "Whether to merge Client or Server files"
+        required: true
+        type: string
+      build_configuration:
+        description: "Whether to merge Release or Debug"
+        default: "Release"
+        type: string
+
+jobs:
+  merge-files:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-${{inputs.build_configuration}}
+
+    - name: Merge Files
+      run: |
+        shopt -s globstar
+        mkdir merged
+        find . -mindepth 3 -maxdepth 3 -type d \( ! -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' merged \;
+        files_to_move=$(find merged -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
+        if [ -n "$files_to_move" ]; then
+        mv $files_to_move merged
+        fi
+        rm -rf merged/bin
+
+    - name: Include ClientModFiles
+      run: |
+        shopt -s globstar
+        mkdir ClientModFiles
+        find . -mindepth 3 -maxdepth 3 -type d \( -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' ClientModFiles \;
+        files_to_move=$(find ClientModFiles -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
+        if [ -n "$files_to_move" ]; then
+        mv $files_to_move ClientModFiles
+        fi
+        rm -rf ClientModFiles/bin
+      if: ${{inputs.build_project == 'Client'}}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-Merged
+        retention-days: 1
+        path: |
+          merged
+          ClientModFiles

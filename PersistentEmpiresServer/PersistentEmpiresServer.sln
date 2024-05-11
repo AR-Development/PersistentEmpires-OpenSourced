@@ -3,9 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresServer", "PersistentEmpiresServer\PersistentEmpiresServer.csproj", "{DBFB57FA-4BEB-4146-93CB-80DD97B56526}"
-	ProjectSection(ProjectDependencies) = postProject
-		{48B5DA4C-99A9-4A74-943C-31CE73601D31} = {48B5DA4C-99A9-4A74-943C-31CE73601D31}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresHarmony", "PersistentEmpiresHarmony\PersistentEmpiresHarmony.csproj", "{8E4BF945-3A17-4A70-80AC-1ECE4C5B5B29}"
 EndProject

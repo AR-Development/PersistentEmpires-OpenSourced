@@ -1,0 +1,50 @@
+name: pe-deploy-production
+
+concurrency: production
+
+on:
+  workflow_call:
+  
+jobs:
+  tag-rc:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Tag release
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        custom_tag: release-${{github.sha}}
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tag-rc
+    environment: production
+
+    steps:
+    - name: Prepare working dirs
+      run: |
+        mkdir -p release/PersistentEmpiresClient
+        mkdir -p release/PersistentEmpiresServer
+
+    - name: Download Client build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{github.ref_name}}-Client-${{github.sha}}
+        working-directory: release/PersistentEmpiresClient
+
+    - name: Download Server build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{github.ref_name}}-Server-${{github.sha}}
+        working-directory: release/PersistentEmpiresServer
+
+    - name: Create a GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.tag_version.outputs.new_tag }}
+        name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
+        artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
