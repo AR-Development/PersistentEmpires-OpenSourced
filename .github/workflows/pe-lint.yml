@@ -1,0 +1,27 @@
+name: pe-lint
+
+on: [workflow_call, workflow_dispatch]
+
+permissions:
+  contents: read
+  packages: read
+  # To report GitHub Actions status checks
+  statuses: write
+
+jobs:
+  lint:
+    runs-on: windows-latest
+
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Super-Linter
+      uses: super-linter/super-linter@v6.4.1
+            
