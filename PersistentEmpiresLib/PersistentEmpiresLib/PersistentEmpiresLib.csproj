@@ -1,421 +1,133 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup Condition=" '$(Configuration)' == 'RunAsClientDebug' ">
-    <ReferenceFolder>.\ClientReferences</ReferenceFolder>
-    <OutputType>Library</OutputType>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
-    <DebugType>portable</DebugType>
-    <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>bin\RunAsClientDebug\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'RunAsServerDebug' ">
-    <ReferenceFolder>.\ServerReferences</ReferenceFolder>
-    <OutputType>Library</OutputType>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
-    <DebugType>portable</DebugType>
-    <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>bin\RunAsServerDebug\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'ReleaseClient'">
-    <ReferenceFolder>.\ClientReferences</ReferenceFolder>
-    <OutputType>Library</OutputType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;CLIENT</DefineConstants>
-    <DebugType>portable</DebugType>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>bin\ReleaseClient\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'ReleaseServer'">
-    <ReferenceFolder>.\ServerReferences</ReferenceFolder>
-    <OutputType>Library</OutputType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVER</DefineConstants>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <DebugType>portable</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-    <OutputPath>bin\ReleaseServer\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFrameworkProfile />
-    <ProjectGuid>{EFF0BC43-D180-45A5-AEEB-94A21D052377}</ProjectGuid>
-  </PropertyGroup>
-  <ItemGroup>
-    <!-- Common
-    dlls -->
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <!-- Dlls
-    ONLY in Shipping Sever -->
-    <Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.DedicatedCustomServer.dll</HintPath>
-    </Reference>
-    <!-- Client/Server
-    specific dlls -->
-    <Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.Diamond">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.Diamond.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.ObjectSystem">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.ObjectSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.DotNet">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.DotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.MountAndBlade.Diamond">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.Core">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.Engine">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.InputSystem">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.InputSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.Library">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.Localization">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.ModuleManager">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.ModuleManager.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.MountAndBlade">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.PlayerServices">
-      <HintPath>$(ReferenceFolder)\TaleWorlds.PlayerServices.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Main.cs" />
-    <Compile Include="ConfigManage.cs" />
-    <Compile Include="Database\DBEntities\DBBanRecord.cs" />
-    <Compile Include="Database\DBEntities\DBCastle.cs" />
-    <Compile Include="Database\DBEntities\DBFactions.cs" />
-    <Compile Include="Database\DBEntities\DBHorseMarket.cs" />
-    <Compile Include="Database\DBEntities\DBInventory.cs" />
-    <Compile Include="Database\DBEntities\DBLog.cs" />
-    <Compile Include="Database\DBEntities\DBPlayer.cs" />
-    <Compile Include="Database\DBEntities\DBPlayerName.cs" />
-    <Compile Include="Database\DBEntities\DBStockpileMarket.cs" />
-    <Compile Include="Database\DBEntities\DBUpgradeableBuilding.cs" />
-    <Compile Include="Database\DBEntities\JsonEntity.cs" />
-    <Compile Include="Data\Faction.cs" />
-    <Compile Include="Data\Inventory.cs" />
-    <Compile Include="Data\InventorySlot.cs" />
-    <Compile Include="ErrorLogging\RglException.cs" />
-    <Compile Include="GameModes\PersistentEmpiresGameMode.cs" />
-    <Compile Include="Helpers\AgentHelpers.cs" />
-    <Compile Include="Helpers\BannerRenderer.cs" />
-    <Compile Include="Helpers\CryptoHelper.cs" />
-    <Compile Include="Helpers\ItemHelper.cs" />
-    <Compile Include="Helpers\LoggerHelper.cs" />
-    <Compile Include="Helpers\PEInformationManager.cs" />
-    <Compile Include="Helpers\PENetworkModule.cs" />
-    <Compile Include="NetworkMessages\Client\AdminChat.cs" />
-    <Compile Include="NetworkMessages\Client\AdminPackets.cs" />
-    <Compile Include="NetworkMessages\Client\ClosedInventory.cs" />
-    <Compile Include="NetworkMessages\Client\DeclareWarRequest.cs" />
-    <Compile Include="NetworkMessages\Client\FactionAssignMarshall.cs" />
-    <Compile Include="NetworkMessages\Client\FactionLordPollRequest.cs" />
-    <Compile Include="NetworkMessages\Client\FactionPollResponse.cs" />
-    <Compile Include="NetworkMessages\Client\InventoryHotkey.cs" />
-    <Compile Include="NetworkMessages\Client\InventorySplitItem.cs" />
-    <Compile Include="NetworkMessages\Client\KickFromFaction.cs" />
-    <Compile Include="NetworkMessages\Client\LocalMessage.cs" />
-    <Compile Include="NetworkMessages\Client\MakePeaceRequest.cs" />
-    <Compile Include="NetworkMessages\Client\MyDiscordId.cs" />
-    <Compile Include="NetworkMessages\Client\PreferredSpawnPoint.cs" />
-    <Compile Include="NetworkMessages\Client\RequestAnimation.cs" />
-    <Compile Include="NetworkMessages\Client\RequestBankAction.cs" />
-    <Compile Include="NetworkMessages\Client\RequestBuyItem.cs" />
-    <Compile Include="NetworkMessages\Client\RequestChestKey.cs" />
-    <Compile Include="NetworkMessages\Client\RequestCloseStockpileMarket.cs" />
-    <Compile Include="NetworkMessages\Client\RequestCloseTradingCenter.cs" />
-    <Compile Include="NetworkMessages\Client\RequestDoorKey.cs" />
-    <Compile Include="NetworkMessages\Client\RequestDropItemFromInventory.cs" />
-    <Compile Include="NetworkMessages\Client\RequestDropMoney.cs" />
-    <Compile Include="NetworkMessages\Client\RequestExecuteCraft.cs" />
-    <Compile Include="NetworkMessages\Client\RequestExportItem.cs" />
-    <Compile Include="NetworkMessages\Client\RequestFactionKeys.cs" />
-    <Compile Include="NetworkMessages\Client\RequestImportItem.cs" />
-    <Compile Include="NetworkMessages\Client\RequestInventoryTransfer.cs" />
-    <Compile Include="NetworkMessages\Client\RequestLordshipTransfer.cs" />
-    <Compile Include="NetworkMessages\Client\RequestOpenInventory.cs" />
-    <Compile Include="NetworkMessages\Client\RequestRevealItemBag.cs" />
-    <Compile Include="NetworkMessages\Client\RequestRevealMoneyPouch.cs" />
-    <Compile Include="NetworkMessages\Client\RequestSellItem.cs" />
-    <Compile Include="NetworkMessages\Client\RequestStartEat.cs" />
-    <Compile Include="NetworkMessages\Client\RequestStartPlaying.cs" />
-    <Compile Include="NetworkMessages\Client\RequestStopEat.cs" />
-    <Compile Include="NetworkMessages\Client\RequestStopPlaying.cs" />
-    <Compile Include="NetworkMessages\Client\RequestSuicide.cs" />
-    <Compile Include="NetworkMessages\Client\RequestTradingBuyItem.cs" />
-    <Compile Include="NetworkMessages\Client\RequestTradingPrices.cs" />
-    <Compile Include="NetworkMessages\Client\RequestTradingSellItem.cs" />
-    <Compile Include="NetworkMessages\Client\SendBatchVoice.cs" />
-    <Compile Include="NetworkMessages\Client\ShoutMessage.cs" />
-    <Compile Include="NetworkMessages\Client\StartMovingBackwardMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StartMovingDownMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StartMovingForwardMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StartMovingUpMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StartTurningLeftMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StartTurningRightMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StockpileUnpackBox.cs" />
-    <Compile Include="NetworkMessages\Client\StopMovingBackwardMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StopMovingDownMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StopMovingForwardMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StopMovingUpMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StopTurningLeftMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\StopTurningRightMoveableMachine.cs" />
-    <Compile Include="NetworkMessages\Client\TurnObject.cs" />
-    <Compile Include="NetworkMessages\Client\UpdateFactionBanner.cs" />
-    <Compile Include="NetworkMessages\Client\UpdateFactionName.cs" />
-    <Compile Include="NetworkMessages\Client\WithdrawDepositMoneychest.cs" />
-    <Compile Include="NetworkMessages\Server\AddFaction.cs" />
-    <Compile Include="NetworkMessages\Server\AddMarshallIdToFaction.cs" />
-    <Compile Include="NetworkMessages\Server\AddMissionObjectBodyFlagPE.cs" />
-    <Compile Include="NetworkMessages\Server\AddPhysicsToMissionObject.cs" />
-    <Compile Include="NetworkMessages\Server\AdminOrErrorMessage.cs" />
-    <Compile Include="NetworkMessages\Server\AgentLabelConfig.cs" />
-    <Compile Include="NetworkMessages\Server\AgentPlayingInstrument.cs" />
-    <Compile Include="NetworkMessages\Server\Announcement.cs" />
-    <Compile Include="NetworkMessages\Server\AuthorizeAsAdmin.cs" />
-    <Compile Include="NetworkMessages\Server\BehadeAgentPacket.cs" />
-    <Compile Include="NetworkMessages\Server\CraftingCompleted.cs" />
-    <Compile Include="NetworkMessages\Server\CraftingStarted.cs" />
-    <Compile Include="NetworkMessages\Server\CustomBubbleMessage.cs" />
-    <Compile Include="NetworkMessages\Server\ExecuteInventoryTransfer.cs" />
-    <Compile Include="NetworkMessages\Server\FactionLordPollClosed.cs" />
-    <Compile Include="NetworkMessages\Server\FactionLordPollOpened.cs" />
-    <Compile Include="NetworkMessages\Server\FactionPollCancelled.cs" />
-    <Compile Include="NetworkMessages\Server\FactionPollProgress.cs" />
-    <Compile Include="NetworkMessages\Server\FactionUpdateLord.cs" />
-    <Compile Include="NetworkMessages\Server\FactionUpdateMarshall.cs" />
-    <Compile Include="NetworkMessages\Server\ForceCloseInventory.cs" />
-    <Compile Include="NetworkMessages\Server\HorseMarketSetReserve.cs" />
-    <Compile Include="NetworkMessages\Server\LocalMessageServer.cs" />
-    <Compile Include="NetworkMessages\Server\OpenBank.cs" />
-    <Compile Include="NetworkMessages\Server\OpenCraftingStation.cs" />
-    <Compile Include="NetworkMessages\Server\OpenImportExport.cs" />
-    <Compile Include="NetworkMessages\Server\OpenInventory.cs" />
-    <Compile Include="NetworkMessages\Server\OpenStockpileMarket.cs" />
-    <Compile Include="NetworkMessages\Server\OpenTradingCenter.cs" />
-    <Compile Include="NetworkMessages\Server\PatreonRegister.cs" />
-    <Compile Include="NetworkMessages\Server\PeaceDecleration.cs" />
-    <Compile Include="NetworkMessages\Server\PEGoldGain.cs" />
-    <Compile Include="NetworkMessages\Server\PEGoldLost.cs" />
-    <Compile Include="NetworkMessages\Server\PEInformationMessage.cs" />
-    <Compile Include="NetworkMessages\Server\PlayerJoinedFaction.cs" />
-    <Compile Include="NetworkMessages\Server\QuickInformation.cs" />
-    <Compile Include="NetworkMessages\Server\ResetAgentArmor.cs" />
-    <Compile Include="NetworkMessages\Server\ResetBatteringRam.cs" />
-    <Compile Include="NetworkMessages\Server\ResetDestructableItem.cs" />
-    <Compile Include="NetworkMessages\Server\ResetSiegeTower.cs" />
-    <Compile Include="NetworkMessages\Server\RevealMoneyPouchServer.cs" />
-    <Compile Include="NetworkMessages\Server\SendBatchVoiceToPlay.cs" />
-    <Compile Include="NetworkMessages\Server\ServerHandshake.cs" />
-    <Compile Include="NetworkMessages\Server\SetAgentAnimation.cs" />
-    <Compile Include="NetworkMessages\Server\SetDayTime.cs" />
-    <Compile Include="NetworkMessages\Server\SetHunger.cs" />
-    <Compile Include="NetworkMessages\Server\SetLadderBuilder.cs" />
-    <Compile Include="NetworkMessages\Server\SetPE_BatteringRamHasArrivedAtTarget.cs" />
-    <Compile Include="NetworkMessages\Server\ShoutMessageServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartMovingBackwardMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartMovingDownMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartMovingForwardMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartMovingUpMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartTurningLeftMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StartTurningRightMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopMovingBackwardMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopMovingDownMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopMovingForwardMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopMovingUpMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopTurningLeftMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\StopTurningRightMoveableMachineServer.cs" />
-    <Compile Include="NetworkMessages\Server\SyncAttachToAgent.cs" />
-    <Compile Include="NetworkMessages\Server\SyncCastleBanner.cs" />
-    <Compile Include="NetworkMessages\Server\SyncFaction.cs" />
-    <Compile Include="NetworkMessages\Server\SyncFactionKey.cs" />
-    <Compile Include="NetworkMessages\Server\SyncGold.cs" />
-    <Compile Include="NetworkMessages\Server\SyncMember.cs" />
-    <Compile Include="NetworkMessages\Server\SyncNewUser.cs" />
-    <Compile Include="NetworkMessages\Server\SyncObjectHitpointsForDestructibleWithItem.cs" />
-    <Compile Include="NetworkMessages\Server\SyncObjectHitpointsPE.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateCastle.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateFactionFromServer.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateInventorySlot.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateItemGatheringDestroyed.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateMoneychestGold.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateStockpileMultiStock.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateStockpileStock.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateTradingCenterMultiStock.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateTradingCenterStock.cs" />
-    <Compile Include="NetworkMessages\Server\UpdateWoundedPlayer.cs" />
-    <Compile Include="NetworkMessages\Server\UpgradeableBuildingSetTier.cs" />
-    <Compile Include="NetworkMessages\Server\UpgradeableBuildingUpgrading.cs" />
-    <Compile Include="NetworkMessages\Server\WarDecleration.cs" />
-    <Compile Include="PersistentEmpireRepresentative.cs" />
-    <Compile Include="PersistentEmpiresGameModels\PEAgentApplyDamageModel.cs" />
-    <Compile Include="PersistentEmpiresGameModels\PEAgentStatCalculateModel.cs" />
-    <Compile Include="PersistentEmpiresGameModels\PersistentEmpireSkills.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\AdminClientBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\AgentHungerBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\AnimalButcheringBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\AnimationBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\AutorestartBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\BankingComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\CastlesBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\CombatlogBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\CraftingComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\CustomNameBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\DayNightCycleBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\DecapitationBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\DoctorBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\DrowningBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\FactionPollComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\FactionsBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\FactionUIComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\ImportExportComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\InformationComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\InstrumentsBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\LocalChatComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\LockpickingBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\MoneyChestBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\MoneyPouchBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PatreonRegistryBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PersistentEmpireBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PersistentEmpireClientBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PersistentEmpireSceneSyncBehaviors.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PickpocketingBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PlayerInventoryComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\PoisoningBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\ProximityChatComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\SaveSystemBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\SpawnFrameSelectionBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\StockpileMarketComponent.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\TradingCenterBehavior.cs" />
-    <Compile Include="PersistentEmpiresMission\MissionBehaviors\WoundingBehavior.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SceneScripts\AnimalSpawner.cs" />
-    <Compile Include="SceneScripts\AttachToAgent.cs" />
-    <Compile Include="SceneScripts\BlocShip.cs" />
-    <Compile Include="SceneScripts\CastleBanner.cs" />
-    <Compile Include="SceneScripts\ChangeClass.cs" />
-    <Compile Include="SceneScripts\CraftingReceipt.cs" />
-    <Compile Include="SceneScripts\CraftingStation.cs" />
-    <Compile Include="SceneScripts\DestructibleWithItem.cs" />
-    <Compile Include="SceneScripts\Extensions\IMissionObjectHash_Implementation.cs" />
-    <Compile Include="SceneScripts\Extensions\IMoveable_Implementation.cs" />
-    <Compile Include="SceneScripts\FactionBanner.cs" />
-    <Compile Include="SceneScripts\HorseMarket.cs" />
-    <Compile Include="SceneScripts\ImportExport.cs" />
-    <Compile Include="SceneScripts\Interfaces\IMissionObjectHash.cs" />
-    <Compile Include="SceneScripts\Interfaces\IMoveable.cs" />
-    <Compile Include="SceneScripts\Interfaces\IRemoveable.cs" />
-    <Compile Include="SceneScripts\Interfaces\ISpawnable.cs" />
-    <Compile Include="SceneScripts\Interfaces\IStray.cs" />
-    <Compile Include="SceneScripts\InventoryEntity.cs" />
-    <Compile Include="SceneScripts\ItemGathering.cs" />
-    <Compile Include="SceneScripts\LiftingDoor.cs" />
-    <Compile Include="SceneScripts\MoneyBag.cs" />
-    <Compile Include="SceneScripts\MoveableGroundedMachine.cs" />
-    <Compile Include="SceneScripts\MoveableMachine.cs" />
-    <Compile Include="SceneScripts\PEGate.cs" />
-    <Compile Include="SceneScripts\PE_AnimationPoint.cs" />
-    <Compile Include="SceneScripts\PE_ArrowBarrel.cs" />
-    <Compile Include="SceneScripts\PE_AToBNavigator.cs" />
-    <Compile Include="SceneScripts\PE_Bank.cs" />
-    <Compile Include="SceneScripts\PE_BatteringRam.cs" />
-    <Compile Include="SceneScripts\PE_BatteringRamBuilder.cs" />
-    <Compile Include="SceneScripts\PE_BatteringRamSpawner.cs" />
-    <Compile Include="SceneScripts\PE_Bed.cs" />
-    <Compile Include="SceneScripts\PE_Chair.cs" />
-    <Compile Include="SceneScripts\PE_ChairUsePoint.cs" />
-    <Compile Include="SceneScripts\PE_DayNightCycle.cs" />
-    <Compile Include="SceneScripts\PE_DestructableComponent.cs" />
-    <Compile Include="SceneScripts\PE_ItemConverter.cs" />
-    <Compile Include="SceneScripts\PE_LadderBuilder.cs" />
-    <Compile Include="SceneScripts\PE_Mangonel.cs" />
-    <Compile Include="SceneScripts\PE_MoneyChest.cs" />
-    <Compile Include="SceneScripts\PE_NativeGate.cs" />
-    <Compile Include="SceneScripts\PE_SiegeTower.cs" />
-    <Compile Include="SceneScripts\PE_SiegeTowerBuilder.cs" />
-    <Compile Include="SceneScripts\PE_StandingPointWithWeaponRequirement.cs" />
-    <Compile Include="SceneScripts\PE_TaxHandler.cs" />
-    <Compile Include="SceneScripts\PE_TradeCenter.cs" />
-    <Compile Include="SceneScripts\PE_UsableFromDistance.cs" />
-    <Compile Include="SceneScripts\PE_UsablePlace.cs" />
-    <Compile Include="SceneScripts\PrefabSpawner.cs" />
-    <Compile Include="SceneScripts\RemoveableChildrens.cs" />
-    <Compile Include="SceneScripts\RepairableDestructableComponent.cs" />
-    <Compile Include="SceneScripts\SpawnFrame.cs" />
-    <Compile Include="SceneScripts\StockpileMarket.cs" />
-    <Compile Include="SceneScripts\TeleportDoor.cs" />
-    <Compile Include="SceneScripts\UpgradeableBuildings.cs" />
-    <Compile Include="SceneScripts\UsableSynchedObject.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Update_Bannerlord_DLLs.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="BouncyCastle">
-      <Version>1.8.9</Version>
-    </PackageReference>
-    <PackageReference Include="RestSharp.Newtonsoft.Json">
-      <Version>1.5.1</Version>
-    </PackageReference>
-    <PackageReference Include="Websocket.Client">
-      <Version>4.7.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Copyright>Copyright © 2023</Copyright>
+		<Product>PersistentEmpiresLib</Product>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Version>1.0.0</Version>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<LangVersion>7.3</LangVersion>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<ProjectGuid>{EFF0BC43-D180-45A5-AEEB-94A21D052377}</ProjectGuid>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<Configurations>RunAsClientDebug;RunAsServerDebug;ReleaseClient;ReleaseServer</Configurations>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'RunAsClientDebug' ">
+		<ReferenceFolder>.\ClientReferences</ReferenceFolder>
+		<OutputType>Library</OutputType>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
+		<DebugType>portable</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'RunAsServerDebug' ">
+		<ReferenceFolder>.\ServerReferences</ReferenceFolder>
+		<OutputType>Library</OutputType>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<DefineConstants>DEBUG;TRACE;SERVER</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+		<DebugType>portable</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'ReleaseClient'">
+		<ReferenceFolder>.\ClientReferences</ReferenceFolder>
+		<OutputType>Library</OutputType>
+		<Optimize>true</Optimize>
+		<DefineConstants>TRACE;CLIENT</DefineConstants>
+		<DebugType>portable</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'ReleaseServer'">
+		<ReferenceFolder>.\ServerReferences</ReferenceFolder>
+		<OutputType>Library</OutputType>
+		<Optimize>true</Optimize>
+		<DefineConstants>TRACE;SERVER</DefineConstants>
+		<DebugType>portable</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BouncyCastle" Version="1.8.9" />
+		<PackageReference Include="RestSharp.Newtonsoft.Json" Version="1.5.1" />
+		<PackageReference Include="Websocket.Client" Version="4.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Windows" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Xml" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.DedicatedCustomServer.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Diamond">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.Diamond.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ObjectSystem">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.ObjectSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.DotNet">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.DotNet.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.Diamond">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Core">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Engine">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.Engine.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.InputSystem">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.InputSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Library">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.Library.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Localization">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.Localization.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ModuleManager">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.ModuleManager.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.PlayerServices">
+			<HintPath>$(ReferenceFolder)\TaleWorlds.PlayerServices.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="app.config" />
+		<None Include="Update_Bannerlord_DLLs.bat" />
+	</ItemGroup>
+
 </Project>
