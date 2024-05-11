@@ -1,0 +1,54 @@
+name: pe-build
+
+on:
+  workflow_call:
+    inputs:
+      build_project:
+        description: "Whether to build Client or Server files"
+        required: true
+        type: string
+      build_configuration:
+        description: "Whether to build Release or Debug"
+        default: "Release"
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      build_project:
+        description: "Whether to build Client or Server files"
+        required: true
+        type: choice
+        options:
+        - Client
+        - Server
+      build_configuration:
+        description: "Whether to build Release or Debug"
+        default: "Release"
+        required: true
+        type: choice
+        options:
+        - Release
+        - Debug
+
+#[workflow_call, workflow_dispatch]
+
+env:
+  SOLUTION_FILE_PATH: ./PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}.sln
+  BUILD_CONFIGURATION: ${{inputs.build_configuration}}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild -t:build -restore -p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
