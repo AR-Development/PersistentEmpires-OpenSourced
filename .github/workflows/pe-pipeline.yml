@@ -90,7 +90,9 @@ jobs:
   deploy-staging:
     uses: ./.github/workflows/pe-deploy-staging.yml
     needs: [client-package-build, server-package-build]
+    if: github.ref == 'refs/heads/master'
 
   deploy-production:
     uses: ./.github/workflows/pe-deploy-production.yml
     needs: deploy-staging
+    if: github.ref == 'refs/heads/master'
