@@ -43,4 +43,5 @@ jobs:
         name: Prerelease rc-${{github.sha}}
         body: ${{ steps.tag_version.outputs.changelog }}
         prerelease: true
+        token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
