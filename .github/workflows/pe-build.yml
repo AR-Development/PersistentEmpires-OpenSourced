@@ -51,7 +51,7 @@ jobs:
 
     - name: Export ClientModFiles
       id: set_client_mod_files
-      run: echo "::set-output name=client_mod_files::./PersistentEmpires${{inputs.build_project}}/ClientModFiles/bin/${{inputs.build_configuration}}"
+      run: echo "CLIENT_MOD_FILES=./PersistentEmpires${{inputs.build_project}}/ClientModFiles/bin/${{inputs.build_configuration}}" >> "$GITHUB_ENV"
       if: ${{ inputs.build_project == 'Client' }}
 
     - name: Archive artifacts
@@ -59,4 +59,4 @@ jobs:
       with:
         path: |
           ./PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
-          ${{ steps.set_client_mod_files.outputs.client_mod_files }}
+          ${{ env.CLIENT_MOD_FILES }}
