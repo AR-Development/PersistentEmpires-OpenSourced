@@ -85,4 +85,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<Exec Command="del &quot;$(TargetDir)*.pdb&quot;" />
+	</Target>
 </Project>
