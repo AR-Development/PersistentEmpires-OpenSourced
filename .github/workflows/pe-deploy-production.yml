@@ -47,4 +47,5 @@ jobs:
         tag: release-${{github.sha}}
         name: Release release-${{github.sha}}
         body: ${{ steps.tag_version.outputs.changelog }}
+        token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
