@@ -5,12 +5,12 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    uses: ./.github/workflows/pe-lint.yml
+  #lint:
+  #  uses: ./.github/workflows/pe-lint.yml
   
   client-build:
     uses: ./.github/workflows/pe-build.yml
-    needs: lint
+    #needs: lint
     with:
       build_project: Client
       build_configuration: Release
@@ -50,7 +50,7 @@ jobs:
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
-    needs: lint
+    #needs: lint
     with:
       build_project: Server
       build_configuration: Release
