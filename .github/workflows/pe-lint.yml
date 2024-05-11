@@ -24,4 +24,3 @@ jobs:
         VALIDATE_JSON: true
         VALIDATE_XML: true
         VALIDATE_YAML: true
-            

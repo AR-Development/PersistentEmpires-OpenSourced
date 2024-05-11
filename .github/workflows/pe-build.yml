@@ -10,7 +10,6 @@ on:
       build_configuration:
         description: "Whether to build Release or Debug"
         default: "Release"
-        required: true
         type: string
   workflow_dispatch:
     inputs:
@@ -24,7 +23,6 @@ on:
       build_configuration:
         description: "Whether to build Release or Debug"
         default: "Release"
-        required: true
         type: choice
         options:
         - Release
