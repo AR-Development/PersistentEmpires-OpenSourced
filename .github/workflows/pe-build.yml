@@ -62,6 +62,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         path: |
-          PersistentEmpiresLib/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
-          PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
           ${{ steps.get-output-dirs.outputs.OUTPUT_DIRS }}
