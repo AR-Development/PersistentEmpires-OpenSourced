@@ -30,8 +30,6 @@ on:
         - Release
         - Debug
 
-#[workflow_call, workflow_dispatch]
-
 env:
   SOLUTION_FILE_PATH: ./PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}.sln
   BUILD_CONFIGURATION: ${{inputs.build_configuration}}
