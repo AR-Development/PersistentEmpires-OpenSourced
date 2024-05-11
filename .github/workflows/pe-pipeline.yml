@@ -36,18 +36,18 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir -p Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        cp -a merged/. Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        mkdir -p Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a merged/. Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a ClientModFiles/. Modules/PersistentEmpires
+        mkdir -p build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        cp -a merged/. build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        mkdir -p build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a merged/. build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a ClientModFiles/. build/Modules/PersistentEmpires
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Client-${{github.sha}}
         retention-days: 1
-        path: Modules
+        path: build
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
@@ -76,17 +76,17 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir -p PersistentEmpires/bin/Win64_Shipping_Server
-        cp -a merged/. PersistentEmpires/bin/Win64_Shipping_Server
-        mkdir -p PersistentEmpires/bin/Linux64_Shipping_Server
-        cp -a merged/. PersistentEmpires/bin/Linux64_Shipping_Server
+        mkdir -p build/bin/Win64_Shipping_Server
+        cp -a merged/. build/bin/Win64_Shipping_Server
+        mkdir -p build/bin/Linux64_Shipping_Server
+        cp -a merged/. build/bin/Linux64_Shipping_Server
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Server-${{github.sha}}
         retention-days: 1
-        path: PersistentEmpires
+        path: build
 
   deploy-staging:
     uses: ./.github/workflows/pe-deploy-staging.yml
