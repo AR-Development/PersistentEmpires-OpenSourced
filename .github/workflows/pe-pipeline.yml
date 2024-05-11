@@ -46,7 +46,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{github.ref_name}}-Client-${{github.sha}}
+        name: Client-${{github.sha}}
         retention-days: 1
         path: PersistentEmpires
 
@@ -73,7 +73,7 @@ jobs:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
-        name: Client-Merged
+        name: Server-Merged
 
     - name: Package build
       run: |
@@ -85,7 +85,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{github.ref_name}}-Server-${{github.sha}}
+        name: Server-${{github.sha}}
         retention-days: 1
         path: PersistentEmpires
 

@@ -15,8 +15,13 @@ jobs:
       id: tag_version
       uses: mathieudutour/github-tag-action@v6.2
       with:
+        custom_tag: ${{github.sha}}
+        tag_prefix: release-
         github_token: ${{secrets.GITHUB_TOKEN}}
-        custom_tag: release-${{github.sha}}
+
+    outputs:
+      new_tag : ${{steps.tag_version.outputs.new_tag}}
+      changelog: ${{steps.tag_version.outputs.changelog}}
   
   deploy:
     runs-on: ubuntu-latest
@@ -32,19 +37,20 @@ jobs:
     - name: Download Client build artifact
       uses: actions/download-artifact@v4
       with:
-        name: ${{github.ref_name}}-Client-${{github.sha}}
+        name: Client-${{github.sha}}
         working-directory: release/PersistentEmpiresClient
 
     - name: Download Server build artifact
       uses: actions/download-artifact@v4
       with:
-        name: ${{github.ref_name}}-Server-${{github.sha}}
+        name: Server-${{github.sha}}
         working-directory: release/PersistentEmpiresServer
 
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
-        tag: release-${{github.sha}}
-        name: Release release-${{github.sha}}
-        body: ${{ steps.tag_version.outputs.changelog }}
+        tag: ${{needs.tag-rc.outputs.new_tag}}
+        name: Release ${{needs.tag-rc.outputs.new_tag}}
+        body: ${{needs.tag-rc.outputs.changelog}}
+        token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
