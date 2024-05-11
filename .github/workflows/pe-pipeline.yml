@@ -35,9 +35,9 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        mkdir -p Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
         cp -a merged/. Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        mkdir Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        mkdir -p Modules/PersistentEmpires/bin/Win64_Shipping_Client
         cp -a merged/. Modules/PersistentEmpires/bin/Win64_Shipping_Client
         cp -a ClientModFiles/. Modules/PersistentEmpires
 
