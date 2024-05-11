@@ -15,8 +15,13 @@ jobs:
       id: tag_version
       uses: mathieudutour/github-tag-action@v6.2
       with:
+        custom_tag: ${{github.sha}}
+        tag_prefix: release-
         github_token: ${{secrets.GITHUB_TOKEN}}
-        custom_tag: release-${{github.sha}}
+
+    outputs:
+      new_tag : ${{steps.tag_version.outputs.new_tag}}
+      changelog: ${{steps.tag_version.outputs.changelog}}
   
   deploy:
     runs-on: ubuntu-latest
@@ -44,8 +49,8 @@ jobs:
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
-        tag: release-${{github.sha}}
+        tag: ${{needs.tag-rc.outputs.new_tag}}
         name: Release release-${{github.sha}}
-        body: ${{ steps.tag_version.outputs.changelog }}
+        body: ${{needs.tag-rc.outputs.changelog}}
         token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
