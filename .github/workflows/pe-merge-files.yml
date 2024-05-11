@@ -28,7 +28,7 @@ jobs:
         shopt -s globstar
         mkdir merged
         ls
-        mv -f PersistentEmpiresClient/PersistentEmpiresClient/bin/Release/*.dll merged/
+        mv -f PersistentEmpiresClient/PersistentEmpiresClient/bin/${{inputs.build_configuration}}/*.dll merged/
       if: ${{inputs.build_project == 'Client'}}
 
     - name: Include ClientModFiles
@@ -36,10 +36,16 @@ jobs:
         shopt -s globstar
         mkdir ClientModFiles
         ls
-        mv -f PersistentEmpiresClient/ClientModFiles/bin/Release/* ClientModFiles/ 
+        mv -f PersistentEmpiresClient/ClientModFiles/bin/${{inputs.build_configuration}}/* ClientModFiles/ 
       if: ${{inputs.build_project == 'Client'}}
-
-    - name: Upload artifacts
+    - name: Merge Server Files
+      run: |
+        shopt -s globstar
+        mkdir merged
+        ls
+        mv -f PersistentEmpiresServer/PersistentEmpiresServer/bin/${{inputs.build_configuration}}/*.dll merged/
+      if: ${{inputs.build_project == 'Server'}}
+    - name: Upload Client Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{inputs.build_project}}-Merged
@@ -47,3 +53,12 @@ jobs:
         path: |
           merged
           ClientModFiles
+      if: ${{inputs.build_project == 'Client'}}
+    - name: Upload Server Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-Merged
+        retention-days: 1
+        path: |
+          merged
+      if: ${{inputs.build_project == 'Server'}}
