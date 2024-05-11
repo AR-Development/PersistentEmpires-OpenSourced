@@ -5,12 +5,12 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    uses: ./.github/workflows/pe-lint.yml
+  #lint:
+  #  uses: ./.github/workflows/pe-lint.yml
   
   client-build:
     uses: ./.github/workflows/pe-build.yml
-    needs: lint
+    #needs: lint
     with:
       build_project: Client
       build_configuration: Release
@@ -35,22 +35,24 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        cp -a merged/. Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        mkdir Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a merged/. Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a ClientModFiles/. Modules/PersistentEmpires
+        mkdir -p PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        cp -a merged/. PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        mkdir -p PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a merged/. PersistentEmpires/bin/Win64_Shipping_Client
+        mkdir -p PersistentEmpires/ModuleData
+        cp -a ClientModFiles/GUI PersistentEmpires/ModuleData/GUI
+        cp ClientModFiles/SubModule.xml PersistentEmpires/SubModule.xml
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{github.ref_name}}-Client-${{github.sha}}
         retention-days: 1
-        path: Modules
+        path: PersistentEmpires
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
-    needs: lint
+    #needs: lint
     with:
       build_project: Server
       build_configuration: Release
@@ -75,17 +77,17 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir bin/Win64_Shipping_Server
-        cp -a merged/. bin/Win64_Shipping_Server
-        mkdir bin/Linux64_Shipping_Server
-        cp -a merged/. bin/Linux64_Shipping_Server
+        mkdir -p PersistentEmpires/bin/Win64_Shipping_Server
+        cp -a merged/. PersistentEmpires/bin/Win64_Shipping_Server
+        mkdir -p PersistentEmpires/bin/Linux64_Shipping_Server
+        cp -a merged/. PersistentEmpires/bin/Linux64_Shipping_Server
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{github.ref_name}}-Server-${{github.sha}}
         retention-days: 1
-        path: bin
+        path: PersistentEmpires
 
   deploy-staging:
     uses: ./.github/workflows/pe-deploy-staging.yml

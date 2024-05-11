@@ -23,34 +23,29 @@ jobs:
       with:
         name: ${{inputs.build_project}}-${{inputs.build_configuration}}
 
-    - name: Merge Files
+    - name: Merge Client Files
       run: |
         shopt -s globstar
         mkdir merged
-        find . -mindepth 3 -maxdepth 3 -type d \( ! -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' merged \;
-        files_to_move=$(find merged -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
-        if [ -n "$files_to_move" ]; then
-          for file in $files_to_move; do
-            mv -fT "$file" merged
-          done
-        fi
-        rm -rf merged/bin
+        ls
+        mv -f PersistentEmpiresClient/PersistentEmpiresClient/bin/${{inputs.build_configuration}}/*.dll merged/
+      if: ${{inputs.build_project == 'Client'}}
 
     - name: Include ClientModFiles
       run: |
         shopt -s globstar
         mkdir ClientModFiles
-        find . -mindepth 3 -maxdepth 3 -type d \( -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' ClientModFiles \;
-        files_to_move=$(find ClientModFiles -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
-        if [ -n "$files_to_move" ]; then
-          for file in $files_to_move; do
-            mv -fT "$file" ClientModFiles
-          done
-        fi
-        rm -rf ClientModFiles/bin
+        ls
+        mv -f PersistentEmpiresClient/ClientModFiles/bin/${{inputs.build_configuration}}/* ClientModFiles/ 
       if: ${{inputs.build_project == 'Client'}}
-
-    - name: Upload artifacts
+    - name: Merge Server Files
+      run: |
+        shopt -s globstar
+        mkdir merged
+        ls
+        mv -f PersistentEmpiresServer/PersistentEmpiresServer/bin/${{inputs.build_configuration}}/*.dll merged/
+      if: ${{inputs.build_project == 'Server'}}
+    - name: Upload Client Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{inputs.build_project}}-Merged
@@ -58,3 +53,12 @@ jobs:
         path: |
           merged
           ClientModFiles
+      if: ${{inputs.build_project == 'Client'}}
+    - name: Upload Server Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-Merged
+        retention-days: 1
+        path: |
+          merged
+      if: ${{inputs.build_project == 'Server'}}
