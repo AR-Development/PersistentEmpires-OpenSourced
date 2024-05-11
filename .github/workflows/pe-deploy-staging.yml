@@ -20,12 +20,8 @@ jobs:
       uses: mathieudutour/github-tag-action@v6.2
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
-        custom_tag: -${{steps.vars.outputs.sha_short}}
-        tag_prefix: release
-
-    outputs:
-      new_tag : ${{steps.tag_version.outputs.new_tag}}
-      changelog: ${{steps.tag_version.outputs.changelog}}
+        custom_tag: ${{steps.vars.outputs.sha_short}}
+        tag_prefix: rc-
   
   deploy:
     runs-on: ubuntu-latest
@@ -34,6 +30,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Calculate short sha
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
     - name: Prepare working dirs
       run: |
         mkdir -p release/PersistentEmpiresClient
@@ -54,9 +53,8 @@ jobs:
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{needs.tag-rc.outputs.new_tag}}
+        tag: ${{steps.vars.outputs.sha_short}}
         name: Prerelease ${{needs.tag-rc.outputs.new_tag}}
-        body: ${{needs.tag-rc.outputs.changelog}}
         prerelease: true
         token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
