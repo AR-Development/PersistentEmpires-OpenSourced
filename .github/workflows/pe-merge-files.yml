@@ -43,6 +43,10 @@ jobs:
         shopt -s globstar
         mkdir merged
         ls
+        mv -f PersistentEmpiresLib/PersistentEmpiresLib/bin/${{inputs.build_configuration}}Server/*.dll merged/
+        mv -f PersistentEmpiresServer/PersistentEmpiresAPI/bin/${{inputs.build_configuration}}/* merged/
+        mv -f PersistentEmpiresServer/PersistentEmpiresSave/bin/${{inputs.build_configuration}}/* merged/
+        mv -f PersistentEmpiresServer/PersistentEmpiresHarmony/bin/${{inputs.build_configuration}}/* merged/
         mv -f PersistentEmpiresServer/PersistentEmpiresServer/bin/${{inputs.build_configuration}}/*.dll merged/
       if: ${{inputs.build_project == 'Server'}}
     - name: Upload Client Artifacts
