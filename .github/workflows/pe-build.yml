@@ -49,14 +49,19 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild -t:build -restore -p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Export ClientModFiles
-      id: export-client-mod-files
-      run: echo "::set-output name=CLIENT_MOD_FILES::PersistentEmpires${{inputs.build_project}}/ClientModFiles/bin/${{inputs.build_configuration}}"
-      if: ${{ inputs.build_project == 'Client' }}
+    - name: Get output directories
+      id: get-output-dirs
+      run: |
+        output_dirs=""
+        while IFS= read -r -d '' dir; do
+          output_dirs+=" $dir"
+        done < <(find . -type d -name 'bin' -exec sh -c 'echo "${1%/*}"' _ {} \; | sort -u -z)
+        echo "::set-output name=OUTPUT_DIRS::$output_dirs"
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
         path: |
+          PersistentEmpiresLib/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
           PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
-          ${{ steps.export-client-mod-files.outputs.CLIENT_MOD_FILES }}
+          ${{ steps.get-output-dirs.outputs.OUTPUT_DIRS }}
