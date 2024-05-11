@@ -29,7 +29,7 @@ on:
         - Debug
 
 env:
-  SOLUTION_FILE_PATH: ./PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}.sln
+  SOLUTION_FILE_PATH: PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}.sln
   BUILD_CONFIGURATION: ${{inputs.build_configuration}}
 
 permissions:
@@ -51,12 +51,12 @@ jobs:
 
     - name: Export ClientModFiles
       id: set_client_mod_files
-      run: echo "CLIENT_MOD_FILES=./PersistentEmpires${{inputs.build_project}}/ClientModFiles/bin/${{inputs.build_configuration}}" >> "$GITHUB_ENV"
+      run: echo "CLIENT_MOD_FILES=PersistentEmpires${{inputs.build_project}}/ClientModFiles/bin/${{inputs.build_configuration}}" >> $GITHUB_OUTPUT
       if: ${{ inputs.build_project == 'Client' }}
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
         path: |
-          ./PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
-          ${{ env.CLIENT_MOD_FILES }}
+          PersistentEmpires${{inputs.build_project}}/PersistentEmpires${{inputs.build_project}}/bin/${{inputs.build_configuration}}
+          ${{ steps.set_client_mod_files.outputs.CLIENT_MOD_FILES }}
