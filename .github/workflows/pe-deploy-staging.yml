@@ -36,8 +36,8 @@ jobs:
 
     - name: Prepare working dirs
       run: |
-        zip -r PersistentEmpiresClient.zip release/PersistentEmpiresClient/
-        zip -r PersistentEmpiresServer.zip release/PersistentEmpiresServer/
+        (cd release/PersistentEmpiresClient/ && zip -r ../../PersistentEmpiresClient.zip .)
+        (cd release/PersistentEmpiresServer/ && zip -r ../../PersistentEmpiresServer.zip .)
 
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
