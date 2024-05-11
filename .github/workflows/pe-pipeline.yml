@@ -1,0 +1,99 @@
+name: pe-pipeline
+
+on:
+  push: 
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  #lint:
+  #  uses: ./.github/workflows/pe-lint.yml
+  
+  client-build:
+    uses: ./.github/workflows/pe-build.yml
+    #needs: lint
+    with:
+      build_project: Client
+      build_configuration: Release
+  
+  merge-client-files:
+    uses: ./.github/workflows/pe-merge-files.yml
+    needs: client-build
+    with:
+      build_project: Client
+      build_configuration: Release
+
+  client-package-build:
+    runs-on: ubuntu-latest
+    needs: merge-client-files
+    environment: development
+
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Client-Merged
+
+    - name: Package build
+      run: |
+        mkdir -p build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        cp -a merged/. build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        mkdir -p build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a merged/. build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a ClientModFiles/. build/Modules/PersistentEmpires
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Client-${{github.sha}}
+        retention-days: 1
+        path: build
+
+  server-build:
+    uses: ./.github/workflows/pe-build.yml
+    #needs: lint
+    with:
+      build_project: Server
+      build_configuration: Release
+
+  merge-server-files:
+    uses: ./.github/workflows/pe-merge-files.yml
+    needs: server-build
+    with:
+      build_project: Server
+      build_configuration: Release
+
+  server-package-build:
+    runs-on: ubuntu-latest
+    needs: merge-server-files
+    environment: development
+
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Server-Merged
+
+    - name: Package build
+      run: |
+        mkdir -p build/bin/Win64_Shipping_Server
+        cp -a merged/. build/bin/Win64_Shipping_Server
+        mkdir -p build/bin/Linux64_Shipping_Server
+        cp -a merged/. build/bin/Linux64_Shipping_Server
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Server-${{github.sha}}
+        retention-days: 1
+        path: build
+
+  deploy-staging:
+    uses: ./.github/workflows/pe-deploy-staging.yml
+    needs: [client-package-build, server-package-build]
+    if: github.ref == 'refs/heads/master'
+
+  deploy-production:
+    uses: ./.github/workflows/pe-deploy-production.yml
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/master'

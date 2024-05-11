@@ -1,0 +1,45 @@
+name: pe-lint
+
+on:
+  workflow_call:
+    inputs:
+      build_project:
+        description: "Whether to merge Client or Server files"
+        required: true
+        type: string
+      build_configuration:
+        description: "Whether to merge Release or Debug"
+        default: "Release"
+        type: string
+
+jobs:
+  merge-files:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-${{inputs.build_configuration}}
+
+    - name: Merge files
+      run: |
+        shopt -s globstar
+        rsync -ax --exclude GUI --exclude ClientModFiles.deps.json --exclude SubModule.xml **/bin/*/. merged
+
+    - name: Include ClientModFiles
+      run: |
+        shopt -s globstar
+        rsync -ax **/ClientModFiles/bin/*/. ClientModFiles
+        # TODO: Add other client assets in this step, such as sounds, models, etc
+      if: ${{inputs.build_project == 'Client'}}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-Merged
+        retention-days: 1
+        path: |
+          merged
+          ClientModFiles
