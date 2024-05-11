@@ -9,6 +9,8 @@
 		<Copyright>Copyright © 2023</Copyright>
 		<ProjectGuid>{E7533096-D455-44A4-89EA-1D50BB3A82A0}</ProjectGuid>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
