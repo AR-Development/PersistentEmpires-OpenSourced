@@ -39,8 +39,8 @@ jobs:
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{ steps.tag_version.outputs.new_tag }}
-        name: Prerelease ${{ steps.tag_version.outputs.new_tag }}
+        tag: rc-${{github.sha}}
+        name: Prerelease rc-${{github.sha}}
         body: ${{ steps.tag_version.outputs.changelog }}
         prerelease: true
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
