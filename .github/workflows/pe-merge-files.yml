@@ -43,7 +43,11 @@ jobs:
         shopt -s globstar
         mkdir merged
         ls
-        mv -f PersistentEmpiresServer/PersistentEmpiresServer/bin/${{inputs.build_configuration}}/*.dll merged/
+        cp -arf PersistentEmpiresLib/PersistentEmpiresLib/bin/${{inputs.build_configuration}}Server/*.dll merged/
+        cp -arf PersistentEmpiresServer/PersistentEmpiresAPI/bin/${{inputs.build_configuration}}/* merged/
+        cp -arf PersistentEmpiresServer/PersistentEmpiresSave/bin/${{inputs.build_configuration}}/* merged/
+        cp -arf PersistentEmpiresServer/PersistentEmpiresHarmony/bin/${{inputs.build_configuration}}/* merged/
+        cp -arf PersistentEmpiresServer/PersistentEmpiresServer/bin/${{inputs.build_configuration}}/*.dll merged/
       if: ${{inputs.build_project == 'Server'}}
     - name: Upload Client Artifacts
       uses: actions/upload-artifact@v4
