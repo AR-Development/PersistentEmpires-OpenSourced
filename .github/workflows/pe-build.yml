@@ -52,7 +52,7 @@ jobs:
     - name: Get output directories
       id: get-output-dirs
       run: |
-        $output_dirs = Get-ChildItem -Directory -Recurse -Filter bin | ForEach-Object { ".\$($_.FullName.Replace('${{env.GITHUB_WORKSPACE}}\', ''))\*\" }
+        $output_dirs = Get-ChildItem -Directory -Recurse -Filter bin | ForEach-Object { (Resolve-Path $_.FullName -Relative) + "\*\"}
         echo "::set-output name=OUTPUT_DIRS::$output_dirs"
 
     - name: Archive artifacts
