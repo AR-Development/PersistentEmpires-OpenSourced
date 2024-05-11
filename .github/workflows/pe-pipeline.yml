@@ -48,7 +48,7 @@ jobs:
       with:
         name: ${{github.ref_name}}-Client-${{github.sha}}
         retention-days: 1
-        path: Modules
+        path: PersistentEmpires
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
@@ -87,7 +87,7 @@ jobs:
       with:
         name: ${{github.ref_name}}-Server-${{github.sha}}
         retention-days: 1
-        path: bin
+        path: PersistentEmpires
 
   deploy-staging:
     uses: ./.github/workflows/pe-deploy-staging.yml
