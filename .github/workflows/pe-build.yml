@@ -52,10 +52,7 @@ jobs:
     - name: Get output directories
       id: get-output-dirs
       run: |
-        output_dirs=""
-        while IFS= read -r -d '' dir; do
-          output_dirs+=" $dir"
-        done < <(find . -type d -name 'bin' -exec sh -c 'echo "${1%/*}"' _ {} \; | sort -u -z)
+        $output_dirs = Get-ChildItem -Directory -Recurse -Filter bin | ForEach-Object { $_.FullName + '/*/' }
         echo "::set-output name=OUTPUT_DIRS::$output_dirs"
 
     - name: Archive artifacts
