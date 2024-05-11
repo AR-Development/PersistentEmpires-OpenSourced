@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   lint:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
