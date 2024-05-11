@@ -26,6 +26,7 @@ jobs:
     - name: Merge Client Files
       run: |
         shopt -s globstar
+        ls
         mkdir merged
         mv -f ${{inputs.build_project}}-${{inputs.build_configuration}}/PersistentEmpiresClient/PersistentEmpiresClient/bin/Release/*.dll merged/
       if: ${{inputs.build_project == 'Client'}}
