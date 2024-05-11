@@ -9,7 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: staging
-    permissions: write-all
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -33,6 +34,11 @@ jobs:
         name: Server-${{github.sha}}
         path: release/PersistentEmpiresServer
 
+    - name: Prepare working dirs
+      run: |
+        zip -r PersistentEmpiresClient.zip release/PersistentEmpiresClient/
+        zip -r PersistentEmpiresServer.zip release/PersistentEmpiresServer/
+
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
@@ -40,4 +46,4 @@ jobs:
         name: Prerelease ${{needs.tag-rc.outputs.new_tag}}
         prerelease: true
         token: ${{secrets.GITHUB_TOKEN}}
-        artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
+        artifacts: "PersistentEmpiresClient.zip,PersistentEmpiresServer.zip"
