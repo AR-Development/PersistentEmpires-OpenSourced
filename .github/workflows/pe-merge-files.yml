@@ -26,16 +26,17 @@ jobs:
     - name: Merge Client Files
       run: |
         shopt -s globstar
-        ls
         mkdir merged
-        mv -f ${{inputs.build_project}}-${{inputs.build_configuration}}/PersistentEmpiresClient/PersistentEmpiresClient/bin/Release/*.dll merged/
+        ls
+        mv -f PersistentEmpiresClient/PersistentEmpiresClient/bin/Release/*.dll merged/
       if: ${{inputs.build_project == 'Client'}}
 
     - name: Include ClientModFiles
       run: |
         shopt -s globstar
         mkdir ClientModFiles
-        mv -f ${{inputs.build_project}}-${{inputs.build_configuration}}/PersistentEmpiresClient/ClientModFiles/bin/Release/* ClientModFiles/ 
+        ls
+        mv -f PersistentEmpiresClient/ClientModFiles/bin/Release/* ClientModFiles/ 
       if: ${{inputs.build_project == 'Client'}}
 
     - name: Upload artifacts
