@@ -100,9 +100,6 @@
     <None Update="GUI\Prefabs\PELocalChat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="GUI\Prefabs\PEMapView.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="GUI\Prefabs\PEMap\PEMapCastleMarker.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
