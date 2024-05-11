@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresClient", "PersistentEmpiresClient\PersistentEmpiresClient.csproj", "{03A0BEA7-F985-4752-9272-D6A994225587}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B3A24DE1-7B04-4DB8-B882-EBFB4E548E41} = {B3A24DE1-7B04-4DB8-B882-EBFB4E548E41}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresLib", "..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj", "{EFF0BC43-D180-45A5-AEEB-94A21D052377}"
 EndProject
