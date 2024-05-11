@@ -50,7 +50,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         tag: ${{needs.tag-rc.outputs.new_tag}}
-        name: Release release-${{github.sha}}
+        name: Release ${{needs.tag-rc.outputs.new_tag}}
         body: ${{needs.tag-rc.outputs.changelog}}
         token: ${{secrets.GITHUB_TOKEN}}
         artifacts: "release/PersistentEmpiresClient,release/PersistentEmpiresServer"
