@@ -30,7 +30,7 @@ jobs:
         find . -mindepth 3 -maxdepth 3 -type d \( ! -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' merged \;
         files_to_move=$(find merged -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
         if [ -n "$files_to_move" ]; then
-        mv $files_to_move merged
+        mv -f $files_to_move merged
         fi
         rm -rf merged/bin
 
@@ -41,7 +41,7 @@ jobs:
         find . -mindepth 3 -maxdepth 3 -type d \( -path "*/ClientModFiles/*" \) -name "bin" -exec cp -r '{}' ClientModFiles \;
         files_to_move=$(find ClientModFiles -mindepth 3 -maxdepth 3 -type d \( -path '*/bin' \) -prune -o -print0 | xargs -0)
         if [ -n "$files_to_move" ]; then
-        mv $files_to_move ClientModFiles
+        mv -f $files_to_move ClientModFiles
         fi
         rm -rf ClientModFiles/bin
       if: ${{inputs.build_project == 'Client'}}
