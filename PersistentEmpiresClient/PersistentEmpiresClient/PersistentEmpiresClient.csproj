@@ -120,11 +120,7 @@
 			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection.dll</HintPath>
 		</Reference>
 	</ItemGroup>
-	
-	<ItemGroup>
-		<Content Include="PersistentEmpiresClient.csproj.user" />
-	</ItemGroup>
-	
+		
 	<ItemGroup>
 		<ProjectReference Include="..\..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj" />
 	</ItemGroup>
