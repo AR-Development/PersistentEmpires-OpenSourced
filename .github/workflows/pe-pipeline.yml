@@ -35,20 +35,18 @@ jobs:
 
     - name: Package build
       run: |
-        mkdir -p PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        cp -a merged/. PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        mkdir -p PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a merged/. PersistentEmpires/bin/Win64_Shipping_Client
-        mkdir -p PersistentEmpires/ModuleData
-        cp -a ClientModFiles/GUI PersistentEmpires/ModuleData/GUI
-        cp ClientModFiles/SubModule.xml PersistentEmpires/SubModule.xml
+        mkdir Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        cp -a merged/. Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
+        mkdir Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a merged/. Modules/PersistentEmpires/bin/Win64_Shipping_Client
+        cp -a ClientModFiles/. Modules/PersistentEmpires
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Client-${{github.sha}}
         retention-days: 1
-        path: PersistentEmpires
+        path: Modules
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
