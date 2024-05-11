@@ -16,8 +16,8 @@ jobs:
       id: tag_version
       uses: mathieudutour/github-tag-action@v6.2
       with:
-        custom_tag: ${{github.sha}}
-        tag_prefix: rc-
+        custom_tag: -${{github.sha}}
+        tag_prefix: rc
         github_token: ${{secrets.GITHUB_TOKEN}}
 
     outputs:
