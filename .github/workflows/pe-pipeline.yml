@@ -16,7 +16,7 @@ jobs:
       build_configuration: Release
   
   merge-client-files:
-    uses: ./github/workflows/pe-merge-files.yml
+    uses: ./.github/workflows/pe-merge-files.yml
     needs: client-build
     with:
       build_project: Client
@@ -56,7 +56,7 @@ jobs:
       build_configuration: Release
 
   merge-server-files:
-    uses: ./github/workflows/pe-merge-files.yml
+    uses: ./.github/workflows/pe-merge-files.yml
     needs: server-build
     with:
       build_project: Server
