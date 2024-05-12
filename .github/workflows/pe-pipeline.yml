@@ -58,7 +58,7 @@ jobs:
 
   server-package-build:
     runs-on: ubuntu-latest
-    needs: merge-server-files
+    needs: server-build
     environment: development
 
     steps:
