@@ -9,7 +9,7 @@ REM Example: set "mbServerFolder=C:\Program Files (x86)\Steam\steamapps\common\M
 set "mbServerFolder=C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Dedicated Server"
 
 REM Check if the client and server paths are set correctly
-if not exist "%mbClientFolder%"  (
+if not exist "%mbClientFolder%" (
     echo Please install the Bannerlord client from Steam.
     goto end
 )
@@ -19,14 +19,18 @@ if not exist "%mbServerFolder%" (
     goto end
 )
 
-REM Bannerlord Server PersistentEmpires-OpenSourced\PersistentEmpiresLib\PersistentEmpiresLib\ServerReferences
+REM Delete existing files in the server target directory
+if exist ".\ServerReferences\*.dll" del ".\ServerReferences\*.dll"
+
 REM Set the path to the directory where your Bannerlord server DLLs are located
 set "serverSourceDir=%mbServerFolder%\bin\Win64_Shipping_Server"
 REM Set the path to the target directory for the server DLLs relative to the current directory
 set "serverTargetDir=.\ServerReferences"
 copy "%serverSourceDir%\*.dll" "%serverTargetDir%"
 
-REM Bannerlord Client PersistentEmpires-OpenSourced\PersistentEmpiresLib\PersistentEmpiresLib\ClientReferences
+REM Delete existing files in the client target directory
+if exist ".\ClientReferences\*.dll" del ".\ClientReferences\*.dll"
+
 REM Set the path to the directory where your Bannerlord client DLLs are located
 set "clientSourceDir=%mbClientFolder%\bin\Win64_Shipping_Client"
 REM Set the path to the target directory for the client DLLs relative to the current directory
