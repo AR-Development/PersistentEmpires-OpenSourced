@@ -56,23 +56,17 @@ jobs:
       build_project: Server
       build_configuration: Release
 
-  merge-server-files:
-    uses: ./.github/workflows/pe-merge-files.yml
-    needs: server-build
-    with:
-      build_project: Server
-      build_configuration: Release
-
   server-package-build:
     runs-on: ubuntu-latest
-    needs: merge-server-files
+    needs: server-build
     environment: development
 
     steps:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
-        name: Server-Merged
+        path: merged
+        name: Server-Release
 
     - name: Package build
       run: |
