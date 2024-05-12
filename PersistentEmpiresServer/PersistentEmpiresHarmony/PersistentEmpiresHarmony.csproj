@@ -75,6 +75,7 @@
     <ItemGroup>
         <PackageReference Include="Lib.Harmony" Version="2.2.2" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="MonoMod.Common" Version="22.6.3.1" />
         <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     </ItemGroup>
     <ItemGroup>
