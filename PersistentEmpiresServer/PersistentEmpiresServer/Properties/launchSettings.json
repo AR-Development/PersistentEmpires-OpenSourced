@@ -3,7 +3,7 @@
     "Server PE": {
       "commandName": "Executable",
       "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
-      "commandLineArgs": "_MODULES_*Native*Multiplayer*PersistentEmpires*_MODULES_ /dedicatedcustomserverconfigfile persistent_empires2.txt /port 7233 /no_watchdog /tickrate 120",
+      "commandLineArgs": "/dedicatedcustomserverconfigfile pe_myconfig.txt /port 7210 /DisableErrorReporting /no_watchdog /tickrate 75 /multiplayer /dedicatedcustomserverauthtoken FkHLd0ru7ehKWdKgdJmXR5oZ3XV483IaQnVX/Zv5uXqP3QrMBzR0gBI/f3j+Fbfr/YrZtpTEPDtxmjZxRadCDairS/vUHqP71SCIu+AtEnnyTu+l9oVe9cZnLcs8HOiTfmp3/nXztkoqn8va/K5mjhGLzllpQXI/1Caxz80scDVv8h44WiTXl3Vw1dgNkLQ4hHbwBLTaZtFMtY/kME53LIXmYy0FiMEB5fDnAUFbPFptKp3EedpVGY74odAACcQmTtXv6TTTjz178/8KejV6rw== _MODULES_*Native*Multiplayer*PersistentEmpires*_MODULES_",
       "workingDirectory": "D:\\SteamLibrary\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
     },
     "Server Native": {

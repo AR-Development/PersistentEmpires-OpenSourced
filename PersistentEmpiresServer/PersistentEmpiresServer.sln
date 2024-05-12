@@ -6,11 +6,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresServer", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresHarmony", "PersistentEmpiresHarmony\PersistentEmpiresHarmony.csproj", "{8E4BF945-3A17-4A70-80AC-1ECE4C5B5B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentEmpiresSave", "PersistentEmpiresSave\PersistentEmpiresSave.csproj", "{E7533096-D455-44A4-89EA-1D50BB3A82A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresSave", "PersistentEmpiresSave\PersistentEmpiresSave.csproj", "{E7533096-D455-44A4-89EA-1D50BB3A82A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresAPI", "PersistentEmpiresAPI\PersistentEmpiresAPI.csproj", "{48B5DA4C-99A9-4A74-943C-31CE73601D31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentEmpiresLib", "..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj", "{EFF0BC43-D180-45A5-AEEB-94A21D052377}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistentEmpiresLib", "..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj", "{EFF0BC43-D180-45A5-AEEB-94A21D052377}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
