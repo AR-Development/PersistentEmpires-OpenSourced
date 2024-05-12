@@ -60,4 +60,4 @@ jobs:
       with:
         name: ${{inputs.build_project}}-${{inputs.build_configuration}}
         retention-days: 1
-        path: '**/bin/*/'
+        path: 'publish'
