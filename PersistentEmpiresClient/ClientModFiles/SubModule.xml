@@ -28,42 +28,6 @@
 		</SubModule>
 	</SubModules>
 	<Xmls>
-	    <XmlNode>
-            <XmlName id="Items" path="cts_carthage_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
-		  <XmlNode>
-            <XmlName id="Items" path="cts_celtic_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
-		  <XmlNode>
-            <XmlName id="Items" path="cts_dacian_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
-		  <XmlNode>
-            <XmlName id="Items" path="cts_greek_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
-		  <XmlNode>
-            <XmlName id="Items" path="cts_persian_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
-		  <XmlNode>
-            <XmlName id="Items" path="cts_roman_items" />
-            <IncludedGameTypes>
-                <GameType value="MultiplayerGame" />
-            </IncludedGameTypes>
-        </XmlNode>
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="lance_pieces" />
 			<IncludedGameTypes>
