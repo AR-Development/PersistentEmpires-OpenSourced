@@ -51,9 +51,26 @@ jobs:
     - name: publish
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet publish -c ${{env.BUILD_CONFIGURATION}} -o ./publish ${{env.SOLUTION_FILE_PATH}}
-    - name: Upload artifacts
+      if: ${{inputs.build_project == 'Server'}}
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild -t:build -restore -p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      if: ${{inputs.build_project == 'Client'}}
+
+
+    - name: Upload server artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{inputs.build_project}}-${{inputs.build_configuration}}
         retention-days: 1
         path: 'publish'
+      if: ${{inputs.build_project == 'Server'}}
+
+    - name: Upload client artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.build_project}}-${{inputs.build_configuration}}
+        retention-days: 1
+        path: '**/bin/*/'
+      if: ${{inputs.build_project == 'Client'}}
