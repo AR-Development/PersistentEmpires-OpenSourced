@@ -188,14 +188,22 @@ public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer
 
                 if(!DeathEquipment[player].Item1)
                 {
-                    for (var equipmentIndex = (int)EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < (int)EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
-                        {
-                        
-                            if(playerEquipment[equipmentIndex].Item?.StringId != message.Equipments[equipmentIndex])
-                            {
-                                playerEquipment[equipmentIndex] = new EquipmentElement();
-                            }
-                        }
+                    if(playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
+                    {
+                        playerEquipment[EquipmentIndex.Weapon0] = new EquipmentElement();
+                    }
+                    if (playerEquipment[EquipmentIndex.Weapon1].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[1]) ? null : message.Equipments[1]))
+                    {
+                        playerEquipment[EquipmentIndex.Weapon1] = new EquipmentElement();
+                    }
+                    if (playerEquipment[EquipmentIndex.Weapon2].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[2]) ? null : message.Equipments[2]))
+                    {
+                        playerEquipment[EquipmentIndex.Weapon2] = new EquipmentElement();
+                    }
+                    if (playerEquipment[EquipmentIndex.Weapon3].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[3]) ? null : message.Equipments[3]))
+                    {
+                        playerEquipment[EquipmentIndex.Weapon3] = new EquipmentElement();
+                    }
                     DeathEquipment[player] = new Tuple<bool, Equipment>(true, playerEquipment);
                 }
             }
