@@ -67,7 +67,7 @@ namespace PersistentEmpiresLib.SceneScripts
             float frontRearRadius = 0.1f; // Adjust the front and rear radius as needed
             float sideRadius = 0.1f; // Adjust the side radius as needed
 
-            // Set a Default Value for Rays TODO
+            // Default
 
             // Define the ray directions for front, rear, left, and right
             Vec3[] rayDirections = new Vec3[]
@@ -128,18 +128,79 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 if (this.PilotAgent != null)
                 {
-                    if (this.RidingSkill != null && this.PilotAgent.Character.GetSkillValue(this.RidingSkill) < this.RidingSkillRequired)
+                    if (this.RidingSkill != null)
                     {
-                        this.PilotAgent.StopUsingGameObjectMT(false);
-                        return;
+                        int skillValue = this.PilotAgent.Character.GetSkillValue(this.RidingSkill);
+                        if (skillValue < this.RidingSkillRequired)
+                        {
+                            this.PilotAgent.StopUsingGameObjectMT(false);
+                            return;
+                        }
                     }
                     this.ResetStrayDuration();
                 }
             }
 
-            if (GameNetwork.IsClient && Agent.Main != null && this.PilotAgent == Agent.Main)
+            if (GameNetwork.IsClient)
             {
-                HandleInput();
+                if (Agent.Main != null && this.PilotAgent == Agent.Main)
+                {
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.W))
+                    {
+                        this.RequestMovingForward();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.W))
+                    {
+                        this.RequestStopMovingForward();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.S))
+                    {
+                        this.RequestMovingBackward();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.S))
+                    {
+                        this.RequestStopMovingBackward();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.A))
+                    {
+                        this.RequestTurningLeft();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.A))
+                    {
+                        this.RequestStopTurningLeft();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.D))
+                    {
+                        this.RequestTurningRight();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.D))
+                    {
+                        this.RequestStopTurningRight();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.Space))
+                    {
+                        this.RequestMovingUp();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.Space))
+                    {
+                        this.RequestStopMovingUp();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.LeftShift))
+                    {
+                        this.RequestMovingDown();
+                    }
+                    else if (Mission.Current.InputManager.IsKeyReleased(InputKey.LeftShift))
+                    {
+                        this.RequestStopMovingDown();
+                    }
+                    if (Mission.Current.InputManager.IsKeyPressed(InputKey.F))
+                    {
+                        GameNetwork.MyPeer.ControlledAgent.HandleStopUsingAction();
+                        this.isPlayerUsing = false;
+                        ActionIndexCache ac = ActionIndexCache.act_none;
+                        this.PilotAgent.SetActionChannel(0, ac, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0, false, -0.2f, 0, true);
+                    }
+                }
             }
 
             if (this.PilotAgent == null)
@@ -147,7 +208,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 StopShip();
             }
 
-            if (GameNetwork.IsServer && (IsShipMoving() || this.PilotAgent != null))
+            if (GameNetwork.IsServer && (base.IsMovingBackward || base.IsMovingDown || base.IsMovingForward || base.IsMovingUp || base.IsTurningLeft || base.IsTurningRight || this.PilotAgent != null))
             {
                 this.CheckIfLanded(oldFrame);
             }
@@ -157,41 +218,6 @@ namespace PersistentEmpiresLib.SceneScripts
                 base.GameEntity.Remove(0);
                 destroyed = false;
             }
-        }
-
-        private void HandleInput()
-        {
-            HandleMovement(InputKey.W, this.RequestMovingForward, this.RequestStopMovingForward);
-            HandleMovement(InputKey.S, this.RequestMovingBackward, this.RequestStopMovingBackward);
-            HandleMovement(InputKey.A, this.RequestTurningLeft, this.RequestStopTurningLeft);
-            HandleMovement(InputKey.D, this.RequestTurningRight, this.RequestStopTurningRight);
-            HandleMovement(InputKey.Space, this.RequestMovingUp, this.RequestStopMovingUp);
-            HandleMovement(InputKey.LeftShift, this.RequestMovingDown, this.RequestStopMovingDown);
-
-            if (Mission.Current.InputManager.IsKeyPressed(InputKey.F))
-            {
-                GameNetwork.MyPeer.ControlledAgent.HandleStopUsingAction();
-                this.isPlayerUsing = false;
-                ActionIndexCache ac = ActionIndexCache.act_none;
-                this.PilotAgent.SetActionChannel(0, ac, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0, false, -0.2f, 0, true);
-            }
-        }
-
-        private void HandleMovement(InputKey key, Action startAction, Action stopAction)
-        {
-            if (Mission.Current.InputManager.IsKeyPressed(key))
-            {
-                startAction();
-            }
-            else if (Mission.Current.InputManager.IsKeyReleased(key))
-            {
-                stopAction();
-            }
-        }
-
-        private bool IsShipMoving()
-        {
-            return base.IsMovingBackward || base.IsMovingDown || base.IsMovingForward || base.IsMovingUp || base.IsTurningLeft || base.IsTurningRight;
         }
 
         private void StopShip()
