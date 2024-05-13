@@ -67,7 +67,10 @@ namespace PersistentEmpiresLib.SceneScripts
             float frontRearRadius = 0.1f; // Adjust the front and rear radius as needed
             float sideRadius = 0.1f; // Adjust the side radius as needed
 
-            // Default
+            // Set a Default Value for Rays TODO
+
+
+            // Don't need to check each direction all the time, can instead check the direction we are going that there is no colisions.
 
             // Define the ray directions for front, rear, left, and right
             Vec3[] rayDirections = new Vec3[]
