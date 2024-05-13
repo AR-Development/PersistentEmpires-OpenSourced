@@ -30,10 +30,14 @@ jobs:
       uses: actions/checkout@master
       with:
         repository: AR-Development/PersistentEmpires-Assets
+        lfs: true
         path: ClientAssets
     - name: Package build
       run: |
         pwd
+        cd ClientAssets
+        git lfs checkout
+        cd ..
         cp -arf ClientAssets/* publish/Modules/PersistentEmpires/
         rm -rf publish/Modules/PersistentEmpires/.git
         rm -rf publish/Modules/PersistentEmpires/.gitattributes
