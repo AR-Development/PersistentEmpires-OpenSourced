@@ -36,6 +36,8 @@ jobs:
     - name: Move Client assets without LFS
       run: |
         cp -arf ClientAssets/* release/PersistentEmpiresClient/Modules/PersistentEmpires/
+        cp -arf ClientAssets/.git release/PersistentEmpiresClient/Modules/PersistentEmpires/.git
+        cp -arf ClientAssets/.gitattributes release/PersistentEmpiresClient/Modules/PersistentEmpires/.gitattributes
         rm -rf ClientAssets
     - name: Download Server build artifact
       uses: actions/download-artifact@v4
