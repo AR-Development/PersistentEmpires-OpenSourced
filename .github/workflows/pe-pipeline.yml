@@ -14,47 +14,35 @@ jobs:
     #needs: lint
     with:
       build_project: Client
-      build_configuration: Release
-  
-  merge-client-files:
-    uses: ./.github/workflows/pe-merge-files.yml
-    needs: client-build
-    with:
-      build_project: Client
-      build_configuration: Release
 
   client-package-build:
     runs-on: ubuntu-latest
-    needs: merge-client-files
+    needs: client-build
     environment: development
 
     steps:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
-        name: Client-Merged
+        path: publish
+        name: Client-Publish
 
-    - name: Package build
-      run: |
-        mkdir -p build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        cp -a merged/. build/Modules/PersistentEmpires/bin/Gaming.Desktop.x64_Shipping_Client
-        mkdir -p build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a merged/. build/Modules/PersistentEmpires/bin/Win64_Shipping_Client
-        cp -a ClientModFiles/. build/Modules/PersistentEmpires
+    #- name: Package build
+    #  run: |
+    #    TODO: Download server assets and include them in release
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Client-${{github.sha}}
         retention-days: 1
-        path: build
+        path: publish
 
   server-build:
     uses: ./.github/workflows/pe-build.yml
     #needs: lint
     with:
       build_project: Server
-      build_configuration: Release
 
   server-package-build:
     runs-on: ubuntu-latest
@@ -65,22 +53,19 @@ jobs:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
-        path: merged
-        name: Server-Release
+        path: publish
+        name: Server-Publish
 
-    - name: Package build
-      run: |
-        mkdir -p build/bin/Win64_Shipping_Server
-        cp -a merged/. build/bin/Win64_Shipping_Server
-        mkdir -p build/bin/Linux64_Shipping_Server
-        cp -a merged/. build/bin/Linux64_Shipping_Server
+    #- name: Package build
+    #  run: |
+    #    TODO: Download server assets and include them in release
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Server-${{github.sha}}
         retention-days: 1
-        path: build
+        path: publish
 
   deploy-staging:
     uses: ./.github/workflows/pe-deploy-staging.yml
