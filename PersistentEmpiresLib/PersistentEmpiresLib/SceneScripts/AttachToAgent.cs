@@ -140,48 +140,54 @@ namespace PersistentEmpiresLib.SceneScripts
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative != null)
             {
-                if (string.IsNullOrEmpty(persistentEmpireRepresentative.AttachToAgentId))
+                if (this.AttachedTo == null && string.IsNullOrEmpty(persistentEmpireRepresentative.AttachToAgentId))
                 {
-                    Vec3 currentAgentVecRotationS = userAgent.Frame.rotation.s;
+                    Vec3 currentEnityVecRotationS = userAgent.Frame.rotation.s;
                     Vec3 enityVecRotationS = this.GameEntity.GetGlobalFrame().rotation.s;
-                    double radians = Math.Acos(Vec3.DotProduct(currentAgentVecRotationS, enityVecRotationS) / (currentAgentVecRotationS.Length) * enityVecRotationS.Length);
+                    double radians = Math.Acos(Vec3.DotProduct(currentEnityVecRotationS, enityVecRotationS) / (currentEnityVecRotationS.Length) * enityVecRotationS.Length);
                     double angle = (360 / Math.PI) * radians;
 
                     // check distance and rotate
 
-                    if (this.GameEntity.GetGlobalFrame().origin.Distance(userAgent.Position) <= UsableDistance && angle <= UsableAngle)
-                    { 
-                        if (this.AttachedTo == null)
+                    if (this.GameEntity.GetGlobalFrame().origin.Distance(userAgent.Position) <= 1.2f && angle <= 100)
+                    {
+                        if (this.AttachableToHorse)
                         {
-                            if (this.AttachableToHorse)
+                            if (!userAgent.HasMount)
                             {
-                                if (!userAgent.HasMount) return;
-                                if (this.AttachableHorseType != "" && userAgent.MountAgent.Monster.StringId != this.AttachableHorseType) return;
-
+                                this.AttachToAgentAux(userAgent);
                                 persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
-                                this.AttachToAgentAux(userAgent.MountAgent);
+
                             }
                             else
                             {
-                                if (userAgent.HasMount) return;
+                                this.AttachToAgentAux(userAgent.MountAgent);
                                 persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
-                                this.AttachToAgentAux(userAgent);
-                            }
+
+                            } 
                         }
-                        else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
+                        else
                         {
-                            persistentEmpireRepresentative.AttachToAgentId = string.Empty;
-                            this.DetachFromAgentAux();
+                            if (!userAgent.HasMount) return;
+                            persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
                         }
+
                     }
                     else
                     {
-                        InformationComponent.Instance.SendMessage("You are too far from target!", new Color(1f, 0, 0).ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage("You are too far from target", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     }
+
+
+                }
+                else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
+                {
+                    this.DetachFromAgentAux();
+                    persistentEmpireRepresentative.AttachToAgentId = string.Empty;
                 }
                 else
                 {
-                    InformationComponent.Instance.SendMessage("You cannot attach more!", new Color(1f, 0, 0).ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage("You cannot attach more!", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                 }
             }
         }
