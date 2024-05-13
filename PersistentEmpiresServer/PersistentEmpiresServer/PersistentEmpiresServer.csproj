@@ -43,55 +43,55 @@
     <ItemGroup>
         <Reference Include="TaleWorlds.Core">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Core.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.Diamond">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Diamond.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.DotNet">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.DotNet.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.Engine">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Engine.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.Library">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Library.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.Localization">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Localization.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.ModuleManager">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ModuleManager.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.DedicatedCustomServer.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.Diamond">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.ObjectSystem">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ObjectSystem.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.PlayerServices">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.PlayerServices.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
