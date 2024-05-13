@@ -1,5 +1,4 @@
 ﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
 using System.Reflection;
@@ -16,7 +15,7 @@ namespace PersistentEmpiresLib.SceneScripts
     {
         // public override ScriptComponentBehavior.TickRequirement GetTickRequirement() => !this.GameEntity.IsVisibleIncludeParents() ? base.GetTickRequirement() : ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel;
 
-        public bool AttachableToHorse = false;
+        public bool AttachableToHorse = true;
         public string AttachableHorseType = "";
         public int StrayDurationSeconds = 7200;
         private long WillBeDeletedAt = 0;
@@ -25,10 +24,6 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public float MaxHitPoint = 500f;
         protected float _hitPoint;
-        // Usable from distance
-        public float UsableDistance = 1.2f;
-        // Usable from angle
-        public int UsableAngle = 100;
 
         public float HitPoint
         {
@@ -136,59 +131,24 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             base.OnUse(userAgent);
             Debug.Print("[USING LOG] AGENT USING " + this.GetType().Name);
-            NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
-            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            if (persistentEmpireRepresentative != null)
+            if (this.AttachedTo == null)
             {
-                if (this.AttachedTo == null && string.IsNullOrEmpty(persistentEmpireRepresentative.AttachToAgentId))
+                if (this.AttachableToHorse)
                 {
-                    Vec3 currentEnityVecRotationS = userAgent.Frame.rotation.s;
-                    Vec3 enityVecRotationS = this.GameEntity.GetGlobalFrame().rotation.s;
-                    double radians = Math.Acos(Vec3.DotProduct(currentEnityVecRotationS, enityVecRotationS) / (currentEnityVecRotationS.Length) * enityVecRotationS.Length);
-                    double angle = (360 / Math.PI) * radians;
-
-                    // check distance and rotate
-
-                    if (this.GameEntity.GetGlobalFrame().origin.Distance(userAgent.Position) <= 1.2f && angle <= 100)
-                    {
-                        if (this.AttachableToHorse)
-                        {
-                            if (!userAgent.HasMount)
-                            {
-                                this.AttachToAgentAux(userAgent);
-                                persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
-
-                            }
-                            else
-                            {
-                                this.AttachToAgentAux(userAgent.MountAgent);
-                                persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
-
-                            } 
-                        }
-                        else
-                        {
-                            if (!userAgent.HasMount) return;
-                            persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
-                        }
-
-                    }
-                    else
-                    {
-                        InformationComponent.Instance.SendMessage("You are too far from target", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
-                    }
-
-
-                }
-                else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
-                {
-                    this.DetachFromAgentAux();
-                    persistentEmpireRepresentative.AttachToAgentId = string.Empty;
+                    if (!userAgent.HasMount) return;
+                    if (this.AttachableHorseType != "" && userAgent.MountAgent.Monster.StringId != this.AttachableHorseType) return;
+                    this.AttachToAgentAux(userAgent.MountAgent);
                 }
                 else
                 {
-                    InformationComponent.Instance.SendMessage("You cannot attach more!", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    if (userAgent.HasMount) return;
+                    this.AttachToAgentAux(userAgent);
                 }
+            }
+            else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
+            {
+
+                this.DetachFromAgentAux();
             }
         }
 
