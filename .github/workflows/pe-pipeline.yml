@@ -26,12 +26,17 @@ jobs:
       with:
         path: publish
         name: Client-Publish
+    - name: Test before clone
+      run: /
+        pwd
+        ls -alh
     - name: Clone client assets
       uses: actions/checkout@master
       with:
         repository: AR-Development/PersistentEmpires-Assets
     - name: Package build
       run: |
+        pwd
         ls -alh
 
     - name: Upload artifacts
