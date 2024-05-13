@@ -83,6 +83,7 @@ namespace PersistentEmpiresLib.SceneScripts
         private static readonly ActionIndexCache act_pickup_from_left_up_horseback_left_end = ActionIndexCache.Create("act_pickup_from_left_up_horseback_left_end");
         protected override bool LockUserFrames { get => false; }
         protected override bool LockUserPositions { get => false; }
+        public static PE_InventoryEntity _current;
 
         private string GenerateId()
         {
@@ -114,21 +115,20 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             base.OnTickParallel2(dt);
 
-            if (GameNetwork.IsServer)
+#if SERVER
+            if (base.HasUser)
             {
-                if (base.HasUser)
+                ActionIndexCache currentAction = base.UserAgent.GetCurrentAction(this._usedChannelIndex);
+                if (currentAction == this._successActionIndex)
                 {
-                    ActionIndexCache currentAction = base.UserAgent.GetCurrentAction(this._usedChannelIndex);
-                    if (currentAction == this._successActionIndex)
-                    {
-                        base.UserAgent.StopUsingGameObjectMT(true); 
-                    }
-                    else if (currentAction != this._progressActionIndex)
-                    {
-                        base.UserAgent.StopUsingGameObjectMT(false);
-                    }
+                    base.UserAgent.StopUsingGameObjectMT(true);
+                }
+                else if (currentAction != this._progressActionIndex)
+                {
+                    base.UserAgent.StopUsingGameObjectMT(false);
                 }
             }
+#endif
         }
 
         protected override void OnEditorInit()
@@ -194,8 +194,8 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_open"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);
                 this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
-            // userAgent.StopUsingGameObjectMT(true);
-        }
+            // userAgent.StopUsingGameObjectMT(true);            
+        }        
 
         public override void OnUse(Agent userAgent)
         {
@@ -259,6 +259,10 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 this.OpenInventory(userAgent);
             }
+
+#if CLIENT
+            _current = this;
+#endif
         }
 
         public void OnEntityRemove()

@@ -44,7 +44,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public Dictionary<Agent, bool> IgnoreAgentDropLoot = new Dictionary<Agent, bool>();
         private Random random = new Random();
 
-
         private string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -220,6 +219,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 GameNetwork.EndModuleEventAsServer();
             }
         }
+        
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
@@ -251,6 +251,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.DestroyChance = ConfigManager.GetIntConfig("ItemDestroyChanceOnDeath", 5);
             }
         }
+        
         public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
         {
             if (GameNetwork.IsServer)
@@ -270,6 +271,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+        
         public override void OnRemoveBehavior()
         {
             base.OnRemoveBehavior();
@@ -482,7 +484,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 this.OnForceCloseInventory();
             }
-        }
+        }        
 
         private bool HandleClosedInventoryFromClient(NetworkCommunicator player, ClosedInventory message)
         {
@@ -526,6 +528,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.OnOpenInventory(message.PlayerInventory, message.RequestedInventory);
             }
         }
+
         public void OpenInventoryForPeer(NetworkCommunicator player, string inventoryId)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
@@ -578,7 +581,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.LootableObjects.Remove(targetInventory.InventoryId);
             }
         }
-
 
         private bool HandleRequestSplit(NetworkCommunicator player, InventorySplitItem message)
         {
@@ -672,6 +674,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return true;
         }
+
         private bool HandleRequestInventoryHotkey(NetworkCommunicator player, InventoryHotkey message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
@@ -1062,8 +1065,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             return this.TransferInventoryItem(player, message.DroppedTag, message.DraggedTag);
         }
-
-
 
         private bool HandleRequestOpenInventoryFromClient(NetworkCommunicator player, RequestOpenInventory message)
         {

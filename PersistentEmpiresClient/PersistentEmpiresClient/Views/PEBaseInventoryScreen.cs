@@ -17,10 +17,10 @@ namespace PersistentEmpires.Views.Views
     abstract public class PEBaseInventoryScreen : MissionView
     {
         protected PlayerInventoryComponent _playerInventoryComponent;
-
         protected abstract PEInventoryVM GetInventoryVM();
         public bool IsActive { get; set; }
         protected GauntletLayer _gauntletLayer;
+
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
@@ -28,6 +28,7 @@ namespace PersistentEmpires.Views.Views
             this._playerInventoryComponent.OnUpdateInventory += this.UpdateInventory;
             this._playerInventoryComponent.OnForceUpdateInventory += this.ForceUpdateInventory;
         }
+    
         protected void UpdateEquipmentInventory(int index, ItemObject item, int count)
         {
             if (!this.IsActive) return;
@@ -127,6 +128,7 @@ namespace PersistentEmpires.Views.Views
                 this.UpdateEquipmentInventory(inventory0Index, item, count);
             }
         }
+
         public void UpdateInventory(String DraggedSlot, String DroppedSlot, ItemObject item0, ItemObject item1, int item0Count, int item1Count)
         {
             if (!this.IsActive) return;
@@ -171,6 +173,5 @@ namespace PersistentEmpires.Views.Views
             }
 
         }
-    
     }
 }
