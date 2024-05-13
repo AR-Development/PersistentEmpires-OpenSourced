@@ -40,6 +40,11 @@ jobs:
         pwd
         ls -alh
         ls -alh ClientAssets/
+        cp -arf ClientAsstes/* publish/Modules/PersistenEmpires/
+        rm -rf publish/Modules/PersistentEmpires/.git
+        rm -rf publish/Modules/PersistentEmpires/.gitattributes
+        rm -rf ClientAssets
+        ls -alh publish/Modules/PersistentEmpires
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
