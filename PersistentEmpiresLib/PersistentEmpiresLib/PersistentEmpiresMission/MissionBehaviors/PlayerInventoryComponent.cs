@@ -143,6 +143,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
                 this.OpenedByPeerInventory.Remove(player);
             }
+
+            foreach (var x in OpenedByPeerInventory)
+            {
+                if (x.Value != null && x.Value.TiedEntity?.GameEntity.GetGlobalFrame().origin.Distance(x.Key.ControlledAgent.Position) > 2f)
+                {
+                    ClosedInventoryOnServer(x.Key, x.Value.InventoryId);
+                }
+            }
         }
 
         public override void OnRemoveBehavior()
