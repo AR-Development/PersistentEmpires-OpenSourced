@@ -39,6 +39,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public Dictionary<NetworkCommunicator, long> LastRevealed = new Dictionary<NetworkCommunicator, long>();
         public Dictionary<Agent, bool> IgnoreAgentDropLoot = new Dictionary<Agent, bool>();
         private Random random = new Random();
+        private static float _distanceForAutoCloseInventory = 4f;
 
         private string RandomString(int length)
         {
@@ -70,8 +71,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             List<DBInventory> savedInventoriesAsList = SaveSystemBehavior.HandleGetAllInventories().ToList();
             this.CustomInventories = new Dictionary<string, Inventory>();
             List<GameEntity> gameEntities = new List<GameEntity>();
-            base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_InventoryEntity>(ref gameEntities);
-            foreach (PE_InventoryEntity inventoryEntity in gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
+            // This is done to ensure derived scripts from PE_InventoryEntity are included
+            Mission.Scene.GetEntities(ref gameEntities);
+            var tmp = gameEntities.Select(x => x.GetScriptComponents().OfType<PE_InventoryEntity>()).SelectMany(y=> y).Where(z=> z!= null);
+
+            foreach (PE_InventoryEntity inventoryEntity in tmp)//gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
             {
                 if (inventoryEntity.InteractionEntity == null)
                 {
@@ -112,9 +116,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             foreach (var x in OpenedByPeerInventory)
             {
-                if (x.Value != null && x.Value.TiedEntity?.GameEntity.GetGlobalFrame().origin.Distance(x.Key.ControlledAgent.Position) > 2f)
+                if (x.Value != null && x.Value.TiedEntity?.GameEntity.GetGlobalFrame().origin.Distance(x.Key.ControlledAgent.Position) > _distanceForAutoCloseInventory)
                 {
                     ClosedInventoryOnServer(x.Key, x.Value.InventoryId);
+
+                    // Send signal to client to close inventory
+                    GameNetwork.BeginModuleEventAsServer(x.Key);
+                    GameNetwork.WriteMessage(new ForceCloseInventory());
+                    GameNetwork.EndModuleEventAsServer();
                 }
             }
         }
