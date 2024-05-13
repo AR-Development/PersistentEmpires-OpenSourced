@@ -70,19 +70,19 @@ namespace PersistentEmpiresLib.SceneScripts
             // Define the ray directions for front, rear, left, and right
             Vec3[] rayDirections = new Vec3[]
             {
-        base.GameEntity.GetGlobalFrame().rotation.f,  // Front
-        -base.GameEntity.GetGlobalFrame().rotation.f, // Rear
-        -base.GameEntity.GetGlobalFrame().rotation.s, // Left
-        base.GameEntity.GetGlobalFrame().rotation.s   // Right
+                base.GameEntity.GetGlobalFrame().rotation.f,  // Front
+                -base.GameEntity.GetGlobalFrame().rotation.f, // Rear
+                -base.GameEntity.GetGlobalFrame().rotation.s, // Left
+                base.GameEntity.GetGlobalFrame().rotation.s   // Right
             };
 
             // Define the corresponding radius for each direction
             float[] rayRadii = new float[]
             {
-        frontRearRadius, // Front
-        frontRearRadius, // Rear
-        sideRadius,      // Left
-        sideRadius       // Right
+                frontRearRadius, // Front
+                frontRearRadius, // Rear
+                sideRadius,      // Left
+                sideRadius       // Right
             };
 
             for (int i = 0; i < rayDirections.Length; i++)
