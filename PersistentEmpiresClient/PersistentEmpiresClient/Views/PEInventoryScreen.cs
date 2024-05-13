@@ -1,21 +1,11 @@
-﻿using PersistentEmpiresLib.Helpers;
+﻿using PersistentEmpires.Views.ViewsVM;
 using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
 using PersistentEmpiresLib.SceneScripts;
 
@@ -37,18 +27,18 @@ namespace PersistentEmpires.Views.Views
 
         private void ForceCloseInventory()
         {
-            if(this.IsActive)
+            if (this.IsActive)
             {
                 this.CloseInventoryAux();
             }
         }
-        
+
         public override void OnMissionScreenFinalize()
         {
             base.OnMissionScreenFinalize();
             this._playerInventoryComponent.OnOpenInventory -= this.OpenInventory;
         }
-       
+
         public override bool OnEscape()
         {
 
@@ -64,7 +54,8 @@ namespace PersistentEmpires.Views.Views
             base.OnMissionTick(dt);
 
 
-            if (base.MissionScreen.InputManager.IsKeyReleased(InputKey.I)) {
+            if (base.MissionScreen.InputManager.IsKeyReleased(InputKey.I))
+            {
 
                 if (this.IsActive)
                 {
@@ -75,7 +66,7 @@ namespace PersistentEmpires.Views.Views
                     this.RequestOpenInventory();
                 }
             }
-            if(this._gauntletLayer != null &&  this.IsActive && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
+            if (this._gauntletLayer != null && this.IsActive && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
             {
 
                 this.CloseInventory();
@@ -88,18 +79,19 @@ namespace PersistentEmpires.Views.Views
 #endif
         }
 
-        private void CloseInventoryAux() {
+        private void CloseInventoryAux()
+        {
             this.IsActive = false;
             this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
             base.MissionScreen.RemoveLayer(this._gauntletLayer);
             this._gauntletLayer = null;
         }
-
-        public void CloseInventory() {
+        public void CloseInventory()
+        {
             if (this.IsActive)
             {
                 this.CloseInventoryAux();
-                if(this._dataSource.TargetInventoryId != "")
+                if (this._dataSource.TargetInventoryId != "")
                 {
                     GameNetwork.BeginModuleEventAsClient();
                     GameNetwork.WriteMessage(new ClosedInventory(this._dataSource.TargetInventoryId));
@@ -107,13 +99,15 @@ namespace PersistentEmpires.Views.Views
                 }
             }
         }
-        public void RequestOpenInventory() {
+        public void RequestOpenInventory()
+        {
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestOpenInventory("", true));
             GameNetwork.EndModuleEventAsClient();
         }
-        
-        public void OpenInventory(Inventory playerInventory, Inventory requestedInventory) {
+
+        public void OpenInventory(Inventory playerInventory, Inventory requestedInventory)
+        {
             if (this.IsActive) return;
 
             if (GameNetwork.MyPeer.ControlledAgent != null)

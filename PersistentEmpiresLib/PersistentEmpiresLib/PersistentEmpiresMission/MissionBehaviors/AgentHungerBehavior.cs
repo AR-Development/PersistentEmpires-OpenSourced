@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -169,7 +167,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void LoadEatables(string modulePath)
         {
             string FoodPath = ModuleHelper.GetXmlPath(modulePath, "Food");
-            Debug.Print("[PE] Trying Loading " + FoodPath,0, DebugColor.Cyan);
+            Debug.Print("[PE] Trying Loading " + FoodPath, 0, DebugColor.Cyan);
             if (File.Exists(FoodPath) == false) return;
 
             XmlDocument xmlDocument = new XmlDocument();

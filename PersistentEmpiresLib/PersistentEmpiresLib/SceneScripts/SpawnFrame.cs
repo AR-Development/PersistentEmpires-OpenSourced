@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.SceneScripts
@@ -21,13 +15,15 @@ namespace PersistentEmpiresLib.SceneScripts
             return Mission.Current.GetMissionBehavior<CastlesBehavior>().castles[this.CastleIndex];
         }
 
-        public bool CanPeerSpawnHere(NetworkCommunicator peer) {
-            PersistentEmpireRepresentative persistentEmpireRepresentative =  peer.GetComponent<PersistentEmpireRepresentative>();
+        public bool CanPeerSpawnHere(NetworkCommunicator peer)
+        {
+            PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
-            if (persistentEmpireRepresentative.GetFaction() == null) {
+            if (persistentEmpireRepresentative.GetFaction() == null)
+            {
                 return !this.SpawnFromCastle && (this.FactionIndex == 0 || this.FactionIndex == -1);
             }
-            if(this.SpawnFromCastle && this.GetCastleBanner() != null)
+            if (this.SpawnFromCastle && this.GetCastleBanner() != null)
             {
                 return this.GetCastleBanner().FactionIndex == persistentEmpireRepresentative.GetFactionIndex();
             }
@@ -35,8 +31,9 @@ namespace PersistentEmpiresLib.SceneScripts
             return this.FactionIndex == persistentEmpireRepresentative.GetFactionIndex();
         }
 
-        public PE_SpawnFrame() { 
-        
+        public PE_SpawnFrame()
+        {
+
         }
     }
 }

@@ -1,14 +1,8 @@
-﻿using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.Views.Markers;
-using PersistentEmpires.Views.ViewsVM.MapMarkers;
-using System;
+﻿using PersistentEmpires.Views.ViewsVM.MapMarkers;
+using PersistentEmpiresLib.SceneScripts;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -34,7 +28,7 @@ namespace PersistentEmpires.Views.ViewsVM
             }
             else
             {
-                foreach(var marker in this.CastleMarkers)
+                foreach (var marker in this.CastleMarkers)
                 {
                     PE_CastleBanner banner = castleBanners.Find(c => c.CastleIndex == marker.GetBanner().CastleIndex);
                     marker.UpdateBanner();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -12,7 +7,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class QuickInformation : GameNetworkMessage
     {
         public string Message;
-        public QuickInformation() { 
+        public QuickInformation()
+        {
         }
 
         public QuickInformation(string message)

@@ -1,11 +1,6 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using PersistentEmpiresServer.SpawnBehavior;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Multiplayer;
@@ -16,7 +11,8 @@ namespace PersistentEmpiresServer
     public class MissionManager
     {
         [MissionMethod]
-        public static void OpenPersistentEmpires(string scene) {
+        public static void OpenPersistentEmpires(string scene)
+        {
             MissionState.OpenNew("PersistentEmpires", new MissionInitializerRecord(scene), delegate (Mission missionController)
             {
                 return new MissionBehavior[]

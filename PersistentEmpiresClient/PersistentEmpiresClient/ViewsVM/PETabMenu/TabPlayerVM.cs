@@ -1,10 +1,5 @@
 ﻿using PersistentEmpiresLib;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -26,10 +21,11 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             this._peer = peer;
             this.IsLord = isLord;
             // InformationManager.DisplayMessage(new InformationMessage("virtualPlayerName: " + peer.VirtualPlayer.UserName));
-            
+
             base.RefreshValues();
         }
-        public void UpdateLord(string lordId) {
+        public void UpdateLord(string lordId)
+        {
             this.IsLord = lordId == this._peer.VirtualPlayer.Id.ToString();
         }
 
@@ -49,7 +45,7 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             get => this._killCount;
             set
             {
-                if(value != this._killCount)
+                if (value != this._killCount)
                 {
                     this._killCount = value;
                     base.OnPropertyChangedWithValue(value, "KillCount");
@@ -72,19 +68,22 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
 
         [DataSourceProperty]
-        public bool IsVoiceMuted {
+        public bool IsVoiceMuted
+        {
             get => this._peer.GetComponent<MissionPeer>() == null ? true : this._peer.GetComponent<MissionPeer>().IsMutedFromGameOrPlatform;
         }
 
-        public void ExecuteUnMute() { 
-            if(this._peer.GetComponent<MissionPeer>() != null)
+        public void ExecuteUnMute()
+        {
+            if (this._peer.GetComponent<MissionPeer>() != null)
             {
                 this._peer.GetComponent<MissionPeer>().SetMuted(false);
                 base.OnPropertyChanged("IsVoiceMuted");
             }
         }
 
-        public void ExecuteMute() {
+        public void ExecuteMute()
+        {
             if (this._peer.GetComponent<MissionPeer>() != null)
             {
                 this._peer.GetComponent<MissionPeer>().SetMuted(true);
@@ -106,7 +105,8 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
 
         [DataSourceProperty]
-        public int Ping {
+        public int Ping
+        {
             get => (int)this.GetPeer().AveragePingInMilliseconds;
         }
 
@@ -136,7 +136,7 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             get => this._isLord;
             set
             {
-                if(value != this._isLord)
+                if (value != this._isLord)
                 {
                     this._isLord = value;
                     base.OnPropertyChangedWithValue(value, "IsLord");

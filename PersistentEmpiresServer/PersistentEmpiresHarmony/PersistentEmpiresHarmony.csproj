@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TaleworldsReferencePath>..\..\PersistentEmpiresLib\PersistentEmpiresLib\ServerReferences</TaleworldsReferencePath>
-        <Platforms>AnyCPU;x64</Platforms>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -73,12 +73,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony"
-                          Version="2.2.2" />
-        <PackageReference Include="Microsoft.CSharp"
-                          Version="4.7.0" />
-        <PackageReference Include="System.Data.DataSetExtensions"
-                          Version="4.5.0" />
+        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="MonoMod.Common" Version="22.6.3.1" />
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     </ItemGroup>
     <ItemGroup>
         <None Update="0Harmony.dll">
@@ -88,4 +86,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<Exec Command="del &quot;$(TargetDir)*.pdb&quot;" />
+	</Target>
 </Project>

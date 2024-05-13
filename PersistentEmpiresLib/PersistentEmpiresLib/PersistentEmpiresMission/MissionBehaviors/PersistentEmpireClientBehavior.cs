@@ -4,10 +4,6 @@ using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Security;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -37,7 +33,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this._myRepresentative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
             this._factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
             this._castlesBehavior = base.Mission.GetMissionBehavior<CastlesBehavior>();
-            if(this.OnSynchronized != null)
+            if (this.OnSynchronized != null)
             {
                 this.OnSynchronized();
             }
@@ -55,13 +51,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             return this._myRepresentative.Gold;
         }
-        
+
         public override void AfterStart()
         {
             base.Mission.SetMissionMode(MissionMode.Battle, true);
-            
+
         }
-        
+
         protected override void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegistererContainer registerer)
         {
             if (GameNetwork.IsClient)
@@ -88,9 +84,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleFromServerExistingObjectsEnd(ExistingObjectsEnd message)
         {
-            for(int i = 0;i < Mission.Current.Teams.Count; i++)
+            for (int i = 0; i < Mission.Current.Teams.Count; i++)
             {
-                for(int j = 0; j < Mission.Current.Teams.Count; j++)
+                for (int j = 0; j < Mission.Current.Teams.Count; j++)
                 {
                     Mission.Current.Teams[i].SetIsEnemyOf(Mission.Current.Teams[j], true);
                 }
@@ -100,7 +96,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleServerAgentLabelConfig(AgentLabelConfig message)
         {
-            if(this.OnAgentLabelConfig != null)
+            if (this.OnAgentLabelConfig != null)
             {
                 this.OnAgentLabelConfig(message.Enabled);
             }
@@ -108,20 +104,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleServerHandshakeFromServer(ServerHandshake message)
         {
-            
+
         }
 
         private void HandleAddMarshallIdToFactionServer(AddMarshallIdToFaction message)
         {
-            if(this._factionsBehavior.Factions.ContainsKey(message.FactionIndex))
+            if (this._factionsBehavior.Factions.ContainsKey(message.FactionIndex))
             {
                 this._factionsBehavior.Factions[message.FactionIndex].marshalls.Add(message.MarshallId);
             }
         }
 
-        private bool HandleClientRequestSuicide(NetworkCommunicator player,RequestSuicide message)
+        private bool HandleClientRequestSuicide(NetworkCommunicator player, RequestSuicide message)
         {
-            if(player.IsConnectionActive && player.ControlledAgent != null)
+            if (player.IsConnectionActive && player.ControlledAgent != null)
             {
                 Agent agent = player.ControlledAgent;
                 Blow blow = new Blow(agent.Index);
@@ -146,7 +142,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return true;
         }
 
-        private bool HandleClientMyDiscordId(NetworkCommunicator player,MyDiscordId message)
+        private bool HandleClientMyDiscordId(NetworkCommunicator player, MyDiscordId message)
         {
             SaveSystemBehavior.HandleDiscordRegister(player, message.Id);
             return true;
@@ -168,10 +164,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleSyncMember(SyncMember message)
         {
-            if(message.FactionIndex != -1)
+            if (message.FactionIndex != -1)
             {
                 Faction f = this._factionsBehavior.Factions[message.FactionIndex];
-                if(!message.Peer.IsMine)
+                if (!message.Peer.IsMine)
                 {
                     this._factionsBehavior.SetPlayerFaction(message.Peer, message.FactionIndex, -1);
                     if (message.IsMarshall) f.marshalls.Add(message.Peer.VirtualPlayer.Id.ToString());
@@ -201,7 +197,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             persistentEmpireRepresentative.SetGold(message.Gold);
         }
 
-        private void HandleAdminOrErrorMessage(AdminOrErrorMessage adminOrErrorMessage) {
+        private void HandleAdminOrErrorMessage(AdminOrErrorMessage adminOrErrorMessage)
+        {
             InformationManager.AddSystemNotification(adminOrErrorMessage.Message);
         }
 

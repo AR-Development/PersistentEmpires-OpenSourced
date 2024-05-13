@@ -1,17 +1,11 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpires.Views.ViewsVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.GauntletUI;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
 
@@ -46,7 +40,8 @@ namespace PersistentEmpires.Views.Views
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
-            if(affectedAgent.IsMine && this.IsActive) {
+            if (affectedAgent.IsMine && this.IsActive)
+            {
                 this.Close();
             }
         }
@@ -73,9 +68,9 @@ namespace PersistentEmpires.Views.Views
             {
                 this.Close();
             }
-            if(this._gauntletLayer != null && this.IsActive && this._gauntletLayer.Input.IsKeyReleased(InputKey.Enter))
+            if (this._gauntletLayer != null && this.IsActive && this._gauntletLayer.Input.IsKeyReleased(InputKey.Enter))
             {
-                if(this._gauntletLayer.Input.IsShiftDown())
+                if (this._gauntletLayer.Input.IsShiftDown())
                 {
                     this.SendShoutMessage();
                 }

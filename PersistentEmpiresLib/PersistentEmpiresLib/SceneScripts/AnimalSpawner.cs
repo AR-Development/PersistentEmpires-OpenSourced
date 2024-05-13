@@ -1,12 +1,9 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
-using PersistentEmpiresLib.PersistentEmpiresMission;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -79,7 +76,8 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             return "Animal Spawner";
         }
-        public void RemoveSpawnedAnimal(Agent animal) {
+        public void RemoveSpawnedAnimal(Agent animal)
+        {
             this.SpawnedAnimals.Remove(animal);
         }
         public List<Receipt> GetDropReceipts()
@@ -92,7 +90,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
             }*/
-            if(GameNetwork.IsServer && base.HasUser)
+            if (GameNetwork.IsServer && base.HasUser)
             {
                 return base.GetTickRequirement() | ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel2;
             }
@@ -126,7 +124,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 if (GameNetwork.IsServer)
                 {
                     NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
-                    PersistentEmpireRepresentative persistentEmpireRepresentative =  peer.GetComponent<PersistentEmpireRepresentative>();
+                    PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
                     Inventory playerInventory = persistentEmpireRepresentative.GetInventory();
                     bool inventoryContainsEveryItem = this.NeededReceipt.All((r) => playerInventory.IsInventoryIncludes(r.Item, r.NeededCount));
                     if (!inventoryContainsEveryItem)
@@ -138,11 +136,12 @@ namespace PersistentEmpiresLib.SceneScripts
                         }
                         return;
                     }
-                    if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.DenarCost)) {
+                    if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.DenarCost))
+                    {
                         InformationComponent.Instance.SendMessage("You don't have enough money", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                         return;
                     }
-                    
+
                     foreach (Receipt r in this.NeededReceipt)
                     {
                         playerInventory.RemoveCountedItem(r.Item, r.NeededCount);
@@ -174,22 +173,22 @@ namespace PersistentEmpiresLib.SceneScripts
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                if(this.HasUser)
+                if (this.HasUser)
                 {
                     InformationComponent.Instance.SendMessage("Someone is using it already...", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
-                
+
                 base.OnUse(userAgent);
                 ActionIndexCache actionIndexCache = ActionIndexCache.Create(this.Animation);
                 userAgent.SetActionChannel(0, actionIndexCache, true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
                 this.UseStartedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 this.UseWillEndAt = this.UseStartedAt + this.WaitTimeInSeconds;
             }
-            if(GameNetwork.IsClient)
+            if (GameNetwork.IsClient)
             {
-                if(userAgent.IsMine)
+                if (userAgent.IsMine)
                 {
                     PEInformationManager.StartCounter("Spawning animal...", this.WaitTimeInSeconds);
                 }

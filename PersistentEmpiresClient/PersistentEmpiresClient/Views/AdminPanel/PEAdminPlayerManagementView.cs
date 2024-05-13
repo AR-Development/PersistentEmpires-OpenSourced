@@ -1,17 +1,8 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
+﻿using PersistentEmpires.Views.ViewsVM.AdminPanel;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM.AdminPanel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons;
-using TaleWorlds.GauntletUI.BaseTypes;
 
 namespace PersistentEmpires.Views.Views.AdminPanel
 {
@@ -27,12 +18,12 @@ namespace PersistentEmpires.Views.Views.AdminPanel
         public PEAdminPlayerManagementView()
         {
         }
-        
+
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
             this._adminBehavior = base.Mission.GetMissionBehavior<AdminClientBehavior>();
-            _dataSource  = new PEAdminPlayerManagementVM();
+            _dataSource = new PEAdminPlayerManagementVM();
         }
 
         public override bool OnEscape()

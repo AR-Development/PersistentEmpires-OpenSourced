@@ -1,14 +1,8 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using TaleWorlds.MountAndBlade;
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionChestKeys : PEMenuItem
@@ -22,15 +16,18 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             base.OnMissionScreenInitialize();
             this._factionManagementComponent.OnManageChestKeyClick += this.OnOpen;
             this._factionsBehavior.OnFactionKeyFetched += this.OnKeyFetched;
-            this._dataSource = new PEFactionMembersVM("Chest Key Management", "Give/Take Key", () => {
+            this._dataSource = new PEFactionMembersVM("Chest Key Management", "Give/Take Key", () =>
+            {
                 this.CloseManagementMenu();
                 this._factionManagementComponent.OnFactionManagementClickHandler();
             },
-            (PEFactionMemberItemVM selectedMember) => {
+            (PEFactionMemberItemVM selectedMember) =>
+            {
                 this._factionsBehavior.RequestChestKeyForUser(selectedMember.Peer);
                 selectedMember.IsGranted = !selectedMember.IsGranted;
             },
-            () => {
+            () =>
+            {
                 this.CloseManagementMenu();
             });
         }

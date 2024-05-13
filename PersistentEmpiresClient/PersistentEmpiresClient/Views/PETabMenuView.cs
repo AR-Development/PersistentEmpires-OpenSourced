@@ -1,16 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpires.Views.ViewsVM.PETabMenu;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using PersistentEmpires.Views.ViewsVM.PETabMenu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
@@ -48,7 +44,7 @@ namespace PersistentEmpires.Views.Views
                 tabfaction.IsSelected = true;
                 this._dataSource.SelectedFaction = tabfaction;
                 // this._dataSource.SelectedFaction.
-                foreach(TabFactionVM tabFactionVM in this._dataSource.Factions)
+                foreach (TabFactionVM tabFactionVM in this._dataSource.Factions)
                 {
                     tabFactionVM.ShowWarIcon = tabfaction.factionObj.warDeclaredTo.Contains(tabFactionVM.FactionIndex) || tabFactionVM.factionObj.warDeclaredTo.Contains(tabfaction.FactionIndex);
                 }
@@ -65,31 +61,31 @@ namespace PersistentEmpires.Views.Views
         {
             if (joinedFromIndex != -1)
             {
-               int indexAt = this._dataSource.Factions[joinedFromIndex].Members
-                    .Select((value, index) => new { value, index })
-                    .Where(pair => pair.value.GetPeer().VirtualPlayer.Id == player.VirtualPlayer.Id)
-                    .Select(pair => pair.index + 1)
-                    .FirstOrDefault() - 1;
-                this._dataSource.RemoveMemberAtIndex(joinedFromIndex,indexAt);
+                int indexAt = this._dataSource.Factions[joinedFromIndex].Members
+                     .Select((value, index) => new { value, index })
+                     .Where(pair => pair.value.GetPeer().VirtualPlayer.Id == player.VirtualPlayer.Id)
+                     .Select(pair => pair.index + 1)
+                     .FirstOrDefault() - 1;
+                this._dataSource.RemoveMemberAtIndex(joinedFromIndex, indexAt);
                 // this._dataSource.OnPropertyChanged("AllMemberCount");
             }
 
 
             // this._dataSource.Factions[factionIndex].Members.Add(new TabPlayerVM(player, faction.lordId == player.VirtualPlayer.Id.ToString()));
-            if(faction != null)
+            if (faction != null)
             {
                 TabPlayerVM newPlayer = new TabPlayerVM(player, faction.lordId == player.VirtualPlayer.Id.ToString());
                 this._dataSource.AddMember(factionIndex, newPlayer);
                 newPlayer.OnPropertyChanged("UserClass");
             }
             // this._dataSource.OnPropertyChanged("AllMemberCount");
-            if(player.IsMine)
+            if (player.IsMine)
             {
-                if(joinedFromIndex != -1)
+                if (joinedFromIndex != -1)
                 {
                     foreach (TabPlayerVM t in this._dataSource.Factions[joinedFromIndex].Members) t.OnPropertyChanged("CanSeeClass");
                 }
-                if(factionIndex != -1)
+                if (factionIndex != -1)
                 {
                     foreach (TabPlayerVM t in this._dataSource.Factions[factionIndex].Members) t.OnPropertyChanged("CanSeeClass");
                 }
@@ -155,7 +151,7 @@ namespace PersistentEmpires.Views.Views
         private void OnCastleAdded(int factionIndex, PE_CastleBanner castle)
         {
             CastleVM castleVM = new CastleVM(castle);
-            if(this._dataSource.Factions.Count > factionIndex)
+            if (this._dataSource.Factions.Count > factionIndex)
             {
                 this._dataSource.Factions[factionIndex].Castles.Add(castleVM);
             }
@@ -163,9 +159,11 @@ namespace PersistentEmpires.Views.Views
         private void OnUpdateCastle(PE_CastleBanner castle)
         {
             this.OnCastleAdded(castle.FactionIndex, castle);
-            foreach (TabFactionVM f in this._dataSource.Factions) {
-                 List<CastleVM> _castleVm = f.Castles.Where((CastleVM c) => c.GetCastleBanner().CastleIndex == castle.CastleIndex && castle.FactionIndex != f.FactionIndex).ToList();
-                if (_castleVm.Count > 0) {
+            foreach (TabFactionVM f in this._dataSource.Factions)
+            {
+                List<CastleVM> _castleVm = f.Castles.Where((CastleVM c) => c.GetCastleBanner().CastleIndex == castle.CastleIndex && castle.FactionIndex != f.FactionIndex).ToList();
+                if (_castleVm.Count > 0)
+                {
                     f.Castles.Remove(_castleVm[0]);
                 }
             }
@@ -200,7 +198,7 @@ namespace PersistentEmpires.Views.Views
             this._castlesBehavior = base.Mission.GetMissionBehavior<CastlesBehavior>();
             this._castlesBehavior.OnCastleAdded += this.OnCastleAdded;
             this._castlesBehavior.OnCastleUpdated += this.OnUpdateCastle;
-            foreach(PE_CastleBanner castleBanner in this._castlesBehavior.castles.Values)
+            foreach (PE_CastleBanner castleBanner in this._castlesBehavior.castles.Values)
             {
                 this.OnUpdateCastle(castleBanner);
             }
@@ -209,12 +207,12 @@ namespace PersistentEmpires.Views.Views
 
         private void OnFactionDeclaredSomething(int declarer, int declaredTo)
         {
-            if(this._dataSource.SelectedFaction != null)
+            if (this._dataSource.SelectedFaction != null)
             {
                 foreach (TabFactionVM tabFactionVM in this._dataSource.Factions)
                 {
                     tabFactionVM.ShowWarIcon = this._dataSource.SelectedFaction.factionObj.warDeclaredTo.Contains(tabFactionVM.FactionIndex) || tabFactionVM.factionObj.warDeclaredTo.Contains(this._dataSource.SelectedFaction.FactionIndex); ;
-                    
+
                 }
             }
         }

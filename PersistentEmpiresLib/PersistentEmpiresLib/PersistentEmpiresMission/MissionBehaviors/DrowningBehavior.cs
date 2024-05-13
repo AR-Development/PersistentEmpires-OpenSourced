@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -20,7 +17,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public override void AfterStart()
         {
-            
+
             GameEntity upperLimit = base.Mission.Scene.FindEntityWithTag("drowning_upper_limit");
             GameEntity lowerLimit = base.Mission.Scene.FindEntityWithTag("drowning_lower_limit");
 
@@ -37,12 +34,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public override void OnMissionTick(float dt)
         {
-            if((this.LastCheckedAt + this.Duration < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) && this.IsSetProperly)
+            if ((this.LastCheckedAt + this.Duration < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) && this.IsSetProperly)
             {
                 this.LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                foreach(Agent agent in base.Mission.Agents.ToList())
+                foreach (Agent agent in base.Mission.Agents.ToList())
                 {
-                    if(agent.IsActive() && agent.Position.Z < UpperLimit && agent.Position.Z > LowerLimit)
+                    if (agent.IsActive() && agent.Position.Z < UpperLimit && agent.Position.Z > LowerLimit)
                     {
                         Blow blow = new Blow(agent.Index);
                         blow.DamageType = TaleWorlds.Core.DamageTypes.Pierce;

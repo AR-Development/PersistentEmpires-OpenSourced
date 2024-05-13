@@ -1,11 +1,7 @@
-﻿using PersistentEmpiresLib.Data;
+﻿using PersistentEmpires.Views.ViewsVM.ImportExport;
+using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM.ImportExport;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -20,11 +16,13 @@ namespace PersistentEmpires.Views.ViewsVM
         private Action<PEImportExportItemVM> _export;
         private Action<PEImportExportItemVM> _import;
         private Action<PEItemVM> _handleClickItem;
-        public PEImportExportVM(Action<PEItemVM> _handleClickItem) {
+        public PEImportExportVM(Action<PEItemVM> _handleClickItem)
+        {
             this._handleClickItem = _handleClickItem;
         }
 
-        public void RefreshValues(PE_ImportExport importExportEntity, Inventory inventory, Action<PEImportExportItemVM> export, Action<PEImportExportItemVM> import) {
+        public void RefreshValues(PE_ImportExport importExportEntity, Inventory inventory, Action<PEImportExportItemVM> export, Action<PEImportExportItemVM> import)
+        {
             this.ItemList = new MBBindingList<PEImportExportItemVM>();
             this.SelectedItem = null;
             this.PlayerInventory = new PEInventoryVM(this._handleClickItem);
@@ -40,11 +38,13 @@ namespace PersistentEmpires.Views.ViewsVM
             this._import = import;
         }
 
-        public void ExecuteExport() {
+        public void ExecuteExport()
+        {
             this._export(this.SelectedItem);
         }
 
-        public void ExecuteImport() {
+        public void ExecuteImport()
+        {
             this._import(this.SelectedItem);
         }
 
@@ -54,29 +54,29 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._filter;
             set
             {
-                if(value != this._filter)
+                if (value != this._filter)
                 {
                     this._filter = value;
                     base.OnPropertyChangedWithValue(value, "Filter");
-                    if(value != null || value != "")
+                    if (value != null || value != "")
                     {
                         this._filteredItemList = new MBBindingList<PEImportExportItemVM>();
-                        foreach(PEImportExportItemVM i in this._itemList)
+                        foreach (PEImportExportItemVM i in this._itemList)
                         {
                             if (i.ItemName.Contains(this.Filter)) this._filteredItemList.Add(i);
                         }
                         base.OnPropertyChanged("FilteredItemList");
                     }
-                    
+
                 }
             }
         }
         [DataSourceProperty]
         public MBBindingList<PEImportExportItemVM> FilteredItemList
-        { 
+        {
             get
             {
-                if(this.Filter == null || this.Filter == "")
+                if (this.Filter == null || this.Filter == "")
                 {
                     return this.ItemList;
                 }
@@ -92,7 +92,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._playerInventory;
             set
             {
-                if(value != this._playerInventory)
+                if (value != this._playerInventory)
                 {
                     this._playerInventory = value;
                     base.OnPropertyChangedWithValue(value, "PlayerInventory");
@@ -105,7 +105,7 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._itemList;
             set
             {
-                if(value != this._itemList)
+                if (value != this._itemList)
                 {
                     this._itemList = value;
                     base.OnPropertyChangedWithValue(value, "ItemList");
@@ -114,7 +114,8 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         [DataSourceProperty]
-        public bool CanImport {
+        public bool CanImport
+        {
             get => this.SelectedItem != null;
         }
         [DataSourceProperty]
@@ -123,21 +124,22 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this.SelectedItem != null;
         }
         [DataSourceProperty]
-        public PEImportExportItemVM SelectedItem {
+        public PEImportExportItemVM SelectedItem
+        {
             get => this._selectedItem;
             set
             {
-                if(value != this._selectedItem)
+                if (value != this._selectedItem)
                 {
-                    if(this._selectedItem != null)
+                    if (this._selectedItem != null)
                     {
                         this._selectedItem.IsSelected = false;
                     }
                     this._selectedItem = value;
-                    if(this._selectedItem != null)
+                    if (this._selectedItem != null)
                     {
                         this._selectedItem.IsSelected = true;
-                    } 
+                    }
                     base.OnPropertyChangedWithValue(value, "SelectedItem");
                     base.OnPropertyChanged("CanExport");
                     base.OnPropertyChanged("CanImport");

@@ -1,12 +1,8 @@
 ﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -24,10 +20,22 @@ namespace PersistentEmpiresLib.SceneScripts
     {
         public string PrefabName;
         public ItemObject SpawnerItem;
-        public SpawnableItem(string prefabName, string spawnerItemId)
+        public int MaxSpawnAmount;
+        public float DespawnArea;
+        public float AdjustPositionX;
+        public float AdjustPositionY;
+        public float AdjustPositionZ;
+
+
+        public SpawnableItem(string prefabName, string spawnerItemId, int maxSpawnAmount, float despawnArea, float adjustPositionX, float adjustPositionY, float adjustPositionZ)
         {
             this.PrefabName = prefabName;
             this.SpawnerItem = MBObjectManager.Instance.GetObject<ItemObject>(spawnerItemId);
+            this.MaxSpawnAmount = maxSpawnAmount;
+            this.DespawnArea = despawnArea;
+            this.AdjustPositionX = adjustPositionX;
+            this.AdjustPositionY = adjustPositionY;
+            this.AdjustPositionZ = adjustPositionZ;
         }
     }
     public class PE_PrefabSpawner : PE_UsableFromDistance
@@ -37,9 +45,8 @@ namespace PersistentEmpiresLib.SceneScripts
         public Vec3 SpawnOffset = new Vec3();
         public string PrefabSpawnerName = "Siege Unit Deployer";
         public string SpawnerCategoryName = "Siege Units";
-        public float DespawnArea = 5f;
+
         private GameEntity SpawningPoint;
-        public int MaxSpawnAmount = 30;
         public override ScriptComponentBehavior.TickRequirement GetTickRequirement() => GameNetwork.IsServer ? base.GetTickRequirement() : ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel;
         public List<SpawnableItem> SpawnableItems { get; private set; }
         public List<GameEntity> SpawnedPrefabs { get; private set; }
@@ -73,7 +80,14 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 string itemId = node["ItemId"].InnerText;
                 string prefabName = node["PrefabName"].InnerText;
-                SpawnableItem spawnableItem = new SpawnableItem(prefabName, itemId);
+                int maxSpawnAmount = node["MaxSpawnAmount"] != null ? int.Parse(node["MaxSpawnAmount"].InnerText) : 20;
+                float despawnArea = node["DespawnArea"] != null ? float.Parse(node["DespawnArea"].InnerText) : 5f;
+
+                float adjustPositionX = node["AdjustPositionX"] != null ? float.Parse(node["AdjustPositionX"].InnerText) : 0;
+                float adjustPositionY = node["AdjustPositionY"] != null ? float.Parse(node["AdjustPositionY"].InnerText) : 0;
+                float adjustPositionZ = node["AdjustPositionZ"] != null ? float.Parse(node["AdjustPositionZ"].InnerText) : 0;
+
+                SpawnableItem spawnableItem = new SpawnableItem(prefabName, itemId, maxSpawnAmount, despawnArea, adjustPositionX, adjustPositionY, adjustPositionZ);
                 if (spawnableItem.SpawnerItem != null)
                 {
                     this.SpawnableItems.Add(spawnableItem);
@@ -120,8 +134,8 @@ namespace PersistentEmpiresLib.SceneScripts
                     SpawnableItem spawnableItem = this.SpawnableItems.FirstOrDefault((s) => s.SpawnerItem.Id == missionWeapon.Item.Id);
                     if (spawnableItem.SpawnerItem == null) this.DespawnNearest(userAgent);
                     else
-                    {
-                        if (this.SpawnedPrefabs.Count < this.MaxSpawnAmount)
+                    { 
+                        if (this.SpawnedPrefabs.Count < spawnableItem.MaxSpawnAmount)
                         {
                             this.SpawnSpawnableItem(userAgent, spawnableItem);
                         }
@@ -138,8 +152,14 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             EquipmentIndex equipmentIndex = userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
             userAgent.RemoveEquippedWeapon(equipmentIndex);
+
             MatrixFrame spawnFrame = this.SpawningPoint.GetGlobalFrame();
-            MissionObject mObject = Mission.Current.CreateMissionObjectFromPrefab(spawnableItem.PrefabName, spawnFrame);
+            Vec3 vecspawnFrame = new Vec3(spawnFrame.origin.X + spawnableItem.AdjustPositionX, spawnFrame.origin.Y + spawnableItem.AdjustPositionY, spawnFrame.origin.Z + spawnableItem.AdjustPositionZ);
+
+            MatrixFrame adjSpawnFrame = new MatrixFrame(spawnFrame.rotation, vecspawnFrame);
+
+            MissionObject mObject = Mission.Current.CreateMissionObjectFromPrefab(spawnableItem.PrefabName, adjSpawnFrame);
+
             this.SpawnedPrefabs.Add(mObject.GameEntity);
 
             LoggerHelper.LogAnAction(userAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerSpawnedPrefab, null, new object[] {
@@ -180,31 +200,30 @@ namespace PersistentEmpiresLib.SceneScripts
 
         private void DespawnNearest(Agent userAgent)
         {
-            foreach (GameEntity spawnedEntity in this.SpawnedPrefabs.ToArray())
+            Vec3 spawnerOrigin = this.SpawningPoint.GetGlobalFrame().origin;
+            this.SpawnedPrefabs.Sort((s, s2) => s.GetGlobalFrame().origin.Distance(spawnerOrigin).CompareTo(s2.GetGlobalFrame().origin.Distance(spawnerOrigin)));
+            var spawnedEntity = this.SpawnedPrefabs.FirstOrDefault();
+            if (spawnedEntity != null)
             {
                 Vec3 spawnedEntityOrigin = spawnedEntity.GetGlobalFrame().origin;
-                Vec3 spawnerOrigin = this.SpawningPoint.GetGlobalFrame().origin;
                 SpawnableItem sItem = this.SpawnableItems.FirstOrDefault(s => s.PrefabName == spawnedEntity.Name);
-                if (sItem.SpawnerItem == null) continue;
-                float distance = spawnedEntityOrigin.Distance(spawnerOrigin);
-                if (distance <= this.DespawnArea)
+                if (sItem.SpawnerItem != null)
                 {
-                    // Remove the object add it as to the agent's inventory, if no place drop on ground.
-                    // userAgent.Equipment
-                    NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
-                    PersistentEmpireRepresentative empireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
-                    if (empireRepresentative.GetInventory().HasEnoughRoomFor(sItem.SpawnerItem, 1))
+                    float distance = spawnedEntityOrigin.Distance(spawnerOrigin);
+                    if (distance <= sItem.DespawnArea)
                     {
-                        empireRepresentative.GetInventory().AddCountedItemSynced(sItem.SpawnerItem, 1, ItemHelper.GetMaximumAmmo(sItem.SpawnerItem));
-                        this.DespawnSpawnedPrefab(spawnedEntity);
-                        LoggerHelper.LogAnAction(userAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerDespawnedPrefab, null, new object[] {
-                            sItem
-                        });
-                        break;
-                    }
-                    else
-                    {
-                        InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                        NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
+                        PersistentEmpireRepresentative empireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+                        if (empireRepresentative.GetInventory().HasEnoughRoomFor(sItem.SpawnerItem, 1))
+                        {
+                            empireRepresentative.GetInventory().AddCountedItemSynced(sItem.SpawnerItem, 1, ItemHelper.GetMaximumAmmo(sItem.SpawnerItem));
+                            this.DespawnSpawnedPrefab(spawnedEntity);
+                            LoggerHelper.LogAnAction(userAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerDespawnedPrefab, null, new object[] { sItem });
+                        }
+                        else
+                        {
+                            InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                        }
                     }
                 }
             }

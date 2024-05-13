@@ -1,22 +1,16 @@
-﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.Data;
-using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.NetworkMessages.Server;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
@@ -87,7 +81,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
         private string GenerateId()
         {
-            if(PE_InventoryEntity.random == null)
+            if (PE_InventoryEntity.random == null)
             {
                 PE_InventoryEntity.random = new Random();
             }
@@ -159,7 +153,7 @@ namespace PersistentEmpiresLib.SceneScripts
             List<GameEntity> reference = new List<GameEntity>();
             base.Scene.GetAllEntitiesWithScriptComponent<PE_InventoryEntity>(ref reference);
             List<PE_InventoryEntity> sameId = reference.Select(r => r.GetFirstScriptOfType<PE_InventoryEntity>()).Where(r => r.InventoryId == this.InventoryId && r != this).ToList();
-            if(sameId.Count() > 0)
+            if (sameId.Count() > 0)
             {
                 MBEditor.AddEntityWarning(base.GameEntity, this.InventoryId + " has a same id with another chest");
                 return false;
@@ -193,9 +187,9 @@ namespace PersistentEmpiresLib.SceneScripts
         public void OpenInventory(Agent userAgent)
         {
             Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_open"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);
-                this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
-            // userAgent.StopUsingGameObjectMT(true);            
-        }        
+            this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
+            // userAgent.StopUsingGameObjectMT(true);
+        }
 
         public override void OnUse(Agent userAgent)
         {
@@ -218,7 +212,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     return;
                 }
             }
-            
+
             if (GameNetwork.IsServer)
             {
                 MatrixFrame globalFrame = base.GameEntity.GetGlobalFrame();
@@ -282,7 +276,7 @@ namespace PersistentEmpiresLib.SceneScripts
             // {
             this.InventoryId = this.GenerateId();
             // }
-            if(playerInventoryComponent.CustomInventories != null && !playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId))
+            if (playerInventoryComponent.CustomInventories != null && !playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId))
             {
                 Inventory inventory = new Inventory(this.Slot, this.StackCount, this.InventoryId, this);
                 inventory.GeneratedViaSpawner = true;

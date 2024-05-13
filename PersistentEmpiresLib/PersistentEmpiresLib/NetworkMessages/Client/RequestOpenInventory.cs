@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -14,7 +8,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     {
         public string InventoryId { get; set; }
         public RequestOpenInventory() { }
-        public RequestOpenInventory(string InventoryId, bool PlayerSelf) {
+        public RequestOpenInventory(string InventoryId, bool PlayerSelf)
+        {
             this.InventoryId = InventoryId;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()

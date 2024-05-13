@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -65,9 +60,9 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             GameEntity portcullis = base.GameEntity.GetFirstChildEntityWithTag(this.PortcullisTag);
             GameEntity elevation = base.GameEntity.GetFirstChildEntityWithTag(this.ElevationPointTag);
-            if(portcullis == null)
+            if (portcullis == null)
             {
-                MBEditor.AddEntityWarning(base.GameEntity,"Portcullis body not found");
+                MBEditor.AddEntityWarning(base.GameEntity, "Portcullis body not found");
                 return false;
             }
             if (elevation == null)
@@ -75,7 +70,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 MBEditor.AddEntityWarning(base.GameEntity, "Elevation point not found");
                 return false;
             }
-            if(portcullis.GetFirstScriptOfType<SynchedMissionObject>() == null)
+            if (portcullis.GetFirstScriptOfType<SynchedMissionObject>() == null)
             {
                 MBEditor.AddEntityWarning(base.GameEntity, "Portcullis body should have a SyncehdMissionObject script");
                 return false;
@@ -101,7 +96,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     hasUser = true;
                     MatrixFrame frame = this._portcullis.GetFrame();
 
-                    if(frame.origin.Z >= this._maxElevationZ && standingPoint.GameEntity.HasTag(this.ElevatorTag))
+                    if (frame.origin.Z >= this._maxElevationZ && standingPoint.GameEntity.HasTag(this.ElevatorTag))
                     {
                         portcullisState = PortcullisState.Idle;
                         standingPoint.UserAgent.StopUsingGameObjectMT(true);
@@ -113,7 +108,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     }
                     else if (standingPoint.GameEntity.HasTag(this.ElevatorTag))
                     {
-                        if(standingPoint.UserAgent.GetCurrentAction(0).Name == "act_none" && this.ElevationAnimation != "")
+                        if (standingPoint.UserAgent.GetCurrentAction(0).Name == "act_none" && this.ElevationAnimation != "")
                         {
                             standingPoint.UserAgent.SetActionChannel(0, ActionIndexCache.Create(this.ElevationAnimation), true, 0UL, 0.0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
                         }
@@ -130,7 +125,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
                 }
             }
-            if(!hasUser)
+            if (!hasUser)
             {
                 this.portcullisState = PortcullisState.Idle;
             }

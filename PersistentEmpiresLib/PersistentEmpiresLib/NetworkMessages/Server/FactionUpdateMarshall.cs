@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -16,7 +11,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public bool IsMarshall;
 
         public FactionUpdateMarshall() { }
-        public FactionUpdateMarshall(int FactionIndex, NetworkCommunicator TargetPlayer,bool IsMarshall)
+        public FactionUpdateMarshall(int FactionIndex, NetworkCommunicator TargetPlayer, bool IsMarshall)
         {
             this.TargetPlayer = TargetPlayer;
             this.FactionIndex = FactionIndex;
@@ -36,7 +31,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1,200,true), ref result);
+            this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
             this.TargetPlayer = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
             this.IsMarshall = GameNetworkMessage.ReadBoolFromPacket(ref result);
             return result;

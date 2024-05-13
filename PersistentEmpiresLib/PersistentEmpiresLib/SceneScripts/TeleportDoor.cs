@@ -1,11 +1,5 @@
 ﻿using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.InputSystem;
@@ -65,11 +59,12 @@ namespace PersistentEmpiresLib.SceneScripts
             return false;
         }
 
-        public bool CanPlayerUse(Agent userAgent) {
+        public bool CanPlayerUse(Agent userAgent)
+        {
             if (this.CastleId == -1) return true;
             Faction f = this.GetCastleBanner().GetOwnerFaction();
             NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
-            PersistentEmpireRepresentative persistentEmpireRepresentative =  player.GetComponent<PersistentEmpireRepresentative>();
+            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (this.AllowMembersWithoutKeys && persistentEmpireRepresentative.GetFaction() == f) return true;
             if (f.doorManagers.Contains(player.VirtualPlayer.Id.ToString()) || f.marshalls.Contains(player.VirtualPlayer.Id.ToString()) || f.lordId == player.VirtualPlayer.Id.ToString()) return true;
             return false;
@@ -97,7 +92,7 @@ namespace PersistentEmpiresLib.SceneScripts
                         PE_RepairableDestructableComponent destructComponent = base.GameEntity.GetFirstScriptOfType<PE_RepairableDestructableComponent>();
                         if (destructComponent != null && destructComponent.IsBroken) canPlayerUse = true;
                     }
-                    if(canPlayerUse)
+                    if (canPlayerUse)
                     {
                         GameEntity teleportPosEntity = this.LinkedDoor.GameEntity.GetFirstChildEntityWithTag("position");
                         userAgent.TeleportToPosition(teleportPosEntity.GlobalPosition);

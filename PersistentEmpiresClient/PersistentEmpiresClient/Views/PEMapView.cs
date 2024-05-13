@@ -1,10 +1,7 @@
-﻿using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using System;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.SceneScripts;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
@@ -57,14 +54,15 @@ namespace PersistentEmpires.Views.Views
             base.OnMissionScreenTick(dt);
             if (this.IsSceneSupportsMap == false) return;
             this._dataSource.Tick(dt);
-            if(base.MissionScreen.InputManager.IsKeyReleased(InputKey.M))
+            if (base.MissionScreen.InputManager.IsKeyReleased(InputKey.M))
             {
-                if(this.IsActive)
+                if (this.IsActive)
                 {
                     this.MissionScreen.CustomCamera = null;
                     this.CloseUI();
                     this.IsActive = false;
-                }else
+                }
+                else
                 {
                     this.MissionScreen.CustomCamera = this.MapCamera;
                     this.OpenUI();

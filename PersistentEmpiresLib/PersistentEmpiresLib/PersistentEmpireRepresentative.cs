@@ -2,16 +2,12 @@
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using static System.Collections.Specialized.BitVector32;
 
 namespace PersistentEmpiresLib
 {
@@ -34,7 +30,7 @@ namespace PersistentEmpiresLib
         public bool LoadFromDb = false;
         public Vec3 LoadedDbPosition;
         public Equipment LoadedSpawnEquipment;
-
+        public string AttachToAgentId { get; set; } 
         public int[] LoadedAmmo { get; set; }
 
         public PersistentEmpireRepresentative()

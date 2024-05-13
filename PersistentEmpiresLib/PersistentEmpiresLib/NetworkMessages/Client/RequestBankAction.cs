@@ -1,9 +1,4 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
@@ -17,7 +12,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         public bool Deposit;
 
         public RequestBankAction() { }
-        public RequestBankAction(PE_Bank bank, int amount, bool deposit) {
+        public RequestBankAction(PE_Bank bank, int amount, bool deposit)
+        {
             this.Bank = bank;
             this.Amount = amount;
             this.Deposit = deposit;

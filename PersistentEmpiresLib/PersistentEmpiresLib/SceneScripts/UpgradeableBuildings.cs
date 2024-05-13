@@ -1,13 +1,10 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
+﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -76,7 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
         private PE_InventoryEntity _upgradeInventory;
         private PlayerInventoryComponent _playerInventoryComponent;
 
-       
+
 
         protected bool ValidateValues()
         {
@@ -100,7 +97,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 MBEditor.AddEntityWarning(base.GameEntity, base.GameEntity.GetPrefabName() + " Tier3Tag not found in childrens. " + this.Tier3Tag + " not found in childrens");
                 return false;
             }
-            if(base.GameEntity.GetChildren().FirstOrDefault((g) => g.Tags.Contains(this.BuildingInteractiveTag)) == null)
+            if (base.GameEntity.GetChildren().FirstOrDefault((g) => g.Tags.Contains(this.BuildingInteractiveTag)) == null)
             {
                 MBEditor.AddEntityWarning(base.GameEntity, base.GameEntity.GetPrefabName() + " BuildingInteractiveTag not found in childrens. " + this.BuildingInteractiveTag + " not found in childrens");
                 return false;
@@ -109,7 +106,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 this.ParseUpgradeReceipts(this.Tier1UpgradeReceipts);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MBEditor.AddEntityWarning(base.GameEntity, base.GameEntity.GetPrefabName() + " Tier1UpgradeReceipts could not parsed. Make sure it's in defined format");
                 return false;
@@ -245,7 +242,7 @@ namespace PersistentEmpiresLib.SceneScripts
             this._currentTierState.SetVisibilityExcludeParents(true);
             this.CurrentTier = this.CurrentTier + 1;
             this.MaxHitPoint = this.GetNextMaxHit();
-            
+
         }
         public override void SetHitPoint(float hitPoint, Vec3 impactDirection, ScriptComponentBehavior attackerScriptComponentBehavior)
         {
@@ -289,7 +286,7 @@ namespace PersistentEmpiresLib.SceneScripts
             if (attackerAgent == null) return false;
             NetworkCommunicator player = attackerAgent.MissionPeer.GetNetworkPeer();
             bool isAdmin = Main.IsPlayerAdmin(player);
-            if(isAdmin && missionWeapon.Item != null && missionWeapon.Item.StringId == "pe_adminhammer")
+            if (isAdmin && missionWeapon.Item != null && missionWeapon.Item.StringId == "pe_adminhammer")
             {
                 if (this.CurrentTier < this.MaxTier)
                 {
@@ -302,9 +299,9 @@ namespace PersistentEmpiresLib.SceneScripts
                 }
                 return true;
             }
-            if ( missionWeapon.Item == null ||
+            if (missionWeapon.Item == null ||
                 missionWeapon.Item.StringId != this.BuildItem) return false;
-           
+
 
             if (this.IsUpgrading)
             {
@@ -326,7 +323,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 InformationComponent.Instance.SendMessage("You are trying to build " + this.BuildingName + " building.", 0x02ab89d9, player);
                 if (this.CurrentTier >= this.MaxTier)
                 {
-                    InformationComponent.Instance.SendMessage("This building is fully upgraded", new Color(0f,1f,0f).ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage("This building is fully upgraded", new Color(0f, 1f, 0f).ToUnsignedInteger(), player);
                     return false;
                 }
                 if (attackerAgent.Character.GetSkillValue(DefaultSkills.Engineering) < this.GetRequiredEngineeringForUpgrade())
@@ -334,7 +331,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     InformationComponent.Instance.SendMessage("You are not qualified enough", new Color(1f, 0, 0).ToUnsignedInteger(), player);
                     return false;
                 }
-                
+
 
                 GameEntity nextUpgrade = this.GetNextUpgrade();
                 List<UpgradeReceipt> nextUpgradeReceipts = this.GetUpgradeReceipts();

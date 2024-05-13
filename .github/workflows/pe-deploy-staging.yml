@@ -1,0 +1,51 @@
+name: pe-deploy-staging
+
+concurrency: staging
+
+on:
+  workflow_call:
+  
+jobs:  
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Calculate short sha
+      id: vars
+      run: |
+        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "build_date=$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
+    - name: Prepare working dirs
+      run: |
+        mkdir -p release/PersistentEmpiresClient
+        mkdir -p release/PersistentEmpiresServer
+
+    - name: Download Client build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Client-${{github.sha}}
+        path: release/PersistentEmpiresClient
+
+    - name: Download Server build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Server-${{github.sha}}
+        path: release/PersistentEmpiresServer
+
+    - name: Prepare working dirs
+      run: |
+        (cd release/PersistentEmpiresClient/ && zip -r ../../PersistentEmpiresClient.zip .)
+        (cd release/PersistentEmpiresServer/ && zip -r ../../PersistentEmpiresServer.zip .)
+
+    - name: Create a GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: rc-${{steps.vars.outputs.build_date}}-${{steps.vars.outputs.sha_short}}
+        name: Prerelease ${{needs.tag-rc.outputs.new_tag}}
+        prerelease: true
+        token: ${{secrets.GITHUB_TOKEN}}
+        artifacts: "PersistentEmpiresClient.zip,PersistentEmpiresServer.zip"

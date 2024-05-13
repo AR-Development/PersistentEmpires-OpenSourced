@@ -1,14 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using PersistentEmpires.Views.Views.AdminPanel;
+﻿using PersistentEmpires.Views.Views.AdminPanel;
 using PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons;
 using System.Collections.Generic;
 using System.Linq;
-using TaleWorlds.GauntletUI.BaseTypes;
-using TaleWorlds.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using System.Runtime.CompilerServices;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 
 namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 {
@@ -44,7 +39,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             {
                 _customButtons.ForEach(x => _adminButtons.Add(x));
             }
-            
+
             OnPropertyChangedWithValue(_adminButtons, "AdminButtons");
         }
 
@@ -74,8 +69,9 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         public MBBindingList<PEAdminPlayerVM> Players
         {
             get => _players;
-            set {
-                if(value != this._players)
+            set
+            {
+                if (value != this._players)
                 {
                     this._players = value;
                     base.OnPropertyChangedWithValue(value, "Players");
@@ -89,7 +85,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             get => this._searchedPlayerName;
             set
             {
-                if(value != this._searchedPlayerName)
+                if (value != this._searchedPlayerName)
                 {
                     this._searchedPlayerName = value;
                     base.OnPropertyChangedWithValue(value, "SearchedPlayerName");
@@ -101,10 +97,11 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         [DataSourceProperty]
         public MBBindingList<PEAdminPlayerVM> FilteredPlayers
         {
-            get {
-                List<PEAdminPlayerVM> filtered = this.SearchedPlayerName == null || this.SearchedPlayerName == ""  ? this.Players.ToList() : this.Players.Where(p => p.PlayerName.Contains(this.SearchedPlayerName) || p.FactionName.Contains(this.SearchedPlayerName)).ToList();
+            get
+            {
+                List<PEAdminPlayerVM> filtered = this.SearchedPlayerName == null || this.SearchedPlayerName == "" ? this.Players.ToList() : this.Players.Where(p => p.PlayerName.Contains(this.SearchedPlayerName) || p.FactionName.Contains(this.SearchedPlayerName)).ToList();
                 MBBindingList<PEAdminPlayerVM> filteredBinding = new MBBindingList<PEAdminPlayerVM>();
-                foreach(PEAdminPlayerVM f in filtered)
+                foreach (PEAdminPlayerVM f in filtered)
                 {
                     filteredBinding.Add(f);
                 }

@@ -1,9 +1,5 @@
 ﻿using PersistentEmpiresLib.SceneScripts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -49,7 +45,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (spawner != null && affectorAgent.IsHuman && affectorAgent.IsPlayerControlled)
             {
                 SkillObject relevantButcheringSkill = MBObjectManager.Instance.GetObject<SkillObject>(spawner.RelevantButcheringSkill);
-                if(relevantButcheringSkill == null)
+                if (relevantButcheringSkill == null)
                 {
                     return;
                 }

@@ -4,9 +4,6 @@ using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -25,10 +22,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
 
         public override void OnBehaviorInitialize()
-		{
-			base.OnBehaviorInitialize();
-			this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-		}
+        {
+            base.OnBehaviorInitialize();
+            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+        }
 
         public override void OnRemoveBehavior()
         {
@@ -39,18 +36,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
         {
             GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-			if (GameNetwork.IsClient)
-			{
+            if (GameNetwork.IsClient)
+            {
                 networkMessageHandlerRegisterer.Register<LocalMessageServer>(this.HandleLocalMessageFromServer);
                 networkMessageHandlerRegisterer.Register<ShoutMessageServer>(this.HandleShoutMessageFromServer);
                 networkMessageHandlerRegisterer.Register<CustomBubbleMessage>(this.HandleCustomBubbleMessageFromServer);
             }
-			if (GameNetwork.IsServer)
-			{
-				networkMessageHandlerRegisterer.Register<LocalMessage>(this.HandleLocalMessageFromClient);
+            if (GameNetwork.IsServer)
+            {
+                networkMessageHandlerRegisterer.Register<LocalMessage>(this.HandleLocalMessageFromClient);
                 networkMessageHandlerRegisterer.Register<ShoutMessage>(this.HandleShoutMessageFromClient);
             }
-		}
+        }
 
         private void HandleCustomBubbleMessageFromServer(CustomBubbleMessage message)
         {
@@ -64,7 +61,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void HandleShoutMessageFromServer(ShoutMessageServer message)
         {
             InformationManager.DisplayMessage(new InformationMessage("[SHOUT] " + message.Sender.UserName + ": " + message.Message, Color.ConvertStringToColor("#AFAFAFFF")));
-            if(this.OnLocalChatMessage != null)
+            if (this.OnLocalChatMessage != null)
             {
                 this.OnLocalChatMessage(message.Sender, message.Message, true);
             }
@@ -79,7 +76,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        private bool HandleShoutMessageFromClient(NetworkCommunicator player,ShoutMessage message)
+        private bool HandleShoutMessageFromClient(NetworkCommunicator player, ShoutMessage message)
         {
             if (player.ControlledAgent == null) return false;
             if (this.OnPrefixHandleLocalChatFromClient != null)
@@ -107,15 +104,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
-            LoggerHelper.LogAnAction(player, LogAction.LocalChat, affectedPlayers.ToArray(), new object[] { 
+            LoggerHelper.LogAnAction(player, LogAction.LocalChat, affectedPlayers.ToArray(), new object[] {
                 message.Text
             });
             return true;
         }
 
-        private bool HandleLocalMessageFromClient(NetworkCommunicator player,LocalMessage message)
+        private bool HandleLocalMessageFromClient(NetworkCommunicator player, LocalMessage message)
         {
-            
+
             if (player.ControlledAgent == null) return false;
             if (this.OnPrefixHandleLocalChatFromClient != null)
             {
@@ -128,7 +125,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (otherPlayer.ControlledAgent == null) continue;
                 Vec3 otherPlayerPosition = otherPlayer.ControlledAgent.Position;
                 float d = position.Distance(otherPlayerPosition);
-                if(d < 30)
+                if (d < 30)
                 {
                     // InformationComponent.Instance.SendMessage("(LOCAL)[" + player.UserName + "] " + message.Text, new Color(0.96f, 0.64f, 0.0078f).ToUnsignedInteger(), otherPlayer);
                     GameNetwork.BeginModuleEventAsServer(otherPlayer);

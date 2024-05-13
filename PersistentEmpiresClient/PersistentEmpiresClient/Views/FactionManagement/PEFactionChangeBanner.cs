@@ -1,13 +1,4 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM.FactionManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade.View.MissionViews;
+﻿using PersistentEmpires.Views.ViewsVM.FactionManagement;
 
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
@@ -21,15 +12,18 @@ namespace PersistentEmpires.Views.Views.FactionManagement
         {
             base.OnMissionScreenInitialize();
             this._factionManagementComponent.OnBannerChangeClick += this.OnOpen;
-            this._dataSource = new PEFactionChangeBannerVM(() => {
+            this._dataSource = new PEFactionChangeBannerVM(() =>
+            {
                 this.CloseManagementMenu();
                 this._factionManagementComponent.OnFactionManagementClickHandler();
-            }, 
-            (string BannerCode) => {
+            },
+            (string BannerCode) =>
+            {
                 this.CloseManagementMenu();
                 this._factionsBehavior.RequestUpdateFactionBanner(BannerCode);
             },
-            () => {
+            () =>
+            {
                 this.CloseManagementMenu();
             });
         }

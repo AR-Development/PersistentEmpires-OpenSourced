@@ -1,22 +1,19 @@
-﻿using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpires.Views.ViewsVM.PETabMenu;
+using PersistentEmpiresLib;
+using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpires.Views.ViewsVM;
-using PersistentEmpires.Views.ViewsVM.PETabMenu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
+using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
-using TaleWorlds.Engine.GauntletUI;
-using PersistentEmpiresLib;
-using TaleWorlds.Engine;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -55,7 +52,7 @@ namespace PersistentEmpires.Views.Views
 
         private void OnPlayerJoinedFaction(int factionIndex, Faction faction, int joinedFromIndex, NetworkCommunicator player)
         {
-            if(player.IsMine)
+            if (player.IsMine)
             {
                 this.GetSelectableCastles();
                 this.GetDefaultSpawnPoints();
@@ -81,7 +78,7 @@ namespace PersistentEmpires.Views.Views
             if (_selectableCastles.ContainsKey(castle) && castle.FactionIndex != factionIndex)
             {
                 _selectableCastles.Remove(castle);
-                if(this._isEnabled)
+                if (this._isEnabled)
                 {
                     if (this._selectableCastles.Keys.Count > 0)
                     {
@@ -95,7 +92,7 @@ namespace PersistentEmpires.Views.Views
                     }
                 }
             }
-            if(_selectableCastles.ContainsKey(castle) == false && castle.FactionIndex == factionIndex)
+            if (_selectableCastles.ContainsKey(castle) == false && castle.FactionIndex == factionIndex)
             {
                 this._selectableCastles[castle] = this.GetCastleSpawnFrames(castle);
 
@@ -138,7 +135,8 @@ namespace PersistentEmpires.Views.Views
             }
         }
 
-        public void Enable() {
+        public void Enable()
+        {
             if (this._selectableCastles.Count == 0) this.GetSelectableCastles();
             if (this._defaultSpawnPoints.Count == 0) this.GetDefaultSpawnPoints();
             this._dataSource.SpawnTimer = 30;
@@ -192,12 +190,14 @@ namespace PersistentEmpires.Views.Views
                     {
                         this._selectedCastleIndex = this._selectedCastleIndex + 1;
                         this._selectedCastleIndex = this._selectedCastleIndex >= castles.Count ? -1 : this._selectedCastleIndex;
-                        if (this._selectedCastleIndex == -1) { 
-                            this._selectedCastle = null; 
-                            flag = true; 
-                            break; 
+                        if (this._selectedCastleIndex == -1)
+                        {
+                            this._selectedCastle = null;
+                            flag = true;
+                            break;
                         }
-                        else if (this._selectableCastles[castles[this._selectedCastleIndex]].Count > 0) {
+                        else if (this._selectableCastles[castles[this._selectedCastleIndex]].Count > 0)
+                        {
                             this._selectedCastle = castles[this._selectedCastleIndex];
                             flag = false;
                             break;
@@ -239,9 +239,10 @@ namespace PersistentEmpires.Views.Views
             }
         }
 
-        public void UpdateSelection(PE_CastleBanner selectedCastle, int selectedIndex) {
+        public void UpdateSelection(PE_CastleBanner selectedCastle, int selectedIndex)
+        {
             PE_SpawnFrame selectedFrame;
-            if(selectedCastle != null && this._selectableCastles.ContainsKey(selectedCastle) && this._selectableCastles[selectedCastle].Count > selectedIndex)
+            if (selectedCastle != null && this._selectableCastles.ContainsKey(selectedCastle) && this._selectableCastles[selectedCastle].Count > selectedIndex)
             {
                 selectedFrame = this._selectableCastles[selectedCastle][selectedIndex];
             }

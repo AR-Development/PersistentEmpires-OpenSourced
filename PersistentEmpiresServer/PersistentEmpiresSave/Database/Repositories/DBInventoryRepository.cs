@@ -1,13 +1,9 @@
 ﻿using Dapper;
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -15,7 +11,8 @@ namespace PersistentEmpiresSave.Database.Repositories
 {
     public class DBInventoryRepository
     {
-        public static void Initialize() {
+        public static void Initialize()
+        {
             SaveSystemBehavior.OnGetAllInventories += GetAllInventories;
             SaveSystemBehavior.OnGetOrCreateInventory += GetOrCreateInventory;
             SaveSystemBehavior.OnGetOrCreatePlayerInventory += GetOrCreatePlayerInventory;
@@ -26,7 +23,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return null; // Shouldn't be the case
-            Debug.Print("[Save Module] CREATING DBInventory FOR PLAYER "+ (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
+            Debug.Print("[Save Module] CREATING DBInventory FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
             return new DBInventory
             {
                 InventoryId = "PlayerInventory",
@@ -57,7 +54,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static DBInventory GetInventory(string inventoryId)
         {
-            Debug.Print("[Save Module] LOADING INVENTORY "+ inventoryId+" FROM DB");
+            Debug.Print("[Save Module] LOADING INVENTORY " + inventoryId + " FROM DB");
             IEnumerable<DBInventory> results = DBConnection.Connection.Query<DBInventory>("SELECT * FROM Inventories WHERE InventoryId = @InventoryId", new { InventoryId = inventoryId });
             Debug.Print("[Save Module] LOADING INVENTORY " + inventoryId + " RESULT COUNT IS " + results.Count());
             if (results.Count() == 0) return null;
@@ -68,13 +65,13 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             Debug.Print("[Save Module] LOADING INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " FROM DB");
             IEnumerable<DBInventory> results = DBConnection.Connection.Query<DBInventory>("SELECT * FROM Inventories WHERE IsPlayerInventory = 1 and PlayerId = @PlayerId", new { PlayerId = networkCommunicator.VirtualPlayer.Id.ToString() });
-            Debug.Print("[Save Module] LOADING INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT IS "+ results.Count());
+            Debug.Print("[Save Module] LOADING INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT IS " + results.Count());
             if (results.Count() == 0) return null;
             return results.First();
         }
         public static DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created)
         {
-            
+
             created = false;
             DBInventory dbInventory = GetPlayerInventory(networkCommunicator);
             if (dbInventory == null)

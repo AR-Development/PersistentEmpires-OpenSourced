@@ -1,11 +1,6 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
+﻿using PersistentEmpires.Views.ViewsVM.AdminPanel;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM.AdminPanel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -54,11 +49,13 @@ namespace PersistentEmpires.Views.Views.AdminPanel
         {
             base.OnMissionScreenInitialize();
             this._adminBehavior = base.Mission.GetMissionBehavior<AdminClientBehavior>();
-            _dataSource = new PEAdminItemPanelVM((string ItemId, int count) => {
+            _dataSource = new PEAdminItemPanelVM((string ItemId, int count) =>
+            {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new RequestItemSpawn(ItemId, count));
                 GameNetwork.EndModuleEventAsClient();
-            }, () => {
+            }, () =>
+            {
                 this.CloseManagementMenu();
             });
         }

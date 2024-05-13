@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -16,7 +12,8 @@ namespace PersistentEmpires.Views.ViewsVM
         public Action<PEBankVM> OnWithdrawAmount;
 
 
-        public PEBankVM(Action<PEBankVM> depositHandler, Action<PEBankVM> withdrawHandler) {
+        public PEBankVM(Action<PEBankVM> depositHandler, Action<PEBankVM> withdrawHandler)
+        {
             this.OnDepositAmount = depositHandler;
             this.OnWithdrawAmount = withdrawHandler;
         }
@@ -31,11 +28,12 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         [DataSourceProperty]
-        public int Amount {
+        public int Amount
+        {
             get => this._amount;
             set
             {
-                if(value != this._amount)
+                if (value != this._amount)
                 {
                     this._amount = value;
                     base.OnPropertyChangedWithValue(value, "Amount");
@@ -44,11 +42,12 @@ namespace PersistentEmpires.Views.ViewsVM
         }
 
         [DataSourceProperty]
-        public int Balance {
+        public int Balance
+        {
             get => this._balance;
             set
             {
-                if(value != this._balance)
+                if (value != this._balance)
                 {
                     this._balance = value;
                     base.OnPropertyChangedWithValue(value, "Balance");

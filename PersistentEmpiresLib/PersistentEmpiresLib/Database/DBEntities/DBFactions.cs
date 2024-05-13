@@ -1,11 +1,4 @@
-﻿using PersistentEmpiresLib.Factions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PersistentEmpiresLib.Database.DBEntities
+﻿namespace PersistentEmpiresLib.Database.DBEntities
 {
     public class DBFactions
     {
@@ -16,6 +9,6 @@ namespace PersistentEmpiresLib.Database.DBEntities
         public string LordId { get; set; }
         public long PollUnlockedAt { get; set; }
         public string Marshalls { get; set; }
-        
+
     }
 }

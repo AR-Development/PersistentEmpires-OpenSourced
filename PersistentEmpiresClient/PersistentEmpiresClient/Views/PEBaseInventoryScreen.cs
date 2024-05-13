@@ -1,14 +1,10 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 
@@ -92,12 +88,13 @@ namespace PersistentEmpires.Views.Views
         {
             PEInventoryVM inventoryVM = this.GetInventoryVM();
             // InformationManager.DisplayMessage(new InformationMessage(this._gauntletLayer.Input.IsShiftDown().ToString()));
-            if(base.MissionScreen.InputManager.IsShiftDown())
+            if (base.MissionScreen.InputManager.IsShiftDown() || this._gauntletLayer.Input.IsShiftDown())
             {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new InventoryHotkey(clickedSlot.DropTag));
                 GameNetwork.EndModuleEventAsClient();
-            }else if(base.MissionScreen.InputManager.IsControlDown())
+            }
+            else if (base.MissionScreen.InputManager.IsControlDown() || this._gauntletLayer.Input.IsControlDown())
             {
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new InventorySplitItem(clickedSlot.DropTag));
@@ -117,13 +114,13 @@ namespace PersistentEmpires.Views.Views
                 this.GetInventoryVM().RequestedInventoryItems[inventory0Index].Count = count;
                 this.GetInventoryVM().RequestedInventoryItems[inventory0Index].UpdateFromItem();
             }
-            if(inventory0 == "PlayerInventory")
+            if (inventory0 == "PlayerInventory")
             {
                 this.GetInventoryVM().InventoryItems[inventory0Index].Item = item;
                 this.GetInventoryVM().InventoryItems[inventory0Index].Count = count;
                 this.GetInventoryVM().InventoryItems[inventory0Index].UpdateFromItem();
             }
-            if(inventory0 == "Equipment")
+            if (inventory0 == "Equipment")
             {
                 this.UpdateEquipmentInventory(inventory0Index, item, count);
             }

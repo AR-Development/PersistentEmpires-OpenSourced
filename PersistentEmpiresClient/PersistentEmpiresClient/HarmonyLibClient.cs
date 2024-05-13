@@ -1,18 +1,14 @@
 ﻿using HarmonyLib;
+using PersistentEmpiresClient.Patches;
 using PersistentEmpiresHarmony.Patches;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.DotNet;
-using TaleWorlds.MountAndBlade.Diamond;
 using TaleWorlds.MountAndBlade;
-using Debug = TaleWorlds.Library.Debug;
+using TaleWorlds.MountAndBlade.Diamond;
 using TaleWorlds.MountAndBlade.Network.Messages;
-using PersistentEmpiresClient.Patches;
+using Debug = TaleWorlds.Library.Debug;
 
 namespace PersistentEmpiresClient
 {

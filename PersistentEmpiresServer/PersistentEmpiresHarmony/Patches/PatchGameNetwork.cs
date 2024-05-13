@@ -1,11 +1,5 @@
 ﻿using NetworkMessages.FromServer;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Diamond;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
@@ -21,7 +15,7 @@ namespace PersistentEmpiresHarmony.Patches
         public static bool PrefixAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)
         {
             if (OnAddNewPlayerOnServer != null) OnAddNewPlayerOnServer(ref playerConnectionInfo, serverPeer, isAdmin);
-            File.AppendAllText("network.txt", "== Add New Player "+playerConnectionInfo.Name +" ==\n");
+            File.AppendAllText("network.txt", "== Add New Player " + playerConnectionInfo.Name + " ==\n");
 
             return true;
         }
@@ -44,7 +38,7 @@ namespace PersistentEmpiresHarmony.Patches
                 SynchronizeMissionObject sMessage = (SynchronizeMissionObject)message;
                 SynchedMissionObject missionObject = (SynchedMissionObject)Mission.MissionNetworkHelper.GetMissionObjectFromMissionObjectId(sMessage.MissionObjectId);
 
-                File.AppendAllText("network.txt", "  => Mission Object Is " + missionObject.GetType().Name +"\n");
+                File.AppendAllText("network.txt", "  => Mission Object Is " + missionObject.GetType().Name + "\n");
 
 
             }

@@ -1,9 +1,4 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersistentEmpiresSave.Database.Migrations
 {
@@ -51,7 +46,9 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_1").AsInt32().WithDefaultValue(0)
                 .WithColumn("Ammo_2").AsInt32().WithDefaultValue(0)
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
-                .WithColumn("CustomName").AsString().Nullable();
+                .WithColumn("CustomName").AsString().Nullable()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Index("PlayerId__Players")
                 .OnTable("Players")
@@ -122,11 +119,19 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("PlayerName").AsString()
                 .WithColumn("PlayerId").AsString();
-                
+
             Create.Table("Whitelist")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("PlayerId").AsString().Unique()
                 .WithColumn("Active").AsBoolean().WithDefaultValue(true);
+
+            Create.Table("Identifiers")
+                .WithColumn("Identifier").AsString().NotNullable().PrimaryKey()
+                .WithColumn("IdentifierType").AsString().Nullable()
+                .WithColumn("UserId").AsInt64().NotNullable()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+
         }
     }
 }

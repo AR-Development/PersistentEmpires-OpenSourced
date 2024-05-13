@@ -1,10 +1,4 @@
-﻿using PersistentEmpiresLib.ErrorLogging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Server
@@ -13,7 +7,8 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class FactionLordPollClosed : GameNetworkMessage
     {
         // public NetworkCommunicator TargetPlayer {
-        public FactionLordPollClosed() { 
+        public FactionLordPollClosed()
+        {
         }
 
         public FactionLordPollClosed(NetworkCommunicator TargetPlayer, bool Accepted, int FactionIndex)
@@ -45,7 +40,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.Accepted = GameNetworkMessage.ReadBoolFromPacket(ref result);
             this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200), ref result);
 
-           
+
             return result;
         }
 
@@ -53,7 +48,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
             GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.TargetPlayer);
             GameNetworkMessage.WriteBoolToPacket(this.Accepted);
-            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1 , 200));
+            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1, 200));
         }
     }
 }

@@ -1,13 +1,11 @@
-﻿using PersistentEmpiresLib.Helpers;
-using PersistentEmpiresLib.Data;
+﻿using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -86,7 +84,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (craftingAction.startedAt + craftingAction.craftable.CraftTime <= DateTimeOffset.Now.ToUnixTimeSeconds())
                 {
                     // Crafting complete bra.
-                    bool hasEveryItem = craftingAction.craftable.Receipts.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
+                    bool hasEveryItem = craftingAction.craftable.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
                     if (!hasEveryItem)
                     {
                         InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
@@ -97,7 +95,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         continue;
                     }
                     List<int> updatedSlots;
-                    foreach (CraftingReceipt r in craftingAction.craftable.Receipts)
+                    foreach (CraftingRecipe r in craftingAction.craftable.Recipe)
                     {
                         updatedSlots = persistentEmpireRepresentative.GetInventory().RemoveCountedItemSynced(r.Item, r.NeededCount);
                         foreach (int i in updatedSlots)
@@ -107,7 +105,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                             GameNetwork.EndModuleEventAsServer();
                         }
                     }
-                    updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(craftingAction.craftable.CraftableItem, craftingAction.craftable.OutputCount, ItemHelper.GetMaximumAmmo(craftingAction.craftable.CraftableItem));
+                    updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(craftingAction.craftable.Item, craftingAction.craftable.OutputCount, ItemHelper.GetMaximumAmmo(craftingAction.craftable.Item));
                     foreach (int i in updatedSlots)
                     {
                         GameNetwork.BeginModuleEventAsServer(player);
@@ -207,7 +205,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 InformationComponent.Instance.SendMessage("This station is being used.", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }*/
-            if(craftingStation.upgradeableBuilding != null && craftingStation.upgradeableBuilding.CurrentTier < requestedCraft.Tier)
+            if (craftingStation.upgradeableBuilding != null && craftingStation.upgradeableBuilding.CurrentTier < requestedCraft.Tier)
             {
                 InformationComponent.Instance.SendMessage("Upgrade the building first", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
@@ -224,12 +222,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
-            if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(requestedCraft.CraftableItem, requestedCraft.OutputCount))
+            if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(requestedCraft.Item, requestedCraft.OutputCount))
             {
                 InformationComponent.Instance.SendMessage("You have not enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
-            bool hasEveryItem = requestedCraft.Receipts.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
+            bool hasEveryItem = requestedCraft.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
             if (!hasEveryItem)
             {
                 InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);

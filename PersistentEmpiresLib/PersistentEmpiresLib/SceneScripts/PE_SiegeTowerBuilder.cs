@@ -1,12 +1,9 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -39,13 +36,14 @@ namespace PersistentEmpiresLib.SceneScripts
             this.HitPoint = 0;
             this.ParseRepairReceipts();
         }
-        public void Reset() {
+        public void Reset()
+        {
             MethodInfo resetMethod = this.siegeTower.GetType().GetMethod("OnMissionReset", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             resetMethod.Invoke(this.siegeTower, new object[] { });
             this.siegeTower.DestructionComponent.Reset();
             this.siegeTower.GameEntity.SetVisibilityExcludeParents(false);
             this.siegeTowerBuilt = false;
-            this.SetHitPoint(0, new Vec3(0, 0, 0),null);
+            this.SetHitPoint(0, new Vec3(0, 0, 0), null);
             this.siegeTowerDestroyed = false;
         }
         protected override void OnTick(float dt)
@@ -68,7 +66,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 // Reset the shit man.
                 this.Reset();
-                if(GameNetwork.IsServer)
+                if (GameNetwork.IsServer)
                 {
                     GameNetwork.BeginBroadcastModuleEvent();
                     GameNetwork.WriteMessage(new ResetSiegeTower(this));
@@ -102,7 +100,7 @@ namespace PersistentEmpiresLib.SceneScripts
             if (hitPoint >= this.MaxHitPoint) hitPoint = this.MaxHitPoint;
 
             this.HitPoint = hitPoint;
-            if(this.siegeTowerBuilt == false && this.HitPoint >= this.MaxHitPoint)
+            if (this.siegeTowerBuilt == false && this.HitPoint >= this.MaxHitPoint)
             {
                 if (this.ParticleEffectOnRepair != "")
                 {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM.AnimationMenu
@@ -27,7 +24,8 @@ namespace PersistentEmpires.Views.ViewsVM.AnimationMenu
             get => _pages;
         }
 
-        public PEAnimationSubMenuVM(string categoryName, List<PEAnimationVM> animations) {
+        public PEAnimationSubMenuVM(string categoryName, List<PEAnimationVM> animations)
+        {
             this.Name = categoryName;
             this._pages = ChunkBy<PEAnimationVM>(animations, 8);
             this.PageNumber = 0;
@@ -37,7 +35,8 @@ namespace PersistentEmpires.Views.ViewsVM.AnimationMenu
         [DataSourceProperty]
         public MBBindingList<PEAnimationVM> Page
         {
-            get {
+            get
+            {
                 List<PEAnimationVM> page = this._pages[PageNumber];
                 MBBindingList<PEAnimationVM> retVal = new MBBindingList<PEAnimationVM>();
                 foreach (PEAnimationVM p in page) retVal.Add(p);
@@ -51,7 +50,7 @@ namespace PersistentEmpires.Views.ViewsVM.AnimationMenu
             get => this._pageNumber;
             set
             {
-                if(value != this._pageNumber && value < this._pages.Count)
+                if (value != this._pageNumber && value < this._pages.Count)
                 {
                     this._pageNumber = value;
                     base.OnPropertyChangedWithValue(value, "PageNumber");

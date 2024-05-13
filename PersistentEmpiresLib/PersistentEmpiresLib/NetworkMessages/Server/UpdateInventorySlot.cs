@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.ObjectSystem;
@@ -13,7 +8,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     [DefineGameNetworkMessageTypeForMod(GameNetworkMessageSendType.FromServer)]
     public sealed class UpdateInventorySlot : GameNetworkMessage
     {
-        public string Slot {get;set;}
+        public string Slot { get; set; }
         public ItemObject Item { get; set; }
         public int Count { get; set; }
 

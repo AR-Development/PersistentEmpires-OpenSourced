@@ -1,13 +1,8 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersistentEmpiresLib;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade.DedicatedCustomServer;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib;
+using TaleWorlds.MountAndBlade.DedicatedCustomServer;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
@@ -20,9 +15,9 @@ namespace PersistentEmpiresServer.ServerMissions
             base.OnBehaviorInitialize();
             this.IsEnabled = ConfigManager.GetBoolConfig("WhitelistEnabled", false);
 
-            if(this.IsEnabled)
+            if (this.IsEnabled)
             {
-                Debug.Print("** PERSISTENT EMPIRES ** Whitelist Enabled.",0,Debug.DebugColor.DarkYellow);
+                Debug.Print("** PERSISTENT EMPIRES ** Whitelist Enabled.", 0, Debug.DebugColor.DarkYellow);
             }
         }
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator player)
@@ -36,6 +31,6 @@ namespace PersistentEmpiresServer.ServerMissions
                 DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(player.VirtualPlayer.Id, false);
             }
         }
-       
+
     }
 }

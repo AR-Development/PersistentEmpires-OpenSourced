@@ -1,13 +1,7 @@
-﻿using PersistentEmpiresLib.Factions;
+﻿using PersistentEmpires.Views.ViewsVM.AdminPanel;
+using PersistentEmpires.Views.ViewsVM.PETabMenu;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpires.Views.ViewsVM.AdminPanel;
-using PersistentEmpires.Views.ViewsVM.PETabMenu;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;

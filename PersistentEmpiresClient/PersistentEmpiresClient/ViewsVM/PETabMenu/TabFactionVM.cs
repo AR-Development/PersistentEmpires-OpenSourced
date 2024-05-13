@@ -1,11 +1,7 @@
 ﻿using PersistentEmpiresLib;
 using PersistentEmpiresLib.Factions;
-using PersistentEmpiresLib.PersistentEmpiresMission;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -54,8 +50,9 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         [DataSourceProperty]
         public bool CanSeeClasses
         {
-            get {
-                if(GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>() == null)
+            get
+            {
+                if (GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>() == null)
                 {
                     return false;
                 }
@@ -64,11 +61,12 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
 
         [DataSourceProperty]
-        public bool ShowWarIcon {
+        public bool ShowWarIcon
+        {
             get => this._showWarIcon;
             set
             {
-                if(value != this._showWarIcon)
+                if (value != this._showWarIcon)
                 {
                     this._showWarIcon = value;
                     base.OnPropertyChangedWithValue(value, "ShowWarIcon");
@@ -106,7 +104,8 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             }
         }
         [DataSourceProperty]
-        public int MemberCount {
+        public int MemberCount
+        {
             get => this.Members.Count();
         }
 
@@ -122,9 +121,11 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             }
         }
         [DataSourceProperty]
-        public MBBindingList<CastleVM> Castles {
+        public MBBindingList<CastleVM> Castles
+        {
             get => _castles;
-            set {
+            set
+            {
                 this._castles = value;
                 base.OnPropertyChangedWithValue(value, "Castles");
             }
