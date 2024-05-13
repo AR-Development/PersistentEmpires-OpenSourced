@@ -78,45 +78,59 @@
 		<Reference Include="WindowsBase" />
 		<Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.DedicatedCustomServer.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.MountAndBlade.Multiplayer">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Multiplayer.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.Diamond">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.Diamond.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.ObjectSystem">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.ObjectSystem.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.DotNet">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.DotNet.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.MountAndBlade.Diamond">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.Core">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.Core.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.Engine">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.Engine.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.InputSystem">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.InputSystem.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.Library">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.Library.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.Localization">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.Localization.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.ModuleManager">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.ModuleManager.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.MountAndBlade">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.MountAndBlade.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 		<Reference Include="TaleWorlds.PlayerServices">
 			<HintPath>$(ReferenceFolder)\TaleWorlds.PlayerServices.dll</HintPath>
+			<Private>False</Private>
 		</Reference>
 	</ItemGroup>
 

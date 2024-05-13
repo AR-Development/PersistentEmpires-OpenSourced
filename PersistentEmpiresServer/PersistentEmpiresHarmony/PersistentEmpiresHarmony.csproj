@@ -33,43 +33,43 @@
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
-    <ItemGroup>
-        <None Remove="References\0Harmony.dll" />
-    </ItemGroup>
-    <ItemGroup>
-        <Resource Include="0Harmony.dll" />
-        <Resource Include="0Harmony.xml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Resource>
-        <Resource Include="References\0Harmony.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Resource>
-    </ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="References\**" />
+	  <EmbeddedResource Remove="References\**" />
+	  <None Remove="References\**" />
+	</ItemGroup>
     <ItemGroup>
         <Reference Include="TaleWorlds.Core">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Core.dll</HintPath>
+			<Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.Diamond">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Diamond.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.DotNet">
-            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.DotNet.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Engine">
-            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Engine.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Library">
-            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.Library.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade">
-            <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="TaleWorlds.DotNet">
+			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.DotNet.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="TaleWorlds.Engine">
+			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.Engine.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="TaleWorlds.Library">
+			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.Library.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade">
+			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.dll</HintPath>
+			<Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.Diamond">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
-            <Private>True</Private>
+			<Private>False</Private>
         </Reference>
         <Reference Include="TaleWorlds.ObjectSystem">
             <HintPath>$(TaleworldsReferencePath)\TaleWorlds.ObjectSystem.dll</HintPath>
+			<Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -79,9 +79,6 @@
         <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     </ItemGroup>
     <ItemGroup>
-        <None Update="0Harmony.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="0Harmony.xml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
