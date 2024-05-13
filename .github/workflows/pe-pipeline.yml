@@ -39,6 +39,7 @@ jobs:
       run: |
         pwd
         ls -alh
+        ls -R publish/
         ls -alh ClientAssets/
         cp -arf ClientAssets/* publish/Modules/PersistenEmpires/
         rm -rf publish/Modules/PersistentEmpires/.git
