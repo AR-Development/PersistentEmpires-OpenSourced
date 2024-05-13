@@ -30,7 +30,7 @@ namespace PersistentEmpiresLib
         public bool LoadFromDb = false;
         public Vec3 LoadedDbPosition;
         public Equipment LoadedSpawnEquipment;
-
+        public string AttachToAgentId { get; set; } 
         public int[] LoadedAmmo { get; set; }
 
         public PersistentEmpireRepresentative()
