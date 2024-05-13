@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.Helpers;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
 using System.Reflection;
@@ -24,6 +25,10 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public float MaxHitPoint = 500f;
         protected float _hitPoint;
+        // Usable from distance
+        public float UsableDistance = 1.2f;
+        // Usable from angle
+        public int UsableAngle = 100;
 
         public float HitPoint
         {
@@ -131,24 +136,53 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             base.OnUse(userAgent);
             Debug.Print("[USING LOG] AGENT USING " + this.GetType().Name);
-            if (this.AttachedTo == null)
+            NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
+            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            if (persistentEmpireRepresentative != null)
             {
-                if (this.AttachableToHorse)
+                if (string.IsNullOrEmpty(persistentEmpireRepresentative.AttachToAgentId))
                 {
-                    if (!userAgent.HasMount) return;
-                    if (this.AttachableHorseType != "" && userAgent.MountAgent.Monster.StringId != this.AttachableHorseType) return;
-                    this.AttachToAgentAux(userAgent.MountAgent);
+                    Vec3 currentAgentVecRotationS = userAgent.Frame.rotation.s;
+                    Vec3 enityVecRotationS = this.GameEntity.GetGlobalFrame().rotation.s;
+                    double radians = Math.Acos(Vec3.DotProduct(currentAgentVecRotationS, enityVecRotationS) / (currentAgentVecRotationS.Length) * enityVecRotationS.Length);
+                    double angle = (360 / Math.PI) * radians;
+
+                    // check distance and rotate
+
+                    if (this.GameEntity.GetGlobalFrame().origin.Distance(userAgent.Position) <= UsableDistance && angle <= UsableAngle)
+                    { 
+                        if (this.AttachedTo == null)
+                        {
+                            if (this.AttachableToHorse)
+                            {
+                                if (!userAgent.HasMount) return;
+                                if (this.AttachableHorseType != "" && userAgent.MountAgent.Monster.StringId != this.AttachableHorseType) return;
+
+                                persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
+                                this.AttachToAgentAux(userAgent.MountAgent);
+                            }
+                            else
+                            {
+                                if (userAgent.HasMount) return;
+                                persistentEmpireRepresentative.AttachToAgentId = this.GameEntity.GetGuid();
+                                this.AttachToAgentAux(userAgent);
+                            }
+                        }
+                        else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
+                        {
+                            persistentEmpireRepresentative.AttachToAgentId = string.Empty;
+                            this.DetachFromAgentAux();
+                        }
+                    }
+                    else
+                    {
+                        InformationComponent.Instance.SendMessage("You are too far from target!", new Color(1f, 0, 0).ToUnsignedInteger(), player);
+                    }
                 }
                 else
                 {
-                    if (userAgent.HasMount) return;
-                    this.AttachToAgentAux(userAgent);
+                    InformationComponent.Instance.SendMessage("You cannot attach more!", new Color(1f, 0, 0).ToUnsignedInteger(), player);
                 }
-            }
-            else if (this.AttachedTo == userAgent || (userAgent.MountAgent != null && this.AttachedTo == userAgent.MountAgent))
-            {
-
-                this.DetachFromAgentAux();
             }
         }
 
