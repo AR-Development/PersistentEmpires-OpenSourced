@@ -22,6 +22,12 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Include="$(TaleworldsReferencePath)\discord_game_sdk.dll" Link="discord_game_sdk.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	
+	<ItemGroup>
 		<Reference Include="System.Web" />
 		<Reference Include="System.Data.DataSetExtensions" />
 		<Reference Include="Microsoft.CSharp" />
