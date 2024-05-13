@@ -96,13 +96,13 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\PersistentEmpiresLib\PersistentEmpiresLib\PersistentEmpiresLib.csproj">
-            <Private>True</Private>
+            <Private>False</Private>
         </ProjectReference>
         <ProjectReference Include="..\PersistentEmpiresHarmony\PersistentEmpiresHarmony.csproj">
-            <Private>True</Private>
+            <Private>False</Private>
         </ProjectReference>
         <ProjectReference Include="..\PersistentEmpiresSave\PersistentEmpiresSave.csproj">
-            <Private>True</Private>
+            <Private>False</Private>
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
