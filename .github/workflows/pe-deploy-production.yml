@@ -23,13 +23,20 @@ jobs:
       run: |
         mkdir -p release/PersistentEmpiresClient
         mkdir -p release/PersistentEmpiresServer
-
     - name: Download Client build artifact
       uses: actions/download-artifact@v4
       with:
         name: Client-${{github.sha}}
         path: release/PersistentEmpiresClient
-
+    - name: Clone client assets
+      uses: actions/checkout@master
+      with:
+        repository: AR-Development/PersistentEmpires-Assets
+        path: ClientAssets
+    - name: Move Client assets without LFS
+      run: |
+        cp -arf ClientAssets/* release/PersistentEmpiresClient/Modules/PersistentEmpires/
+        rm -rf ClientAssets
     - name: Download Server build artifact
       uses: actions/download-artifact@v4
       with:
