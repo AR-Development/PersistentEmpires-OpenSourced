@@ -5,6 +5,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using System.Linq;
 using System;
+using PersistentEmpiresLib.NetworkMessages.Client;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -17,12 +18,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public Dictionary<NetworkCommunicator, long> WoundedUntil = new Dictionary<NetworkCommunicator, long>();
         public Dictionary<NetworkCommunicator, Vec3> DeathPlace = new Dictionary<NetworkCommunicator, Vec3>();
         public Dictionary<NetworkCommunicator, bool> IsWounded = new Dictionary<NetworkCommunicator, bool>();
-        public Dictionary<NetworkCommunicator, Equipment> DeathEquipment = new Dictionary<NetworkCommunicator, Equipment>();
+        public Dictionary<NetworkCommunicator, Tuple<bool,Equipment>> DeathEquipment = new Dictionary<NetworkCommunicator, Tuple<bool, Equipment>>();
         public Dictionary<NetworkCommunicator, MissionEquipment> DeathWeaponEquipment = new Dictionary<NetworkCommunicator, MissionEquipment>();
 #if SERVER
         private static List<string> ItemsWhichCanBeUsedByWounded = new List<string>();
 #endif
 
+        #region MissionNetwork
+#if CLIENT
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
@@ -30,42 +33,45 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 Instance = this;
             }
-#if CLIENT
             AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+        }
+
+        public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
+        {
+            base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
+
+            if(affectedAgent.IsHuman && affectedAgent.IsPlayerControlled 
+                                    && agentState == AgentState.Killed 
+                                    && WoundingEnabled && affectedAgent.MissionPeer != null 
+                                    && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false 
+                                    && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive)
+            {
+                var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
+                for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
+                {
+                    spawnEquipment[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
+                }
+
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(spawnEquipment));
+                GameNetwork.EndModuleEventAsClient();
+            }
+        }
 #endif
 #if SERVER
+        public override void OnBehaviorInitialize()
+        {
+            base.OnBehaviorInitialize();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
             WoundingEnabled = ConfigManager.GetBoolConfig("WoundingEnabled", false);
             WoundingTime = ConfigManager.GetIntConfig("WoundingTimeMinutes", 60);
-#endif
+
+            AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
         }
 
-#if CLIENT
-        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
-        {
-            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-            networkMessageHandlerRegisterer.Register<UpdateWoundedPlayer>(this.HandleUpdateWoundedPlayer);
-        }
-#endif
-
-        private void HandleUpdateWoundedPlayer(UpdateWoundedPlayer message)
-        {
-            IsWounded[message.Player] = message.IsWounded;
-        }
-
-        public bool IsAgentWounded(Agent agent)
-        {
-            if (agent.MissionPeer == null) return false;
-            if (agent.IsActive() == false) return false;
-            return this.IsPlayerWounded(agent.MissionPeer.GetNetworkPeer());
-        }
-
-        public bool IsPlayerWounded(NetworkCommunicator player)
-        {
-            if (this.IsWounded.ContainsKey(player) == false) return false;
-            return this.IsWounded[player];
-        }
-
-#if SERVER
         public override void OnPlayerConnectedToServer(NetworkCommunicator networkPeer)
         {
             base.OnPlayerConnectedToServer(networkPeer);
@@ -81,19 +87,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     GameNetwork.EndModuleEventAsServer();
                 }
             }
-        }
-
-        public void HealPlayer(NetworkCommunicator player)
-        {
-            if (!WoundedUntil.ContainsKey(player)) return;
-
-            InformationComponent.Instance.SendMessage("You are no longer wounded.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
-            WoundedUntil.Remove(player);
-
-            IsWounded[player] = false;
-            GameNetwork.BeginBroadcastModuleEvent();
-            GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));
-            GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
 
         public override void OnMissionTick(float dt)
@@ -123,22 +116,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        public static void AddItmemToItemsWhichCanBeUsedByWoundedList(string itemId)
-        {
-            ItemsWhichCanBeUsedByWounded.Add(itemId);
-        }
-
-        // This should be not allowed to make wounded man heal other man.....
-        //public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
-        //{
-        //    base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
-
-        //    if(IsAgentWounded(affectorAgent) && affectedAgent != null && affectedAgent != affectorAgent)
-        //    {
-        //        affectedAgent.Health += blow.InflictedDamage;
-        //    }
-        //}
-
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
@@ -153,11 +130,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();
                 DeathPlace[player] = affectedAgent.Position;
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
-                DeathEquipment[player] = spawnEquipment;
+                DeathEquipment[player] = new Tuple<bool, Equipment>(false,spawnEquipment);
                 // this.DeathWeaponEquipment[player] = affectedAgent.Equipment[Equip]
                 for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
                 {
-                    DeathEquipment[player][equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
+                    DeathEquipment[player].Item2[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
                 }
 
                 //if your wounded AND your not healed yet then keep old timer
@@ -175,5 +152,100 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 #endif
+        #endregion
+
+        #region Handlers
+#if CLIENT
+public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        {
+            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
+            networkMessageHandlerRegisterer.Register<UpdateWoundedPlayer>(this.HandleUpdateWoundedPlayer);
+        }
+
+        private void HandleUpdateWoundedPlayer(UpdateWoundedPlayer message)
+        {
+            IsWounded[message.Player] = message.IsWounded;
+        }
+#endif
+#if SERVER
+        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        {
+            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
+            networkMessageHandlerRegisterer.Register<RegisterClientEquipmentOnWound>(HandleRegisterClientEquipmentOnWound);
+        }
+
+        private bool HandleRegisterClientEquipmentOnWound(NetworkCommunicator player, RegisterClientEquipmentOnWound message)
+        {
+            if(DeathEquipment.ContainsKey(player))
+            {
+                var playerEquipment = DeathEquipment[player].Item2;
+
+                if(!DeathEquipment[player].Item1)
+                {
+                    for (var equipmentIndex = (int)EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < (int)EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
+                        {
+                        
+                            if(playerEquipment[equipmentIndex].Item.StringId != message.Equipments[equipmentIndex])
+                            {
+                                playerEquipment[equipmentIndex] = new EquipmentElement();
+                            }
+                        }
+                    DeathEquipment[player] = new Tuple<bool, Equipment>(true, playerEquipment);
+                }
+            }
+            
+            return true;
+        }
+#endif
+        #endregion
+
+        #region Functions
+#if CLIENT
+#endif
+#if SERVER        
+        public void HealPlayer(NetworkCommunicator player)
+        {
+            if (!WoundedUntil.ContainsKey(player)) return;
+
+            InformationComponent.Instance.SendMessage("You are no longer wounded.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
+            WoundedUntil.Remove(player);
+
+            IsWounded[player] = false;
+            GameNetwork.BeginBroadcastModuleEvent();
+            GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));
+            GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
+        }
+
+        public static void AddItmemToItemsWhichCanBeUsedByWoundedList(string itemId)
+        {
+            ItemsWhichCanBeUsedByWounded.Add(itemId);
+        }
+
+        // This should be not allowed to make wounded man heal other man.....
+        //public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
+        //{
+        //    base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
+
+        //    if(IsAgentWounded(affectorAgent) && affectedAgent != null && affectedAgent != affectorAgent)
+        //    {
+        //        affectedAgent.Health += blow.InflictedDamage;
+        //    }
+        //}
+#endif
+
+
+        public bool IsAgentWounded(Agent agent)
+        {
+            if (agent.MissionPeer == null) return false;
+            if (agent.IsActive() == false) return false;
+            return this.IsPlayerWounded(agent.MissionPeer.GetNetworkPeer());
+        }
+
+        public bool IsPlayerWounded(NetworkCommunicator player)
+        {
+            if (this.IsWounded.ContainsKey(player) == false) return false;
+            return this.IsWounded[player];
+        }
+        #endregion
     }
 }
