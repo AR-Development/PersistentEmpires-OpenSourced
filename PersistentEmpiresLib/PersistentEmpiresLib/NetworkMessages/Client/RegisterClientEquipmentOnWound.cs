@@ -9,16 +9,11 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     public sealed class RegisterClientEquipmentOnWound : GameNetworkMessage
     {
         public List<string> Equipments;
-        static int Length = (int)EquipmentIndex.NumAllWeaponSlots;
         public RegisterClientEquipmentOnWound() { }
 
-        public RegisterClientEquipmentOnWound(Equipment spawnEquipment)
+        public RegisterClientEquipmentOnWound(List<string> playerEquipment)
         {
-            Equipments = new List<string>();
-            for (var equipmentIndex = (int)EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < Length; equipmentIndex++)
-            {
-                Equipments.Add(spawnEquipment[equipmentIndex].Item.StringId);
-            }
+            Equipments = playerEquipment;            
         }
 
         protected override MultiplayerMessageFilter OnGetLogFilter()
@@ -35,7 +30,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         {
             bool result = true;
             Equipments = new List<string>();
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Equipments.Add(GameNetworkMessage.ReadStringFromPacket(ref result));
             }
@@ -45,7 +40,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         protected override void OnWrite()
         {
             
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < 4; i++)
             {
                 GameNetworkMessage.WriteStringToPacket(Equipments[i]);
             }

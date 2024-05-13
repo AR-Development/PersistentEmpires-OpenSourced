@@ -52,8 +52,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     spawnEquipment[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
                 }
 
+                var equipments = new List<string>();
+                equipments.Add(spawnEquipment[EquipmentIndex.Weapon0].Item?.StringId);
+                equipments.Add(spawnEquipment[EquipmentIndex.Weapon1].Item?.StringId);
+                equipments.Add(spawnEquipment[EquipmentIndex.Weapon2].Item?.StringId);
+                equipments.Add(spawnEquipment[EquipmentIndex.Weapon3].Item?.StringId);
+
                 GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(spawnEquipment));
+                GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(equipments));
                 GameNetwork.EndModuleEventAsClient();
             }
         }
@@ -185,7 +191,7 @@ public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer
                     for (var equipmentIndex = (int)EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < (int)EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
                         {
                         
-                            if(playerEquipment[equipmentIndex].Item.StringId != message.Equipments[equipmentIndex])
+                            if(playerEquipment[equipmentIndex].Item?.StringId != message.Equipments[equipmentIndex])
                             {
                                 playerEquipment[equipmentIndex] = new EquipmentElement();
                             }
