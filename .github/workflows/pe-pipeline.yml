@@ -27,7 +27,7 @@ jobs:
         path: publish
         name: Client-Publish
     - name: Test before clone
-      run: /
+      run: |
         pwd
         ls -alh
     - name: Clone client assets
