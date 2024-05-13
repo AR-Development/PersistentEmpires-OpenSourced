@@ -47,10 +47,57 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        #region MissionNetwork
+#if CLIENT
+        public override void OnBehaviorInitialize()
+        {
+            base.OnBehaviorInitialize();
+            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+        }
+
+        public override void OnRemoveBehavior()
+        {
+            base.OnRemoveBehavior();
+            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
+        }
+#endif
+#if SERVER
+        public override void OnBehaviorInitialize()
+        {
+            base.OnBehaviorInitialize();
+            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            
+            List<DBInventory> savedInventoriesAsList = SaveSystemBehavior.HandleGetAllInventories().ToList();
+            this.CustomInventories = new Dictionary<string, Inventory>();
+            List<GameEntity> gameEntities = new List<GameEntity>();
+            base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_InventoryEntity>(ref gameEntities);
+            foreach (PE_InventoryEntity inventoryEntity in gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
+            {
+                if (inventoryEntity.InteractionEntity == null)
+                {
+                    Debug.Print("INVENTORY ERROR " + inventoryEntity.InventoryId);
+                }
+
+                var savedInventory = savedInventoriesAsList.FirstOrDefault(x => x.InventoryId == inventoryEntity.InventoryId);
+                if (savedInventory != null)
+                {
+                    CustomInventories[inventoryEntity.InventoryId] = Inventory.Deserialize(savedInventory.InventorySerialized, savedInventory.InventoryId, inventoryEntity);
+                }
+                else
+                {
+                    CustomInventories[inventoryEntity.InventoryId] = new Inventory(inventoryEntity.Slot, inventoryEntity.StackCount, inventoryEntity.InventoryId, inventoryEntity);
+                }
+            }
+            this.LootableObjects = new Dictionary<string, PE_InventoryEntity>();
+            this.LootableCreatedAt = new Dictionary<string, long>();
+            this.OpenedByPeerInventory = new Dictionary<NetworkCommunicator, Inventory>();
+            this.DestroyChance = ConfigManager.GetIntConfig("ItemDestroyChanceOnDeath", 5);
+        }
+
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (GameNetwork.IsClient) return;
+
             foreach (string inventoryId in this.LootableCreatedAt.Keys.ToArray())
             {
                 if (this.LootableCreatedAt[inventoryId] + 600 < DateTimeOffset.UtcNow.ToUnixTimeSeconds() || (this.CustomInventories.ContainsKey(inventoryId) && this.CustomInventories[inventoryId].IsInventoryEmpty()))
@@ -62,8 +109,39 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
+
+            foreach (var x in OpenedByPeerInventory)
+            {
+                if (x.Value != null && x.Value.TiedEntity?.GameEntity.GetGlobalFrame().origin.Distance(x.Key.ControlledAgent.Position) > 2f)
+                {
+                    ClosedInventoryOnServer(x.Key, x.Value.InventoryId);
+                }
+            }
         }
 
+        public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
+        {
+            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            if (persistentEmpireRepresentative != null)
+            {
+                persistentEmpireRepresentative.GetInventory().EmptyInventory();
+            }
+            if (this.OpenedByPeerInventory.ContainsKey(player))
+            {
+                if (this.OpenedByPeerInventory[player] != null)
+                {
+                    this.OpenedByPeerInventory[player].RemoveOpenedBy(player);
+                }
+                this.OpenedByPeerInventory.Remove(player);
+            }
+        }
+
+        public override void OnRemoveBehavior()
+        {
+            base.OnRemoveBehavior();
+            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
+        }
+#endif
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
@@ -98,6 +176,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 GameNetwork.EndModuleEventAsServer();
             }
 
+            // Possibly used on client, thats why I dont move this whole function just to Server side code
             if (this.IgnoreAgentDropLoot.ContainsKey(affectedAgent))
             {
                 this.IgnoreAgentDropLoot.Remove(affectedAgent);
@@ -216,137 +295,62 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
         
-        public override void OnBehaviorInitialize()
-        {
-            base.OnBehaviorInitialize();
-            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                List<DBInventory> savedInventoriesAsList = SaveSystemBehavior.HandleGetAllInventories().ToList();
-                Dictionary<string, Inventory> savedInventories = new Dictionary<string, Inventory>();
-                foreach (DBInventory dbInventory in savedInventoriesAsList)
-                {
-                    savedInventories[dbInventory.InventoryId] = Inventory.Deserialize(dbInventory.InventorySerialized, dbInventory.InventoryId, null);
-                }
+#endregion        
 
-                this.CustomInventories = new Dictionary<string, Inventory>();
-                List<GameEntity> gameEntities = new List<GameEntity>();
-                base.Mission.Scene.GetAllEntitiesWithScriptComponent<PE_InventoryEntity>(ref gameEntities);
-                foreach (PE_InventoryEntity inventoryEntity in gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
-                {
-                    if (inventoryEntity.InteractionEntity == null)
-                    {
-                        Debug.Print("INVENTORY ERROR " + inventoryEntity.InventoryId);
-                    }
+        #region Handlers
+#if CLIENT
+        private void HandleForceCloseInventoryFromServer(ForceCloseInventory message)
+        {
+            if (this.OnForceCloseInventory != null)
+            {
+                this.OnForceCloseInventory();
+            }
+        }        
 
-                    CustomInventories[inventoryEntity.InventoryId] = savedInventories.ContainsKey(inventoryEntity.InventoryId) ? savedInventories[inventoryEntity.InventoryId] : new Inventory(inventoryEntity.Slot, inventoryEntity.StackCount, inventoryEntity.InventoryId, inventoryEntity);
-                }
-                this.LootableObjects = new Dictionary<string, PE_InventoryEntity>();
-                this.LootableCreatedAt = new Dictionary<string, long>();
-                this.OpenedByPeerInventory = new Dictionary<NetworkCommunicator, Inventory>();
-                this.DestroyChance = ConfigManager.GetIntConfig("ItemDestroyChanceOnDeath", 5);
-            }
-        }
-        
-        public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
+        private void HandleUpdateInventorySlotFromServer(UpdateInventorySlot message)
         {
-            if (GameNetwork.IsServer)
+            if (this.OnForceUpdateInventory != null)
             {
-                PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-                if (persistentEmpireRepresentative != null)
-                {
-                    persistentEmpireRepresentative.GetInventory().EmptyInventory();
-                }
-                if (this.OpenedByPeerInventory.ContainsKey(player))
-                {
-                    if (this.OpenedByPeerInventory[player] != null)
-                    {
-                        this.OpenedByPeerInventory[player].RemoveOpenedBy(player);
-                    }
-                    this.OpenedByPeerInventory.Remove(player);
-                }
-            }
-        }
-        
-        public override void OnRemoveBehavior()
-        {
-            base.OnRemoveBehavior();
-            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
-        }
-
-        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
-        {
-            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-            if (GameNetwork.IsClient)
-            {
-                networkMessageHandlerRegisterer.Register<OpenInventory>(this.HandleOpenInventoryFromServer);
-                networkMessageHandlerRegisterer.Register<ExecuteInventoryTransfer>(this.HandleExecuteInventoryTransferFromServer);
-                networkMessageHandlerRegisterer.Register<ResetAgentArmor>(this.HandleResetAgentArmorFromServer);
-                networkMessageHandlerRegisterer.Register<UpdateInventorySlot>(this.HandleUpdateInventorySlotFromServer);
-                networkMessageHandlerRegisterer.Register<ForceCloseInventory>(this.HandleForceCloseInventoryFromServer);
-            }
-            if (GameNetwork.IsServer)
-            {
-                networkMessageHandlerRegisterer.Register<RequestOpenInventory>(this.HandleRequestOpenInventoryFromClient);
-                networkMessageHandlerRegisterer.Register<RequestInventoryTransfer>(this.HandleRequestInventoryTransferFromClient);
-                networkMessageHandlerRegisterer.Register<ClosedInventory>(this.HandleClosedInventoryFromClient);
-                networkMessageHandlerRegisterer.Register<InventoryHotkey>(this.HandleRequestInventoryHotkey);
-                networkMessageHandlerRegisterer.Register<InventorySplitItem>(this.HandleRequestSplit);
-                networkMessageHandlerRegisterer.Register<RequestDropItemFromInventory>(this.HandleRequestDropItemFromInventory);
-                networkMessageHandlerRegisterer.Register<RequestRevealItemBag>(this.HandleRequestRevealItemBag);
+                this.OnForceUpdateInventory(message.Slot, message.Item, message.Count);
             }
         }
 
-        private bool HandleRequestRevealItemBag(NetworkCommunicator player, RequestRevealItemBag message)
+        private void HandleResetAgentArmorFromServer(ResetAgentArmor message)
         {
-            if (player.ControlledAgent == null) return true;
-            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            if (persistentEmpireRepresentative == null) return true;
+            AgentHelpers.ResetAgentArmor(message.agent, message.equipment);
+        }
 
-            if (LastRevealed.ContainsKey(player) && LastRevealed[player] + 3 > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+        private void HandleExecuteInventoryTransferFromServer(ExecuteInventoryTransfer message)
+        {
+            if (this.OnUpdateInventory != null)
             {
-                return false;
+                this.OnUpdateInventory(message.DraggedSlot, message.DroppedSlot, message.DraggedSlotItem, message.DroppedSlotItem, message.DraggedSlotCount, message.DroppedSlotCount);
             }
-            LastRevealed[player] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
 
-            Vec3 position = player.ControlledAgent.Position;
-
-            List<AffectedPlayer> affectedPlayers = new List<AffectedPlayer>();
-            Inventory playerInventory = persistentEmpireRepresentative.GetInventory();
-
-
-
-            foreach (NetworkCommunicator otherPlayer in GameNetwork.NetworkPeers)
+        private void HandleOpenInventoryFromServer(OpenInventory message)
+        {
+            if (this.OnOpenInventory != null)
             {
-                if (otherPlayer.ControlledAgent == null) continue;
-                Vec3 otherPlayerPosition = otherPlayer.ControlledAgent.Position;
-                float d = position.Distance(otherPlayerPosition);
-                if (d < 30)
-                {
-                    InformationComponent.Instance.SendMessage(player.UserName + " revealed his item bag.", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
-                    if (playerInventory.IsInventoryEmpty())
-                    {
-                        InformationComponent.Instance.SendMessage("Bag is empty", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
-                    }
-                    else
-                    {
-                        foreach (InventorySlot inventorySlot in playerInventory.Slots)
-                        {
-                            if (inventorySlot.Item != null && inventorySlot.Count > 0)
-                            {
-                                InformationComponent.Instance.SendMessage(player.UserName + " is carrying " + inventorySlot.Count + " amount of " + inventorySlot.Item.Name.ToString(), Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
-                            }
-                        }
-                    }
-
-                    if (otherPlayer != player)
-                    {
-                        affectedPlayers.Add(new AffectedPlayer(otherPlayer));
-                    }
-                }
+                this.OnOpenInventory(message.PlayerInventory, message.RequestedInventory);
             }
-            LoggerHelper.LogAnAction(player, LogAction.PlayerRevealedItemBag, affectedPlayers.ToArray());
+        }
+#endif
+#if SERVER
+        private bool HandleRequestInventoryTransferFromClient(NetworkCommunicator player, RequestInventoryTransfer message)
+        {
+            return this.TransferInventoryItem(player, message.DroppedTag, message.DraggedTag);
+        }
+
+        private bool HandleRequestOpenInventoryFromClient(NetworkCommunicator player, RequestOpenInventory message)
+        {
+            this.OpenInventoryForPeer(player, message.InventoryId);
             return true;
+        }
+
+        private bool HandleClosedInventoryFromClient(NetworkCommunicator player, ClosedInventory message)
+        {
+            return ClosedInventoryOnServer(player, message.InventoryId);
         }
 
         private bool HandleRequestDropItemFromInventory(NetworkCommunicator player, RequestDropItemFromInventory message)
@@ -474,55 +478,97 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return true;
         }
 
-        private void HandleForceCloseInventoryFromServer(ForceCloseInventory message)
+        private bool HandleRequestRevealItemBag(NetworkCommunicator player, RequestRevealItemBag message)
         {
-            if (this.OnForceCloseInventory != null)
-            {
-                this.OnForceCloseInventory();
-            }
-        }        
+            if (player.ControlledAgent == null) return true;
+            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            if (persistentEmpireRepresentative == null) return true;
 
-        private bool HandleClosedInventoryFromClient(NetworkCommunicator player, ClosedInventory message)
+            if (LastRevealed.ContainsKey(player) && LastRevealed[player] + 3 > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            {
+                return false;
+            }
+            LastRevealed[player] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            Vec3 position = player.ControlledAgent.Position;
+
+            List<AffectedPlayer> affectedPlayers = new List<AffectedPlayer>();
+            Inventory playerInventory = persistentEmpireRepresentative.GetInventory();
+
+
+
+            foreach (NetworkCommunicator otherPlayer in GameNetwork.NetworkPeers)
+            {
+                if (otherPlayer.ControlledAgent == null) continue;
+                Vec3 otherPlayerPosition = otherPlayer.ControlledAgent.Position;
+                float d = position.Distance(otherPlayerPosition);
+                if (d < 30)
+                {
+                    InformationComponent.Instance.SendMessage(player.UserName + " revealed his item bag.", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
+                    if (playerInventory.IsInventoryEmpty())
+                    {
+                        InformationComponent.Instance.SendMessage("Bag is empty", Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
+                    }
+                    else
+                    {
+                        foreach (InventorySlot inventorySlot in playerInventory.Slots)
+                        {
+                            if (inventorySlot.Item != null && inventorySlot.Count > 0)
+                            {
+                                InformationComponent.Instance.SendMessage(player.UserName + " is carrying " + inventorySlot.Count + " amount of " + inventorySlot.Item.Name.ToString(), Color.ConvertStringToColor("#FFEB3BFF").ToUnsignedInteger(), otherPlayer);
+                            }
+                        }
+                    }
+
+                    if (otherPlayer != player)
+                    {
+                        affectedPlayers.Add(new AffectedPlayer(otherPlayer));
+                    }
+                }
+            }
+            LoggerHelper.LogAnAction(player, LogAction.PlayerRevealedItemBag, affectedPlayers.ToArray());
+            return true;
+        }    
+#endif
+        #endregion
+
+        #region Functions
+#if CLIENT
+        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        {
+            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
+            networkMessageHandlerRegisterer.Register<OpenInventory>(this.HandleOpenInventoryFromServer);
+            networkMessageHandlerRegisterer.Register<ExecuteInventoryTransfer>(this.HandleExecuteInventoryTransferFromServer);
+            networkMessageHandlerRegisterer.Register<ResetAgentArmor>(this.HandleResetAgentArmorFromServer);
+            networkMessageHandlerRegisterer.Register<UpdateInventorySlot>(this.HandleUpdateInventorySlotFromServer);
+            networkMessageHandlerRegisterer.Register<ForceCloseInventory>(this.HandleForceCloseInventoryFromServer);
+        }
+#endif
+#if SERVER
+public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        {
+            GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
+                networkMessageHandlerRegisterer.Register<RequestOpenInventory>(this.HandleRequestOpenInventoryFromClient);
+                networkMessageHandlerRegisterer.Register<RequestInventoryTransfer>(this.HandleRequestInventoryTransferFromClient);
+                networkMessageHandlerRegisterer.Register<ClosedInventory>(this.HandleClosedInventoryFromClient);
+                networkMessageHandlerRegisterer.Register<InventoryHotkey>(this.HandleRequestInventoryHotkey);
+                networkMessageHandlerRegisterer.Register<InventorySplitItem>(this.HandleRequestSplit);
+                networkMessageHandlerRegisterer.Register<RequestDropItemFromInventory>(this.HandleRequestDropItemFromInventory);
+                networkMessageHandlerRegisterer.Register<RequestRevealItemBag>(this.HandleRequestRevealItemBag);
+        }
+
+        private bool ClosedInventoryOnServer(NetworkCommunicator player, string inventoryId)
         {
             Inventory targetInventory;
             if (this.OpenedByPeerInventory.ContainsKey(player))
             {
                 this.OpenedByPeerInventory.Remove(player);
             }
-            if (!this.CustomInventories.TryGetValue(message.InventoryId, out targetInventory)) return false;
+            if (!this.CustomInventories.TryGetValue(inventoryId, out targetInventory)) return false;
             if (targetInventory == null) return false;
             targetInventory.RemoveOpenedBy(player);
             // LoggerHelper.LogAnAction(player, LogAction.PlayerClosesChest, null, new object[] { targetInventory });
             return true;
-        }
-
-        private void HandleUpdateInventorySlotFromServer(UpdateInventorySlot message)
-        {
-            if (this.OnForceUpdateInventory != null)
-            {
-                this.OnForceUpdateInventory(message.Slot, message.Item, message.Count);
-            }
-        }
-
-        private void HandleResetAgentArmorFromServer(ResetAgentArmor message)
-        {
-            AgentHelpers.ResetAgentArmor(message.agent, message.equipment);
-        }
-
-        private void HandleExecuteInventoryTransferFromServer(ExecuteInventoryTransfer message)
-        {
-            if (this.OnUpdateInventory != null)
-            {
-                this.OnUpdateInventory(message.DraggedSlot, message.DroppedSlot, message.DraggedSlotItem, message.DroppedSlotItem, message.DraggedSlotCount, message.DroppedSlotCount);
-            }
-        }
-
-        private void HandleOpenInventoryFromServer(OpenInventory message)
-        {
-            if (this.OnOpenInventory != null)
-            {
-                this.OnOpenInventory(message.PlayerInventory, message.RequestedInventory);
-            }
         }
 
         public void OpenInventoryForPeer(NetworkCommunicator player, string inventoryId)
@@ -1055,17 +1101,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
             return true;
-        }
-
-        private bool HandleRequestInventoryTransferFromClient(NetworkCommunicator player, RequestInventoryTransfer message)
-        {
-            return this.TransferInventoryItem(player, message.DroppedTag, message.DraggedTag);
-        }
-
-        private bool HandleRequestOpenInventoryFromClient(NetworkCommunicator player, RequestOpenInventory message)
-        {
-            this.OpenInventoryForPeer(player, message.InventoryId);
-            return true;
-        }
+        }        
+#endif
+        #endregion        
     }
 }

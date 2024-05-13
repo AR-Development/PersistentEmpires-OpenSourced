@@ -77,7 +77,7 @@ namespace PersistentEmpiresLib.SceneScripts
         private static readonly ActionIndexCache act_pickup_from_left_up_horseback_left_end = ActionIndexCache.Create("act_pickup_from_left_up_horseback_left_end");
         protected override bool LockUserFrames { get => false; }
         protected override bool LockUserPositions { get => false; }
-        public static PE_InventoryEntity _current;
+        
 
         private string GenerateId()
         {
@@ -183,14 +183,14 @@ namespace PersistentEmpiresLib.SceneScripts
             }
             return null;
         }
-
+#if SERVER
         public void OpenInventory(Agent userAgent)
         {
             Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_open"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);
             this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
             // userAgent.StopUsingGameObjectMT(true);
         }
-
+#endif
         public override void OnUse(Agent userAgent)
         {
             base.OnUse(userAgent);
@@ -249,25 +249,22 @@ namespace PersistentEmpiresLib.SceneScripts
             base.OnUseStopped(userAgent, isSuccessful, preferenceIndex);
             Debug.Print("[USING LOG] AGENT USE STOPPED " + this.GetType().Name);
 
-            if (isSuccessful && GameNetwork.IsServer)
+            if (isSuccessful)
             {
+#if SERVER
                 this.OpenInventory(userAgent);
-            }
-
-#if CLIENT
-            _current = this;
 #endif
+            }
         }
 
         public void OnEntityRemove()
         {
-            if (GameNetwork.IsServer)
+#if SERVER
+            if (playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId) || playerInventoryComponent.LootableObjects.ContainsKey(this.InventoryId))
             {
-                if (playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId) || playerInventoryComponent.LootableObjects.ContainsKey(this.InventoryId))
-                {
-                    playerInventoryComponent.CleanUpInventory(playerInventoryComponent.CustomInventories[this.InventoryId]);
-                }
+                playerInventoryComponent.CleanUpInventory(playerInventoryComponent.CustomInventories[this.InventoryId]);
             }
+#endif
         }
 
         public void OnSpawnedByPrefab(PE_PrefabSpawner spawner)

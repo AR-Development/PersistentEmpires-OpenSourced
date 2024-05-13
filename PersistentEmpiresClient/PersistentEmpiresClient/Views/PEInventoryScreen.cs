@@ -7,13 +7,11 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ScreenSystem;
-using PersistentEmpiresLib.SceneScripts;
 
 namespace PersistentEmpires.Views.Views
 {
     public class PEInventoryScreen : PEBaseInventoryScreen
     {
-        private static float _distanceToCloseInventory = 2f;
         private PEInventoryVM _dataSource;
 
         public override void OnMissionScreenInitialize()
@@ -71,12 +69,6 @@ namespace PersistentEmpires.Views.Views
 
                 this.CloseInventory();
             }
-#if CLIENT
-            if(IsActive && PE_InventoryEntity._current != null && PE_InventoryEntity._current.GameEntity.GetGlobalFrame().origin.Distance(Mission.Current.MainAgent.Position) > _distanceToCloseInventory)
-            {
-                CloseInventory();
-            }
-#endif
         }
 
         private void CloseInventoryAux()
