@@ -26,17 +26,17 @@ jobs:
       with:
         path: publish
         name: Client-Publish
-    - name: Clone client assets
-      uses: actions/checkout@master
-      with:
-        repository: AR-Development/PersistentEmpires-Assets
-        lfs: true
-        path: ClientAssets
-    - name: Package build
-      run: |
-        pwd
-        cp -arf ClientAssets/* publish/Modules/PersistentEmpires/
-        rm -rf ClientAssets
+    #- name: Clone client assets
+    #  uses: actions/checkout@master
+    #  with:
+    #    repository: AR-Development/PersistentEmpires-Assets
+    #    lfs: true
+    #    path: ClientAssets
+    #- name: Package build
+    #  run: |
+    #    pwd
+    #    cp -arf ClientAssets/* publish/Modules/PersistentEmpires/
+    #    rm -rf ClientAssets
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
