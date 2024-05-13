@@ -81,7 +81,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 string itemId = node["ItemId"].InnerText;
                 string prefabName = node["PrefabName"].InnerText;
                 int maxSpawnAmount = node["MaxSpawnAmount"] != null ? int.Parse(node["MaxSpawnAmount"].InnerText) : 20;
-                float despawnArea = node["DespawnArea"] != null ? int.Parse(node["DespawnArea"].InnerText) : 5f;
+                float despawnArea = node["DespawnArea"] != null ? float.Parse(node["DespawnArea"].InnerText) : 5f;
 
                 float adjustPositionX = node["AdjustPositionX"] != null ? float.Parse(node["AdjustPositionX"].InnerText) : 0;
                 float adjustPositionY = node["AdjustPositionY"] != null ? float.Parse(node["AdjustPositionY"].InnerText) : 0;
