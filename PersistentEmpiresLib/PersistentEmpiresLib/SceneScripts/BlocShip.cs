@@ -63,61 +63,58 @@ namespace PersistentEmpiresLib.SceneScripts
             if (base.GameEntity?.GlobalPosition == null || oldFrame == null)
                 return;
 
+            // Set a Default Value for Rays TODO
+
             Vec3 startPosition = base.GameEntity.GlobalPosition;
             float frontRearRadius = 0.1f; // Adjust the front and rear radius as needed
             float sideRadius = 0.1f; // Adjust the side radius as needed
 
-            // Set a Default Value for Rays TODO
+            Vec3 movementDirection = GetMovementDirection();
+            if (movementDirection == Vec3.Zero)
+                return;
 
+            float radius = frontRearRadius;
+            if (movementDirection == -base.GameEntity.GetGlobalFrame().rotation.s || movementDirection == base.GameEntity.GetGlobalFrame().rotation.s)
+                radius = sideRadius;
 
-            // Don't need to check each direction all the time, can instead check the direction we are going that there is no colisions.
+            Vec3 raycastPosition = startPosition;
+            Vec3 raycastEndPosition = raycastPosition + movementDirection * radius;
 
-            // Define the ray directions for front, rear, left, and right
-            Vec3[] rayDirections = new Vec3[]
+            if (Mission.Current.Scene.RayCastForClosestEntityOrTerrain(raycastPosition, raycastEndPosition, out _, out GameEntity hitEntity))
             {
-                base.GameEntity.GetGlobalFrame().rotation.f,  // Front
-                -base.GameEntity.GetGlobalFrame().rotation.f, // Rear
-                -base.GameEntity.GetGlobalFrame().rotation.s, // Left
-                base.GameEntity.GetGlobalFrame().rotation.s   // Right
-            };
-
-            // Define the corresponding radius for each direction
-            float[] rayRadii = new float[]
-            {
-                frontRearRadius, // Front
-                frontRearRadius, // Rear
-                sideRadius,      // Left
-                sideRadius       // Right
-            };
-
-            for (int i = 0; i < rayDirections.Length; i++)
-            {
-                Vec3 direction = rayDirections[i];
-                float radius = rayRadii[i];
-
-                Vec3 raycastPosition = startPosition;
-                Vec3 raycastEndPosition = raycastPosition + direction * radius;
-
-                if (Mission.Current.Scene.RayCastForClosestEntityOrTerrain(raycastPosition, raycastEndPosition, out float hitDistance, out GameEntity hitEntity))
+                if (hitEntity != base.GameEntity)
                 {
-                    if (hitEntity != base.GameEntity)
-                    {
-                        StopShip();
-                        base.GameEntity.SetFrame(ref oldFrame);
-                        Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), startPosition, false, true, -1, -1);
-                        this.SetHitPoint(this.HitPoint - 10, Vec3.Zero);
-                        break;
-                    }
-                    else if (hitDistance <= radius)
-                    {
-                        StopShip();
-                        base.GameEntity.SetFrame(ref oldFrame);
-                        Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), startPosition, false, true, -1, -1);
-                        this.SetHitPoint(this.HitPoint - 10, Vec3.Zero);
-                        break;
-                    }
+                    StopShip();
+                    base.GameEntity.SetFrame(ref oldFrame);
+                    PlayCollisionEffects(startPosition);
                 }
             }
+        }
+
+        private Vec3 GetMovementDirection()
+        {
+            Vec3 movementDirection = Vec3.Zero;
+
+            if (base.IsMovingForward || base.IsMovingBackward)
+            {
+                movementDirection = base.GameEntity.GetGlobalFrame().rotation.f;
+                if (base.IsMovingBackward)
+                    movementDirection = -movementDirection;
+            }
+            else if (base.IsTurningLeft || base.IsTurningRight)
+            {
+                movementDirection = base.GameEntity.GetGlobalFrame().rotation.s;
+                if (base.IsTurningLeft)
+                    movementDirection = -movementDirection;
+            }
+
+            return movementDirection;
+        }
+
+        private void PlayCollisionEffects(Vec3 position)
+        {
+            Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), position, false, true, -1, -1);
+            this.SetHitPoint(this.HitPoint - 10, Vec3.Zero);
         }
 
         protected override void OnTick(float dt)
