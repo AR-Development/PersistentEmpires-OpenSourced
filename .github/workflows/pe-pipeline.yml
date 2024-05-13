@@ -34,10 +34,12 @@ jobs:
       uses: actions/checkout@master
       with:
         repository: AR-Development/PersistentEmpires-Assets
+        path: ClientAssets
     - name: Package build
       run: |
         pwd
         ls -alh
+        ls -alh ClientAssets/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
