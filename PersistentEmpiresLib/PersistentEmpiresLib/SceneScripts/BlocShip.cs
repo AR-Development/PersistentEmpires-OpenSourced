@@ -41,9 +41,20 @@ namespace PersistentEmpiresLib.SceneScripts
         private SkillObject RidingSkill;
         private SkillObject RepairSkill;
 
-        private List<RepairReceipt> receipt = new List<RepairReceipt>();
-        private bool _landed;
+        private readonly List<RepairReceipt> receipt = new List<RepairReceipt>();
+
         private bool destroyed = false;
+
+        private readonly Dictionary<InputKey, Action> inputActions = new Dictionary<InputKey, Action>
+        {
+            { InputKey.W, null },
+            { InputKey.S, null },
+            { InputKey.A, null },
+            { InputKey.D, null },
+            { InputKey.Space, null },
+            { InputKey.LeftShift, null }
+        };
+
         public override ScriptComponentBehavior.TickRequirement GetTickRequirement() => !this.GameEntity.IsVisibleIncludeParents() ? base.GetTickRequirement() : ScriptComponentBehavior.TickRequirement.Tick | ScriptComponentBehavior.TickRequirement.TickParallel;
 
         private void ParseRepairReceipts()
@@ -93,26 +104,20 @@ namespace PersistentEmpiresLib.SceneScripts
 
         private Vec3 GetMovementDirection()
         {
-            Vec3 movementDirection = Vec3.Zero;
-
-            if (base.IsMovingForward)
+            MatrixFrame globalFrame = base.GameEntity.GetGlobalFrame();
+            switch (true)
             {
-                movementDirection = base.GameEntity.GetGlobalFrame().rotation.f;
+                case var _ when base.IsMovingForward:
+                    return globalFrame.rotation.f;
+                case var _ when base.IsMovingBackward:
+                    return -globalFrame.rotation.f;
+                case var _ when base.IsTurningLeft:
+                    return -globalFrame.rotation.s;
+                case var _ when base.IsTurningRight:
+                    return globalFrame.rotation.s;
+                default:
+                    return Vec3.Zero;
             }
-            else if (base.IsMovingBackward)
-            {
-                movementDirection = -base.GameEntity.GetGlobalFrame().rotation.f;
-            }
-            else if (base.IsTurningLeft)
-            {
-                movementDirection = -base.GameEntity.GetGlobalFrame().rotation.s;
-            }
-            else if (base.IsTurningRight)
-            {
-                movementDirection = base.GameEntity.GetGlobalFrame().rotation.s;
-            }
-
-            return movementDirection;
         }
 
         private void PlayCollisionEffects(Vec3 position)
@@ -143,19 +148,9 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if (GameNetwork.IsClient && Agent.Main != null && this.PilotAgent == Agent.Main)
             {
-                Dictionary<InputKey, Action> inputActions = new Dictionary<InputKey, Action>
-                {
-                    { InputKey.W, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.W)) this.RequestMovingForward(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.W)) this.RequestStopMovingForward(); } },
-                    { InputKey.S, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.S)) this.RequestMovingBackward(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.S)) this.RequestStopMovingBackward(); } },
-                    { InputKey.A, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.A)) this.RequestTurningLeft(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.A)) this.RequestStopTurningLeft(); } },
-                    { InputKey.D, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.D)) this.RequestTurningRight(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.D)) this.RequestStopTurningRight(); } },
-                    { InputKey.Space, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.Space)) this.RequestMovingUp(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.Space)) this.RequestStopMovingUp(); } },
-                    { InputKey.LeftShift, () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.LeftShift)) this.RequestMovingDown(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.LeftShift)) this.RequestStopMovingDown(); } }
-                };
-
                 foreach (var inputAction in inputActions)
                 {
-                    inputAction.Value();
+                    inputAction.Value?.Invoke();
                 }
 
                 if (Mission.Current.InputManager.IsKeyPressed(InputKey.F))
@@ -180,7 +175,6 @@ namespace PersistentEmpiresLib.SceneScripts
             if (destroyed)
             {
                 base.GameEntity.Remove(0);
-                destroyed = false;
             }
         }
 
@@ -206,6 +200,14 @@ namespace PersistentEmpiresLib.SceneScripts
         protected override void OnInit()
         {
             base.OnInit();
+
+            inputActions[InputKey.W] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.W)) this.RequestMovingForward(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.W)) this.RequestStopMovingForward(); };
+            inputActions[InputKey.S] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.S)) this.RequestMovingBackward(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.S)) this.RequestStopMovingBackward(); };
+            inputActions[InputKey.A] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.A)) this.RequestTurningLeft(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.A)) this.RequestStopTurningLeft(); };
+            inputActions[InputKey.D] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.D)) this.RequestTurningRight(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.D)) this.RequestStopTurningRight(); };
+            inputActions[InputKey.Space] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.Space)) this.RequestMovingUp(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.Space)) this.RequestStopMovingUp(); };
+            inputActions[InputKey.LeftShift] = () => { if (Mission.Current.InputManager.IsKeyPressed(InputKey.LeftShift)) this.RequestMovingDown(); else if (Mission.Current.InputManager.IsKeyReleased(InputKey.LeftShift)) this.RequestStopMovingDown(); };
+
             foreach (StandingPoint standingPoint in this.StandingPoints)
             {
                 standingPoint.AutoSheathWeapons = true;
@@ -258,20 +260,16 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if (this.HitPoint == 0)
             {
-                if (this.PilotAgent != null)
-                {
-                    this.PilotAgent.StopUsingGameObjectMT(false);
-                }
-                if (this.ParticleEffectOnDestroy != "")
+                this.PilotAgent?.StopUsingGameObjectMT(false);
+                if (!string.IsNullOrEmpty(this.ParticleEffectOnDestroy))
                 {
                     Mission.Current.Scene.CreateBurstParticle(ParticleSystemManager.GetRuntimeIdByName(this.ParticleEffectOnDestroy), globalFrame);
                 }
-                if (this.SoundEffectOnDestroy != "")
+                if (!string.IsNullOrEmpty(this.SoundEffectOnDestroy))
                 {
                     Mission.Current.MakeSound(SoundEvent.GetEventIdFromString(this.SoundEffectOnDestroy), globalFrame.origin, false, true, -1, -1);
                 }
                 destroyed = true;
-                // base.GameEntity.Remove(0);
             }
             if (this.HitPoint == this.MaxHitPoint)
             {
