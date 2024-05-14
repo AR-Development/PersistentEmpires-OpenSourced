@@ -66,8 +66,8 @@ namespace PersistentEmpiresLib.SceneScripts
             // Set a Default Value for Rays TODO
 
             Vec3 startPosition = base.GameEntity.GlobalPosition;
-            float frontRearRadius = 0.1f; // Adjust the front and rear radius as needed
-            float sideRadius = 0.1f; // Adjust the side radius as needed
+            float frontRearRadius = 4.5f; // Adjust the front and rear radius as needed
+            float sideRadius = 2f; // Adjust the side radius as needed
 
             Vec3 movementDirection = GetMovementDirection();
             if (movementDirection == Vec3.Zero)
@@ -95,17 +95,21 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             Vec3 movementDirection = Vec3.Zero;
 
-            if (base.IsMovingForward || base.IsMovingBackward)
+            if (base.IsMovingForward)
             {
                 movementDirection = base.GameEntity.GetGlobalFrame().rotation.f;
-                if (base.IsMovingBackward)
-                    movementDirection = -movementDirection;
             }
-            else if (base.IsTurningLeft || base.IsTurningRight)
+            else if (base.IsMovingBackward)
+            {
+                movementDirection = -base.GameEntity.GetGlobalFrame().rotation.f;
+            }
+            else if (base.IsTurningLeft)
+            {
+                movementDirection = -base.GameEntity.GetGlobalFrame().rotation.s;
+            }
+            else if (base.IsTurningRight)
             {
                 movementDirection = base.GameEntity.GetGlobalFrame().rotation.s;
-                if (base.IsTurningLeft)
-                    movementDirection = -movementDirection;
             }
 
             return movementDirection;
