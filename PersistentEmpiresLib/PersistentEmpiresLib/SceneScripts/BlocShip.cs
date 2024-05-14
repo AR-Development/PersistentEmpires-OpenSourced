@@ -58,35 +58,72 @@ namespace PersistentEmpiresLib.SceneScripts
             }
         }
 
-
         private void CheckIfLanded(MatrixFrame oldFrame)
         {
-            // if (this._landed) return;
+            if (base.GameEntity?.GlobalPosition == null || oldFrame == null)
+                return;
 
-            if (base.GameEntity == null) return;
-            if (oldFrame == null) return;
-            float heightUnder = Mission.Current.Scene.GetTerrainHeight(this.GameEntity.GlobalPosition.AsVec2, true);
-            if (base.GameEntity.GlobalPosition.Z - heightUnder <= 1f)
+            // Set a Default Value for Rays TODO
+
+            Vec3 startPosition = base.GameEntity.GlobalPosition;
+            float frontRearRadius = 0.1f; // Adjust the front and rear radius as needed
+            float sideRadius = 0.1f; // Adjust the side radius as needed
+
+            Vec3 movementDirection = GetMovementDirection();
+            if (movementDirection == Vec3.Zero)
+                return;
+
+            float radius = frontRearRadius;
+            if (movementDirection == -base.GameEntity.GetGlobalFrame().rotation.s || movementDirection == base.GameEntity.GetGlobalFrame().rotation.s)
+                radius = sideRadius;
+
+            Vec3 raycastPosition = startPosition;
+            Vec3 raycastEndPosition = raycastPosition + movementDirection * radius;
+
+            if (Mission.Current.Scene.RayCastForClosestEntityOrTerrain(raycastPosition, raycastEndPosition, out _, out GameEntity hitEntity))
             {
-                if (base.IsMovingBackward) this.StopMovingBackward();
-                if (base.IsMovingDown) this.StopMovingDown();
-                if (base.IsMovingForward) this.StopMovingForward();
-                if (base.IsMovingUp) this.StopMovingUp();
-                if (base.IsTurningLeft) this.StopTurningLeft();
-                if (base.IsTurningRight) this.StopTurningRight();
-                base.GameEntity.SetFrame(ref oldFrame);
-                // this._landed = true;
-                Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), this.GameEntity.GlobalPosition, false, true, -1, -1);
-
-                this.SetHitPoint(this.HitPoint - 10, new Vec3(0, 0, 0));
-                // this.Disable();
+                if (hitEntity != base.GameEntity)
+                {
+                    StopShip();
+                    base.GameEntity.SetFrame(ref oldFrame);
+                    PlayCollisionEffects(startPosition);
+                }
             }
         }
+
+        private Vec3 GetMovementDirection()
+        {
+            Vec3 movementDirection = Vec3.Zero;
+
+            if (base.IsMovingForward || base.IsMovingBackward)
+            {
+                movementDirection = base.GameEntity.GetGlobalFrame().rotation.f;
+                if (base.IsMovingBackward)
+                    movementDirection = -movementDirection;
+            }
+            else if (base.IsTurningLeft || base.IsTurningRight)
+            {
+                movementDirection = base.GameEntity.GetGlobalFrame().rotation.s;
+                if (base.IsTurningLeft)
+                    movementDirection = -movementDirection;
+            }
+
+            return movementDirection;
+        }
+
+        private void PlayCollisionEffects(Vec3 position)
+        {
+            Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/siege/merlon/wood_destroy"), position, false, true, -1, -1);
+            this.SetHitPoint(this.HitPoint - 10, Vec3.Zero);
+        }
+
         protected override void OnTick(float dt)
         {
             if (base.GameEntity == null) return;
+
             MatrixFrame oldFrame = base.GameEntity.GetFrame();
             base.OnTick(dt);
+
             if (GameNetwork.IsServer)
             {
                 if (this.PilotAgent != null)
@@ -156,7 +193,6 @@ namespace PersistentEmpiresLib.SceneScripts
                     {
                         this.RequestStopMovingDown();
                     }
-
                     if (Mission.Current.InputManager.IsKeyPressed(InputKey.F))
                     {
                         GameNetwork.MyPeer.ControlledAgent.HandleStopUsingAction();
@@ -169,22 +205,29 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if (this.PilotAgent == null)
             {
-                if (base.IsMovingBackward) this.StopMovingBackward();
-                if (base.IsMovingDown) this.StopMovingDown();
-                if (base.IsMovingForward) this.StopMovingForward();
-                if (base.IsMovingUp) this.StopMovingUp();
-                if (base.IsTurningLeft) this.StopTurningLeft();
-                if (base.IsTurningRight) this.StopTurningRight();
+                StopShip();
             }
-            if (GameNetwork.IsServer)
+
+            if (GameNetwork.IsServer && (base.IsMovingBackward || base.IsMovingDown || base.IsMovingForward || base.IsMovingUp || base.IsTurningLeft || base.IsTurningRight || this.PilotAgent != null))
             {
                 this.CheckIfLanded(oldFrame);
             }
+
             if (destroyed)
             {
                 base.GameEntity.Remove(0);
                 destroyed = false;
             }
+        }
+
+        private void StopShip()
+        {
+            if (base.IsMovingBackward) this.StopMovingBackward();
+            if (base.IsMovingDown) this.StopMovingDown();
+            if (base.IsMovingForward) this.StopMovingForward();
+            if (base.IsMovingUp) this.StopMovingUp();
+            if (base.IsTurningLeft) this.StopTurningLeft();
+            if (base.IsTurningRight) this.StopTurningRight();
         }
 
 
@@ -283,40 +326,35 @@ namespace PersistentEmpiresLib.SceneScripts
         protected override bool OnHit(Agent attackerAgent, int damage, Vec3 impactPosition, Vec3 impactDirection, in MissionWeapon weapon, ScriptComponentBehavior attackerScriptComponentBehavior, out bool reportDamage)
         {
             reportDamage = true;
-            MissionWeapon missionWeapon = weapon;
-            WeaponComponentData currentUsageItem = missionWeapon.CurrentUsageItem;
-            if (
-                attackerAgent != null &&
-                this.RepairSkill != null &&
-                attackerAgent.Character.GetSkillValue(this.RepairSkill) >= this.RepairingSkillRequired &&
-                missionWeapon.Item != null &&
-                missionWeapon.Item.StringId == this.RepairItem &&
-                attackerAgent.IsHuman &&
-                attackerAgent.IsPlayerControlled &&
-                this.HitPoint != this.MaxHitPoint
-                )
+            WeaponComponentData currentUsageItem = weapon.CurrentUsageItem;
+
+            if (attackerAgent != null && this.RepairSkill != null && attackerAgent.Character.GetSkillValue(this.RepairSkill) >= this.RepairingSkillRequired &&
+                weapon.Item?.StringId == this.RepairItem && attackerAgent.IsHuman && attackerAgent.IsPlayerControlled && this.HitPoint != this.MaxHitPoint)
             {
                 reportDamage = false;
                 NetworkCommunicator player = attackerAgent.MissionPeer.GetNetworkPeer();
                 PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
                 if (persistentEmpireRepresentative == null) return false;
-                bool playerHasAllItems = this.receipt.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.RepairItem, r.NeededCount));
+
+                bool playerHasAllItems = this.receipt.All(r => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.RepairItem, r.NeededCount));
                 if (!playerHasAllItems)
                 {
-                    //TODO: Inform player
                     InformationComponent.Instance.SendMessage("Required Items:", 0x02ab89d9, player);
                     foreach (RepairReceipt r in this.receipt)
                     {
-                        InformationComponent.Instance.SendMessage(r.NeededCount + " * " + r.RepairItem.Name.ToString(), 0x02ab89d9, player);
+                        InformationComponent.Instance.SendMessage($"{r.NeededCount} * {r.RepairItem.Name}", 0x02ab89d9, player);
                     }
                     return false;
                 }
+
                 foreach (RepairReceipt r in this.receipt)
                 {
                     persistentEmpireRepresentative.GetInventory().RemoveCountedItem(r.RepairItem, r.NeededCount);
                 }
-                InformationComponent.Instance.SendMessage((this.HitPoint + this.RepairDamage).ToString() + "/" + this.MaxHitPoint + ", repaired", 0x02ab89d9, player);
+
+                InformationComponent.Instance.SendMessage($"{this.HitPoint + this.RepairDamage}/{this.MaxHitPoint}, repaired", 0x02ab89d9, player);
                 this.SetHitPoint(this.HitPoint + this.RepairDamage, impactDirection);
+
                 if (GameNetwork.IsServer)
                 {
                     LoggerHelper.LogAnAction(attackerAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerRepairesTheDestructable, null, new object[] { this.GetType().Name });
@@ -324,15 +362,15 @@ namespace PersistentEmpiresLib.SceneScripts
             }
             else
             {
-                if (this.DestroyedByStoneOnly)
+                if (this.DestroyedByStoneOnly && (currentUsageItem == null || (currentUsageItem.WeaponClass != WeaponClass.Stone && currentUsageItem.WeaponClass != WeaponClass.Boulder) || !currentUsageItem.WeaponFlags.HasAnyFlag(WeaponFlags.NotUsableWithOneHand)))
                 {
-                    if (currentUsageItem == null || (currentUsageItem.WeaponClass != WeaponClass.Stone && currentUsageItem.WeaponClass != WeaponClass.Boulder) || !currentUsageItem.WeaponFlags.HasAnyFlag(WeaponFlags.NotUsableWithOneHand))
-                    {
-                        damage = 0;
-                    }
+                    damage = 0;
                 }
-                if (impactDirection == null) impactDirection = Vec3.Zero;
+
+                if (impactDirection == null)
+                    impactDirection = Vec3.Zero;
                 this.SetHitPoint(this.HitPoint - damage, impactDirection);
+
                 if (GameNetwork.IsServer)
                 {
                     LoggerHelper.LogAnAction(attackerAgent.MissionPeer.GetNetworkPeer(), LogAction.PlayerHitToDestructable, null, new object[] { this.GetType().Name });
