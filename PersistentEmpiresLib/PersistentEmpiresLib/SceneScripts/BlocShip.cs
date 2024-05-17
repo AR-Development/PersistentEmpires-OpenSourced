@@ -96,7 +96,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 if (hitEntity != base.GameEntity)
                 {
                     StopShip();
-                    base.GameEntity.SetFrame(ref oldFrame);
+                    GameEntity.SetGlobalFrame(oldFrame);
                     PlayCollisionEffects(startPosition);
                 }
             }
