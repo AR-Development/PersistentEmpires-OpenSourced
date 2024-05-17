@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -9,6 +12,7 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
     {
         private string _bannerCode;
         private string _bannerCodeNotApplicable;
+        private bool _canApply;
         private Action _onCancel;
         private Action<string> _onApply;
         private Action _close;
@@ -97,12 +101,12 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
         }
         public bool CanApplyValue()
         {
-            if (this.BannerCode == "")
+            if (this._bannerCode == "")
             {
                 this.BannerCodeNotApplicable = "Cannot be empty";
                 return false;
             }
-            if ((int)(this.BannerCode.Split('.').Count() / 10) <= 0)
+            if ((int)(this._bannerCode.Split('.').Count() / 10) <= 0)
             {
                 this.BannerCodeNotApplicable = "Invalid Banner Code";
                 return false;
@@ -140,15 +144,26 @@ namespace PersistentEmpires.Views.ViewsVM.FactionManagement
                 if (value != this._bannerCode)
                 {
                     this._bannerCode = value;
+                    CanApply = this.CanApplyValue();
                     base.OnPropertyChangedWithValue(value, "BannerCode");
-                    base.OnPropertyChanged("CanApply");
                 }
             }
         }
         [DataSourceProperty]
         public bool CanApply
         {
-            get => this.CanApplyValue();
+            get
+            {
+                return _canApply;
+            }
+            set
+            {
+                if (value != _canApply)
+                {
+                    this._canApply = value;
+                    base.OnPropertyChangedWithValue(value, "CanApply");
+                }
+            }
         }
 
         [DataSourceProperty]
