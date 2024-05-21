@@ -19,22 +19,34 @@ if not exist "%mbServerFolder%" (
     goto end
 )
 
-REM Delete existing files in the server target directory
-if exist ".\ServerReferences\*.dll" del ".\ServerReferences\*.dll"
-
 REM Set the path to the directory where your Bannerlord server DLLs are located
 set "serverSourceDir=%mbServerFolder%\bin\Win64_Shipping_Server"
+
 REM Set the path to the target directory for the server DLLs relative to the current directory
 set "serverTargetDir=.\ServerReferences"
-copy "%serverSourceDir%\*.dll" "%serverTargetDir%"
 
-REM Delete existing files in the client target directory
-if exist ".\ClientReferences\*.dll" del ".\ClientReferences\*.dll"
+REM Create the server target directory if it doesn't exist
+if not exist "%serverTargetDir%" mkdir "%serverTargetDir%"
+
+REM Delete existing files in the server target directory
+if exist "%serverTargetDir%\*.dll" del "%serverTargetDir%\*.dll"
+
+REM Copy server DLLs to the target directory
+copy "%serverSourceDir%\*.dll" "%serverTargetDir%"
 
 REM Set the path to the directory where your Bannerlord client DLLs are located
 set "clientSourceDir=%mbClientFolder%\bin\Win64_Shipping_Client"
+
 REM Set the path to the target directory for the client DLLs relative to the current directory
 set "clientTargetDir=.\ClientReferences"
+
+REM Create the client target directory if it doesn't exist
+if not exist "%clientTargetDir%" mkdir "%clientTargetDir%"
+
+REM Delete existing files in the client target directory
+if exist "%clientTargetDir%\*.dll" del "%clientTargetDir%\*.dll"
+
+REM Copy client DLLs to the target directory
 copy "%clientSourceDir%\*.dll" "%clientTargetDir%"
 
 echo DLL files copied successfully.
