@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 
 namespace PersistentEmpiresClient.ViewsVM.MessageLogPanel
@@ -35,6 +40,12 @@ namespace PersistentEmpiresClient.ViewsVM.MessageLogPanel
 
         private void ExecuteLink(string link)
         {
+        }
+
+        internal void Copy()
+        {
+            var s = string.Join(Environment.NewLine, _items.Select(x => $"{x.Date} {x.Description}"));
+            Input.SetClipboardText(s);
         }
 
         [DataSourceProperty]
