@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Linq;
@@ -159,7 +160,7 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
                 case nameof(LogAction.PlayerOpensStockpile):
                 case nameof(LogAction.PlayerClosesStockpile):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensStockpile ? "accessed to" : "closed")} a stockpile market. Xml file of market is {((PE_StockpileMarket)oParams[0]).XmlFile}";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensStockpile ? "accessed to" : "closed")} a stockpile market. Xml file of market is {StockpileMarketComponent.XmlFile}";
                 case nameof(LogAction.PlayerBuysStockpile):
                     return $"{FormatLogForPlayer(issuer, dateTime)} bought {((MarketItem)oParams[0]).Item.Name} from the stockpile market with a price of {((MarketItem)oParams[0]).BuyPrice()}.";
                 case nameof(LogAction.PlayerSellsStockpile):
