@@ -5,6 +5,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using PersistentEmpiresLib.NetworkMessages.Client;
+using System.Linq;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -66,11 +67,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 #if SERVER
         public override void OnBehaviorInitialize()
         {
-            if (agent.MissionPeer == null) return false;
-            if (agent.IsActive() == false) return false;
-            return this.IsPlayerWounded(agent.MissionPeer.GetNetworkPeer());
-        } 
-
+            WoundingEnabled = ConfigManager.GetBoolConfig("WoundingEnabled", false);
+            WoundingTime = ConfigManager.GetIntConfig("WoundingTimeMinutes", 60);
             AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
         }
 
