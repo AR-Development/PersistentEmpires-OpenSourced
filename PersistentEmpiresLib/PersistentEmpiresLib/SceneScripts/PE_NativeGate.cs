@@ -364,7 +364,7 @@ namespace PersistentEmpiresLib.SceneScripts
         }
 
         // Token: 0x06002BD8 RID: 11224 RVA: 0x000AA4B4 File Offset: 0x000A86B4
-        private void UpdateDoorBodies(bool updateAnyway)
+        public void UpdateDoorBodies(bool updateAnyway)
         {
             if (this.IsDestroyed) { return; }
             if (this._attackOnlyDoorColliders.Count == 2)
@@ -1027,10 +1027,10 @@ namespace PersistentEmpiresLib.SceneScripts
         private int _closingAnimationIndex = -1;
 
         // Token: 0x04001157 RID: 4439
-        private bool _leftExtraColliderDisabled;
+        public bool _leftExtraColliderDisabled;
 
         // Token: 0x04001158 RID: 4440
-        private bool _rightExtraColliderDisabled;
+        public bool _rightExtraColliderDisabled;
 
         // Token: 0x04001159 RID: 4441
         private bool _civilianMission;
@@ -1048,13 +1048,13 @@ namespace PersistentEmpiresLib.SceneScripts
         private SynchedMissionObject _door;
 
         // Token: 0x0400115F RID: 4447
-        private Skeleton _doorSkeleton;
+        public Skeleton _doorSkeleton;
 
         // Token: 0x04001160 RID: 4448
-        private GameEntity _extraColliderRight;
+        public GameEntity _extraColliderRight;
 
         // Token: 0x04001161 RID: 4449
-        private GameEntity _extraColliderLeft;
+        public GameEntity _extraColliderLeft;
 
         // Token: 0x04001162 RID: 4450
         private readonly List<GameEntity> _attackOnlyDoorColliders;
@@ -1072,7 +1072,7 @@ namespace PersistentEmpiresLib.SceneScripts
         private LadderQueueManager _queueManager;
 
         // Token: 0x04001167 RID: 4455
-        private bool _afterMissionStartTriggered;
+        public bool _afterMissionStartTriggered;
 
         // Token: 0x04001168 RID: 4456
         private sbyte _rightDoorBoneIndex;
@@ -1081,13 +1081,13 @@ namespace PersistentEmpiresLib.SceneScripts
         private sbyte _leftDoorBoneIndex;
 
         // Token: 0x0400116C RID: 4460
-        private AgentPathNavMeshChecker _pathChecker;
+        public AgentPathNavMeshChecker _pathChecker;
 
         // Token: 0x0400116D RID: 4461
         public bool AutoOpen;
 
         // Token: 0x0400116E RID: 4462
-        private SynchedMissionObject _plank;
+        public SynchedMissionObject _plank;
 
         // Token: 0x04001170 RID: 4464
         private WorldFrame _middleFrame;

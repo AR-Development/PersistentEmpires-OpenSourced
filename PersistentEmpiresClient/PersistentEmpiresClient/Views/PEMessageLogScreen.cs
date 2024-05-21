@@ -63,6 +63,10 @@ namespace PersistentEmpires.Views.Views
                     ShowLogView();
                 }
             }
+            else if (MissionScreen.InputManager.IsKeyPressed(InputKey.C) && MissionScreen.InputManager.IsControlDown())
+            {
+                _dataSource.Copy();
+            }
         }
 
         private bool CloseLog()
