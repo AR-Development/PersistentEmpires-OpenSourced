@@ -1,3 +1,5 @@
 /.vs
 /.vscode
 /publish
+/PersistentEmpiresLib/PersistentEmpiresLib/ClientReferences/*.dll
+/PersistentEmpiresLib/PersistentEmpiresLib/ServerReferences/*.dll

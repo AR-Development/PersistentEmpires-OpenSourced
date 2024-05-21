@@ -12,8 +12,8 @@ namespace PersistentEmpires.Views.Views
 {
     public class PEInventoryScreen : PEBaseInventoryScreen
     {
-
         private PEInventoryVM _dataSource;
+
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
@@ -78,6 +78,7 @@ namespace PersistentEmpires.Views.Views
             base.MissionScreen.RemoveLayer(this._gauntletLayer);
             this._gauntletLayer = null;
         }
+
         public void CloseInventory()
         {
             if (this.IsActive)
@@ -109,7 +110,7 @@ namespace PersistentEmpires.Views.Views
                 this._dataSource.SetRequestedItems(requestedInventory);
             }
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriority);
-            this._gauntletLayer.IsFocusLayer = true;
+            this._gauntletLayer.IsFocusLayer = false;
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             this._gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
             this._gauntletLayer.LoadMovie("PEPlayerInventory", this._dataSource);
