@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -15,7 +16,6 @@ namespace PersistentEmpiresLib.SceneScripts
     public class PE_TradeCenter : PE_UsableFromDistance
     {
         public static int MAX_STOCK_COUNT = 1000;
-        public string XmlFile = "exampletradecenter";
         public List<MarketItem> MarketItems { get; private set; }
         private TradingCenterBehavior tradingCenterBehavior;
         private CastlesBehavior castlesBehavior;
@@ -73,15 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
             base.DescriptionMessage = descriptionMessage;
             this.tradingCenterBehavior = Mission.Current.GetMissionBehavior<TradingCenterBehavior>();
             this.castlesBehavior = Mission.Current.GetMissionBehavior<CastlesBehavior>();
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Markets/" + this.XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-            this.MarketItems = new List<MarketItem>();
-            this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier1Items").InnerText, 1);
-            this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier2Items").InnerText, 2);
-            this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier3Items").InnerText, 3);
-            this.LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier4Items").InnerText, 4);
-
+            MarketItems = TradingCenterBehavior.MarketItems.ToList();
         }
         public override void OnUse(Agent userAgent)
         {
