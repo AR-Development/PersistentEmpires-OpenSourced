@@ -100,9 +100,12 @@ namespace PersistentEmpiresServer.SpawnBehavior
 
                         if (WoundingBehavior.Instance.WoundingEnabled)
                         {
-                            if (WoundingBehavior.Instance.IsWounded.ContainsKey(networkCommunicator) && WoundingBehavior.Instance.IsWounded[networkCommunicator] && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator))
+                            if (WoundingBehavior.Instance.IsWounded.ContainsKey(networkCommunicator)
+                                && WoundingBehavior.Instance.IsWounded[networkCommunicator]
+                                && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator)
+                                && WoundingBehavior.Instance.DeathEquipment[networkCommunicator].Item1)
                             {
-                                agentBuildData.Equipment(WoundingBehavior.Instance.DeathEquipment[networkCommunicator]);
+                                agentBuildData.Equipment(WoundingBehavior.Instance.DeathEquipment[networkCommunicator].Item2);
                                 WoundingBehavior.Instance.DeathEquipment.Remove(networkCommunicator); // Done.
                             }
                         }
