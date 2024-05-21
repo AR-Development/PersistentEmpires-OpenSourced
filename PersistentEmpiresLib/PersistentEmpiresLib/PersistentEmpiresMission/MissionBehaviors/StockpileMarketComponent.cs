@@ -111,12 +111,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             openedInventories = new Dictionary<MissionObject, List<NetworkCommunicator>>();
-#if SERVER
             LoadXmlConfig();
-#endif
         }
 
-#if SERVER
         private void LoadXmlConfig()
         {
             string xmlPath = ModuleHelper.GetXmlPath(ModuleFolder, "Markets/" + XmlFile);
@@ -163,7 +160,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 CraftingBoxes.Add(new CraftingBox(itemId, minTierLevel, maxTierLevel));
             }
         }
-#endif
 
         public override void OnRemoveBehavior()
         {
