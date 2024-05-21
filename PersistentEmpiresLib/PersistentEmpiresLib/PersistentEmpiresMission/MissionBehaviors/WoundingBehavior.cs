@@ -27,7 +27,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         #region MissionNetwork
 #if CLIENT
         public override void OnBehaviorInitialize()
-        {
+        {        
             base.OnBehaviorInitialize();
             if (Instance == null)
             {
@@ -67,6 +67,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 #if SERVER
         public override void OnBehaviorInitialize()
         {
+            base.OnBehaviorInitialize();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+
             WoundingEnabled = ConfigManager.GetBoolConfig("WoundingEnabled", false);
             WoundingTime = ConfigManager.GetIntConfig("WoundingTimeMinutes", 60);
             AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
@@ -75,7 +81,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnPlayerConnectedToServer(NetworkCommunicator networkPeer)
         {
             base.OnPlayerConnectedToServer(networkPeer);
-            
+
             if (WoundingEnabled == false) return;
 
             foreach (NetworkCommunicator player in IsWounded.Keys.ToList())
@@ -130,7 +136,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();
                 DeathPlace[player] = affectedAgent.Position;
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
-                DeathEquipment[player] = new Tuple<bool, Equipment>(false,spawnEquipment);
+                DeathEquipment[player] = new Tuple<bool, Equipment>(false, spawnEquipment);
                 // this.DeathWeaponEquipment[player] = affectedAgent.Equipment[Equip]
                 for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
                 {
@@ -139,10 +145,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                 //if your wounded AND your not healed yet then keep old timer
                 if (WoundedUntil.ContainsKey(player) && WoundedUntil[player] < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) return;
-                
+
                 // otherwise get new heal time
                 WoundedUntil[player] = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
-                
+
                 IsWounded[player] = true;
                 GameNetwork.BeginBroadcastModuleEvent();
                 GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, true));
@@ -176,13 +182,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private bool HandleRegisterClientEquipmentOnWound(NetworkCommunicator player, RegisterClientEquipmentOnWound message)
         {
-            if(DeathEquipment.ContainsKey(player))
+            if (DeathEquipment.ContainsKey(player))
             {
                 var playerEquipment = DeathEquipment[player].Item2;
 
-                if(!DeathEquipment[player].Item1)
+                if (!DeathEquipment[player].Item1)
                 {
-                    if(playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
+                    if (playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
                     {
                         playerEquipment[EquipmentIndex.Weapon0] = new EquipmentElement();
                     }
@@ -201,7 +207,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     DeathEquipment[player] = new Tuple<bool, Equipment>(true, playerEquipment);
                 }
             }
-            
+
             return true;
         }
 #endif
