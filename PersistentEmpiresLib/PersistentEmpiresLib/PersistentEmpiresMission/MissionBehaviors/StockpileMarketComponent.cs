@@ -106,16 +106,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static string XmlFile = "examplemarket"; // itemId*minimum*maximum,itemId*minimum*maximum
         private static string ModuleFolder = "PersistentEmpires";
 
-        public StockpileMarketComponent()
-        {
-            LoadXmlConfig();
-        }
-
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             openedInventories = new Dictionary<MissionObject, List<NetworkCommunicator>>();
+            LoadXmlConfig();
         }
 
         private void LoadXmlConfig()

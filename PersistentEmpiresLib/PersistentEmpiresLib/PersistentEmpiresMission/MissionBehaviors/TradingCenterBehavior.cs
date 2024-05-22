@@ -33,18 +33,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static string XmlFile = "exampletradecenter";
 
         private Random randomizer;
-
-        public TradingCenterBehavior()
-        {
-            LoadXmlConfig();
-        }
-
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             openedInventories = new Dictionary<MissionObject, List<NetworkCommunicator>>();
             randomizer = new Random();
+            LoadXmlConfig();
         }
 
         private void LoadXmlConfig()
