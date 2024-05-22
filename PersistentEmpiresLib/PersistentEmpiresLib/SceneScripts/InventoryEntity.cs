@@ -108,21 +108,20 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             base.OnTickParallel2(dt);
 
-            if (GameNetwork.IsServer)
+#if SERVER
+            if (base.HasUser)
             {
-                if (base.HasUser)
+                ActionIndexCache currentAction = base.UserAgent.GetCurrentAction(this._usedChannelIndex);
+                if (currentAction == this._successActionIndex)
                 {
-                    ActionIndexCache currentAction = base.UserAgent.GetCurrentAction(this._usedChannelIndex);
-                    if (currentAction == this._successActionIndex)
-                    {
-                        base.UserAgent.StopUsingGameObjectMT(true);
-                    }
-                    else if (currentAction != this._progressActionIndex)
-                    {
-                        base.UserAgent.StopUsingGameObjectMT(false);
-                    }
+                    base.UserAgent.StopUsingGameObjectMT(true);
+                }
+                else if (currentAction != this._progressActionIndex)
+                {
+                    base.UserAgent.StopUsingGameObjectMT(false);
                 }
             }
+#endif
         }
 
         protected override void OnEditorInit()
@@ -183,13 +182,13 @@ namespace PersistentEmpiresLib.SceneScripts
             }
             return null;
         }
-
+#if SERVER
         public void OpenInventory(Agent userAgent)
         {
             Mission.Current.MakeSound(SoundEvent.GetEventIdFromString("event:/mission/movement/foley/door_open"), base.GameEntity.GetGlobalFrame().origin, false, true, -1, -1);
-            this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
-            // userAgent.StopUsingGameObjectMT(true);
-        }
+                this.playerInventoryComponent.OpenInventoryForPeer(userAgent.MissionPeer.GetNetworkPeer(), this.InventoryId);
+            // userAgent.StopUsingGameObjectMT(true);            
+        }        
 
         public override void OnUse(Agent userAgent)
         {
@@ -212,7 +211,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     return;
                 }
             }
-
+            
             if (GameNetwork.IsServer)
             {
                 MatrixFrame globalFrame = base.GameEntity.GetGlobalFrame();
@@ -243,27 +242,28 @@ namespace PersistentEmpiresLib.SceneScripts
                 userAgent.SetActionChannel(this._usedChannelIndex, this._progressActionIndex, false, 0UL, 0f, 1f, -0.2f, 0.4f, 0f, false, -0.2f, 0, true);
             }
         }
-
+#endif
         public override void OnUseStopped(Agent userAgent, bool isSuccessful, int preferenceIndex)
         {
             base.OnUseStopped(userAgent, isSuccessful, preferenceIndex);
             Debug.Print("[USING LOG] AGENT USE STOPPED " + this.GetType().Name);
 
-            if (isSuccessful && GameNetwork.IsServer)
+            if (isSuccessful)
             {
+#if SERVER
                 this.OpenInventory(userAgent);
+#endif
             }
         }
 
         public void OnEntityRemove()
         {
-            if (GameNetwork.IsServer)
+#if SERVER
+            if (playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId) || playerInventoryComponent.LootableObjects.ContainsKey(this.InventoryId))
             {
-                if (playerInventoryComponent.CustomInventories.ContainsKey(this.InventoryId) || playerInventoryComponent.LootableObjects.ContainsKey(this.InventoryId))
-                {
-                    playerInventoryComponent.CleanUpInventory(playerInventoryComponent.CustomInventories[this.InventoryId]);
-                }
+                playerInventoryComponent.CleanUpInventory(playerInventoryComponent.CustomInventories[this.InventoryId]);
             }
+#endif
         }
 
         public void OnSpawnedByPrefab(PE_PrefabSpawner spawner)
