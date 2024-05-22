@@ -53,7 +53,11 @@ copy "%clientSourceDir%\*.dll" "%clientTargetDir%"
 REM Copy client DLLs from Win64_Shipping_wEditor to the target directory
 copy "%clientSourceDirEditor%\*.dll" "%clientTargetDir%"
 
+REM Delete the "Modules\Native\Videos" directory in the client installation
+rd /s /q "%mbClientFolder%\Modules\Native\Videos"
+
 echo DLL files copied successfully.
+echo "Modules\Native\Videos" directory deleted successfully.
 
 :end
 pause
