@@ -31,6 +31,7 @@ if not exist "%serverTargetDir%" mkdir "%serverTargetDir%"
 REM Set the paths to the directories where your Bannerlord client DLLs are located
 set "clientSourceDir=%mbClientFolder%\bin\Win64_Shipping_Client"
 set "clientSourceDirEditor=%mbClientFolder%\bin\Win64_Shipping_wEditor"
+set "clientSourceDirNative=%mbClientFolder%\Modules\Native\bin\Win64_Shipping_Client"
 
 REM Set the path to the target directory for the client DLLs relative to the current directory
 set "clientTargetDir=.\ClientReferences"
@@ -52,6 +53,9 @@ copy "%clientSourceDir%\*.dll" "%clientTargetDir%"
 
 REM Copy client DLLs from Win64_Shipping_wEditor to the target directory
 copy "%clientSourceDirEditor%\*.dll" "%clientTargetDir%"
+
+REM Copy client DLLs from Modules\Native\bin\Win64_Shipping_Client to the target directory
+copy "%clientSourceDirNative%\*.dll" "%clientTargetDir%"
 
 REM Delete the "Modules\Native\Videos" directory in the client installation
 rd /s /q "%mbClientFolder%\Modules\Native\Videos"
