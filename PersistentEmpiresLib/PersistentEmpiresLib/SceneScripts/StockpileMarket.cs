@@ -49,8 +49,8 @@ namespace PersistentEmpiresLib.SceneScripts
             base.DescriptionMessage = descriptionMessage;
             this.stockpileMarketComponent = Mission.Current.GetMissionBehavior<StockpileMarketComponent>();
 
-            MarketItems = StockpileMarketComponent.MarketItems.ToList();
-            CraftingBoxes = StockpileMarketComponent.CraftingBoxes.ToList();
+            MarketItems = StockpileMarketComponent.MarketItems;
+            CraftingBoxes = StockpileMarketComponent.CraftingBoxes;
         }
         public override string GetDescriptionText(GameEntity gameEntity = null)
         {

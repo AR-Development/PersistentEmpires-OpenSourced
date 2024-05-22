@@ -6,12 +6,9 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -29,8 +26,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         Dictionary<MissionObject, List<NetworkCommunicator>> openedInventories;
 
         Dictionary<PE_TradeCenter, long> RandomizeTimer = new Dictionary<PE_TradeCenter, long>();
-        public static List<MarketItem> MarketItems { get; set; } = new List<MarketItem>();
-        public static string XmlFile = "exampletradecenter";
 
         private Random randomizer;
         public override void OnBehaviorInitialize()
@@ -39,45 +34,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             openedInventories = new Dictionary<MissionObject, List<NetworkCommunicator>>();
             randomizer = new Random();
-#if SERVER
-            LoadXmlConfig();
-#endif
         }
-
-#if SERVER
-        private void LoadXmlConfig()
-        {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Markets/" + XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-
-            LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier1Items").InnerText, 1);
-            LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier2Items").InnerText, 2);
-            LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier3Items").InnerText, 3);
-            LoadMarketItems(xmlDocument.SelectSingleNode("/Market/Tier4Items").InnerText, 4);
-        }
-
-        protected void LoadMarketItems(string innerText, int tier)
-        {
-
-            if (innerText == "") return;
-            foreach (string marketItemStr in innerText.Trim().Split('|'))
-            {
-                string[] values = marketItemStr.Split('*');
-                string itemId = values[0];
-                int minPrice = int.Parse(values[1]);
-                int maxPrice = int.Parse(values[2]);
-                int stability = values.Length > 4 ? int.Parse(values[3]) : 10;
-
-                ItemObject item = MBObjectManager.Instance.GetObject<ItemObject>(itemId);
-                if (item == null)
-                {
-                    Debug.Print(" ERROR IN MARKET SERIALIZATION " + XmlFile + " ITEM ID " + itemId + " NOT FOUND !!! ", 0, Debug.DebugColor.Red);
-                }
-                MarketItems.Add(new MarketItem(itemId, maxPrice, minPrice, stability, tier));
-            }
-        }
-#endif
 
         public override void AfterStart()
         {
