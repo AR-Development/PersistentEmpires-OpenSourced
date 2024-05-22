@@ -39,9 +39,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             openedInventories = new Dictionary<MissionObject, List<NetworkCommunicator>>();
             randomizer = new Random();
+#if SERVER
             LoadXmlConfig();
+#endif
         }
 
+#if SERVER
         private void LoadXmlConfig()
         {
             string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Markets/" + XmlFile);
@@ -74,6 +77,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 MarketItems.Add(new MarketItem(itemId, maxPrice, minPrice, stability, tier));
             }
         }
+#endif
 
         public override void AfterStart()
         {

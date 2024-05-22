@@ -62,6 +62,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+
+
         public override MultiplayerGameType GetMissionType()
         {
             return MultiplayerGameType.FreeForAll;
@@ -355,6 +357,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+
+
+
 
         public override void AfterStart()
         {
