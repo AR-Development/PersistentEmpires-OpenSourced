@@ -18,8 +18,7 @@ namespace PersistentEmpiresSave.Database.Migrations
         public override void Up()
         {
             Create.Table("Players")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("PlayerId").AsString().NotNullable().Unique()
+                .WithColumn("PlayerId").AsString().PrimaryKey().NotNullable()
                 .WithColumn("DiscordId").AsString().Nullable()
                 .WithColumn("Name").AsString(512).NotNullable()
                 .WithColumn("Hunger").AsInt32().WithDefaultValue(0)
@@ -56,18 +55,18 @@ namespace PersistentEmpiresSave.Database.Migrations
 
             Create.Table("Inventories")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("InventoryId").AsString().PrimaryKey().NotNullable()
                 .WithColumn("PlayerId").AsString().Nullable()
-                .WithColumn("InventoryId").AsString().NotNullable()
                 .WithColumn("IsPlayerInventory").AsBoolean()
-                .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable();
+                .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable()
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Index("PlayerId__Inventories")
                 .OnTable("Inventories")
                 .OnColumn("PlayerId");
 
             Create.Table("Factions")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("FactionIndex").AsInt32().NotNullable().Unique()
+                .WithColumn("FactionIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("Name").AsString().NotNullable()
                 .WithColumn("BannerKey").AsString().NotNullable()
                 .WithColumn("LordId").AsString().Nullable()
@@ -75,34 +74,33 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Marshalls").AsCustom("TEXT").Nullable();
 
             Create.Table("Castles")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("CastleIndex").AsInt32().NotNullable().Unique()
+                .WithColumn("CastleIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("FactionIndex").AsInt32().NotNullable().WithDefaultValue(0);
 
             Create.Table("UpgradeableBuildings")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("IsUpgrading").AsBoolean().WithDefaultValue(false)
-                .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0);
+                .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0)
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("StockpileMarkets")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
-                .WithColumn("MarketItemsSerialized").AsCustom("TEXT");
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
+                .WithColumn("MarketItemsSerialized").AsCustom("TEXT")
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("HorseMarkets")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
-                .WithColumn("Stock").AsInt32();
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
+                .WithColumn("Stock").AsInt32()
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("Logs")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("CreatedAt").AsDateTime()
                 .WithColumn("IssuerPlayerId").AsString()
                 .WithColumn("IssuerPlayerName").AsString()
-                .WithColumn("ActionType").AsString() // Hit,Capture,Kill,Gathering,Chat...
+                .WithColumn("ActionType").AsString()
                 .WithColumn("IssuerCoordinates").AsString()
-                .WithColumn("LogMessage").AsCustom("TEXT") // Compiled for chatgpt
+                .WithColumn("LogMessage").AsCustom("TEXT")
                 .WithColumn("AffectedPlayers").AsCustom("JSON");
 
             Create.Table("BanRecords")
@@ -121,8 +119,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("PlayerId").AsString();
 
             Create.Table("Whitelist")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("PlayerId").AsString().Unique()
+                .WithColumn("PlayerId").AsString().PrimaryKey()
                 .WithColumn("Active").AsBoolean().WithDefaultValue(true);
 
             Create.Table("Identifiers")
