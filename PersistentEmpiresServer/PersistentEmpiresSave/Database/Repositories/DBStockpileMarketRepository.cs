@@ -16,6 +16,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnGetAllStockpileMarkets += GetAllStockpileMarkets;
             SaveSystemBehavior.OnGetStockpileMarket += GetStockpileMarket;
             SaveSystemBehavior.OnCreateOrSaveStockpileMarket += CreateOrSaveStockpileMarket;
+            SaveSystemBehavior.OnUpsertStockpileMarkets += UpsertStockpileMarkets;
         }
 
         private static DBStockpileMarket CreateDBStockpileMarket(PE_StockpileMarket stockpileMarket)
@@ -39,6 +40,30 @@ namespace PersistentEmpiresSave.Database.Repositories
             Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ") RESULT COUNT " + result.Count());
             if (result.Count() == 0) return null;
             return result.First();
+        }
+        public static void UpsertStockpileMarkets(List<PE_StockpileMarket> markets)
+        {
+            Debug.Print($"[Save Module] CREATE OR UPDATE STOCKPILE {markets.Count()} MARKETS TO DB");
+
+            string query = @"
+            INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized)
+            VALUES ";
+
+            foreach(var market in markets)
+            {
+                var dbMarket = CreateDBStockpileMarket(market);
+
+                query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
+            }
+            // remove last ","
+            query = query.TrimEnd(',');
+            query += @" 
+                    ON DUPLICATE KEY UPDATE
+                    MarketItemsSerialized = VALUES(MarketItemsSerialized)";
+
+            DBConnection.Connection.Execute(query);
+
+            Debug.Print($"[Save Module] Executed querry: {query}");
         }
         public static DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket)
         {

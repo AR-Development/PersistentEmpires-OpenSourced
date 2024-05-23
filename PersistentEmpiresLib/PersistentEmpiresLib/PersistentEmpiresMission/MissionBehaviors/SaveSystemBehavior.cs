@@ -77,6 +77,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate IEnumerable<DBStockpileMarket> GetAllStockpileMarkets();
         public delegate DBStockpileMarket GetStockpileMarket(PE_StockpileMarket stockpileMarket);
         public delegate DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket);
+        public delegate void UpsertStockpileMarkets(List<PE_StockpileMarket> markets);
         /* Horse Markets */
         public delegate IEnumerable<DBHorseMarket> GetAllHorseMarkets();
         public delegate DBHorseMarket GetHorseMarket(PE_HorseMarket horseMarket);
@@ -127,6 +128,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetAllStockpileMarkets OnGetAllStockpileMarkets;
         public static event GetStockpileMarket OnGetStockpileMarket;
         public static event CreateOrSaveStockpileMarket OnCreateOrSaveStockpileMarket;
+        public static event UpsertStockpileMarkets OnUpsertStockpileMarkets;
+        
         /* Horse Markets */
         public static event GetAllHorseMarkets OnGetAllHorseMarkets;
         public static event GetHorseMarket OnGetHorseMarket;
@@ -236,6 +239,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
+        public static void HandleCreateOrSaveStockpileMarkets(List<PE_StockpileMarket> markets)
+        {
+            Debug.Print("[Save System] HandleCreateOrSaveStockpileMarkets)");
+            if (OnUpsertStockpileMarkets != null)
+            {
+                OnUpsertStockpileMarkets(markets);
+            }
+        }
+
         public static DBStockpileMarket HandleCreateOrSaveStockpileMarket(PE_StockpileMarket stockPileMarket)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveStockpileMarket null ? " + (OnCreateOrSaveStockpileMarket == null).ToString());

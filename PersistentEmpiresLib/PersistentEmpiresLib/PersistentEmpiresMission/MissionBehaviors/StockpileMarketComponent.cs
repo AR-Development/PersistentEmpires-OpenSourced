@@ -231,10 +231,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public void AutoSaveAllMarkets()
         {
             List<PE_StockpileMarket> markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>()).ToList();
-            foreach (PE_StockpileMarket market in markets)
-            {
-                SaveSystemBehavior.HandleCreateOrSaveStockpileMarket(market);
-            }
+            SaveSystemBehavior.HandleCreateOrSaveStockpileMarkets(markets);
+            //foreach (PE_StockpileMarket market in markets)
+            //{
+            //    SaveSystemBehavior.HandleCreateOrSaveStockpileMarket(market);
+            //}
         }
 
         private void UpdateStockForPeers(PE_StockpileMarket stockpileMarket, int itemIndex)
