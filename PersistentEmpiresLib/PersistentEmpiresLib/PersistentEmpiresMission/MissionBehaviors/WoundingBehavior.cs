@@ -24,7 +24,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private static List<string> ItemsWhichCanBeUsedByWounded = new List<string>();
 #endif
 
-        #region MissionNetwork
+            #region MissionNetwork
 #if CLIENT
         public override void OnBehaviorInitialize()
         {        
@@ -42,9 +42,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
                                     && agentState == AgentState.Killed
-                                    && WoundingEnabled && affectedAgent.MissionPeer != null
-                                    && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false
-                                    && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive)
+                                    && affectedAgent.MissionPeer != null
+                                    && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false)
             {
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
                 for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
@@ -126,11 +125,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
 
-            if (affectedAgent.IsHuman && affectedAgent.IsPlayerControlled && agentState == AgentState.Killed && WoundingEnabled &&
-               affectedAgent.MissionPeer != null &&
-               (
-                   (affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive)
-               )
+            if (affectedAgent.IsHuman && affectedAgent.IsPlayerControlled 
+                && agentState == AgentState.Killed && WoundingEnabled 
+                && affectedAgent.MissionPeer != null 
+                && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive
             )
             {
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();

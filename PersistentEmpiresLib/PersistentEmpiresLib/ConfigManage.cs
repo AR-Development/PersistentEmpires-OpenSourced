@@ -10,7 +10,21 @@ namespace PersistentEmpiresLib
         public static int StartingGold { get; private set; }
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
+        public static XmlDocument _xmlDocument = null;
+        public static XmlDocument XmlDocument
+        {
+            get
+            {
+                if(_xmlDocument == null)
+                {
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
+                    _xmlDocument = new XmlDocument();
+                    _xmlDocument.Load(xmlPath);
+                }
 
+                return _xmlDocument;
+            }
+        }
 
         public static void Initialize()
         {
@@ -20,19 +34,13 @@ namespace PersistentEmpiresLib
         }
         public static bool GetVoiceChatEnabled()
         {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-            XmlNode portElement = xmlDocument.SelectSingleNode("/GeneralConfig/VoiceChatEnabled");
+            XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/VoiceChatEnabled");
             return portElement.InnerText == "true";
         }
 
         public static int GetStartingGold()
         {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-            XmlNode portElement = xmlDocument.SelectSingleNode("/GeneralConfig/StartingGold");
+            XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/StartingGold");
             return int.Parse(portElement.InnerText);
         }
 
@@ -46,18 +54,12 @@ namespace PersistentEmpiresLib
 
         public static int GetIntConfig(string config, int defValue)
         {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-            XmlNode portElement = xmlDocument.SelectSingleNode("/GeneralConfig/" + config);
+            XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);
             return portElement == null ? defValue : int.Parse(portElement.InnerText);
         }
         public static string GetStrConfig(string config, string defValue)
         {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-            XmlNode portElement = xmlDocument.SelectSingleNode("/GeneralConfig/" + config);
+            XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);
             return portElement == null ? defValue : portElement.InnerText.Trim();
         }
     }
