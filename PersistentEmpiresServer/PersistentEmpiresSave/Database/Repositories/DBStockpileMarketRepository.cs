@@ -64,26 +64,5 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             Debug.Print($"[Save Module] Executed querry: {query}");
         }
-
-        public static DBStockpileMarket CreateStockpileMarket(PE_StockpileMarket stockpileMarket)
-        {
-            Debug.Print("[Save Module] CREATE STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            DBStockpileMarket dbMarket = CreateDBStockpileMarket(stockpileMarket);
-            string insertQuery = "INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized) VALUES (@MissionObjectHash, @MarketItemsSerialized)";
-            DBConnection.Connection.Execute(insertQuery, dbMarket);
-            Debug.Print("[Save Module] CREATED STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            return dbMarket;
-        }
-
-        public static DBStockpileMarket SaveStockpileMarket(PE_StockpileMarket stockpileMarket)
-        {
-            Debug.Print("[Save Module] UPDATING STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            DBStockpileMarket dbMarket = CreateDBStockpileMarket(stockpileMarket);
-            string insertQuery = "UPDATE StockpileMarkets SET MarketItemsSerialized = @MarketItemsSerialized WHERE MissionObjectHash = @MissionObjectHash";
-            DBConnection.Connection.Execute(insertQuery, dbMarket);
-            Debug.Print("[Save Module] UPDATED STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            return dbMarket;
-        }
-
     }
 }
