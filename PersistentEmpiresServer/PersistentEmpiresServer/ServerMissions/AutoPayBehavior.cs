@@ -23,7 +23,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
             AutoPayEnabled = ConfigManager.GetBoolConfig("AutoPayEnabled", false);
             AutoPayTime = ConfigManager.GetIntConfig("AutoPayTimeMinutes", 30);
-            AutoPayGold = ConfigManager.GetIntConfig("AutoPayTimeMinutes", 100);
+            AutoPayGold = ConfigManager.GetIntConfig("AutoPayGold", 100);
 
             if (AutoPayEnabled)
             {
