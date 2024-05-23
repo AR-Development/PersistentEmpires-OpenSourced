@@ -43,24 +43,26 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static void UpsertStockpileMarkets(List<PE_StockpileMarket> markets)
         {
             Debug.Print($"[Save Module] INSERT/UPDATE FOR {markets.Count()} MARKETS TO DB");
-
-            string query = @"
+            if (markets.Any())
+            {
+                string query = @"
             INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized)
             VALUES ";
 
-            foreach(var market in markets)
-            {
-                var dbMarket = CreateDBStockpileMarket(market);
+                foreach (var market in markets)
+                {
+                    var dbMarket = CreateDBStockpileMarket(market);
 
-                query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
-            }
-            // remove last ","
-            query = query.TrimEnd(',');
-            query += @" 
+                    query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
+                }
+                // remove last ","
+                query = query.TrimEnd(',');
+                query += @" 
                     ON DUPLICATE KEY UPDATE
                     MarketItemsSerialized = VALUES(MarketItemsSerialized)";
 
-            DBConnection.Connection.Execute(query);
+                DBConnection.Connection.Execute(query);
+            }
         }
     }
 }
