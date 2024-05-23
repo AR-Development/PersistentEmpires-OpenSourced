@@ -232,10 +232,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             List<PE_StockpileMarket> markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>()).ToList();
             SaveSystemBehavior.HandleCreateOrSaveStockpileMarkets(markets);
-            //foreach (PE_StockpileMarket market in markets)
-            //{
-            //    SaveSystemBehavior.HandleCreateOrSaveStockpileMarket(market);
-            //}
         }
 
         private void UpdateStockForPeers(PE_StockpileMarket stockpileMarket, int itemIndex)

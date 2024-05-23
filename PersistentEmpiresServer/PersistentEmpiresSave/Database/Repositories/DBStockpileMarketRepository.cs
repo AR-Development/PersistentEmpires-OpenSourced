@@ -15,7 +15,6 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             SaveSystemBehavior.OnGetAllStockpileMarkets += GetAllStockpileMarkets;
             SaveSystemBehavior.OnGetStockpileMarket += GetStockpileMarket;
-            SaveSystemBehavior.OnCreateOrSaveStockpileMarket += CreateOrSaveStockpileMarket;
             SaveSystemBehavior.OnUpsertStockpileMarkets += UpsertStockpileMarkets;
         }
 
@@ -65,15 +64,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             Debug.Print($"[Save Module] Executed querry: {query}");
         }
-        public static DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket)
-        {
 
-            if (GetStockpileMarket(stockpileMarket) == null)
-            {
-                return CreateStockpileMarket(stockpileMarket);
-            }
-            return SaveStockpileMarket(stockpileMarket);
-        }
         public static DBStockpileMarket CreateStockpileMarket(PE_StockpileMarket stockpileMarket)
         {
             Debug.Print("[Save Module] CREATE STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");

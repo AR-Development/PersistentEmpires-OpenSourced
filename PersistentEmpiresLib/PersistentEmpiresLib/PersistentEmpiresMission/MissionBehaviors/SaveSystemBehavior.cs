@@ -127,7 +127,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         /* Stockpile Markets */
         public static event GetAllStockpileMarkets OnGetAllStockpileMarkets;
         public static event GetStockpileMarket OnGetStockpileMarket;
-        public static event CreateOrSaveStockpileMarket OnCreateOrSaveStockpileMarket;
         public static event UpsertStockpileMarkets OnUpsertStockpileMarkets;
         
         /* Horse Markets */
@@ -248,21 +247,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 OnUpsertStockpileMarkets(markets);
             }
         }
-
-        public static DBStockpileMarket HandleCreateOrSaveStockpileMarket(PE_StockpileMarket stockPileMarket)
-        {
-            Debug.Print("[Save System] Is OnCreateOrSaveStockpileMarket null ? " + (OnCreateOrSaveStockpileMarket == null).ToString());
-            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-            if (OnCreateOrSaveStockpileMarket != null)
-            {
-                var result = OnCreateOrSaveStockpileMarket(stockPileMarket);
-                LogQuery(String.Format("OnCreateOrSaveStockpileMarket Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
-                return result;
-            }
-
-            return null;
-        }
+        
         public static DBUpgradeableBuilding HandleCreateOrSaveUpgradebleBuilding(PE_UpgradeableBuildings building)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveUpgradebleBuilding null ? " + (OnCreateOrSaveUpgradebleBuilding == null).ToString());
