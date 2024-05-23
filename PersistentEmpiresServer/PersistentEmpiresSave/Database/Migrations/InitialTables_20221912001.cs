@@ -47,7 +47,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
                 .WithColumn("CustomName").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Index("PlayerId__Players")
                 .OnTable("Players")
@@ -59,7 +59,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("PlayerId").AsString().Nullable()
                 .WithColumn("IsPlayerInventory").AsBoolean()
                 .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable()
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Index("PlayerId__Inventories")
                 .OnTable("Inventories")
@@ -81,17 +81,17 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("IsUpgrading").AsBoolean().WithDefaultValue(false)
                 .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("StockpileMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("MarketItemsSerialized").AsCustom("TEXT")
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("HorseMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("Stock").AsInt32()
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
             Create.Table("Logs")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
@@ -127,7 +127,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("IdentifierType").AsString().Nullable()
                 .WithColumn("UserId").AsInt64().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime).OnUpdate(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
 
         }
     }
