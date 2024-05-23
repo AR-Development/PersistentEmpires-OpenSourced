@@ -25,6 +25,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public int Constant;
         public int Stability;
         public int Tier;
+        public bool Dirty = false;
         // X is stock Y is price x^(1/stability) * y = k
         public MarketItem(string itemId, int maximumPrice, int minimumPrice, int stability, int tier)
         {
@@ -38,7 +39,10 @@ namespace PersistentEmpiresLib.SceneScripts
         }
         public void UpdateReserve(int newStock)
         {
+            Dirty = true;
+
             if (newStock > 999) newStock = 999;
+            
             if (newStock < 0) newStock = 0;
 
             if (newStock < 1)
