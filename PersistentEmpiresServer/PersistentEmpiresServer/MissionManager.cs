@@ -72,7 +72,8 @@ namespace PersistentEmpiresServer
                         new AutorestartBehavior(),
                         new AnimationBehavior(),
                         new ChatCommandSystem(),
-                        new WhitelistBehavior()
+                        new WhitelistBehavior(),
+                        new AutoPayBehavior(),
 						// new AgentHumanAILogic(),
 						// new EquipmentControllerLeaveLogic(),
 						// new MultiplayerPreloadHelper()

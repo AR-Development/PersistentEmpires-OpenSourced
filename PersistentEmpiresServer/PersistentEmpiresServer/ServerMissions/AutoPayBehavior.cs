@@ -12,7 +12,7 @@ namespace PersistentEmpiresServer.ServerMissions
     public class AutoPayBehavior : MissionNetwork
     {
         private static bool AutoPayEnabled = false;
-        private static int AutoPayTime = 1;
+        private static int AutoPayTime = 30;
         private static int AutoPayGold = 100;
         private static System.Timers.Timer AutoPayTimer = null;
 
@@ -22,7 +22,7 @@ namespace PersistentEmpiresServer.ServerMissions
             base.OnBehaviorInitialize();
 
             AutoPayEnabled = ConfigManager.GetBoolConfig("AutoPayEnabled", false);
-            AutoPayTime = ConfigManager.GetIntConfig("AutoPayTimeMinutes", 1);
+            AutoPayTime = ConfigManager.GetIntConfig("AutoPayTimeMinutes", 30);
             AutoPayGold = ConfigManager.GetIntConfig("AutoPayTimeMinutes", 100);
 
             if (AutoPayEnabled)
