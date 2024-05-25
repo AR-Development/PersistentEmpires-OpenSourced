@@ -132,7 +132,7 @@
 			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.Platform.PC.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="TaleWorlds.MountAndBlade.View"> 
+		<Reference Include="TaleWorlds.MountAndBlade.View">
 			<HintPath>$(TaleworldsReferencePath)\TaleWorlds.MountAndBlade.View.dll</HintPath>
 			<Private>False</Private>
 		</Reference>

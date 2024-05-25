@@ -7,19 +7,32 @@ namespace PersistentEmpiresSave.Database.Migrations
     {
         public override void Down()
         {
+            Delete.Table("BanRecords");
+            Delete.Table("Castles");
+            Delete.Table("Factions");
+            Delete.Table("HorseMarkets");
+            Delete.Table("Identifiers");
+            Delete.Table("Inventories");
+            Delete.Table("Logs");
+            Delete.Table("PlayerNames");
+            Delete.Table("Players");
+            Delete.Table("StockpileMarkets");
+            Delete.Table("UpgradeableBuildings");
+            Delete.Table("VersionInfo");
+            Delete.Table("Whitelist");
             Delete.Table("Players");
             Delete.Table("Inventories");
             Delete.Table("Factions");
             Delete.Table("Castles");
             Delete.Table("UpgradeableBuildings");
             Delete.Table("StockpileMarkets");
+
         }
 
         public override void Up()
         {
             Create.Table("Players")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("PlayerId").AsString().NotNullable().Unique()
+                .WithColumn("PlayerId").AsString().PrimaryKey().NotNullable()
                 .WithColumn("DiscordId").AsString().Nullable()
                 .WithColumn("Name").AsString(512).NotNullable()
                 .WithColumn("Hunger").AsInt32().WithDefaultValue(0)
@@ -48,26 +61,27 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
                 .WithColumn("CustomName").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
-            Create.Index("PlayerId__Players")
-                .OnTable("Players")
-                .OnColumn("PlayerId");
+            Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
 
             Create.Table("Inventories")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("PlayerId").AsString().Nullable()
                 .WithColumn("InventoryId").AsString().NotNullable()
+                .WithColumn("PlayerId").AsString().Nullable()
                 .WithColumn("IsPlayerInventory").AsBoolean()
-                .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable();
+                .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable()
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE Inventories MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Index("PlayerId__Inventories")
                 .OnTable("Inventories")
                 .OnColumn("PlayerId");
 
             Create.Table("Factions")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("FactionIndex").AsInt32().NotNullable().Unique()
+                .WithColumn("FactionIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("Name").AsString().NotNullable()
                 .WithColumn("BannerKey").AsString().NotNullable()
                 .WithColumn("LordId").AsString().Nullable()
@@ -75,34 +89,39 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Marshalls").AsCustom("TEXT").Nullable();
 
             Create.Table("Castles")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("CastleIndex").AsInt32().NotNullable().Unique()
+                .WithColumn("CastleIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("FactionIndex").AsInt32().NotNullable().WithDefaultValue(0);
 
             Create.Table("UpgradeableBuildings")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("IsUpgrading").AsBoolean().WithDefaultValue(false)
-                .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0);
+                .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0)
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE UpgradeableBuildings MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("StockpileMarkets")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
-                .WithColumn("MarketItemsSerialized").AsCustom("TEXT");
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
+                .WithColumn("MarketItemsSerialized").AsCustom("TEXT")
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE StockpileMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("HorseMarkets")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("MissionObjectHash").AsString().NotNullable()
-                .WithColumn("Stock").AsInt32();
+                .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
+                .WithColumn("Stock").AsInt32()
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE HorseMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("Logs")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("CreatedAt").AsDateTime()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
                 .WithColumn("IssuerPlayerId").AsString()
                 .WithColumn("IssuerPlayerName").AsString()
-                .WithColumn("ActionType").AsString() // Hit,Capture,Kill,Gathering,Chat...
+                .WithColumn("ActionType").AsString()
                 .WithColumn("IssuerCoordinates").AsString()
-                .WithColumn("LogMessage").AsCustom("TEXT") // Compiled for chatgpt
+                .WithColumn("LogMessage").AsCustom("TEXT")
                 .WithColumn("AffectedPlayers").AsCustom("JSON");
 
             Create.Table("BanRecords")
@@ -112,7 +131,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("BanReason").AsCustom("TEXT").Nullable()
                 .WithColumn("UnbanReason").AsCustom("TEXT").Nullable()
                 .WithColumn("BannedBy").AsString().Nullable()
-                .WithColumn("CreatedAt").AsDateTime().Nullable()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
                 .WithColumn("BanEndsAt").AsDateTime().Nullable();
 
             Create.Table("PlayerNames")
@@ -121,8 +140,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("PlayerId").AsString();
 
             Create.Table("Whitelist")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("PlayerId").AsString().Unique()
+                .WithColumn("PlayerId").AsString().PrimaryKey()
                 .WithColumn("Active").AsBoolean().WithDefaultValue(true);
 
             Create.Table("Identifiers")
@@ -130,7 +148,9 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("IdentifierType").AsString().Nullable()
                 .WithColumn("UserId").AsInt64().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE Identifiers MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
         }
     }
