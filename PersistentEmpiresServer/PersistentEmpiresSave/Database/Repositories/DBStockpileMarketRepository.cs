@@ -15,7 +15,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             SaveSystemBehavior.OnGetAllStockpileMarkets += GetAllStockpileMarkets;
             SaveSystemBehavior.OnGetStockpileMarket += GetStockpileMarket;
-            SaveSystemBehavior.OnCreateOrSaveStockpileMarket += CreateOrSaveStockpileMarket;
+            SaveSystemBehavior.OnUpsertStockpileMarkets += UpsertStockpileMarkets;
         }
 
         private static DBStockpileMarket CreateDBStockpileMarket(PE_StockpileMarket stockpileMarket)
@@ -40,34 +40,29 @@ namespace PersistentEmpiresSave.Database.Repositories
             if (result.Count() == 0) return null;
             return result.First();
         }
-        public static DBStockpileMarket CreateOrSaveStockpileMarket(PE_StockpileMarket stockpileMarket)
+        public static void UpsertStockpileMarkets(List<PE_StockpileMarket> markets)
         {
-
-            if (GetStockpileMarket(stockpileMarket) == null)
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {markets.Count()} MARKETS TO DB");
+            if (markets.Any())
             {
-                return CreateStockpileMarket(stockpileMarket);
+                string query = @"
+            INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized)
+            VALUES ";
+
+                foreach (var market in markets)
+                {
+                    var dbMarket = CreateDBStockpileMarket(market);
+
+                    query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
+                }
+                // remove last ","
+                query = query.TrimEnd(',');
+                query += @" 
+                    ON DUPLICATE KEY UPDATE
+                    MarketItemsSerialized = VALUES(MarketItemsSerialized)";
+
+                DBConnection.Connection.Execute(query);
             }
-            return SaveStockpileMarket(stockpileMarket);
         }
-        public static DBStockpileMarket CreateStockpileMarket(PE_StockpileMarket stockpileMarket)
-        {
-            Debug.Print("[Save Module] CREATE STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            DBStockpileMarket dbMarket = CreateDBStockpileMarket(stockpileMarket);
-            string insertQuery = "INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized) VALUES (@MissionObjectHash, @MarketItemsSerialized)";
-            DBConnection.Connection.Execute(insertQuery, dbMarket);
-            Debug.Print("[Save Module] CREATED STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            return dbMarket;
-        }
-
-        public static DBStockpileMarket SaveStockpileMarket(PE_StockpileMarket stockpileMarket)
-        {
-            Debug.Print("[Save Module] UPDATING STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            DBStockpileMarket dbMarket = CreateDBStockpileMarket(stockpileMarket);
-            string insertQuery = "UPDATE StockpileMarkets SET MarketItemsSerialized = @MarketItemsSerialized WHERE MissionObjectHash = @MissionObjectHash";
-            DBConnection.Connection.Execute(insertQuery, dbMarket);
-            Debug.Print("[Save Module] UPDATED STOCKPILE MARKET TO DB (" + stockpileMarket != null ? " " + stockpileMarket.GetMissionObjectHash() : "STOCKPILE MARKET IS NULL !)");
-            return dbMarket;
-        }
-
     }
 }

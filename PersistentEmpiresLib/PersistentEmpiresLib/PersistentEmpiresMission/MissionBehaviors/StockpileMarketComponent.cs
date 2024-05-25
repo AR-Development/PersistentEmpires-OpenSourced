@@ -230,10 +230,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public void AutoSaveAllMarkets()
         {
-            List<PE_StockpileMarket> markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>()).ToList();
-            foreach (PE_StockpileMarket market in markets)
+            var markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>());
+            var changedMarkets = markets.Where(x => x.MarketItems.Any(i => i.Dirty));
+
+            SaveSystemBehavior.HandleCreateOrSaveStockpileMarkets(changedMarkets.ToList());
+
+            // Reset dirty flag
+            foreach(var market in changedMarkets)
             {
-                SaveSystemBehavior.HandleCreateOrSaveStockpileMarket(market);
+                market.MarketItems.ForEach(x => x.Dirty = false);
             }
         }
 
