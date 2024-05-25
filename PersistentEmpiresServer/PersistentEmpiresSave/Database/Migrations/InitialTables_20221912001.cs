@@ -7,12 +7,26 @@ namespace PersistentEmpiresSave.Database.Migrations
     {
         public override void Down()
         {
+            Delete.Table("BanRecords");
+            Delete.Table("Castles");
+            Delete.Table("Factions");
+            Delete.Table("HorseMarkets");
+            Delete.Table("Identifiers");
+            Delete.Table("Inventories");
+            Delete.Table("Logs");
+            Delete.Table("PlayerNames");
+            Delete.Table("Players");
+            Delete.Table("StockpileMarkets");
+            Delete.Table("UpgradeableBuildings");
+            Delete.Table("VersionInfo");
+            Delete.Table("Whitelist");
             Delete.Table("Players");
             Delete.Table("Inventories");
             Delete.Table("Factions");
             Delete.Table("Castles");
             Delete.Table("UpgradeableBuildings");
             Delete.Table("StockpileMarkets");
+
         }
 
         public override void Up()
@@ -47,11 +61,10 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
                 .WithColumn("CustomName").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
-            Create.Index("PlayerId__Players")
-                .OnTable("Players")
-                .OnColumn("PlayerId");
+            Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
 
             Create.Table("Inventories")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
@@ -59,7 +72,9 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("PlayerId").AsString().Nullable()
                 .WithColumn("IsPlayerInventory").AsBoolean()
                 .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable()
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE Inventories MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Index("PlayerId__Inventories")
                 .OnTable("Inventories")
@@ -81,17 +96,23 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("IsUpgrading").AsBoolean().WithDefaultValue(false)
                 .WithColumn("CurrentTier").AsInt32().NotNullable().WithDefaultValue(0)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE UpgradeableBuildings MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("StockpileMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("MarketItemsSerialized").AsCustom("TEXT")
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE StockpileMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("HorseMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
                 .WithColumn("Stock").AsInt32()
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE HorseMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
             Create.Table("Logs")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
@@ -127,7 +148,9 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("IdentifierType").AsString().Nullable()
                 .WithColumn("UserId").AsInt64().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime);
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+
+            Execute.Sql("ALTER TABLE Identifiers MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
         }
     }
