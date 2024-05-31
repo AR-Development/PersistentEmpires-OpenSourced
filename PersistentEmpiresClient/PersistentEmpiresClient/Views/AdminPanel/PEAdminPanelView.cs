@@ -101,6 +101,12 @@ namespace PersistentEmpires.Views.Views
                 InformationManager.DisplayMessage(new InformationMessage("Not implemented yet"));
             }));
 
+            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Teleport to locations"), () =>
+            {
+                CloseAdminPanel();
+                Mission.GetMissionBehavior<PEAdminTeleportView>().OnOpen();
+            }));
+
             return menuItemVm;
         }
 
