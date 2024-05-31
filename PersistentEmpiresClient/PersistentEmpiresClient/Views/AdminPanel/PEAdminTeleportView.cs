@@ -20,7 +20,7 @@ namespace PersistentEmpires.Views.Views.AdminPanel
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
-            _dataSource = new PEAdminTeleportVM(AdminClientBehavior.AdminTps);
+            _dataSource = new PEAdminTeleportVM(AdminClientBehavior.AdminTps, this);
         }
 
         public override bool OnEscape()

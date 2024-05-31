@@ -8,9 +8,11 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
     public class PEAdminTeleportVM : ViewModel
     {
         private MBBindingList<PEAdminTpItemVM> _adminTps;
+        private Views.AdminPanel.PEAdminTeleportView _pEAdminTeleportView;
 
-        public PEAdminTeleportVM(List<PersistentEmpiresLib.SceneScripts.AdminTp> adminTps)
+        public PEAdminTeleportVM(List<PersistentEmpiresLib.SceneScripts.AdminTp> adminTps, Views.AdminPanel.PEAdminTeleportView pEAdminTeleportView)
         {
+            _pEAdminTeleportView = pEAdminTeleportView;
             _adminTps = new MBBindingList<PEAdminTpItemVM>();
             adminTps.ForEach(x=> _adminTps.Add(new PEAdminTpItemVM(x, ExecuteSelect)));
 
@@ -28,6 +30,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             GameNetwork.BeginModuleEventAsClient();
             GameNetwork.WriteMessage(new RequestTpToPosition(selectedPosition.TeleportLocation.SpawnPosition));
             GameNetwork.EndModuleEventAsClient();
+            _pEAdminTeleportView.OnEscape();
         }
 
         [DataSourceProperty]
