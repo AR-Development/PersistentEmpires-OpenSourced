@@ -1,5 +1,6 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -14,7 +15,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         {
             _pEAdminTeleportView = pEAdminTeleportView;
             _adminTps = new MBBindingList<PEAdminTpItemVM>();
-            adminTps.ForEach(x=> _adminTps.Add(new PEAdminTpItemVM(x, ExecuteSelect)));
+            adminTps.OrderBy(x => x.Description).ToList().ForEach(x=> _adminTps.Add(new PEAdminTpItemVM(x, ExecuteSelect)));
 
             OnPropertyChanged("AdminTps");
         }
