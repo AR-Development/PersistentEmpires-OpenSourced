@@ -65,11 +65,8 @@ namespace PersistentEmpiresSave.Database.Migrations
 
             Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
-
             Create.Table("Inventories")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("InventoryId").AsString().NotNullable()
-                .WithColumn("PlayerId").AsString().Nullable()
+                .WithColumn("InventoryId").AsString().PrimaryKey().NotNullable()
                 .WithColumn("IsPlayerInventory").AsBoolean()
                 .WithColumn("InventorySerialized").AsCustom("TEXT").NotNullable()
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
