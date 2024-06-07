@@ -128,10 +128,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionTick(dt);
             if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
             {
+                // Mark as done so it don't get executed on next tick as save is done on own thread
+                LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
                 Task.Run(() =>
                     {
-                        this.AutoSaveAllMarkets();
-                        this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        AutoSaveAllMarkets();
                     });
             }
         }

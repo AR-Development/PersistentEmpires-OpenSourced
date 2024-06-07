@@ -531,6 +531,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionTick(dt);
             if (DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
+                // Mark as done so it don't get executed on next tick as save is done on own thread
+                LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
                 Task.Run(() =>
                 {
                     // Create a Job
