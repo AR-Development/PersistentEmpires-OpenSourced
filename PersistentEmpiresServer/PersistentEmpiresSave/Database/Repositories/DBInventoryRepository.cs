@@ -135,30 +135,6 @@ namespace PersistentEmpiresSave.Database.Repositories
             }
         }
 
-        public static DBInventory UpsertPlayerInventory(string inventoryId)
-        {
-            Debug.Print($"[Save Module] INSERT/UPDATE FOR INVENTORY {inventoryId} TO DB");
-            var dbInventory = GetInventory(inventoryId);
-
-            if(dbInventory == null)
-            {
-                return CreateInventory(inventoryId);
-            }
-
-            string query = @"
-            INSERT INTO inventories (InventoryId, IsPlayerInventory, InventorySerialized)
-            VALUES ";
-
-            query += $"('{dbInventory.PlayerId}', 1, '{dbInventory.InventorySerialized}')";
-            query += @" 
-                    ON DUPLICATE KEY UPDATE
-                    InventorySerialized = VALUES(InventorySerialized)";
-
-            DBConnection.Connection.Execute(query);
-
-            return dbInventory;
-        }
-
         public static DBInventory CreateOrSavePlayerInventory(NetworkCommunicator networkCommunicator)
         {
             if (GetPlayerInventory(networkCommunicator) == null)
