@@ -132,9 +132,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 _running = true;
                 Task.Run(() =>
                     {
-                        AutoSaveAllMarkets();
-                        LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-                        _running = false;
+                        try
+                        {
+                            AutoSaveAllMarkets();
+                            LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        }
+                        catch (Exception ex)
+                        {
+                            InformationComponent.Instance.BroadcastMessage($"* Exception in Autosave stockpiles! {ex.Message}", Colors.Red.ToUnsignedInteger());
+                            throw ex;
+                        }
+                        finally
+                        {
+                            _running = false;
+                        }
                     });
             }
         }

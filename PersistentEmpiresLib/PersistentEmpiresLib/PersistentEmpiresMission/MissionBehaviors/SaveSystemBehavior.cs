@@ -536,10 +536,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 Task.Run(() =>
                 {
                     // Create a Job
-                    InformationComponent.Instance.BroadcastMessage("* Autosave triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
-                    AutoSaveJob(GameNetwork.NetworkPeers.ToList());
-                    LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    _running = false;
+                    try
+                    {
+                        InformationComponent.Instance.BroadcastMessage("* Autosave player inventories triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
+                        AutoSaveJob(GameNetwork.NetworkPeers.ToList());
+                        LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    }
+                    catch(Exception ex)
+                    {
+                        InformationComponent.Instance.BroadcastMessage($"* Exception in Autosave player inventories! {ex.Message}", Colors.Red.ToUnsignedInteger());
+                        throw ex;
+                    }
+                    finally
+                    {
+                        _running = false;
+                    }
                 });
             }
         }
