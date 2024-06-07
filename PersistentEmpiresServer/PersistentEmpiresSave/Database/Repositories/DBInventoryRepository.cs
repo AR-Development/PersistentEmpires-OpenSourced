@@ -115,7 +115,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static void UpsertPlayerInventories(List<NetworkCommunicator> players)
         {
-            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYERS TO DB");
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYER INVENTORIES TO DB");
             if (players.Any())
             {
                 string query = @"

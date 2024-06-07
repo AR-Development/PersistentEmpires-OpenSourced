@@ -177,7 +177,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static DBPlayer UpsertPlayer(NetworkCommunicator player)
         {
-            Debug.Print($"[Save Module] INSERT/UPDATE FOR {player.VirtualPlayer?.Id} TO DB");
+            Debug.Print($"[Save Module] INSERT/UPDATE PLAYER {player.VirtualPlayer?.Id} ITEMS TO DB");
             string query = @"
         INSERT INTO Players (PlayerId, Name, Hunger, Health, Money, Horse, HorseHarness, Equipment_0, Equipment_1, Equipment_2, Equipment_3, Armor_Head, Armor_Body, Armor_Leg, Armor_Gloves, Armor_Cape, PosX, PosY, PosZ, FactionIndex, Class, Ammo_0, Ammo_1, Ammo_2, Ammo_3)
         VALUES ";
@@ -196,7 +196,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static void UpsertPlayers(List<NetworkCommunicator> players)
         {
-            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYERS TO DB");
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYER ITEMS TO DB");
             if (players.Any())
             {
                 string query = @"
