@@ -23,13 +23,6 @@
       "executablePath": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
       "commandLineArgs": "_MODULES_*Native*Multiplayer*_MODULES_ /dedicatedcustomserverconfigfile ds_config_sample_duel.txt /port 7233 /no_watchdog /tickrate 120",
       "workingDirectory": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
-    },
-
-    "Server PE Roleplay": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
-      "commandLineArgs": "_MODULES_*Native*Multiplayer*PersistentEmpires*PERoleplay*_MODULES_ /dedicatedcustomserverconfigfile pe_birke_test2.txt /port 7233 /no_watchdog /tickrate 120",
-      "workingDirectory": "C:\\Users\\Snah\\Desktop\\FTP\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\"
     }
   }
 }

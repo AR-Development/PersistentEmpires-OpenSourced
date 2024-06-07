@@ -14,7 +14,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     public class SaveSystemBehavior : MissionNetwork
     {
         public long LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-        public int SaveDuration = 30;
+        public int SaveDuration = 600;
 
         /* Events for handles */
         public delegate void StartMigration();

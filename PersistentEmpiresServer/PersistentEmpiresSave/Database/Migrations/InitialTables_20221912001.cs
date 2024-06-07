@@ -73,6 +73,10 @@ namespace PersistentEmpiresSave.Database.Migrations
 
             Execute.Sql("ALTER TABLE Inventories MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 
+            Create.Index("PlayerId__Inventories")
+                .OnTable("Inventories")
+                .OnColumn("PlayerId");
+
             Create.Table("Factions")
                 .WithColumn("FactionIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("Name").AsString().NotNullable()
