@@ -127,7 +127,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 {
                     var dbInventory = CreateDBInventoryFromPlayer(player);
 
-                    query += $"('{dbInventory.PlayerId}', 1, '{dbInventory.InventorySerialized}'),";
+                    query += $"('{dbInventory.InventoryId}', 1, '{dbInventory.InventorySerialized}'),";
                 }
                 // remove last ","
                 query = query.TrimEnd(',');
