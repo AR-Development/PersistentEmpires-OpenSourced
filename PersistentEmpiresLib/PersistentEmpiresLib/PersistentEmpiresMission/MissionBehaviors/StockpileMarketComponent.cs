@@ -6,6 +6,7 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -14,7 +15,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     public class StockpileMarketComponent : MissionNetwork
     {
         public long LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-        public long SaveDuration = 600;
+        public long SaveDuration = 180;
 
         public delegate void StockpileMarketOpenHandler(PE_StockpileMarket stockpileMarket, Inventory playerInventory);
         public event StockpileMarketOpenHandler OnStockpileMarketOpen;
@@ -127,8 +128,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionTick(dt);
             if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
             {
-                this.AutoSaveAllMarkets();
-                this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                Task.Run(() =>
+                    {
+                        this.AutoSaveAllMarkets();
+                        this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    });
             }
         }
 

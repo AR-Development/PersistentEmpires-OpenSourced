@@ -14,7 +14,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     public class SaveSystemBehavior : MissionNetwork
     {
         public long LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-        public int SaveDuration = 600;
+        public int SaveDuration = 60;
 
         /* Events for handles */
         public delegate void StartMigration();
@@ -106,7 +106,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             Debug.Print("** Persistent Empires Auto Save ** Saving 10 players", 0, Debug.DebugColor.Blue);
             // Run it on own thread so we dont block onTick.
-            Task.WhenAll(new List<Task>() { Task.Factory.StartNew(() => SaveSystemBehavior.HandleCreateOrSavePlayers(peers)), Task.Factory.StartNew(() => SaveSystemBehavior.HandleCreateOrSavePlayerInventories(peers)) });
+            HandleCreateOrSavePlayers(peers);
+            HandleCreateOrSavePlayerInventories(peers);
         }
 
         public static void LogQuery(string query)
@@ -489,7 +490,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             AppDomain.CurrentDomain.ProcessExit += HandleApplicationExit;
             AppDomain.CurrentDomain.UnhandledException += HandleExceptionalExit;
 
-            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 600);
+            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 60);
 
             HandleStartMigration();
 
@@ -528,12 +529,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             // Auto save
             base.OnMissionTick(dt);
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
-                // Create a Job
-                InformationComponent.Instance.BroadcastMessage("* Autosave triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
-                AutoSaveJob(GameNetwork.NetworkPeers.ToList());
-                this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                Task.Run(() =>
+                {
+                    // Create a Job
+                    InformationComponent.Instance.BroadcastMessage("* Autosave triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
+                    AutoSaveJob(GameNetwork.NetworkPeers.ToList());
+                    LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                });
             }
         }
     }
