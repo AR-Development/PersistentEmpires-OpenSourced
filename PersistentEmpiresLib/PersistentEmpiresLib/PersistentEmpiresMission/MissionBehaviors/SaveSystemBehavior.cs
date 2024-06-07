@@ -104,7 +104,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public static void AutoSaveJob(List<NetworkCommunicator> peers)
         {
-            Debug.Print("** Persistent Empires Auto Save ** Saving 10 players", 0, Debug.DebugColor.Blue);
+            Debug.Print($"** Persistent Empires Auto Save ** Saving {peers.Count()} players", 0, Debug.DebugColor.Blue);
             // Run it on own thread so we dont block onTick.
             HandleCreateOrSavePlayers(peers);
             HandleCreateOrSavePlayerInventories(peers);
