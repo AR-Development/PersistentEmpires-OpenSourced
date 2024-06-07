@@ -139,7 +139,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         }
                         catch (Exception ex)
                         {
-                            InformationComponent.Instance.BroadcastMessage($"* Exception in Autosave stockpiles! {ex.Message}", Colors.Red.ToUnsignedInteger());
+                            Debug.Print($"* Exception in Autosave stockpiles! {ex.Message}", color: Debug.DebugColor.Red);
                             throw ex;
                         }
                         finally

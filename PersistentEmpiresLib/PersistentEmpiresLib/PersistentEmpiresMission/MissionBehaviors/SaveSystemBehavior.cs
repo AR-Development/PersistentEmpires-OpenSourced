@@ -544,7 +544,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                     catch(Exception ex)
                     {
-                        InformationComponent.Instance.BroadcastMessage($"* Exception in Autosave player inventories! {ex.Message}", Colors.Red.ToUnsignedInteger());
+                        Debug.Print($"* Exception in Autosave player inventories! {ex.Message}", color: Debug.DebugColor.Red);
                         throw ex;
                     }
                     finally
