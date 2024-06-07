@@ -16,6 +16,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static void Initialize()
         {
             SaveSystemBehavior.OnCreateOrSavePlayer += CreateOrSavePlayer;
+            SaveSystemBehavior.OnCreateOrSavePlayers += CreateOrSavePlayers;
             SaveSystemBehavior.OnGetOrCreatePlayer += GetOrCreatePlayer;
             SaveSystemBehavior.OnDiscordRegister += OnDiscordRegister;
             SaveSystemBehavior.OnGetPlayer += OnGetPlayer;
@@ -184,6 +185,15 @@ namespace PersistentEmpiresSave.Database.Repositories
                 return CreatePlayer(peer);
             }
         }
+
+        public static void CreateOrSavePlayers(List<NetworkCommunicator> players)
+        {
+            foreach(var player in players)
+            {
+
+            }
+        }
+
         public static DBPlayer SavePlayer(NetworkCommunicator peer)
         {
             Debug.Print("[Save Module] SAVING PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
