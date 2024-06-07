@@ -15,8 +15,8 @@ namespace PersistentEmpiresSave.Database.Repositories
     {
         public static void Initialize()
         {
-            SaveSystemBehavior.OnCreateOrSavePlayer += CreateOrSavePlayer;
-            SaveSystemBehavior.OnCreateOrSavePlayers += CreateOrSavePlayers;
+            SaveSystemBehavior.OnCreateOrSavePlayer += UpsertPlayer;
+            SaveSystemBehavior.OnCreateOrSavePlayers += UpsertPlayers;
             SaveSystemBehavior.OnGetOrCreatePlayer += GetOrCreatePlayer;
             SaveSystemBehavior.OnDiscordRegister += OnDiscordRegister;
             SaveSystemBehavior.OnGetPlayer += OnGetPlayer;
@@ -160,6 +160,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             return DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = playerId });
         }
+
         public static DBPlayer GetOrCreatePlayer(NetworkCommunicator peer, out bool created)
         {
             // DBConnection.Connection.Query<DBPlayer>();
@@ -174,38 +175,48 @@ namespace PersistentEmpiresSave.Database.Repositories
             return getQuery.First();
         }
 
-        public static DBPlayer CreateOrSavePlayer(NetworkCommunicator peer)
+        public static DBPlayer UpsertPlayer(NetworkCommunicator player)
         {
-            if (GetPlayer(peer).Count() > 0)
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {player.VirtualPlayer?.Id} TO DB");
+            string query = @"
+        INSERT INTO Players (PlayerId, Name, Hunger, Health, Money, Horse, HorseHarness, Equipment_0, Equipment_1, Equipment_2, Equipment_3, Armor_Head, Armor_Body, Armor_Leg, Armor_Gloves, Armor_Cape, PosX, PosY, PosZ, FactionIndex, Class, Ammo_0, Ammo_1, Ammo_2, Ammo_3)
+        VALUES ";
+            var dbPlayer = CreateDBPlayer(player);
+            if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
+            query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, {dbPlayer.Horse}, {dbPlayer.HorseHarness}, '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, {dbPlayer.Class}, {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}),";
+            // remove last ","
+            query = query.TrimEnd(',');
+            query += @" 
+        ON DUPLICATE KEY UPDATE
+        Name = VALUES(Name), Hunger = VALUES(Hunger), Health = VALUES(Health), Money = VALUES(Money), Horse = VALUES(Horse), HorseHarness = VALUES(HorseHarness), Equipment_0 = VALUES(Equipment_0), Equipment_1 = VALUES(Equipment_1), Equipment_2 = VALUES(Equipment_2), Equipment_3 = VALUES(Equipment_3), Armor_Head = VALUES(Armor_Head), Armor_Body = VALUES(Armor_Body), Armor_Leg = VALUES(Armor_Leg), Armor_Gloves = VALUES(Armor_Gloves), Armor_Cape = VALUES(Armor_Cape), PosX = VALUES(PosX), PosY = VALUES(PosY), PosZ = VALUES(PosZ), FactionIndex = VALUES(FactionIndex), Class = VALUES(Class), Ammo_0 = VALUES(Ammo_0), Ammo_1 = VALUES(Ammo_1), Ammo_2 = VALUES(Ammo_2), Ammo_3 = VALUES(Ammo_3)";
+            DBConnection.Connection.Execute(query);
+
+            return dbPlayer;
+        }
+
+        public static void UpsertPlayers(List<NetworkCommunicator> players)
+        {
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYERS TO DB");
+            if (players.Any())
             {
-                return SavePlayer(peer);
-            }
-            else
-            {
-                return CreatePlayer(peer);
+                string query = @"
+        INSERT INTO Players (PlayerId, Name, Hunger, Health, Money, Horse, HorseHarness, Equipment_0, Equipment_1, Equipment_2, Equipment_3, Armor_Head, Armor_Body, Armor_Leg, Armor_Gloves, Armor_Cape, PosX, PosY, PosZ, FactionIndex, Class, Ammo_0, Ammo_1, Ammo_2, Ammo_3)
+        VALUES ";
+                foreach (var player in players)
+                {
+                    var dbPlayer = CreateDBPlayer(player);
+                    if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
+                    query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, {dbPlayer.Horse}, {dbPlayer.HorseHarness}, '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, {dbPlayer.Class}, {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}),";
+                }
+                // remove last ","
+                query = query.TrimEnd(',');
+                query += @" 
+        ON DUPLICATE KEY UPDATE
+        Name = VALUES(Name), Hunger = VALUES(Hunger), Health = VALUES(Health), Money = VALUES(Money), Horse = VALUES(Horse), HorseHarness = VALUES(HorseHarness), Equipment_0 = VALUES(Equipment_0), Equipment_1 = VALUES(Equipment_1), Equipment_2 = VALUES(Equipment_2), Equipment_3 = VALUES(Equipment_3), Armor_Head = VALUES(Armor_Head), Armor_Body = VALUES(Armor_Body), Armor_Leg = VALUES(Armor_Leg), Armor_Gloves = VALUES(Armor_Gloves), Armor_Cape = VALUES(Armor_Cape), PosX = VALUES(PosX), PosY = VALUES(PosY), PosZ = VALUES(PosZ), FactionIndex = VALUES(FactionIndex), Class = VALUES(Class), Ammo_0 = VALUES(Ammo_0), Ammo_1 = VALUES(Ammo_1), Ammo_2 = VALUES(Ammo_2), Ammo_3 = VALUES(Ammo_3)";
+                DBConnection.Connection.Execute(query);
             }
         }
 
-        public static void CreateOrSavePlayers(List<NetworkCommunicator> players)
-        {
-            foreach(var player in players)
-            {
-
-            }
-        }
-
-        public static DBPlayer SavePlayer(NetworkCommunicator peer)
-        {
-            Debug.Print("[Save Module] SAVING PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
-
-
-            string updateQuery = "UPDATE Players SET Name = @Name, Hunger = @Hunger, Health = @Health, Money = @Money, Horse = @Horse, HorseHarness = @HorseHarness, Equipment_0 = @Equipment_0, Equipment_1 = @Equipment_1, Equipment_2 = @Equipment_2, Equipment_3 = @Equipment_3, Armor_Head = @Armor_Head, Armor_Body = @Armor_Body, Armor_Leg = @Armor_Leg, Armor_Gloves = @Armor_Gloves, Armor_Cape = @Armor_Cape, PosX = @PosX, PosY = @PosY, PosZ = @PosZ, FactionIndex = @FactionIndex, Class = @Class, Ammo_0 = @Ammo_0, Ammo_1 = @Ammo_1, Ammo_2 = @Ammo_2, Ammo_3 = @Ammo_3 WHERE PlayerId = @PlayerId";
-            DBPlayer player = CreateDBPlayer(peer);
-            if (player.FactionIndex == -1) player.FactionIndex = 0;
-            DBConnection.Connection.Execute(updateQuery, player);
-            Debug.Print("[Save Module] SAVED PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
-            return player;
-        }
         public static DBPlayer CreatePlayer(NetworkCommunicator peer)
         {
             Debug.Print("[Save Module] CREATING PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
@@ -217,19 +228,6 @@ namespace PersistentEmpiresSave.Database.Repositories
             Debug.Print("[Save Module] CREATED PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
 
             return player;
-        }
-
-        public static void OnUpdateCustomName(NetworkCommunicator player, string customName)
-        {
-            string updateQuery = "UPDATE Players SET CustomName = @CustomName WHERE PlayerId = @PlayerId";
-            bool created;
-            DBPlayer dbplayer = GetOrCreatePlayer(player, out created);
-
-            DBConnection.Connection.Execute(updateQuery, new
-            {
-                CustomName = customName,
-                PlayerId = dbplayer.PlayerId
-            });
         }
     }
 }

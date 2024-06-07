@@ -19,10 +19,11 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnGetOrCreateInventory += GetOrCreateInventory;
             
             SaveSystemBehavior.OnGetOrCreatePlayerInventory += GetOrCreatePlayerInventory;
-            SaveSystemBehavior.OnCreateOrSaveInventory += CreateOrSaveInventory;
-            SaveSystemBehavior.OnCreateOrSavePlayerInventories += CreateOrSavePlayerInventories;
+            SaveSystemBehavior.OnCreateOrSaveInventory += UpsertPlayerInventory;
+            SaveSystemBehavior.OnCreateOrSavePlayerInventories += UpsertPlayerInventories;
             SaveSystemBehavior.OnCreateOrSavePlayerInventory += CreateOrSavePlayerInventory;
         }
+
         private static DBInventory CreateDBInventoryFromPlayer(NetworkCommunicator networkCommunicator)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
@@ -73,6 +74,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             if (results.Count() == 0) return null;
             return results.First();
         }
+
         public static DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created)
         {
             created = false;
@@ -105,9 +107,9 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(updateQuery, dbInventory);
             Debug.Print("[Save Module] UPDATED INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
             return dbInventory;
-        }
+        }        
 
-        public static void CreateOrSavePlayerInventories(List<NetworkCommunicator> players)
+        public static void UpsertPlayerInventories(List<NetworkCommunicator> players)
         {
             Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYERS TO DB");
             if (players.Any())
@@ -133,6 +135,25 @@ namespace PersistentEmpiresSave.Database.Repositories
             }
         }
 
+        public static DBInventory UpsertPlayerInventory(string inventoryId)
+        {
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR INVENTORY {inventoryId} TO DB");
+            string query = @"
+            INSERT INTO inventories (InventoryId, IsPlayerInventory, InventorySerialized)
+            VALUES ";
+
+            var dbInventory = GetInventory(inventoryId);
+
+            query += $"('{dbInventory.PlayerId}', 1, '{dbInventory.InventorySerialized}')";
+            query += @" 
+                    ON DUPLICATE KEY UPDATE
+                    InventorySerialized = VALUES(InventorySerialized)";
+
+            DBConnection.Connection.Execute(query);
+
+            return dbInventory;
+        }
+
         public static DBInventory CreateOrSavePlayerInventory(NetworkCommunicator networkCommunicator)
         {
             if (GetPlayerInventory(networkCommunicator) == null)
@@ -152,15 +173,6 @@ namespace PersistentEmpiresSave.Database.Repositories
             return dBInventory;
         }
 
-        public static DBInventory CreateOrSaveInventory(string inventoryId)
-        {
-            DBInventory dbInventory = GetInventory(inventoryId);
-            if (dbInventory == null)
-            {
-                return CreateInventory(inventoryId);
-            }
-            return SaveInventory(inventoryId);
-        }
 
         public static DBInventory CreateInventory(string inventoryId)
         {
@@ -170,16 +182,6 @@ namespace PersistentEmpiresSave.Database.Repositories
             string insertQuery = "INSERT INTO Inventories (InventoryId, IsPlayerInventory, InventorySerialized) VALUES (@InventoryId, 0, @InventorySerialized)";
             DBConnection.Connection.Execute(insertQuery, dbInventory);
             Debug.Print("[Save Module] CREATED RECORD FOR INVENTORY " + inventoryId + " IS REGISTERED ? " + playerInventoryComponent.CustomInventories.ContainsKey(inventoryId));
-            return dbInventory;
-        }
-        public static DBInventory SaveInventory(string inventoryId)
-        {
-            DBInventory dbInventory = CreateDBInventoryFromId(inventoryId);
-            PlayerInventoryComponent playerInventoryComponent = Mission.Current.GetMissionBehavior<PlayerInventoryComponent>();
-            Debug.Print("[Save Module] UPDATING RECORD FOR INVENTORY " + inventoryId + " IS REGISTERED ? " + playerInventoryComponent.CustomInventories.ContainsKey(inventoryId));
-            string updateQuery = "UPDATE Inventories SET InventorySerialized = @InventorySerialized WHERE InventoryId = @InventoryId";
-            Debug.Print("[Save Module] UPDATED RECORD FOR INVENTORY " + inventoryId + " IS REGISTERED ? " + playerInventoryComponent.CustomInventories.ContainsKey(inventoryId));
-            DBConnection.Connection.Execute(updateQuery, dbInventory);
             return dbInventory;
         }
     }
