@@ -525,20 +525,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // Define your error logging logic
         }
 
+        private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
             // Auto save
             base.OnMissionTick(dt);
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
+            if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
-                // Mark as done so it don't get executed on next tick as save is done on own thread
-                LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                _running = true;
                 Task.Run(() =>
                 {
                     // Create a Job
                     InformationComponent.Instance.BroadcastMessage("* Autosave triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
                     AutoSaveJob(GameNetwork.NetworkPeers.ToList());
                     LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    _running = false;
                 });
             }
         }

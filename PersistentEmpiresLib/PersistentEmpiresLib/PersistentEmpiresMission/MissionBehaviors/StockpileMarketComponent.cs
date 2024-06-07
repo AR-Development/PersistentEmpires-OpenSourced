@@ -123,21 +123,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }*/
         }
 
+        private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
+            if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
             {
-                // Mark as done so it don't get executed on next tick as save is done on own thread
-                LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                _running = true;
                 Task.Run(() =>
                     {
                         AutoSaveAllMarkets();
+                        LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        _running = false;
                     });
             }
         }
-
-
 
         private void HandleUpdateStockpileStockFromServer(UpdateStockpileStock message)
         {
@@ -235,7 +235,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public void AutoSaveAllMarkets()
         {
-            var markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>());
+            var markets = Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>());
             var changedMarkets = markets.Where(x => x.MarketItems.Any(i => i.Dirty));
 
             SaveSystemBehavior.HandleCreateOrSaveStockpileMarkets(changedMarkets.ToList());
