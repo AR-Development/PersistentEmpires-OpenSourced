@@ -1,0 +1,53 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Popup.CloseButton.Width" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushName="Popup.CloseButton" BrushLayer="Default" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Width" />
+    <Constant Name="Banner.Height" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width.Scaled" MultiplyResult="0.20" Value="!Banner.Width" />
+    <Constant Name="Banner.Height.Scaled" MultiplyResult="0.28" Value="!Banner.Height" />
+  </Constants>
+  <Window>
+    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent"
+			MarginBottom="50" MarginTop="50" MarginLeft="80" MarginRight="80">
+      <Children>
+        <Standard.Window Parameter.Title="Teleport locations">
+          <Children>
+            <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" MarginTop="10" MarginBottom="40" MarginRight="10" MarginLeft="0">
+              <Children>
+                <ListPanel HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
+                  <Children>
+                    <ScrollablePanel Id="EntriesListScrollablePanel" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="EntriesListRect\EntriesList" ClipRect="EntriesListRect" MouseScrollAxis="Vertical" VerticalScrollbar="..\..\EntriesListScrollbar\Scrollbar" MarginLeft="0" AutoHideScrollBars="false"  Sprite="SPGeneral\GameMenu\panel_frame">
+                      <Children>
+                        <Widget Id="EntriesListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                          <Children>
+                            <ListPanel MarginLeft="50" MarginRight="70" MarginTop="10" DataSource="{AdminTps}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" Id="EntriesList">
+                              <ItemTemplate>
+                                <ButtonWidget Command.Click="ExecuteSelect" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="60" MarginLeft="15" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="PE.FactionMember.Button">
+                                  <Children>
+                                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" >
+                                      <Children>
+                                        <TextWidget WidthSizePolicy="StretchToParent" MarginLeft="35" HeightSizePolicy="StretchToParent" SuggestedWidth="200" Text="@Description" Brush="GameMenu.Leaderboard.Entry.Name.Text" />
+                                      </Children>
+                                    </ListPanel>
+                                  </Children>
+                                </ButtonWidget>
+                              </ItemTemplate>
+                            </ListPanel>
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ScrollablePanel>
+                  </Children>
+                </ListPanel>
+                <Standard.VerticalScrollbar Id="EntriesListScrollbar" HorizontalAlignment="Right" VerticalAlignment="Center" HeightSizePolicy="Fixed" SuggestedHeight="300" />				  
+              </Children>
+            </ListPanel>
+          </Children>
+        </Standard.Window>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

@@ -4,57 +4,22 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
-    class AutoSaveJob
-    {
-        public Queue<List<NetworkCommunicator>> toBeSaved = new Queue<List<NetworkCommunicator>>();
-        public List<List<T>> ChunkBy<T>(List<T> source, int chunkSize)
-        {
-            return source
-                .Select((x, i) => new { Index = i, Value = x })
-                .GroupBy(x => x.Index / chunkSize)
-                .Select(x => x.Select(v => v.Value).ToList())
-                .ToList();
-        }
-        public AutoSaveJob(List<NetworkCommunicator> peers)
-        {
-            List<List<NetworkCommunicator>> chunk = ChunkBy<NetworkCommunicator>(peers, 10);
-            foreach (var c in chunk) toBeSaved.Enqueue(c);
-        }
-
-        public bool isCompleted()
-        {
-            return toBeSaved.IsEmpty();
-        }
-
-        public void doWork()
-        {
-            Debug.Print("** Persistent Empires Auto Save ** Saving 10 players", 0, Debug.DebugColor.Blue);
-            List<NetworkCommunicator> currentBatch = toBeSaved.Dequeue();
-            foreach (NetworkCommunicator player in currentBatch)
-            {
-                if (player.ControlledAgent != null && player.ControlledAgent.IsActive())
-                {
-                    SaveSystemBehavior.HandleCreateOrSavePlayer(player);
-                    SaveSystemBehavior.HandleCreateOrSavePlayerInventory(player);
-                }
-            }
-        }
-    }
     public class SaveSystemBehavior : MissionNetwork
     {
         public long LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-        public int SaveDuration = 600;
-        private AutoSaveJob _currentAutoSaveJob;
+        public int SaveDuration = 60;
 
         /* Events for handles */
         public delegate void StartMigration();
         /* Players */
+        public delegate void CreateOrSavePlayers(List<NetworkCommunicator> peers);
         public delegate DBPlayer CreateOrSavePlayer(NetworkCommunicator peer);
         public delegate DBPlayer GetOrCreatePlayer(NetworkCommunicator peer, out bool created);
         public delegate DBPlayer GetPlayer(string playerId);
@@ -63,6 +28,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate IEnumerable<DBInventory> GetAllInventories();
         public delegate DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created);
         public delegate DBInventory CreateOrSavePlayerInventory(NetworkCommunicator networkCommunicator);
+        public delegate void CreateOrSavePlayerInventories(List<NetworkCommunicator> networkCommunicators);
         public delegate DBInventory GetOrCreateInventory(string inventoryId);
         public delegate DBInventory CreateOrSaveInventory(string inventoryId);
         /* Factions */
@@ -101,12 +67,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event DiscordRegister OnDiscordRegister;
         public static event StartMigration OnStartMigration;
         /* Players */
+        public static event CreateOrSavePlayers OnCreateOrSavePlayers;
         public static event CreateOrSavePlayer OnCreateOrSavePlayer;
         public static event GetOrCreatePlayer OnGetOrCreatePlayer;
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         /* Inventories */
         public static event GetOrCreatePlayerInventory OnGetOrCreatePlayerInventory;
+        public static event CreateOrSavePlayerInventories OnCreateOrSavePlayerInventories;
         public static event CreateOrSavePlayerInventory OnCreateOrSavePlayerInventory;
         public static event GetOrCreateInventory OnGetOrCreateInventory;
         public static event CreateOrSaveInventory OnCreateOrSaveInventory;
@@ -133,6 +101,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetAllHorseMarkets OnGetAllHorseMarkets;
         public static event GetHorseMarket OnGetHorseMarket;
         public static event CreateOrSaveHorseMarket OnCreateOrSaveHorseMarket;
+
+        public static void AutoSaveJob(List<NetworkCommunicator> peers)
+        {
+            Debug.Print($"** Persistent Empires Auto Save ** Saving {peers.Count()} players", 0, Debug.DebugColor.Blue);
+            // Run it on own thread so we dont block onTick.
+            HandleCreateOrSavePlayers(peers);
+            HandleCreateOrSavePlayerInventories(peers);
+        }
 
         public static void LogQuery(string query)
         {
@@ -301,6 +277,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
+        public static void HandleCreateOrSavePlayers(List<NetworkCommunicator> peers)
+        {
+            Debug.Print("[Save System] Is OnCreateOrSavePlayers null ? " + (OnCreateOrSavePlayers == null).ToString());
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnCreateOrSavePlayers != null)
+            {
+                OnCreateOrSavePlayers(peers);
+                LogQuery(String.Format("OnCreateOrSavePlayers Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
+        }
+
         public static DBPlayer HandleGetOrCreatePlayer(NetworkCommunicator peer, out bool created)
         {
             Debug.Print("[Save System] Is OnGetOrCreatePlayer null ? " + (OnGetOrCreatePlayer == null).ToString());
@@ -350,6 +337,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 return result;
             }
             return null;
+        }
+
+        public static void HandleCreateOrSavePlayerInventories(List<NetworkCommunicator> networkCommunicators)
+        {
+            Debug.Print("[Save System] Is OnCreateOrSavePlayerInventories null ? " + (OnCreateOrSavePlayerInventories == null).ToString());
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnCreateOrSavePlayerInventories != null)
+            {
+                OnCreateOrSavePlayerInventories(networkCommunicators);
+                LogQuery(String.Format("OnCreateOrSavePlayerInventory Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
         }
         public static DBInventory HandleGetOrCreateInventory(string inventoryId)
         {
@@ -492,7 +490,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             AppDomain.CurrentDomain.ProcessExit += HandleApplicationExit;
             AppDomain.CurrentDomain.UnhandledException += HandleExceptionalExit;
 
-            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 600);
+            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 60);
 
             HandleStartMigration();
 
@@ -527,20 +525,33 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // Define your error logging logic
         }
 
+        private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
             // Auto save
             base.OnMissionTick(dt);
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
+            if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
-                // Create a Job
-                InformationComponent.Instance.BroadcastMessage("* Autosave triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
-                this._currentAutoSaveJob = new AutoSaveJob(GameNetwork.NetworkPeers.ToList());
-                this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-            }
-            if (this._currentAutoSaveJob != null && this._currentAutoSaveJob.isCompleted() == false)
-            {
-                this._currentAutoSaveJob.doWork();
+                _running = true;
+                Task.Run(() =>
+                {
+                    // Create a Job
+                    try
+                    {
+                        InformationComponent.Instance.BroadcastMessage("* Autosave player inventories triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
+                        AutoSaveJob(GameNetwork.NetworkPeers.ToList());
+                        LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.Print($"* Exception in Autosave player inventories! {ex.Message}", color: Debug.DebugColor.Red);
+                        throw ex;
+                    }
+                    finally
+                    {
+                        _running = false;
+                    }
+                });
             }
         }
     }

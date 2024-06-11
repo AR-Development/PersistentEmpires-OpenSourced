@@ -6,6 +6,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using System.Linq;
+using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -14,8 +15,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static WoundingBehavior Instance;
         public bool WoundingEnabled = false;
         public int WoundingTime = 60;
+        public string ItemId = "pe_doctorscalpel";
+        public int RequiredMedicineSkillForHealing = 50;
 
-        public Dictionary<NetworkCommunicator, long> WoundedUntil = new Dictionary<NetworkCommunicator, long>();
+        public Dictionary<NetworkCommunicator, KeyValuePair<bool, long>> WoundedUntil = new Dictionary<NetworkCommunicator, KeyValuePair<bool, long>>();
         public Dictionary<NetworkCommunicator, Vec3> DeathPlace = new Dictionary<NetworkCommunicator, Vec3>();
         public Dictionary<NetworkCommunicator, bool> IsWounded = new Dictionary<NetworkCommunicator, bool>();
         public Dictionary<NetworkCommunicator, Tuple<bool, Equipment>> DeathEquipment = new Dictionary<NetworkCommunicator, Tuple<bool, Equipment>>();
@@ -104,7 +107,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 if (!WoundedUntil.ContainsKey(player)) continue;
 
-                if (WoundedUntil[player] < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                if (WoundedUntil[player].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
                     HealPlayer(player);
                 }
@@ -142,10 +145,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
 
                 //if your wounded AND your not healed yet then keep old timer
-                if (WoundedUntil.ContainsKey(player) && WoundedUntil[player] < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) return;
+                if (WoundedUntil.ContainsKey(player) && WoundedUntil[player].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) return;
 
                 // otherwise get new heal time
-                WoundedUntil[player] = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
+                WoundedUntil[player] = new KeyValuePair<bool, long>(false, DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60));
 
                 IsWounded[player] = true;
                 GameNetwork.BeginBroadcastModuleEvent();
@@ -234,15 +237,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
 
         // This should be not allowed to make wounded man heal other man.....
-        //public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
-        //{
-        //    base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
+        public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
+        {
+            if (!affectorAgent.IsHuman) return;
+            if (affectorWeapon.Item == null) return;
+            if (affectorWeapon.Item != null && affectorWeapon.Item.StringId != this.ItemId) return;
+            SkillObject medicineSkill = MBObjectManager.Instance.GetObject<SkillObject>("Medicine");
+            if (affectorAgent.Character.GetSkillValue(medicineSkill) < RequiredMedicineSkillForHealing) return;
 
-        //    if(IsAgentWounded(affectorAgent) && affectedAgent != null && affectedAgent != affectorAgent)
-        //    {
-        //        affectedAgent.Health += blow.InflictedDamage;
-        //    }
-        //}
+            var communicator = affectedAgent.MissionPeer?.GetNetworkPeer();
+            if (communicator == null) return;
+            if (!WoundedUntil.ContainsKey(communicator) || !WoundedUntil[communicator].Key) return;
+
+            var deductedTime = WoundedUntil[communicator].Value / 2;
+            WoundedUntil[communicator] = new KeyValuePair<bool, long>(true, deductedTime);
+        }
 #endif
 
 
