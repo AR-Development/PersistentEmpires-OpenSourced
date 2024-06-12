@@ -123,11 +123,16 @@ namespace PersistentEmpiresSave.Database.Repositories
             VALUES "
                 ;
 
+                bool execute = false;
                 foreach (var player in players)
                 {
                     var dbInventory = CreateDBInventoryFromPlayer(player);
 
-                    query += $"('{dbInventory.InventoryId}', 1, '{dbInventory.InventorySerialized}'),";
+                    if (dbInventory != null)
+                    {
+                        query += $"('{dbInventory.InventoryId}', 1, '{dbInventory.InventorySerialized}'),";
+                        execute = true;
+                    }
                 }
                 // remove last ","
                 query = query.TrimEnd(',');
@@ -135,7 +140,10 @@ namespace PersistentEmpiresSave.Database.Repositories
                     ON DUPLICATE KEY UPDATE
                     InventorySerialized = VALUES(InventorySerialized)";
 
-                DBConnection.Connection.Execute(query);
+                if (execute)
+                {
+                    DBConnection.Connection.Execute(query);
+                }
             }
         }
 
