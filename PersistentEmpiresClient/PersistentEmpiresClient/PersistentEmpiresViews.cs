@@ -70,6 +70,7 @@ namespace PersistentEmpires.Views
             list.Add(new PEAnimationsView());
             list.Add(new PEAdminChatScreen());
             list.Add(new PEChatBox());
+            list.Add(new PEAdminTeleportView());
             // list.Add(new SentryMissionView());
             list.Add(MultiplayerViewCreator.CreateMultiplayerMissionDeathCardUIHandler(null));
 

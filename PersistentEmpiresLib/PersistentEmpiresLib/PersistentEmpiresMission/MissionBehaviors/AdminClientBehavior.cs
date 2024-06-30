@@ -1,4 +1,8 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Server;
+using PersistentEmpiresLib.SceneScripts;
+using System;
+using System.Collections.Generic;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
@@ -7,6 +11,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     {
         public delegate void AdminPanelClick();
         public event AdminPanelClick OnAdminPanelClick;
+        public static List<AdminTp> AdminTps = new List<AdminTp>();
 
         public void HandleAdminPanelClick()
         {
@@ -39,6 +44,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private void HandleAuthorizeAsAdminFromServer(AuthorizeAsAdmin message)
         {
             GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>().IsAdmin = true;
+        }
+
+
+        internal static void Register(AdminTp adminTp)
+        {
+            AdminTps.Add(adminTp);
         }
     }
 }

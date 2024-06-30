@@ -1,4 +1,5 @@
-﻿using PersistentEmpiresLib;
+﻿using Org.BouncyCastle.Asn1.X509;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
@@ -177,6 +178,7 @@ namespace PersistentEmpiresServer.ServerMissions
                 networkMessageHandlerRegisterer.Register<RequestAdminGold>(this.HandleRequestAdminGold);
                 networkMessageHandlerRegisterer.Register<RequestBecameGodlike>(this.HandleRequestBecameGodlike);
                 networkMessageHandlerRegisterer.Register<AdminChat>(this.HandleAdminChatFromServer);
+                networkMessageHandlerRegisterer.Register<RequestTpToPosition>(HandleRequestTpToPositionFromClient);
             }
         }
 
@@ -567,6 +569,22 @@ namespace PersistentEmpiresServer.ServerMissions
             return true;
         }
 
+        public bool HandleRequestTpToPositionFromClient(NetworkCommunicator admin, RequestTpToPosition message)
+        {
+            PersistentEmpireRepresentative persistentEmpireRepresentative = admin.GetComponent<PersistentEmpireRepresentative>();
+            if (!persistentEmpireRepresentative.IsAdmin)
+            {
+                return false;
+            }
+            if (admin.ControlledAgent == null || !admin.ControlledAgent.IsActive())
+            {
+                return false;
+            }
+            admin.ControlledAgent.TeleportToPosition(message.Position);
+            
+            return true;
+        }
+        
         public bool HandleRequestHealFromClient(NetworkCommunicator admin, RequestHeal message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = admin.GetComponent<PersistentEmpireRepresentative>();

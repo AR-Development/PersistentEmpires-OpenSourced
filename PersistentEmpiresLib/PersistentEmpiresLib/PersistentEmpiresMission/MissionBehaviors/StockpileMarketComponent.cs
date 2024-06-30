@@ -6,6 +6,7 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -14,7 +15,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     public class StockpileMarketComponent : MissionNetwork
     {
         public long LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
-        public long SaveDuration = 600;
+        public long SaveDuration = 180;
 
         public delegate void StockpileMarketOpenHandler(PE_StockpileMarket stockpileMarket, Inventory playerInventory);
         public event StockpileMarketOpenHandler OnStockpileMarketOpen;
@@ -122,17 +123,32 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }*/
         }
 
+        private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
+            if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > this.LastSaveAt + this.SaveDuration)
             {
-                this.AutoSaveAllMarkets();
-                this.LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                _running = true;
+                Task.Run(() =>
+                    {
+                        try
+                        {
+                            AutoSaveAllMarkets();
+                            LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.Print($"* Exception in Autosave stockpiles! {ex.Message}", color: Debug.DebugColor.Red);
+                            throw ex;
+                        }
+                        finally
+                        {
+                            _running = false;
+                        }
+                    });
             }
         }
-
-
 
         private void HandleUpdateStockpileStockFromServer(UpdateStockpileStock message)
         {
@@ -230,7 +246,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public void AutoSaveAllMarkets()
         {
-            var markets = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>());
+            var markets = Mission.GetActiveEntitiesWithScriptComponentOfType<PE_StockpileMarket>().Select(g => g.GetFirstScriptOfType<PE_StockpileMarket>());
             var changedMarkets = markets.Where(x => x.MarketItems.Any(i => i.Dirty));
 
             SaveSystemBehavior.HandleCreateOrSaveStockpileMarkets(changedMarkets.ToList());

@@ -38,6 +38,9 @@
 		<None Update="GUI\Prefabs\PEAdminPanel\PEAdminPanel.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="GUI\Prefabs\PEAdminPanel\PEAdminTeleport.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="GUI\Prefabs\PEAdminPanel\PEAdminPlayerManagement.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
