@@ -119,7 +119,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             if (players.Any())
             {
                 string query = @"
-            INSERT INTO inventories (InventoryId, IsPlayerInventory, InventorySerialized)
+            INSERT INTO Inventories (InventoryId, IsPlayerInventory, InventorySerialized)
             VALUES "
                 ;
 
