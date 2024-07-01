@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Org.BouncyCastle.Asn1.X509;
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using static PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors.SaveSystemBehavior;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
@@ -15,10 +17,13 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             SaveSystemBehavior.OnGetAllInventories += GetAllInventories;
             SaveSystemBehavior.OnGetOrCreateInventory += GetOrCreateInventory;
+            
             SaveSystemBehavior.OnGetOrCreatePlayerInventory += GetOrCreatePlayerInventory;
             SaveSystemBehavior.OnCreateOrSaveInventory += CreateOrSaveInventory;
+            SaveSystemBehavior.OnCreateOrSavePlayerInventories += UpsertPlayerInventories;
             SaveSystemBehavior.OnCreateOrSavePlayerInventory += CreateOrSavePlayerInventory;
         }
+
         private static DBInventory CreateDBInventoryFromPlayer(NetworkCommunicator networkCommunicator)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
@@ -75,7 +80,6 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created)
         {
-
             created = false;
             DBInventory dbInventory = GetPlayerInventory(networkCommunicator);
             if (dbInventory == null)
@@ -85,6 +89,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             }
             return dbInventory;
         }
+
         public static DBInventory CreatePlayerInventory(NetworkCommunicator networkCommunicator)
         {
             DBInventory dbInventory = CreateDBInventoryFromPlayer(networkCommunicator);
@@ -95,6 +100,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             Debug.Print("[Save Module] CREATED INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
             return dbInventory;
         }
+
         public static DBInventory SavePlayerInventory(NetworkCommunicator networkCommunicator)
         {
             DBInventory dbInventory = CreateDBInventoryFromPlayer(networkCommunicator);
@@ -105,6 +111,32 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(updateQuery, new { InventoryId = dbInventory.InventoryId, InventorySerialized = dbInventory.InventorySerialized });
             Debug.Print("[Save Module] UPDATED INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
             return dbInventory;
+        }        
+
+        public static void UpsertPlayerInventories(List<NetworkCommunicator> players)
+        {
+            Debug.Print($"[Save Module] INSERT/UPDATE FOR {players.Count()} PLAYER INVENTORIES TO DB");
+            if (players.Any())
+            {
+                string query = @"
+            INSERT INTO Inventories (InventoryId, IsPlayerInventory, InventorySerialized)
+            VALUES "
+                ;
+
+                foreach (var player in players)
+                {
+                    var dbInventory = CreateDBInventoryFromPlayer(player);
+
+                    query += $"('{dbInventory.InventoryId}', 1, '{dbInventory.InventorySerialized}'),";
+                }
+                // remove last ","
+                query = query.TrimEnd(',');
+                query += @" 
+                    ON DUPLICATE KEY UPDATE
+                    InventorySerialized = VALUES(InventorySerialized)";
+
+                DBConnection.Connection.Execute(query);
+            }
         }
 
         public static DBInventory CreateOrSavePlayerInventory(NetworkCommunicator networkCommunicator)
@@ -125,6 +157,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             }
             return dBInventory;
         }
+
 
         public static DBInventory CreateOrSaveInventory(string inventoryId)
         {
