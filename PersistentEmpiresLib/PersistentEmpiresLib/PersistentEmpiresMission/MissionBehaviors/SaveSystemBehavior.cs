@@ -490,7 +490,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             AppDomain.CurrentDomain.ProcessExit += HandleApplicationExit;
             AppDomain.CurrentDomain.UnhandledException += HandleExceptionalExit;
 
-            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 60);
+            SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 600);
 
             HandleStartMigration();
 
