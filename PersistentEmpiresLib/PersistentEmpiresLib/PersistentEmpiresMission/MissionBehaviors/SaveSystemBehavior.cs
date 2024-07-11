@@ -539,7 +539,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     try
                     {
                         InformationComponent.Instance.BroadcastMessage("* Autosave player inventories triggered. It might lag a bit", Colors.Blue.ToUnsignedInteger());
-                        AutoSaveJob(GameNetwork.NetworkPeers.ToList());
+                        AutoSaveJob(GameNetwork.NetworkPeers.Where(x=> x.ControlledAgent != null && x.ControlledAgent.IsActive()).ToList());
                         LastSaveAt = DateTimeOffset.Now.ToUnixTimeSeconds();
                     }
                     catch(Exception ex)
