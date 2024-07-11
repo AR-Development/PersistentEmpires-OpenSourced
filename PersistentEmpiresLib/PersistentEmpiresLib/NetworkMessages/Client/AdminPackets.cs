@@ -1,4 +1,5 @@
-﻿using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.NetworkMessages.Client
@@ -536,6 +537,39 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         protected override void OnWrite()
         {
             GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Player);
+        }
+    }
+
+    [DefineGameNetworkMessageTypeForMod(GameNetworkMessageSendType.FromClient)]
+    public sealed class RequestTpToPosition : GameNetworkMessage
+    {
+        public Vec3 Position;
+        public RequestTpToPosition() { }
+        public RequestTpToPosition(Vec3 position)
+        {
+            Position = position;
+        }
+
+        protected override MultiplayerMessageFilter OnGetLogFilter()
+        {
+            return MultiplayerMessageFilter.Administration;
+        }
+
+        protected override string OnGetLogFormat()
+        {
+            return "Received RequestTpToPosition";
+        }
+
+        protected override bool OnRead()
+        {
+            bool result = true;
+            Position = GameNetworkMessage.ReadVec3FromPacket(CompressionMission.OrderPositionCompressionInfo, ref result);
+            return result;
+        }
+
+        protected override void OnWrite()
+        {
+            GameNetworkMessage.WriteVec3ToPacket(Position, CompressionMission.OrderPositionCompressionInfo);
         }
     }
 }
