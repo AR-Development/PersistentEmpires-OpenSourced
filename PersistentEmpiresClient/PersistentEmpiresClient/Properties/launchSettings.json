@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "PersistentEmpiresClient": {
+      "commandName": "Project"
+    },
+    "PERP": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Bannerlord\\bin\\Win64_Shipping_Client\\Bannerlord.exe",
+      "commandLineArgs": "/multiplayer _MODULES_*Native*Multiplayer*PersistentEmpires*PERoleplay*_MODULES_ /no_watchdog",
+      "workingDirectory": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Bannerlord\\bin\\Win64_Shipping_Client"
+    }
+  }
+}
