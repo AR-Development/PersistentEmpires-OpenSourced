@@ -139,7 +139,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 query += @" 
                     ON DUPLICATE KEY UPDATE
                     InventorySerialized = VALUES(InventorySerialized)";
-
+                
                 if (execute)
                 {
                     DBConnection.Connection.Execute(query);
