@@ -1,5 +1,10 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using PersistentEmpiresLib.NetworkMessages.Server;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresLib.SceneScripts;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -198,6 +203,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
                 return;
             }
 
+            var tmp = Mission.Current.GetActiveEntitiesWithScriptComponentOfType<PE_AttachToAgent>().ToList().Select(x => x.GetFirstScriptOfType<PE_AttachToAgent>());
+            if (tmp.Any(x => x.AttachedTo == agent))
+            {
+                agentDrivenProperties.MountManeuver = 0.8f;
+                agentDrivenProperties.MountSpeed = 0.8f;
+                agentDrivenProperties.TopSpeedReachDuration = 10f;
+                agentDrivenProperties.MountDashAccelerationMultiplier = 0.8f;
+
+                return;
+            }
+
             MPPerkObject.MPPerkHandler perkHandler = MPPerkObject.GetPerkHandler(agent.RiderAgent);
             EquipmentElement equipmentElement = agent.SpawnEquipment[EquipmentIndex.ArmorItemEndSlot];
             EquipmentElement equipmentElement2 = agent.SpawnEquipment[EquipmentIndex.HorseHarness];
@@ -209,8 +225,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
             agentDrivenProperties.MountSpeed *= 1f + (float)num * 0.0032f;
             agentDrivenProperties.MountManeuver *= 1f + (float)num * 0.0035f;
             float num2 = equipmentElement.Weight / 2f + (equipmentElement2.IsEmpty ? 0f : equipmentElement2.Weight);
-            agentDrivenProperties.MountDashAccelerationMultiplier = ((num2 > 200f) ? ((num2 < 300f) ? (1f - (num2 - 200f) / 111f) : 0.1f) : 1f);
+            agentDrivenProperties.MountDashAccelerationMultiplier = ((num2 > 200f) ? ((num2 < 300f) ? (1f - (num2 - 200f) / 111f) : 0.1f) : 1f);            
         }
+
         private int GetMinSkillForTier(ItemObject.ItemTiers tier)
         {
             if (tier > ItemObject.ItemTiers.Tier1)
