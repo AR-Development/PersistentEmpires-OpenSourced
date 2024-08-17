@@ -193,7 +193,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (GameNetwork.IsServer)
             {
                 this.HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
-                this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerInterval", 1);
+                this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
                 this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
                 this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
                 this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
