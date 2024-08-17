@@ -77,13 +77,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
                     if (persistentEmpireRepresentative == null) continue;
 
-                    if (peer.ControlledAgent.Health < (peer.ControlledAgent.Health) * HungerStartHealingUnderHealthPct)
+                    // If hunger is higher then set threshold && health is under then set threshold 
+                    if (
+                        peer.ControlledAgent.Health < (float)(peer.ControlledAgent.HealthLimit) * HungerStartHealingUnderHealthPct &&
+                        persistentEmpireRepresentative.GetHunger() > HungerRefillHealthLowerBoundary)
                     {
                         persistentEmpireRepresentative.SetHunger(persistentEmpireRepresentative.GetHunger() - HungerHealingReduceAmount);
-                        if (persistentEmpireRepresentative.GetHunger() > HungerRefillHealthLowerBoundary)
-                        {
-                            peer.ControlledAgent.Health += HungerHealingAmount;
-                        }
+                        peer.ControlledAgent.Health += HungerHealingAmount;
                     }
                     else
                     {
@@ -197,7 +197,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
                 this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
                 this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
-                this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
+                this.HungerStartHealingUnderHealthPct = ((float)ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75)) / 100;
             }
             Debug.Print("[PE] LOADING EATABLES...");
             this.LoadEatables("PersistentEmpires");

@@ -116,11 +116,11 @@ GeneralConfig.xml
   <MedicineItemId>pe_doctorscalpel</MedicineItemId>
 
   <!-- Hunger Settings -->
-  <HungerInterval>72</HungerInterval>
-  <HungerReduceAmount>1</HungerReduceAmount>
+  <HungerInterval>72</HungerInterval> <!-- In seconds -->
+  <HungerReduceAmount>5</HungerReduceAmount> <!-- Normally -->
+  <HungerHealingReduceAmount>10</HungerHealingReduceAmount> <!-- When healing -->
+  <HungerHealingAmount>10</HungerHealingAmount> <!-- Healing amount -->
   <HungerRefillHealthLowerBoundary>25</HungerRefillHealthLowerBoundary>
-  <HungerHealingAmount>10</HungerHealingAmount>
-  <HungerHealingReduceAmount>5</HungerHealingReduceAmount>
   <HungerStartHealingUnderHealthPct>75</HungerStartHealingUnderHealthPct>
 
   <!-- Lord Poll Settings -->
