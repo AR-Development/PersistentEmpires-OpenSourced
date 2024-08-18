@@ -56,12 +56,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public List<Food> Eatables = new List<Food>();
         Dictionary<Agent, EatingAction> AgentsEating = new Dictionary<Agent, EatingAction>();
-        private int HungerInterval = 72; // ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
-        private int HungerReduceAmount = 1;// ConfigManager.GetIntConfig("HungerInterval", 1);
-        private int HungerRefillHealthLowerBoundary = 25;// ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
-        private int HungerHealingAmount = 10; //  ConfigManager.GetIntConfig("HungerHealingAmount", 10);
-        private int HungerHealingReduceAmount = 5; // ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
-        private float HungerStartHealingUnderHealthPct = 75 / 100; // ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
+        private int HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
+        private int HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
+        private int HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
+        private int HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
+        private int HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
+        private float HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
         private long LastHungerCheckedAt = 0;
 
         private int StarvingInternal = 10;
