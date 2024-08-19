@@ -16,7 +16,7 @@ namespace PersistentEmpiresLib.SceneScripts
     {
         public int ChangingDurationAsSeconds = 10;
         public string Animation = "act_main_story_become_king_crowd_06";
-        public String ClassId = "pe_peasant";
+        public String ClassId = PersistentEmpireRepresentative.DefaultClass;
         public int CastleId = 0;
         public int DinarCost = 0;
         public bool JoinCastleFaction = true;

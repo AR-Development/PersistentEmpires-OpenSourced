@@ -226,7 +226,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         Faction fact = representative.GetFaction();
                         BasicCultureObject basicCultureObject = fact.basicCultureObject;
 
-                        // MultiplayerClassDivisions.MPHeroClass mpheroClassForPeer = MultiplayerClassDivisions.GetMPHeroClasses().Where((MultiplayerClassDivisions.MPHeroClass x) => x.HeroCharacter.StringId == "pe_peasant").First();
+                        // MultiplayerClassDivisions.MPHeroClass mpheroClassForPeer = MultiplayerClassDivisions.GetMPHeroClasses().Where((MultiplayerClassDivisions.MPHeroClass x) => x.HeroCharacter.StringId == PersistentEmpireRepresentative.DefaultClass).First();
 
                         /*foreach(MultiplayerClassDivisions.MPHeroClass mpHeroClass in MultiplayerClassDivisions.GetMPHeroClasses(component.Culture))
                         {
@@ -237,7 +237,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         if (selectedCharacterObject == null)
                         {
                             Debug.Print("*PERSISTENT EMPIRES* Player class is null", 0, Debug.DebugColor.Red);
-                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>("pe_peasant");
+                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>(PersistentEmpireRepresentative.DefaultClass);
                         }
 
                         component.Culture = selectedCharacterObject.Culture;

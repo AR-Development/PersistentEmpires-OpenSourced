@@ -1,4 +1,5 @@
 ﻿using FluentMigrator;
+using PersistentEmpiresLib;
 
 namespace PersistentEmpiresSave.Database.Migrations
 {
@@ -51,7 +52,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Armor_Gloves").AsString().Nullable()
                 .WithColumn("Armor_Cape").AsString().Nullable()
                 .WithColumn("FactionIndex").AsInt32().WithDefaultValue(0)
-                .WithColumn("Class").AsString().WithDefaultValue("pe_peasant")
+                .WithColumn("Class").AsString().WithDefaultValue(PersistentEmpireRepresentative.DefaultClass)
                 .WithColumn("PosX").AsFloat().WithDefaultValue(0)
                 .WithColumn("PosY").AsFloat().WithDefaultValue(0)
                 .WithColumn("PosZ").AsFloat().WithDefaultValue(0)

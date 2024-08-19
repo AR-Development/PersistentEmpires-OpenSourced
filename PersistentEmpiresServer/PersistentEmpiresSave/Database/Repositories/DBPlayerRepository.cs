@@ -87,7 +87,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
                 Health = (int)(peer.ControlledAgent?.Health ?? 100),
                 Money = persistentEmpireRepresentative?.Gold ?? 100,
-                Class = persistentEmpireRepresentative?.GetClassId() ?? "pe_peasant",
+                Class = persistentEmpireRepresentative?.GetClassId() ?? PersistentEmpireRepresentative.DefaultClass,
                 PosX = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.X : 0,
                 PosY = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Y : 0,
                 PosZ = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Z : 0,
