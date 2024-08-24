@@ -65,6 +65,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         private long LastHungerCheckedAt = 0;
 
         private int StarvingInternal = 10;
+        private int StarvingReduceAmount = 10;
+        private float StarvingMinHealthPct = 10 / 100;
         private long LastStarvingCheckedAt = 0;
         private void ReduceHungerLoop()
         {
@@ -105,9 +107,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
                     if (persistentEmpireRepresentative == null) continue;
                     if (persistentEmpireRepresentative.GetHunger() > 0) continue;
-                    if (peer.ControlledAgent.Health <= 10) continue;
-                    float reduceAmount = peer.ControlledAgent.Health - 10 > 10 ? 10 : 10 - peer.ControlledAgent.Health;
-                    peer.ControlledAgent.Health -= reduceAmount;
+                    float minHealthCap = peer.ControlledAgent.HealthLimit * StarvingMinHealthPct;
+                    if (peer.ControlledAgent.Health <= minHealthCap) continue;
+                    float newHealth = peer.ControlledAgent.Health - StarvingReduceAmount;
+                    peer.ControlledAgent.Health = newHealth < minHealthCap ? minHealthCap : newHealth;
                 }
                 this.LastStarvingCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             }
@@ -198,6 +201,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
                 this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
                 this.HungerStartHealingUnderHealthPct = ((float)ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75)) / 100;
+                this.StarvingInternal = ConfigManager.GetIntConfig("StarvingInternal", 10); // 10 secs
+                this.StarvingReduceAmount = ConfigManager.GetIntConfig("StarvingReduceAmount", 10);
+                this.StarvingMinHealthPct = ((float)ConfigManager.GetIntConfig("StarvingMinHealthPct", 10)) / 100;
             }
             Debug.Print("[PE] LOADING EATABLES...");
             this.LoadEatables("PersistentEmpires");

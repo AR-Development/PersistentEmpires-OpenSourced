@@ -122,6 +122,9 @@ GeneralConfig.xml
   <HungerHealingAmount>10</HungerHealingAmount> <!-- Healing amount -->
   <HungerRefillHealthLowerBoundary>25</HungerRefillHealthLowerBoundary>
   <HungerStartHealingUnderHealthPct>75</HungerStartHealingUnderHealthPct>
+  <StarvingInternal>10</StarvingInternal>
+  <StarvingReduceAmount>10</StarvingReduceAmount>
+  <StarvingMinHealthPct>10</StarvingMinHealthPct>
 
   <!-- Lord Poll Settings -->
   <LordPollRequiredGold>1000</LordPollRequiredGold>
