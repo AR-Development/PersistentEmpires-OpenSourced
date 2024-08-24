@@ -78,18 +78,19 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     if (peer.ControlledAgent == null) continue;
                     PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
                     if (persistentEmpireRepresentative == null) continue;
+                    int currentHunger = persistentEmpireRepresentative.GetHunger();
 
                     // If hunger is higher then set threshold && health is under then set threshold 
                     if (
                         peer.ControlledAgent.Health < (float)(peer.ControlledAgent.HealthLimit) * HungerStartHealingUnderHealthPct &&
-                        persistentEmpireRepresentative.GetHunger() > HungerRefillHealthLowerBoundary)
+                        currentHunger > HungerRefillHealthLowerBoundary)
                     {
-                        persistentEmpireRepresentative.SetHunger(persistentEmpireRepresentative.GetHunger() - HungerHealingReduceAmount);
+                        persistentEmpireRepresentative.SetHunger(currentHunger - HungerHealingReduceAmount);
                         peer.ControlledAgent.Health += HungerHealingAmount;
                     }
                     else
                     {
-                        persistentEmpireRepresentative.SetHunger(persistentEmpireRepresentative.GetHunger() - HungerReduceAmount); // Reduce hunger
+                        persistentEmpireRepresentative.SetHunger(currentHunger - HungerReduceAmount); // Reduce hunger
                     }
 
                 }
