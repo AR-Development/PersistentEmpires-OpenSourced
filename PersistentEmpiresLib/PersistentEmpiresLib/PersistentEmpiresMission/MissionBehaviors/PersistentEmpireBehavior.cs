@@ -43,6 +43,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ServerSignature;
 
         // public static string ServerSignature = "";
+        private static string _defaultClass = "pe_peasant";
+        public static string DefaultClass { get { return _defaultClass; } }
+
+        public static void SetDefaultClass(string defaultClass)
+        {
+            if (string.IsNullOrEmpty(defaultClass)) return;
+
+            _defaultClass = defaultClass;
+        }
 
         public override void OnAgentMount(Agent agent)
         {

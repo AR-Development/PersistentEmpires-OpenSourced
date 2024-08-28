@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,9 @@ namespace PersistentEmpiresLib
 {
     public class PersistentEmpireRepresentative : MissionRepresentativeBase
     {
-        private static string _defaultClass = "pe_peasant";
-        public static string DefaultClass { get { return _defaultClass; } } 
-
         private Faction _playerFaction;
         private int _factionIndex = -1;
-        private string _classId = _defaultClass;
+        private string _classId = PersistentEmpireBehavior.DefaultClass;
         private Inventory playerInventory;
         private int hunger = 0;
         private PE_SpawnFrame nextSpawnFrame = null;
@@ -39,13 +37,6 @@ namespace PersistentEmpiresLib
             playerInventory = new Inventory(5, 10, "PlayerInventory");
             hunger = 100;
             this.SpawnTimer = new Timer(Mission.Current.CurrentTime, 3f, false);
-        }
-
-        public static void SetDefaultClass(string defaultClass)
-        {
-            if (string.IsNullOrEmpty(defaultClass)) return;
-
-            _defaultClass = defaultClass;
         }
 
         public PE_SpawnFrame GetNextSpawnFrame()

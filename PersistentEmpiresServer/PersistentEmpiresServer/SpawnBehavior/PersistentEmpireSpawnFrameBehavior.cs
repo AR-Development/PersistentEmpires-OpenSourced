@@ -237,7 +237,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         if (selectedCharacterObject == null)
                         {
                             Debug.Print("*PERSISTENT EMPIRES* Player class is null", 0, Debug.DebugColor.Red);
-                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>(PersistentEmpireRepresentative.DefaultClass);
+                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>(PersistentEmpireBehavior.DefaultClass);
                         }
 
                         component.Culture = selectedCharacterObject.Culture;
