@@ -35,6 +35,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     }
     public class AgentHungerBehavior : MissionNetwork
     {
+        public static AgentHungerBehavior Instance;
         public delegate void AgentHungerChangedDelegate(int hunger);
         public event AgentHungerChangedDelegate OnAgentHungerChanged;
 
@@ -189,6 +190,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             if (GameNetwork.IsServer)
             {

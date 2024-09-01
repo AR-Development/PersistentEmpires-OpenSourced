@@ -115,7 +115,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     if (player.ControlledAgent != null)
                     {
-                        if (!ItemsWhichCanBeUsedByWounded.Contains(player.ControlledAgent.WieldedWeapon.Item?.StringId))
+                        if (!ItemsWhichCanBeUsedByWounded.Contains(player.ControlledAgent.WieldedWeapon.Item?.StringId) || !AgentHungerBehavior.Instance.Eatables.Any(x=> x.Item == player.ControlledAgent.WieldedWeapon.Item))
                         {
                             player.ControlledAgent?.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
                         }
