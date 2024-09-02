@@ -26,6 +26,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate DBPlayer GetPlayer(string playerId);
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
         public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
+        public delegate void SaveDefaultsForNewPlayer(NetworkCommunicator peer, Equipment equipment);
+        
         /* Inventories */
         public delegate IEnumerable<DBInventory> GetAllInventories();
         public delegate DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created);
@@ -75,6 +77,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
+        public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
+        
         /* Inventories */
         public static event GetOrCreatePlayerInventory OnGetOrCreatePlayerInventory;
         public static event CreateOrSavePlayerInventories OnCreateOrSavePlayerInventories;
@@ -280,6 +284,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
+        public static void HandleSaveDefaultsForNewPlayer(NetworkCommunicator networkCommunicator, Equipment equipment)
+        {
+            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnCreateOrSavePlayer == null).ToString());
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnSaveDefaultsForNewPlayer != null)
+            {
+                OnSaveDefaultsForNewPlayer(networkCommunicator, equipment);
+                LogQuery(String.Format("OnSaveDefaultsForNewPlayerr Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
+        }
+
         public static void HandleCreateOrSavePlayers(List<NetworkCommunicator> peers)
         {
             Debug.Print("[Save System] Is OnCreateOrSavePlayers null ? " + (OnCreateOrSavePlayers == null).ToString());
@@ -456,7 +471,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         internal static void HandleUpdateWoundedUntil(NetworkCommunicator communicator, long woundTime)
         {
-            OnPlayerUpdateWoundedUntil(communicator, woundTime);
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnPlayerUpdateWoundedUntil != null)
+            {
+                OnPlayerUpdateWoundedUntil(communicator, woundTime);
+                LogQuery(String.Format("OnPlayerUpdateWoundedUntil Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
         }
 
         public override void OnMissionResultReady(MissionResult missionResult)
@@ -571,6 +591,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 });
             }
-        }
+        }        
     }
 }

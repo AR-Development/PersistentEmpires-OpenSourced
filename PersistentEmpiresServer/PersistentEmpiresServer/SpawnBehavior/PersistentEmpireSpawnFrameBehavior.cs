@@ -249,9 +249,11 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         BasicCharacterObject heroCharacter = mpheroClassForPeer.HeroCharacter;
                         Equipment equipment = heroCharacter.Equipment.Clone(false);
 
+                        var agentEquipment = representative.LoadFromDb ? representative.LoadedSpawnEquipment.Clone(false) : equipment;
+
                         AgentBuildData agentBuildData = new AgentBuildData(heroCharacter)
                             .MissionPeer(component)
-                            .Equipment(representative.LoadFromDb ? representative.LoadedSpawnEquipment.Clone(false) : equipment)
+                            .Equipment(agentEquipment)
                             .Team(component.Team)
                             .TroopOrigin(new BasicBattleAgentOrigin(heroCharacter))
                             .IsFemale(component.Peer.IsFemale)
@@ -268,7 +270,11 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         }
                         this.GameMode.HandleAgentVisualSpawning(networkCommunicator, agentBuildData, 0, true);
 
-                        SaveSystemBehavior.HandleCreateOrSavePlayer(networkCommunicator);
+                        // update data from default class
+                        if (!representative.LoadFromDb)
+                        {
+                            SaveSystemBehavior.HandleSaveDefaultsForNewPlayer(networkCommunicator, agentEquipment);
+                        }
                     }
                 }
             }
