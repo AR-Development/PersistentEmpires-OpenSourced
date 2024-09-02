@@ -63,7 +63,8 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
                 .WithColumn("CustomName").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable()
+                .WithColumn("WoundedUntil").AsInt64().NotNullable();
 
             Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 

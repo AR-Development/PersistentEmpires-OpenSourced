@@ -1,4 +1,6 @@
-﻿namespace PersistentEmpiresLib.Database.DBEntities
+﻿using System;
+
+namespace PersistentEmpiresLib.Database.DBEntities
 {
     public class DBPlayer
     {
@@ -32,5 +34,6 @@
         public float PosY { get; set; }
         public float PosZ { get; set; }
         public string CustomName { get; set; }
+        public long? WoundedUntil { get; set; }
     }
 }

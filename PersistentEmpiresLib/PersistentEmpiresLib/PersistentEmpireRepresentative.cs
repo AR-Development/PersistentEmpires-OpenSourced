@@ -3,6 +3,7 @@ using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
@@ -31,6 +32,7 @@ namespace PersistentEmpiresLib
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
         public int[] LoadedAmmo { get; set; }
+        public long? WoundedUntil { get; set; }
 
         public PersistentEmpireRepresentative()
         {
@@ -170,6 +172,16 @@ namespace PersistentEmpiresLib
             {
                 SoundEvent.CreateEventFromString("event:/ui/notification/coins_negative", Mission.Current.Scene).Play();
             }
+        }
+
+        public void SetWounded(long? woundedto)
+        {
+            WoundedUntil = woundedto;
+        }
+
+        public void UnWound()
+        {
+            WoundedUntil = null;
         }
     }
 

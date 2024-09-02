@@ -290,6 +290,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     persistentEmpireRepresentative.SetClass(dbPlayer.Class);
                     persistentEmpireRepresentative.SetGold(dbPlayer.Money);
                     persistentEmpireRepresentative.SetHunger(dbPlayer.Hunger);
+                    persistentEmpireRepresentative.SetWounded(dbPlayer.WoundedUntil);
                     this._factionsBehavior.SetPlayerFaction(networkPeer, dbPlayer.FactionIndex, -1);
 
                     persistentEmpireRepresentative.LoadedDbPosition = new Vec3(dbPlayer.PosX, dbPlayer.PosY, dbPlayer.PosZ);
