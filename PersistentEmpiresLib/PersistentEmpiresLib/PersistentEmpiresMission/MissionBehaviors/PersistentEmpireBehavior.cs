@@ -368,9 +368,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-
-
-
         public override void AfterStart()
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);

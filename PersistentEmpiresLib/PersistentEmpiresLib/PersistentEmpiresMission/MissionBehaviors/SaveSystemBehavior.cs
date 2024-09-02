@@ -525,6 +525,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // Define your error logging logic
         }
 
+        public override void OnAgentCreated(Agent agent)
+        {
+            base.OnAgentCreated(agent);
+            if(Mission.Current.MainAgent == agent)
+            {
+                HandleCreateOrSavePlayer(agent.MissionPeer.GetNetworkPeer());
+            }
+        }
+
         private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
