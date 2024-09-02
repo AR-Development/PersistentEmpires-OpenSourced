@@ -86,13 +86,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (WoundingEnabled == false) return;
 
-            var persistentEmpireRepresentative = networkPeer.GetComponent<PersistentEmpireRepresentative>();
+            var woundedUntil = SaveSystemBehavior.HandleGetWoundedUntil(networkPeer);
 
-            if(persistentEmpireRepresentative != null && persistentEmpireRepresentative.GetWoundedUntil().HasValue)
+            if(woundedUntil.HasValue)
             {
                 if(!WoundedUntil.ContainsKey(networkPeer))
                 {
-                    WoundedUntil.Add(networkPeer, new KeyValuePair<bool, long>(true, persistentEmpireRepresentative.GetWoundedUntil().Value));
+                    WoundedUntil.Add(networkPeer, new KeyValuePair<bool, long>(true, woundedUntil.Value));
                 }
 
                 if (!IsWounded.ContainsKey(networkPeer))
@@ -240,12 +240,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 #if SERVER        
         public void HealPlayer(NetworkCommunicator player)
         {
-            if (!WoundedUntil.ContainsKey(player)) return;
+            var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            if (!WoundedUntil.ContainsKey(player) || persistentEmpireRepresentative == null) return;
 
             InformationComponent.Instance.SendMessage("You are no longer wounded.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
             WoundedUntil.Remove(player);
             IsWounded[player] = false;
-            var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             persistentEmpireRepresentative.UnWound();
             GameNetwork.BeginBroadcastModuleEvent();
             GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));

@@ -182,7 +182,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerDisconnected);
             }
 
-            if (saveSystemBehavior != null && persistentEmpireRepresentative != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
+            if (saveSystemBehavior != null && persistentEmpireRepresentative != null && networkPeer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
             {
                 persistentEmpireRepresentative.IsFirstAgentSpawned = false;
                 SaveSystemBehavior.HandleCreateOrSavePlayer(networkPeer);

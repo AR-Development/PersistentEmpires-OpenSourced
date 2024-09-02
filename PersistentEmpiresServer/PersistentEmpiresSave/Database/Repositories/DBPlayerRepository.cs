@@ -6,9 +6,11 @@ using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.PlayerServices;
 using static PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors.SaveSystemBehavior;
 
 namespace PersistentEmpiresSave.Database.Repositories
@@ -25,6 +27,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnPlayerUpdateCustomName += OnPlayerUpdateCustomName;
             SaveSystemBehavior.OnPlayerUpdateWoundedUntil += OnPlayerUpdateWoundedUntil;
             SaveSystemBehavior.OnSaveDefaultsForNewPlayer += OnSaveDefaultsForNewPlayer;
+            SaveSystemBehavior.OnGetWoundedUntil += OnGetWoundedUntil;
         }
 
         private static bool OnPlayerUpdateCustomName(NetworkCommunicator peer, string customName)
@@ -86,6 +89,14 @@ namespace PersistentEmpiresSave.Database.Repositories
         ON DUPLICATE KEY UPDATE
         Name = VALUES(Name), Hunger = VALUES(Hunger), Health = VALUES(Health), Money = VALUES(Money), Horse = VALUES(Horse), HorseHarness = VALUES(HorseHarness), Equipment_0 = VALUES(Equipment_0), Equipment_1 = VALUES(Equipment_1), Equipment_2 = VALUES(Equipment_2), Equipment_3 = VALUES(Equipment_3), Armor_Head = VALUES(Armor_Head), Armor_Body = VALUES(Armor_Body), Armor_Leg = VALUES(Armor_Leg), Armor_Gloves = VALUES(Armor_Gloves), Armor_Cape = VALUES(Armor_Cape), PosX = VALUES(PosX), PosY = VALUES(PosY), PosZ = VALUES(PosZ), FactionIndex = VALUES(FactionIndex), Class = VALUES(Class), Ammo_0 = VALUES(Ammo_0), Ammo_1 = VALUES(Ammo_1), Ammo_2 = VALUES(Ammo_2), Ammo_3 = VALUES(Ammo_3), WoundedUntil = VALUES(WoundedUntil)";
             DBConnection.Connection.Execute(query);
+        }
+
+        private static long? OnGetWoundedUntil(NetworkCommunicator player)
+        {
+            IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId", 
+                new { PlayerId = player.VirtualPlayer?.Id.ToString() });
+            if (getQuery.Count() == 0) return null;
+            return getQuery.First();
         }
 
         private static DBPlayer OnGetPlayer(string playerId)

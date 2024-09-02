@@ -27,7 +27,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
         public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
         public delegate void SaveDefaultsForNewPlayer(NetworkCommunicator peer, Equipment equipment);
-        
+        public delegate long? GetWoundedUntil(NetworkCommunicator peer);
+
         /* Inventories */
         public delegate IEnumerable<DBInventory> GetAllInventories();
         public delegate DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created);
@@ -78,6 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
         public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
+        public static event GetWoundedUntil OnGetWoundedUntil;
         
         /* Inventories */
         public static event GetOrCreatePlayerInventory OnGetOrCreatePlayerInventory;
@@ -477,6 +479,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 OnPlayerUpdateWoundedUntil(communicator, woundTime);
                 LogQuery(String.Format("OnPlayerUpdateWoundedUntil Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
             }
+        }
+
+        internal static long? HandleGetWoundedUntil(NetworkCommunicator communicator)
+        {
+            long? woundedUntill = null;
+            if (OnGetWoundedUntil != null)
+            {
+                woundedUntill = OnGetWoundedUntil(communicator);
+                LogQuery(String.Format("OnGetWoundedUntil Took {0} ms", woundedUntill));
+            }
+
+            return woundedUntill;
         }
 
         public override void OnMissionResultReady(MissionResult missionResult)
