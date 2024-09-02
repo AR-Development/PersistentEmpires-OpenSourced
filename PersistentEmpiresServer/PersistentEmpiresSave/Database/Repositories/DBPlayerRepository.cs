@@ -3,6 +3,7 @@ using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
@@ -21,6 +22,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnDiscordRegister += OnDiscordRegister;
             SaveSystemBehavior.OnGetPlayer += OnGetPlayer;
             SaveSystemBehavior.OnPlayerUpdateCustomName += OnPlayerUpdateCustomName;
+            SaveSystemBehavior.OnPlayerUpdateWoundedUntil += OnPlayerUpdateWoundedUntil;
         }
 
         private static bool OnPlayerUpdateCustomName(NetworkCommunicator peer, string customName)
@@ -52,6 +54,19 @@ namespace PersistentEmpiresSave.Database.Repositories
                 });
             }
             return true;
+        }
+
+        private static void OnPlayerUpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil)
+        {
+            bool created = false;
+            DBPlayer dbplayer = GetOrCreatePlayer(peer, out created);
+
+            string updateQuery = "UPDATE Players SET WoundedUntil = @WoundedUntil WHERE PlayerId = @PlayerId";
+            DBConnection.Connection.Execute(updateQuery, new
+            {
+                WoundedUntil = woundedUntil,
+                PlayerId = dbplayer.PlayerId
+            });
         }
 
         private static DBPlayer OnGetPlayer(string playerId)
@@ -91,7 +106,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 PosX = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.X : 0,
                 PosY = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Y : 0,
                 PosZ = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Z : 0,
-                WoundedUntil = persistentEmpireRepresentative.WoundedUntil,
+                WoundedUntil = persistentEmpireRepresentative.GetWoundedUntil(),
             };
 
             if (peer.ControlledAgent?.IsActive() == true && persistentEmpireRepresentative != null)

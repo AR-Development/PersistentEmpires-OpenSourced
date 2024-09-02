@@ -32,7 +32,7 @@ namespace PersistentEmpiresLib
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
         public int[] LoadedAmmo { get; set; }
-        public long? WoundedUntil { get; set; }
+        private long? WoundedUntil { get; set; }
 
         public PersistentEmpireRepresentative()
         {
@@ -182,6 +182,11 @@ namespace PersistentEmpiresLib
         public void UnWound()
         {
             WoundedUntil = null;
+        }
+
+        public long? GetWoundedUntil()
+        {
+            return WoundedUntil;
         }
     }
 

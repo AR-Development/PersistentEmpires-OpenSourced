@@ -209,6 +209,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
             this.SpawnAgents();
             this.OverridenOnTick(dt);
         }
+
         protected override void SpawnAgents()
         {
             // throw new NotImplementedException();
@@ -266,6 +267,8 @@ namespace PersistentEmpiresServer.SpawnBehavior
                             component.EquipmentUpdatingExpired = false;
                         }
                         this.GameMode.HandleAgentVisualSpawning(networkCommunicator, agentBuildData, 0, true);
+
+                        SaveSystemBehavior.HandleCreateOrSavePlayer(networkCommunicator);
                     }
                 }
             }

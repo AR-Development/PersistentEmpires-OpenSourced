@@ -4,6 +4,7 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -24,6 +25,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate DBPlayer GetOrCreatePlayer(NetworkCommunicator peer, out bool created);
         public delegate DBPlayer GetPlayer(string playerId);
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
+        public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
         /* Inventories */
         public delegate IEnumerable<DBInventory> GetAllInventories();
         public delegate DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created);
@@ -72,6 +74,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetOrCreatePlayer OnGetOrCreatePlayer;
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
+        public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
         /* Inventories */
         public static event GetOrCreatePlayerInventory OnGetOrCreatePlayerInventory;
         public static event CreateOrSavePlayerInventories OnCreateOrSavePlayerInventories;
@@ -349,6 +352,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 LogQuery(String.Format("OnCreateOrSavePlayerInventory Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
             }
         }
+
         public static DBInventory HandleGetOrCreateInventory(string inventoryId)
         {
             Debug.Print("[Save System] Is OnGetOrCreateInventory null ? " + (OnGetOrCreateInventory == null).ToString());
@@ -361,6 +365,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBInventory HandleCreateOrSaveInventory(string inventoryId)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveInventory null ? " + (OnCreateOrSaveInventory == null).ToString());
@@ -385,6 +390,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBCastle HandleCreateOrSaveCastle(int castleIndex, int factionIndex)
         {
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -409,6 +415,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBFactions HandleGetFaction(int factionIndex)
         {
             Debug.Print("[Save System] Is OnGetFaction null ? " + (OnGetFaction == null).ToString());
@@ -421,6 +428,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBFactions HandleCreateOrSaveFaction(Faction faction, int factionIndex)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveFaction null ? " + (OnCreateOrSaveFaction == null).ToString());
@@ -433,6 +441,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static bool HandlePlayerUpdateCustomName(NetworkCommunicator peer, string customName)
         {
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -444,6 +453,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return false;
         }
+
+        internal static void HandleUpdateWoundedUntil(NetworkCommunicator communicator, long woundTime)
+        {
+            OnPlayerUpdateWoundedUntil(communicator, woundTime);
+        }
+
         public override void OnMissionResultReady(MissionResult missionResult)
         {
             base.OnMissionResultReady(missionResult);
@@ -456,6 +471,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+
         private void HandleExceptionalExit(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
@@ -472,6 +488,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             HandleApplicationExit(sender, args);
         }
+
         private void HandleApplicationExit(object sender, EventArgs e)
         {
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
@@ -484,6 +501,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
@@ -523,15 +541,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static void RglExceptionThrown(System.Diagnostics.StackTrace e, Exception rglException)
         {
             // Define your error logging logic
-        }
-
-        public override void OnAgentCreated(Agent agent)
-        {
-            base.OnAgentCreated(agent);
-            if(Mission.Current.MainAgent == agent)
-            {
-                HandleCreateOrSavePlayer(agent.MissionPeer.GetNetworkPeer());
-            }
         }
 
         private static bool _running = false;

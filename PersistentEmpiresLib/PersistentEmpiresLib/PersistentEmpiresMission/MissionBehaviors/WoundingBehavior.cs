@@ -88,11 +88,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             var persistentEmpireRepresentative = networkPeer.GetComponent<PersistentEmpireRepresentative>();
 
-            if(persistentEmpireRepresentative != null && persistentEmpireRepresentative.WoundedUntil.HasValue)
+            if(persistentEmpireRepresentative != null && persistentEmpireRepresentative.GetWoundedUntil().HasValue)
             {
                 if(!WoundedUntil.ContainsKey(networkPeer))
                 {
-                    WoundedUntil.Add(networkPeer, new KeyValuePair<bool, long>(true, persistentEmpireRepresentative.WoundedUntil.Value));
+                    WoundedUntil.Add(networkPeer, new KeyValuePair<bool, long>(true, persistentEmpireRepresentative.GetWoundedUntil().Value));
                 }
 
                 if (!IsWounded.ContainsKey(networkPeer))
@@ -168,6 +168,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 IsWounded[player] = true;
                 var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
                 persistentEmpireRepresentative.SetWounded(woundTime);
+                // Make sure it get saved in db
+                SaveSystemBehavior.HandleUpdateWoundedUntil(player, woundTime);
 
                 GameNetwork.BeginBroadcastModuleEvent();
                 GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, true));
@@ -272,6 +274,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             WoundedUntil[communicator] = new KeyValuePair<bool, long>(true, deductedTime);
             var persistentEmpireRepresentative = communicator.GetComponent<PersistentEmpireRepresentative>();
             persistentEmpireRepresentative.SetWounded(deductedTime);
+            // Make sure it get saved in db
+            SaveSystemBehavior.HandleUpdateWoundedUntil(communicator, deductedTime);
         }
 #endif
 
