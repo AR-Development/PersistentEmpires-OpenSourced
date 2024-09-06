@@ -32,7 +32,7 @@ namespace PersistentEmpiresClient.ViewsVM.MessageLogPanel
         internal void Add(KeyValuePair<string, string> item)
         {
             var tmp = Items.ToList();
-            tmp.Add(new MessageLogItem(item.Key, item.Value));
+            tmp.Insert(0, new MessageLogItem(item.Key, item.Value));
             var tmp2 = new MBBindingList<MessageLogItem>();
             tmp.ForEach(x => tmp2.Add(x));
             Items = tmp2;
