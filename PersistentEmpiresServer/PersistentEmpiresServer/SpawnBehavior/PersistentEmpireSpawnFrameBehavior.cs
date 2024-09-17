@@ -209,6 +209,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
             this.SpawnAgents();
             this.OverridenOnTick(dt);
         }
+
         protected override void SpawnAgents()
         {
             // throw new NotImplementedException();
@@ -226,7 +227,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         Faction fact = representative.GetFaction();
                         BasicCultureObject basicCultureObject = fact.basicCultureObject;
 
-                        // MultiplayerClassDivisions.MPHeroClass mpheroClassForPeer = MultiplayerClassDivisions.GetMPHeroClasses().Where((MultiplayerClassDivisions.MPHeroClass x) => x.HeroCharacter.StringId == "pe_peasant").First();
+                        // MultiplayerClassDivisions.MPHeroClass mpheroClassForPeer = MultiplayerClassDivisions.GetMPHeroClasses().Where((MultiplayerClassDivisions.MPHeroClass x) => x.HeroCharacter.StringId == PersistentEmpireRepresentative.DefaultClass).First();
 
                         /*foreach(MultiplayerClassDivisions.MPHeroClass mpHeroClass in MultiplayerClassDivisions.GetMPHeroClasses(component.Culture))
                         {
@@ -237,7 +238,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         if (selectedCharacterObject == null)
                         {
                             Debug.Print("*PERSISTENT EMPIRES* Player class is null", 0, Debug.DebugColor.Red);
-                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>("pe_peasant");
+                            selectedCharacterObject = MBObjectManager.Instance.GetObject<BasicCharacterObject>(PersistentEmpireBehavior.DefaultClass);
                         }
 
                         component.Culture = selectedCharacterObject.Culture;
@@ -248,9 +249,11 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         BasicCharacterObject heroCharacter = mpheroClassForPeer.HeroCharacter;
                         Equipment equipment = heroCharacter.Equipment.Clone(false);
 
+                        var agentEquipment = representative.LoadFromDb ? representative.LoadedSpawnEquipment.Clone(false) : equipment;
+
                         AgentBuildData agentBuildData = new AgentBuildData(heroCharacter)
                             .MissionPeer(component)
-                            .Equipment(representative.LoadFromDb ? representative.LoadedSpawnEquipment.Clone(false) : equipment)
+                            .Equipment(agentEquipment)
                             .Team(component.Team)
                             .TroopOrigin(new BasicBattleAgentOrigin(heroCharacter))
                             .IsFemale(component.Peer.IsFemale)
@@ -266,6 +269,12 @@ namespace PersistentEmpiresServer.SpawnBehavior
                             component.EquipmentUpdatingExpired = false;
                         }
                         this.GameMode.HandleAgentVisualSpawning(networkCommunicator, agentBuildData, 0, true);
+
+                        // update data from default class
+                        if (!representative.LoadFromDb)
+                        {
+                            SaveSystemBehavior.HandleSaveDefaultsForNewPlayer(networkCommunicator, agentEquipment);
+                        }
                     }
                 }
             }

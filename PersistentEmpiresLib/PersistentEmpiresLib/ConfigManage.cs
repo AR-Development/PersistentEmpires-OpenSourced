@@ -15,6 +15,7 @@ namespace PersistentEmpiresLib
         {
             get
             {
+#if SERVER
                 if(_xmlDocument == null)
                 {
                     string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
@@ -23,6 +24,10 @@ namespace PersistentEmpiresLib
                 }
 
                 return _xmlDocument;
+#endif
+#if CLIENT
+                return null;
+#endif
             }
         }
 
@@ -32,6 +37,7 @@ namespace PersistentEmpiresLib
             VoiceChatEnabled = GetVoiceChatEnabled();
             DontOverrideMangonelHit = GetBoolConfig("DontOverrideMangonelHit", false);
         }
+
         public static bool GetVoiceChatEnabled()
         {
             XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/VoiceChatEnabled");

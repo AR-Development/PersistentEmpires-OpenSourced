@@ -1,7 +1,9 @@
 ﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Server;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
@@ -13,11 +15,9 @@ namespace PersistentEmpiresLib
 {
     public class PersistentEmpireRepresentative : MissionRepresentativeBase
     {
-        public const string defaultClass = "pe_peasant";
-
         private Faction _playerFaction;
         private int _factionIndex = -1;
-        private string _classId = defaultClass;
+        private string _classId = PersistentEmpireBehavior.DefaultClass;
         private Inventory playerInventory;
         private int hunger = 0;
         private PE_SpawnFrame nextSpawnFrame = null;
@@ -32,6 +32,7 @@ namespace PersistentEmpiresLib
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
         public int[] LoadedAmmo { get; set; }
+        private long? WoundedUntil { get; set; }
 
         public PersistentEmpireRepresentative()
         {
@@ -171,6 +172,21 @@ namespace PersistentEmpiresLib
             {
                 SoundEvent.CreateEventFromString("event:/ui/notification/coins_negative", Mission.Current.Scene).Play();
             }
+        }
+
+        public void SetWounded(long? woundedto)
+        {
+            WoundedUntil = woundedto;
+        }
+
+        public void UnWound()
+        {
+            WoundedUntil = null;
+        }
+
+        public long? GetWoundedUntil()
+        {
+            return WoundedUntil;
         }
     }
 

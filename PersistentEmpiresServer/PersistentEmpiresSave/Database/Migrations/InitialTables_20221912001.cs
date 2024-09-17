@@ -1,4 +1,6 @@
 ﻿using FluentMigrator;
+using PersistentEmpiresLib;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 
 namespace PersistentEmpiresSave.Database.Migrations
 {
@@ -51,7 +53,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Armor_Gloves").AsString().Nullable()
                 .WithColumn("Armor_Cape").AsString().Nullable()
                 .WithColumn("FactionIndex").AsInt32().WithDefaultValue(0)
-                .WithColumn("Class").AsString().WithDefaultValue("pe_peasant")
+                .WithColumn("Class").AsString().WithDefaultValue(PersistentEmpireBehavior.DefaultClass)
                 .WithColumn("PosX").AsFloat().WithDefaultValue(0)
                 .WithColumn("PosY").AsFloat().WithDefaultValue(0)
                 .WithColumn("PosZ").AsFloat().WithDefaultValue(0)
@@ -61,7 +63,8 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("Ammo_3").AsInt32().WithDefaultValue(0)
                 .WithColumn("CustomName").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
-                .WithColumn("UpdatedAt").AsDateTime().NotNullable();
+                .WithColumn("UpdatedAt").AsDateTime().NotNullable()
+                .WithColumn("WoundedUntil").AsInt64().Nullable();
 
             Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 

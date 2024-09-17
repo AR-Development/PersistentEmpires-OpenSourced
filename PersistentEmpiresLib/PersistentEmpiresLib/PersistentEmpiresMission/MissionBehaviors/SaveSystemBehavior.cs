@@ -4,6 +4,7 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -24,6 +25,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate DBPlayer GetOrCreatePlayer(NetworkCommunicator peer, out bool created);
         public delegate DBPlayer GetPlayer(string playerId);
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
+        public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
+        public delegate void SaveDefaultsForNewPlayer(NetworkCommunicator peer, Equipment equipment);
+        public delegate long? GetWoundedUntil(NetworkCommunicator peer);
+
         /* Inventories */
         public delegate IEnumerable<DBInventory> GetAllInventories();
         public delegate DBInventory GetOrCreatePlayerInventory(NetworkCommunicator networkCommunicator, out bool created);
@@ -72,6 +77,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetOrCreatePlayer OnGetOrCreatePlayer;
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
+        public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
+        public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
+        public static event GetWoundedUntil OnGetWoundedUntil;
+        
         /* Inventories */
         public static event GetOrCreatePlayerInventory OnGetOrCreatePlayerInventory;
         public static event CreateOrSavePlayerInventories OnCreateOrSavePlayerInventories;
@@ -277,6 +286,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
+        public static void HandleSaveDefaultsForNewPlayer(NetworkCommunicator networkCommunicator, Equipment equipment)
+        {
+            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnCreateOrSavePlayer == null).ToString());
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnSaveDefaultsForNewPlayer != null)
+            {
+                OnSaveDefaultsForNewPlayer(networkCommunicator, equipment);
+                LogQuery(String.Format("OnSaveDefaultsForNewPlayerr Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
+        }
+
         public static void HandleCreateOrSavePlayers(List<NetworkCommunicator> peers)
         {
             Debug.Print("[Save System] Is OnCreateOrSavePlayers null ? " + (OnCreateOrSavePlayers == null).ToString());
@@ -349,6 +369,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 LogQuery(String.Format("OnCreateOrSavePlayerInventory Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
             }
         }
+
         public static DBInventory HandleGetOrCreateInventory(string inventoryId)
         {
             Debug.Print("[Save System] Is OnGetOrCreateInventory null ? " + (OnGetOrCreateInventory == null).ToString());
@@ -361,6 +382,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBInventory HandleCreateOrSaveInventory(string inventoryId)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveInventory null ? " + (OnCreateOrSaveInventory == null).ToString());
@@ -385,6 +407,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBCastle HandleCreateOrSaveCastle(int castleIndex, int factionIndex)
         {
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -409,6 +432,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBFactions HandleGetFaction(int factionIndex)
         {
             Debug.Print("[Save System] Is OnGetFaction null ? " + (OnGetFaction == null).ToString());
@@ -421,6 +445,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static DBFactions HandleCreateOrSaveFaction(Faction faction, int factionIndex)
         {
             Debug.Print("[Save System] Is OnCreateOrSaveFaction null ? " + (OnCreateOrSaveFaction == null).ToString());
@@ -433,6 +458,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return null;
         }
+
         public static bool HandlePlayerUpdateCustomName(NetworkCommunicator peer, string customName)
         {
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -444,6 +470,29 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             return false;
         }
+
+        internal static void HandleUpdateWoundedUntil(NetworkCommunicator communicator, long woundTime)
+        {
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnPlayerUpdateWoundedUntil != null)
+            {
+                OnPlayerUpdateWoundedUntil(communicator, woundTime);
+                LogQuery(String.Format("OnPlayerUpdateWoundedUntil Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
+        }
+
+        internal static long? HandleGetWoundedUntil(NetworkCommunicator communicator)
+        {
+            long? woundedUntill = null;
+            if (OnGetWoundedUntil != null)
+            {
+                woundedUntill = OnGetWoundedUntil(communicator);
+                LogQuery(String.Format("OnGetWoundedUntil Took {0} ms", woundedUntill));
+            }
+
+            return woundedUntill;
+        }
+
         public override void OnMissionResultReady(MissionResult missionResult)
         {
             base.OnMissionResultReady(missionResult);
@@ -456,6 +505,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+
         private void HandleExceptionalExit(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
@@ -472,6 +522,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             HandleApplicationExit(sender, args);
         }
+
         private void HandleApplicationExit(object sender, EventArgs e)
         {
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
@@ -484,6 +535,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
+
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
@@ -553,6 +605,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 });
             }
-        }
+        }        
     }
 }

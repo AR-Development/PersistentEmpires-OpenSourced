@@ -8,6 +8,11 @@ namespace PersistentEmpires.Views.Views
 {
     public class PEChatBox : MissionView
     {
+        private static int _maxHeight = 1000;
+        private static int _minHeight = 300;
+        private static int _maxWidth = 1000;
+        private static int _minWidth = 460;
+
         public override void OnMissionScreenTick(float dt)
         {
             base.OnMissionScreenTick(dt);
@@ -32,17 +37,45 @@ namespace PersistentEmpires.Views.Views
                                     {
                                         var h = chatLogWidget.SuggestedHeight;
                                         h += 100;
-                                        if (h > 1000)
-                                            h = 1000;
+                                        if (h > _maxHeight)
+                                            h = _maxHeight;
                                         chatLogWidget.SuggestedHeight = h;
                                     }
                                     else if (focusedLayer.Input.IsKeyReleased(InputKey.Down))
                                     {
                                         var h = chatLogWidget.SuggestedHeight;
                                         h -= 100;
-                                        if (h < 300)
-                                            h = 300;
+                                        if (h < _minHeight)
+                                            h = _minHeight;
                                         chatLogWidget.SuggestedHeight = h;
+                                    }
+                                    else if (focusedLayer.Input.IsKeyPressed(InputKey.Right))
+                                    {
+                                        var chatTextInputParent = tmp.RootWidget.AllChildren.ToList().Where(x => x.Id == "ChatTextInputParent").FirstOrDefault();
+                                        if (chatTextInputParent != null)
+                                        {
+                                            chatTextInputParent.HorizontalAlignment = TaleWorlds.GauntletUI.HorizontalAlignment.Left;
+                                            chatTextInputParent.MarginLeft = 8;
+                                        }
+                                        var w = chatLogWidget.SuggestedWidth;
+                                        w += 100;
+                                        if (w > _maxWidth)
+                                            w = _maxWidth;
+                                        chatLogWidget.SuggestedWidth= w;
+                                    }
+                                    else if (focusedLayer.Input.IsKeyReleased(InputKey.Left))
+                                    {
+                                        var chatTextInputParent = tmp.RootWidget.AllChildren.ToList().Where(x => x.Id == "ChatTextInputParent").FirstOrDefault();
+                                        if (chatTextInputParent != null)
+                                        {
+                                            chatTextInputParent.HorizontalAlignment = TaleWorlds.GauntletUI.HorizontalAlignment.Left;
+                                            chatTextInputParent.MarginLeft = 8;
+                                        }
+                                        var w = chatLogWidget.SuggestedWidth;
+                                        w -= 100;
+                                        if (w < _minWidth)
+                                            w = _minWidth;
+                                        chatLogWidget.SuggestedWidth = w;
                                     }
                                 }
                             }

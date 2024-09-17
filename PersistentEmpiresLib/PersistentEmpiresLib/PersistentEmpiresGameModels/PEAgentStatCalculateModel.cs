@@ -203,16 +203,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
                 return;
             }
 
-            var tmp = Mission.Current.GetActiveEntitiesWithScriptComponentOfType<PE_AttachToAgent>().ToList().Select(x => x.GetFirstScriptOfType<PE_AttachToAgent>());
-            if (tmp.Any(x => x.AttachedTo == agent))
-            {
-                agentDrivenProperties.MountManeuver = 0.8f;
-                agentDrivenProperties.MountSpeed = 0.8f;
-                agentDrivenProperties.TopSpeedReachDuration = 10f;
-                agentDrivenProperties.MountDashAccelerationMultiplier = 0.8f;
+            //var tmp = Mission.Current.GetActiveEntitiesWithScriptComponentOfType<PE_AttachToAgent>().ToList().Select(x => x.GetFirstScriptOfType<PE_AttachToAgent>());
+            //if (tmp.Any(x => x.AttachedTo == agent))
+            //{
+            //    agentDrivenProperties.MountManeuver = 0.8f;
+            //    agentDrivenProperties.MountSpeed = 0.8f;
+            //    agentDrivenProperties.TopSpeedReachDuration = 10f;
+            //    agentDrivenProperties.MountDashAccelerationMultiplier = 0.8f;
 
-                return;
-            }
+            //    return;
+            //}
 
             MPPerkObject.MPPerkHandler perkHandler = MPPerkObject.GetPerkHandler(agent.RiderAgent);
             EquipmentElement equipmentElement = agent.SpawnEquipment[EquipmentIndex.ArmorItemEndSlot];

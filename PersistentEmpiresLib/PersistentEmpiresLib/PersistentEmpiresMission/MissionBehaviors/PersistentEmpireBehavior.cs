@@ -43,6 +43,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ServerSignature;
 
         // public static string ServerSignature = "";
+        private static string _defaultClass = "pe_peasant";
+        public static string DefaultClass { get { return _defaultClass; } }
+
+        public static void SetDefaultClass(string defaultClass)
+        {
+            if (string.IsNullOrEmpty(defaultClass)) return;
+
+            _defaultClass = defaultClass;
+        }
 
         public override void OnAgentMount(Agent agent)
         {
@@ -173,7 +182,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerDisconnected);
             }
 
-            if (saveSystemBehavior != null && persistentEmpireRepresentative != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
+            if (saveSystemBehavior != null && persistentEmpireRepresentative != null && networkPeer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
             {
                 persistentEmpireRepresentative.IsFirstAgentSpawned = false;
                 SaveSystemBehavior.HandleCreateOrSavePlayer(networkPeer);
@@ -281,6 +290,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     persistentEmpireRepresentative.SetClass(dbPlayer.Class);
                     persistentEmpireRepresentative.SetGold(dbPlayer.Money);
                     persistentEmpireRepresentative.SetHunger(dbPlayer.Hunger);
+                    persistentEmpireRepresentative.SetWounded(dbPlayer.WoundedUntil);
                     this._factionsBehavior.SetPlayerFaction(networkPeer, dbPlayer.FactionIndex, -1);
 
                     persistentEmpireRepresentative.LoadedDbPosition = new Vec3(dbPlayer.PosX, dbPlayer.PosY, dbPlayer.PosZ);
@@ -357,9 +367,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
         }
-
-
-
 
         public override void AfterStart()
         {
