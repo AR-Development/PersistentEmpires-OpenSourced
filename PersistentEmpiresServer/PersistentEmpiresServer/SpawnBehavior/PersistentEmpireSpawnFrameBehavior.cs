@@ -44,7 +44,9 @@ namespace PersistentEmpiresServer.SpawnBehavior
 
         public MatrixFrame GetSpawnFrame(NetworkCommunicator peer)
         {
-            if (WoundingBehavior.Instance.WoundingEnabled && WoundingBehavior.Instance.IsPlayerWounded(peer))
+            if (WoundingBehavior.Instance.WoundingEnabled 
+                && WoundingBehavior.Instance.IsPlayerWounded(peer)
+                && WoundingBehavior.Instance.DeathPlace.ContainsKey(peer))
             {
                 return new MatrixFrame(Mat3.Identity, WoundingBehavior.Instance.DeathPlace[peer]);
             }
