@@ -13,6 +13,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Network.Messages;
+using static TaleWorlds.MountAndBlade.GameNetwork;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -34,6 +35,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.Mission.OnItemPickUp += this.OnItemPickup;
         }
 
+#if CLIENT
+        public override void OnRemoveBehavior()
+        {
+            base.OnRemoveBehavior();
+
+            var networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            networkMessageHandlerRegisterer.Register<SendRulesToNewClientMessage>(this.HandleFromServerSendRulesToNewClientMessage);
+        }
+#endif
+
         private void OnMyClientSynchronized()
         {
             this._myRepresentative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
@@ -45,7 +56,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-
         public override void OnGoldAmountChangedForRepresentative(MissionRepresentativeBase representative, int goldAmount)
         {
             if (representative != null && base.MissionLobbyComponent.CurrentMultiplayerState != MissionLobbyComponent.MultiplayerGameState.Ending)
@@ -53,6 +63,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 representative.UpdateGold(goldAmount);
             }
         }
+
         public override int GetGoldAmount()
         {
             return this._myRepresentative.Gold;
