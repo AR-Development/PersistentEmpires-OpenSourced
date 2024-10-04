@@ -45,6 +45,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
             WriteIntToPacket(PackageId, new CompressionInfo.Integer(0, 1000, true));
             WriteIntToPacket(PackageCount, new CompressionInfo.Integer(0, 1000, true));
+            WriteStringToPacket(ConfigChunk);
         }
     }
 }
