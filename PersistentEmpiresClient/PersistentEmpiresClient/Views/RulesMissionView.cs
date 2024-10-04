@@ -1,0 +1,61 @@
+﻿using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using System;
+using System.Text.RegularExpressions;
+using System.Xml;
+using TaleWorlds.Core;
+using TaleWorlds.Engine.GauntletUI;
+using TaleWorlds.InputSystem;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.View.MissionViews;
+using TaleWorlds.ScreenSystem;
+
+namespace PersistentEmpires.Views.Views
+{
+    public class RulesMissionView : MissionView
+    {
+        private GauntletLayer _gauntletLayer;
+        private RulesViewModule _dataSource = new RulesViewModule();
+
+        public RulesMissionView()
+        {
+
+        }
+
+        public override void OnMissionTick(float dt)
+        {
+            base.OnMissionTick(dt);
+            if (this._gauntletLayer != null && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
+            {
+                _gauntletLayer.InputRestrictions.ResetInputRestrictions();
+                MissionScreen.RemoveLayer(_gauntletLayer);
+                _gauntletLayer = null;
+            }
+            else if (this._gauntletLayer == null && this._gauntletLayer.Input.IsKeyPressed(InputKey.R) && (this._gauntletLayer.Input.IsKeyDown(InputKey.LeftControl) || this._gauntletLayer.Input.IsKeyDown(InputKey.RightControl)))
+            {
+                Init();
+            }
+        }
+
+        public void Init()
+        {
+            _gauntletLayer = new GauntletLayer(102);
+            _gauntletLayer.IsFocusLayer = true;
+            _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+            _gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
+            _gauntletLayer.LoadMovie("ShowRules", this._dataSource);
+            MissionScreen.AddLayer(this._gauntletLayer);
+            ScreenManager.TrySetFocus(this._gauntletLayer);
+
+            _dataSource.Init(PersistentEmpireClientBehavior.Rules);
+        }
+
+        public void CloseCraftingWindow()
+        {
+            _gauntletLayer.InputRestrictions.ResetInputRestrictions();
+            MissionScreen.RemoveLayer(_gauntletLayer);
+            _gauntletLayer = null;
+        }
+    }
+}

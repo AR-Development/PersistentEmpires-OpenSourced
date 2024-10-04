@@ -62,6 +62,9 @@
 		<None Update="GUI\Prefabs\PEAnimationMenu\PEAnimationMenu.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="GUI\Prefabs\ShowRules.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="GUI\Prefabs\PEBank.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
