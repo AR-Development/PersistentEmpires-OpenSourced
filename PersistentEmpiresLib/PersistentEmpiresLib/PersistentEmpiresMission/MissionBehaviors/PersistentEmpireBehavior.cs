@@ -168,7 +168,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             var count = 0;
             var doWork = true;
             List<string> list = new List<string>();
-            var rest = ConfigManager.Rules.ToString();
+            var rest = ConfigManager.Rules.OuterXml;
             while (doWork)
             {
                 count++;
