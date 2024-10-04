@@ -10,6 +10,11 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public int PackageCount { get; private set; }
         public string ConfigChunk { get; private set; }
 
+        public SendRulesToNewClientMessage()
+        {
+
+        }
+
         public SendRulesToNewClientMessage(int packageId, int packageCount, string configChunk)
         {
             this.PackageId = packageId;
