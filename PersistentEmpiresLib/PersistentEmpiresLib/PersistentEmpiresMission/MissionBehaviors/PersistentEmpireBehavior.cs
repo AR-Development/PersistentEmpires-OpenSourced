@@ -165,6 +165,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 #if SERVER
         private void SendRulesToNewClient(NetworkCommunicator networkPeer)
         {
+            if(ConfigManager.Rules == null)
+            {
+                return;
+            }
+
             var count = 0;
             var doWork = true;
             List<string> list = new List<string>();

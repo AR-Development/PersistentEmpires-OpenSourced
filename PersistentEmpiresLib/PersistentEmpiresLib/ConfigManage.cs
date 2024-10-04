@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.IO;
+using System.Xml;
 using TaleWorlds.ModuleManager;
 
 namespace PersistentEmpiresLib
@@ -42,8 +43,11 @@ namespace PersistentEmpiresLib
                 if (_rulesDocument == null)
                 {
                     string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
-                    _rulesDocument = new XmlDocument();
-                    _rulesDocument.Load(xmlPath);
+                    if (File.Exists(xmlPath))
+                    {
+                        _rulesDocument = new XmlDocument();
+                        _rulesDocument.Load(xmlPath);
+                    }
                 }
 
                 return _rulesDocument;
