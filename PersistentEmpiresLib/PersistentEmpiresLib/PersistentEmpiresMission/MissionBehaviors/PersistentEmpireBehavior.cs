@@ -160,9 +160,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnPlayerConnectedToServer(networkPeer);
             networkPeer.QuitFromMission = false;
-#if SERVER
-            SendRulesToNewClient(networkPeer);
-#endif
         }
 
 #if SERVER
@@ -403,6 +400,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerJoined);
                 }
             }
+#if SERVER
+            SendRulesToNewClient(networkPeer);
+#endif
         }
 
         public override void AfterStart()
