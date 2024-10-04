@@ -4,9 +4,15 @@ using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Network.Messages;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -74,6 +80,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 registerer.Register<ServerHandshake>(this.HandleServerHandshakeFromServer);
                 registerer.Register<AgentLabelConfig>(this.HandleServerAgentLabelConfig);
                 registerer.Register<ExistingObjectsEnd>(this.HandleFromServerExistingObjectsEnd);
+                registerer.Register<SendRulesToNewClientMessage>(this.HandleFromServerSendRulesToNewClientMessage);
             }
             else
             {
@@ -92,6 +99,42 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
             }
 
+        }
+
+        public static XmlDocument Rules = null;
+        private static List<KeyValuePair<int, string>> tmpList = null;
+        private void HandleFromServerSendRulesToNewClientMessage(SendRulesToNewClientMessage message)
+        {
+            if (tmpList == null)
+            {
+                tmpList = new List<KeyValuePair<int, string>>();
+            }
+
+            tmpList.Add(new KeyValuePair<int, string>(message.MessageId, message.ConfigChunk));
+
+            if (message.PackageId == message.PackageCount)
+            {
+                var tmp = string.Join("", tmpList.OrderBy(x => x.Key).Select(y => y.Value));
+                //var array = new UTF8Encoding().GetBytes(tmp);
+                try
+                {
+                    Rules = new XmlDocument();
+                    Rules.LoadXml(tmp);
+                    //XmlSerializer serializer = new XmlSerializer(typeof(Configuration.DbCraftingConfiguration.DbCraftingConfiguration));
+                    //using (var reader = new MemoryStream(array))
+                    //{
+                    //    PERoleplaySubModule._DbCraftingConfiguration = (Configuration.DbCraftingConfiguration.DbCraftingConfiguration)serializer.Deserialize(reader);
+                    //}
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    tmpList = null;
+                }
+            }
         }
 
         private void HandleServerAgentLabelConfig(AgentLabelConfig message)

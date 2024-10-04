@@ -7,10 +7,13 @@ namespace PersistentEmpiresLib
     {
         public static string XmlFile = "GeneralConfig";
 
+        internal static string RulesXmlFile = "Rules";
+
         public static int StartingGold { get; private set; }
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
         public static XmlDocument _xmlDocument = null;
+        public static XmlDocument _RulesDocument = null;
         public static XmlDocument XmlDocument
         {
             get
@@ -23,6 +26,13 @@ namespace PersistentEmpiresLib
                     _xmlDocument.Load(xmlPath);
                 }
 
+                if (_RulesDocument == null)
+                {
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
+                    _RulesDocument = new XmlDocument();
+                    _RulesDocument.Load(xmlPath);
+                }
+
                 return _xmlDocument;
 #endif
 #if CLIENT
@@ -30,6 +40,23 @@ namespace PersistentEmpiresLib
 #endif
             }
         }
+
+#if SERVER
+        public static XmlDocument Rules
+        {
+            get
+            {
+                if (_RulesDocument == null)
+                {
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
+                    _RulesDocument = new XmlDocument();
+                    _RulesDocument.Load(xmlPath);
+                }
+
+                return _xmlDocument;
+            }
+        }
+#endif
 
         public static void Initialize()
         {
