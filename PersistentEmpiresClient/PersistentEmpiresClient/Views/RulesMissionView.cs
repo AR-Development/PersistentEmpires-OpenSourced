@@ -8,11 +8,13 @@ using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.View;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
 
 namespace PersistentEmpires.Views.Views
 {
+    [DefaultView]
     public class RulesMissionView : MissionView
     {
         private GauntletLayer _gauntletLayer;
@@ -27,7 +29,7 @@ namespace PersistentEmpires.Views.Views
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (MissionScreen.InputManager.IsKeyPressed(InputKey.R) && (MissionScreen.InputManager.IsKeyDown(InputKey.LeftControl) || MissionScreen.InputManager.IsKeyDown(InputKey.RightControl)))
+            if (MissionScreen.InputManager.IsKeyPressed(InputKey.F1))
             {
                 if (IsActive)
                 {
