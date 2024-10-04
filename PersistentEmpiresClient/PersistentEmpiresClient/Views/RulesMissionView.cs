@@ -17,6 +17,7 @@ namespace PersistentEmpires.Views.Views
     {
         private GauntletLayer _gauntletLayer;
         private RulesViewModule _dataSource = new RulesViewModule();
+        private static bool IsActive = false;
 
         public RulesMissionView()
         {
@@ -26,29 +27,63 @@ namespace PersistentEmpires.Views.Views
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (this._gauntletLayer != null && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
+            if (MissionScreen.InputManager.IsKeyPressed(InputKey.R) && (MissionScreen.InputManager.IsKeyDown(InputKey.LeftControl) || MissionScreen.InputManager.IsKeyDown(InputKey.RightControl)))
+            {
+                if (IsActive)
+                {
+                    CloseView();
+                }
+                else
+                {
+                    ShowView();
+                }
+            }
+            else if (this._gauntletLayer != null && (this._gauntletLayer.Input.IsHotKeyReleased("ToggleEscapeMenu") || this._gauntletLayer.Input.IsHotKeyReleased("Exit")))
             {
                 _gauntletLayer.InputRestrictions.ResetInputRestrictions();
                 MissionScreen.RemoveLayer(_gauntletLayer);
                 _gauntletLayer = null;
             }
-            else if (this._gauntletLayer == null && this._gauntletLayer.Input.IsKeyPressed(InputKey.R) && (this._gauntletLayer.Input.IsKeyDown(InputKey.LeftControl) || this._gauntletLayer.Input.IsKeyDown(InputKey.RightControl)))
-            {
-                Init();
-            }
         }
 
-        public void Init()
+        private bool CloseView()
         {
-            _gauntletLayer = new GauntletLayer(102);
-            _gauntletLayer.IsFocusLayer = true;
-            _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
-            _gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
-            _gauntletLayer.LoadMovie("ShowRules", this._dataSource);
-            MissionScreen.AddLayer(this._gauntletLayer);
-            ScreenManager.TrySetFocus(this._gauntletLayer);
+            if (IsActive)
+            {
+                IsActive = false;
+                _gauntletLayer.InputRestrictions.ResetInputRestrictions();
+                MissionScreen.RemoveLayer(_gauntletLayer);
+                _gauntletLayer = null;
+                return true;
+            }
 
-            _dataSource.Init(PersistentEmpireClientBehavior.Rules);
+            return false;
+        }
+
+        public override bool OnEscape()
+        {
+            return CloseView();
+        }
+
+        internal void ShowView()
+        {
+            if (_gauntletLayer != null)
+            {
+                CloseView();
+            }
+            else
+            {
+                IsActive = true;
+                _gauntletLayer = new GauntletLayer(102);
+                _gauntletLayer.IsFocusLayer = true;
+                _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+                _gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
+                _gauntletLayer.LoadMovie("ShowRules", this._dataSource);
+                MissionScreen.AddLayer(this._gauntletLayer);
+                ScreenManager.TrySetFocus(this._gauntletLayer);
+
+                _dataSource.Init(PersistentEmpireClientBehavior.Rules);
+            }
         }
 
         public void CloseCraftingWindow()
