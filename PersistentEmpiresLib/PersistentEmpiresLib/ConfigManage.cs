@@ -13,7 +13,7 @@ namespace PersistentEmpiresLib
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
         public static XmlDocument _xmlDocument = null;
-        public static XmlDocument _RulesDocument = null;
+        public static XmlDocument _rulesDocument = null;
         public static XmlDocument XmlDocument
         {
             get
@@ -24,13 +24,6 @@ namespace PersistentEmpiresLib
                     string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
                     _xmlDocument = new XmlDocument();
                     _xmlDocument.Load(xmlPath);
-                }
-
-                if (_RulesDocument == null)
-                {
-                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
-                    _RulesDocument = new XmlDocument();
-                    _RulesDocument.Load(xmlPath);
                 }
 
                 return _xmlDocument;
@@ -46,14 +39,14 @@ namespace PersistentEmpiresLib
         {
             get
             {
-                if (_RulesDocument == null)
+                if (_rulesDocument == null)
                 {
                     string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
-                    _RulesDocument = new XmlDocument();
-                    _RulesDocument.Load(xmlPath);
+                    _rulesDocument = new XmlDocument();
+                    _rulesDocument.Load(xmlPath);
                 }
 
-                return _xmlDocument;
+                return _rulesDocument;
             }
         }
 #endif
