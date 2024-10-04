@@ -29,7 +29,7 @@ namespace PersistentEmpires.Views.Views
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (MissionScreen.InputManager.IsKeyPressed(InputKey.F1))
+            if (MissionScreen.InputManager.IsKeyPressed(InputKey.F1) && PersistentEmpireClientBehavior.Rules != null)
             {
                 if (IsActive)
                 {
