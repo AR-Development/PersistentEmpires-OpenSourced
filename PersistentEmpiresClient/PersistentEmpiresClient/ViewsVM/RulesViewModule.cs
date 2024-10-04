@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Xml;
+using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -20,6 +21,10 @@ namespace PersistentEmpires.Views.ViewsVM
         {
             var element = rules.SelectSingleNode("/Rules/ForumLink");
             ForumLink = element.InnerText;
+            if(!string.IsNullOrEmpty(ForumLink))
+            {
+                Input.SetClipboardText(ForumLink);
+            }
             element = rules.SelectSingleNode("/Rules/Message");
             Message = element.InnerText;
             var elements = rules.SelectNodes("/Rules/Rule");
