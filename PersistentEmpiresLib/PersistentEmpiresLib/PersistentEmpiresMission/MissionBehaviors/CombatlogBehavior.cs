@@ -24,7 +24,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
         {
             base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
-            if (affectorAgent != null && affectorAgent != affectedAgent && affectorAgent.IsActive() && affectorAgent.IsHuman && affectedAgent != null && affectedAgent.MissionPeer != null && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.IsHuman && affectedAgent.IsActive() && affectorWeapon.Item != null && affectorWeapon.Item.StringId != "pe_doctorscalpel")
+            if (affectorAgent != null && affectorAgent != affectedAgent && affectorAgent.IsActive() && affectorAgent.IsHuman && affectedAgent != null && affectedAgent.MissionPeer != null && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.IsHuman && affectedAgent.IsActive() && affectorWeapon.Item != null && affectorWeapon.Item.StringId != DoctorBehavior.Instance?.ItemId)
             {
                 NetworkCommunicator player = affectedAgent.MissionPeer.GetNetworkPeer();
                 this.WarnPlayer(player);
