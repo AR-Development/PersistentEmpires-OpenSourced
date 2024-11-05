@@ -47,7 +47,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
 
             long remainingSeconds = _restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (remainingSeconds <= 0)
+            if (IsActive && remainingSeconds <= 0)
             {
                 throw new Exception("Server auto restart.");
             }
