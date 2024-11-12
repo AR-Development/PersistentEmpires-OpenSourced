@@ -14,7 +14,7 @@ using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresServer.SpawnBehavior
 {
-    class PersistentEmpiresSpawningBehavior : SpawningBehaviorBase
+    public class PersistentEmpiresSpawningBehavior : SpawningBehaviorBase
     {
         private FactionsBehavior factionBehavior;
         protected event Action<MissionPeer> OnPeerSpawnedFromVisuals;
@@ -113,7 +113,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         }
 
 
-                        agentBuildData.BodyProperties(this.GetBodyProperties(component, component.Culture));
+                        agentBuildData.BodyProperties(GetBodyProperties(component, component.Culture));
                         agentBuildData.Age((int)agentBuildData.AgentBodyProperties.Age);
 
                         MatrixFrame spawnFrame = this.GetSpawnFrame(networkCommunicator);
@@ -259,7 +259,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                             .Team(component.Team)
                             .TroopOrigin(new BasicBattleAgentOrigin(heroCharacter))
                             .IsFemale(component.Peer.IsFemale)
-                            .BodyProperties(base.GetBodyProperties(component, component.Culture))
+                            .BodyProperties(GetBodyProperties(component, component.Culture))
                             .VisualsIndex(0)
                             .ClothingColor1(fact.banner.GetPrimaryColor())
                             .ClothingColor2(fact.banner.GetFirstIconColor());
