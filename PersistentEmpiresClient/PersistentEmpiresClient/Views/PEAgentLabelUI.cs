@@ -23,7 +23,7 @@ namespace PersistentEmpires.Views.Views
         private Dictionary<Agent, bool> _renderedHasVoiceData = new Dictionary<Agent, bool>();
         private Dictionary<Agent, MetaMesh> _voiceMeshes = new Dictionary<Agent, MetaMesh>();
         private Dictionary<Agent, long> _voiceMeshSettedAt = new Dictionary<Agent, long>();
-
+        private List<string> _validStealthItems = new List<string>() { "PE_pilgrim_hood" };
         private bool disabled = false;
 
         private OrderController PlayerOrderController
@@ -411,9 +411,17 @@ namespace PersistentEmpires.Views.Views
             }
         }
 
+        public void AddStealthItem(string item)
+        {
+            if(!_validStealthItems.Contains(item))
+            {
+                _validStealthItems.Add(item);
+            }
+        }
+
         private bool isAgentStealth(Agent agent)
         {
-            if (agent.IsActive() && agent.SpawnEquipment[EquipmentIndex.Head].IsEmpty != true && agent.SpawnEquipment[EquipmentIndex.Head].Item.StringId == "PE_pilgrim_hood")
+            if (agent.IsActive() && agent.SpawnEquipment[EquipmentIndex.Head].IsEmpty != true && _validStealthItems.Contains(agent.SpawnEquipment[EquipmentIndex.Head].Item.StringId))
             {
                 return true;
             }

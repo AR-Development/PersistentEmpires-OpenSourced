@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -160,6 +161,44 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnPlayerConnectedToServer(networkPeer);
             networkPeer.QuitFromMission = false;
         }
+
+#if SERVER
+        private void SendRulesToNewClient(NetworkCommunicator networkPeer)
+        {
+            if(ConfigManager.Rules == null)
+            {
+                return;
+            }
+
+            var count = 0;
+            var doWork = true;
+            List<string> list = new List<string>();
+            var rest = ConfigManager.Rules.OuterXml;
+            while (doWork)
+            {
+                count++;
+                if (rest.Length > 500)
+                {
+                    list.Add(rest.Substring(0, 500));
+                    rest = rest.Substring(500);
+                }
+                else
+                {
+                    list.Add(rest.Substring(0));
+                    doWork = false;
+                }
+            }
+            var count2 = 1;
+            foreach (var item in list)
+            {
+                GameNetwork.BeginModuleEventAsServer(networkPeer);
+                GameNetwork.WriteMessage(new SendRulesToNewClientMessage(count2, count, item));
+                GameNetwork.EndModuleEventAsServer();
+                count2++;
+            }
+        }
+        #endif
+
         protected override void HandleEarlyPlayerDisconnect(NetworkCommunicator peer)
         {
             base.HandleEarlyPlayerDisconnect(peer);
@@ -366,16 +405,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerJoined);
                 }
             }
+#if SERVER
+            SendRulesToNewClient(networkPeer);
+#endif
         }
 
         public override void AfterStart()
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);
-            if (GameNetwork.IsServer)
-            {
-                ConfigManager.Initialize();
-                this.agentLabelEnabled = ConfigManager.GetBoolConfig("AgentLabelEnabled", true);
-            }
+#if SERVER
+            ConfigManager.Initialize();
+            this.agentLabelEnabled = ConfigManager.GetBoolConfig("AgentLabelEnabled", true);
+#endif
 
             int maxPlayer = MultiplayerOptions.OptionType.MaxNumberOfPlayers.GetIntValue(MultiplayerOptions.MultiplayerOptionsAccessMode.CurrentMapOptions);
             string serverName = MultiplayerOptions.OptionType.ServerName.GetStrValue(MultiplayerOptions.MultiplayerOptionsAccessMode.CurrentMapOptions);
