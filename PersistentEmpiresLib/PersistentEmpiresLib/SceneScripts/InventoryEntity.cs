@@ -1,5 +1,6 @@
 ﻿using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts.Interfaces;
 using System;
@@ -202,7 +203,7 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 canUserUse = false;
                 Faction f = this.GetCastleBanner().GetOwnerFaction();
-                if (f.chestManagers.Contains(player.VirtualPlayer.Id.ToString()) || f.marshalls.Contains(player.VirtualPlayer.Id.ToString()) || f.lordId == player.VirtualPlayer.Id.ToString()) canUserUse = true;
+                if (f.chestManagers.Contains(player.VirtualPlayer.ToPlayerId()) || f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()) || f.lordId == player.VirtualPlayer.ToPlayerId()) canUserUse = true;
                 PE_RepairableDestructableComponent destructComponent = base.GameEntity.GetFirstScriptOfType<PE_RepairableDestructableComponent>();
                 if (destructComponent != null && destructComponent.IsBroken) canUserUse = true;
                 if (!canUserUse)

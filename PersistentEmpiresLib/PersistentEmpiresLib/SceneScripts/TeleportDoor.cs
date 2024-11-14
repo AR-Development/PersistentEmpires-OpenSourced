@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -66,7 +67,7 @@ namespace PersistentEmpiresLib.SceneScripts
             NetworkCommunicator player = userAgent.MissionPeer.GetNetworkPeer();
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (this.AllowMembersWithoutKeys && persistentEmpireRepresentative.GetFaction() == f) return true;
-            if (f.doorManagers.Contains(player.VirtualPlayer.Id.ToString()) || f.marshalls.Contains(player.VirtualPlayer.Id.ToString()) || f.lordId == player.VirtualPlayer.Id.ToString()) return true;
+            if (f.doorManagers.Contains(player.VirtualPlayer.ToPlayerId()) || f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()) || f.lordId == player.VirtualPlayer.ToPlayerId()) return true;
             return false;
         }
         public override void OnUse(Agent userAgent)

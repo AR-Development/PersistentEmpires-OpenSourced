@@ -12,6 +12,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
+using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -63,7 +64,7 @@ namespace PersistentEmpires.Views.Views
             {
                 int indexAt = this._dataSource.Factions[joinedFromIndex].Members
                      .Select((value, index) => new { value, index })
-                     .Where(pair => pair.value.GetPeer().VirtualPlayer.Id == player.VirtualPlayer.Id)
+                     .Where(pair => pair.value.GetPeer().VirtualPlayer.ToPlayerId() == player.VirtualPlayer.ToPlayerId())
                      .Select(pair => pair.index + 1)
                      .FirstOrDefault() - 1;
                 this._dataSource.RemoveMemberAtIndex(joinedFromIndex, indexAt);
@@ -74,7 +75,7 @@ namespace PersistentEmpires.Views.Views
             // this._dataSource.Factions[factionIndex].Members.Add(new TabPlayerVM(player, faction.lordId == player.VirtualPlayer.Id.ToString()));
             if (faction != null)
             {
-                TabPlayerVM newPlayer = new TabPlayerVM(player, faction.lordId == player.VirtualPlayer.Id.ToString());
+                TabPlayerVM newPlayer = new TabPlayerVM(player, faction.lordId == player.VirtualPlayer.ToPlayerId());
                 this._dataSource.AddMember(factionIndex, newPlayer);
                 newPlayer.OnPropertyChanged("UserClass");
             }
@@ -218,12 +219,12 @@ namespace PersistentEmpires.Views.Views
         }
         private void OnFactionMarshallChanged(Faction faction, int factionIndex, NetworkCommunicator newMarshall)
         {
-            foreach (TabPlayerVM playerVM in this._dataSource.Factions[factionIndex].Members) playerVM.UpdateMarshall(newMarshall.VirtualPlayer.Id.ToString());
+            foreach (TabPlayerVM playerVM in this._dataSource.Factions[factionIndex].Members) playerVM.UpdateMarshall(newMarshall.VirtualPlayer.ToPlayerId());
 
         }
         private void OnFactionLordChanged(Faction faction, int factionIndex, NetworkCommunicator newLord)
         {
-            foreach (TabPlayerVM playerVM in this._dataSource.Factions[factionIndex].Members) playerVM.UpdateLord(newLord.VirtualPlayer.Id.ToString());
+            foreach (TabPlayerVM playerVM in this._dataSource.Factions[factionIndex].Members) playerVM.UpdateLord(newLord.VirtualPlayer.ToPlayerId());
         }
     }
 }

@@ -4,8 +4,10 @@ using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Text.RegularExpressions;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.DedicatedCustomServer;
 
 namespace PersistentEmpiresServer.ChatCommands.Commands
 {
@@ -73,9 +75,11 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 return false;
             }
             persistentEmpireRepresentative.ReduceIfHaveEnoughGold(AdminServerBehavior.Instance.nameChangeGold);
-            InformationComponent.Instance.SendMessage("Your name is changed. You need to relog to take effect.", Colors.Green.ToUnsignedInteger(), networkPeer);
+            //InformationComponent.Instance.SendMessage("Your name is changed. You need to relog to take effect.", Colors.Green.ToUnsignedInteger(), networkPeer);
             LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerChangedName, null, new object[] { newName });
             AdminServerBehavior.Instance.LastChangedName[networkPeer] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(networkPeer.VirtualPlayer.Id, false);
 
             return true;
         }

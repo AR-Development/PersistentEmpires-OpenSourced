@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
@@ -255,7 +256,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (targetRepresentative == null || pollCreatorRepresentative == null) return;
 
             Faction f = targetRepresentative.GetFaction();
-            if (pollCreatorPeer.Index == targetPeer.Index && f.lordId != targetPeer.VirtualPlayer.Id.ToString() && targetRepresentative.IsAdmin == false)
+            if (pollCreatorPeer.Index == targetPeer.Index && f.lordId != targetPeer.VirtualPlayer.ToPlayerId() && targetRepresentative.IsAdmin == false)
             {
                 InformationComponent.Instance.SendMessage("You can't poll yourself", Color.ConvertStringToColor("#d32f2fff").ToUnsignedInteger(), pollCreatorPeer);
                 return;
@@ -271,12 +272,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 return;
             }
 
-            if (f.pollUnlockedAt > DateTimeOffset.UtcNow.ToUnixTimeSeconds() && f.lordId != targetPeer.VirtualPlayer.Id.ToString())
+            if (f.pollUnlockedAt > DateTimeOffset.UtcNow.ToUnixTimeSeconds() && f.lordId != targetPeer.VirtualPlayer.ToPlayerId())
             {
                 this._informationComponent.SendMessage("You can't poll a different lord in 24 hours.", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
-            if (f.lordId == targetPeer.VirtualPlayer.Id.ToString() && f.pollUnlockedAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() > 24 * 60 * 60)
+            if (f.lordId == targetPeer.VirtualPlayer.ToPlayerId() && f.pollUnlockedAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() > 86400)//24 * 60 * 60)
             {
                 this._informationComponent.SendMessage("You can't make a validation poll because you already made one. Wait 24h to validate your lordship", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
                 return;

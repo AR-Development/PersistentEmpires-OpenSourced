@@ -8,6 +8,8 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
+using PersistentEmpiresLib.Helpers;
+
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionManagementMenu : MissionView
@@ -31,12 +33,12 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             PersistentEmpireRepresentative myRepr = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
             if (myRepr == null) return false;
             if (myRepr.GetFaction() == null) return false;
-            return myRepr.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.Id.ToString();
+            return myRepr.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.ToPlayerId();
         }
         public bool PlayerIsLordOrMarshall()
         {
             PersistentEmpireRepresentative myRepr = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
-            return this.PlayerIsLord() || myRepr.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.Id.ToString());
+            return this.PlayerIsLord() || myRepr.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.ToPlayerId());
         }
         public List<ManagementItemVM> GetList()
         {

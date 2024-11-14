@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaleWorlds.Core;
 
 namespace PersistentEmpiresSave.Database.Helpers
 {
-    internal static class Extenstions
+    public static class Extenstions
     {
-        internal static string EncodeSpecialMariaDbChars(this string tmp)
+        public static string EncodeSpecialMariaDbChars(this string tmp)
         {
             return tmp.Replace("'", @"\'");
+        }
+
+        public static string ToPlayerId(this VirtualPlayer virtualPlayer)
+        {
+            return $"{virtualPlayer.Id.ToString()}_{virtualPlayer.UserName}";
         }
     }
 }

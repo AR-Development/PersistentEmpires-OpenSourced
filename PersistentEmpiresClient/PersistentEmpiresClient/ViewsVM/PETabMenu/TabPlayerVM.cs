@@ -2,6 +2,7 @@
 using System;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpires.Views.ViewsVM.PETabMenu
 {
@@ -26,12 +27,12 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
         public void UpdateLord(string lordId)
         {
-            this.IsLord = lordId == this._peer.VirtualPlayer.Id.ToString();
+            this.IsLord = lordId == this._peer.VirtualPlayer.ToPlayerId();
         }
 
         public void UpdateMarshall(string marshallId)
         {
-            this.IsMarshall = marshallId == this._peer.VirtualPlayer.Id.ToString();
+            this.IsMarshall = marshallId == this._peer.VirtualPlayer.ToPlayerId();
         }
 
         public NetworkCommunicator GetPeer()

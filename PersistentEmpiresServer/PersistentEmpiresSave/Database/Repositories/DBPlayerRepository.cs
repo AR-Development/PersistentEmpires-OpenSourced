@@ -40,11 +40,21 @@ namespace PersistentEmpiresSave.Database.Repositories
             });
             if (players.Count() > 0) return false;
 
-            string updateQuery = "UPDATE Players SET CustomName = @customName WHERE PlayerId = @PlayerId";
+            string oldName = "SELECT CustomName FROM Players WHERE PlayerId = @PlayerId";
+            IEnumerable<DBPlayer> playerOldName = DBConnection.Connection.Query<DBPlayer>(fetchFirst, new
+            {
+                PlayerId = peer.VirtualPlayer.Id.ToString()
+            });
+
+            // Upate all other tables
+            DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{oldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
+
+            string updateQuery = "UPDATE Players SET CustomName = @customName WHERE PlayerId = @PlayerId AND CustomName = @OldName";
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
-                PlayerId = peer.VirtualPlayer.Id.ToString()
+                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                OldName = oldName
             });
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
@@ -94,7 +104,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static long? OnGetWoundedUntil(NetworkCommunicator player)
         {
-            IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId", 
+            IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId",
                 new { PlayerId = player.VirtualPlayer?.Id.ToString() });
             if (getQuery.Count() == 0) return null;
             return getQuery.First();

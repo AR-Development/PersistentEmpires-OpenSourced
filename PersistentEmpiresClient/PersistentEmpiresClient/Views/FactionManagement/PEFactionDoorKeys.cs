@@ -3,6 +3,8 @@ using PersistentEmpiresLib;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresLib.Helpers;
+
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionDoorKeys : PEMenuItem
@@ -41,7 +43,7 @@ namespace PersistentEmpires.Views.Views.FactionManagement
 
             foreach (PEFactionMemberItemVM item in ((PEFactionMembersVM)this._dataSource).Members)
             {
-                item.IsGranted = item.Peer.VirtualPlayer.Id.ToString() == playerId;
+                item.IsGranted = item.Peer.VirtualPlayer.ToPlayerId() == playerId;
             }
         }
 

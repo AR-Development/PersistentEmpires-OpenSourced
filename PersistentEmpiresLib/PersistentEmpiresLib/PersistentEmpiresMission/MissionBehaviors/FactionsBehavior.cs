@@ -74,7 +74,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = networkPeer.GetComponent<PersistentEmpireRepresentative>();
             Faction f = persistentEmpireRepresentative.GetFaction();
-            if (message.Message.StartsWith("!") && f != null && (f.lordId == networkPeer.VirtualPlayer.Id.ToString() || f.marshalls.Contains(networkPeer.VirtualPlayer.Id.ToString())))
+            if (message.Message.StartsWith("!") && f != null && (f.lordId == networkPeer.VirtualPlayer.ToPlayerId() || f.marshalls.Contains(networkPeer.VirtualPlayer.ToPlayerId())))
             {
                 string updated = message.Message.Substring(1);
 
@@ -276,7 +276,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 return false;
             }
             Faction f = persistentEmpireRepresentative.GetFaction();
-            if (f.lordId != sender.VirtualPlayer.Id.ToString() && f.marshalls.Contains(sender.VirtualPlayer.Id.ToString()) == false)
+            if (f.lordId != sender.VirtualPlayer.ToPlayerId() && f.marshalls.Contains(sender.VirtualPlayer.ToPlayerId()) == false)
             {
                 this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do this.", sender);
                 return false;
@@ -284,17 +284,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             NetworkCommunicator targetPlayer = message.Target;
             PersistentEmpireRepresentative targetRepresentative = targetPlayer.GetComponent<PersistentEmpireRepresentative>();
             if (targetRepresentative == null) return false;
-            if (targetPlayer.Equals(sender) && f.lordId != targetPlayer.VirtualPlayer.Id.ToString())
+            if (targetPlayer.Equals(sender) && f.lordId != targetPlayer.VirtualPlayer.ToPlayerId())
             {
                 this._informationComponent.SendAnnouncementToPlayer("You can't kick yourself or the lord.", sender);
                 return false;
             }
-            if (f.lordId == targetPlayer.VirtualPlayer.Id.ToString())
+            if (f.lordId == targetPlayer.VirtualPlayer.ToPlayerId())
             {
                 this._informationComponent.SendAnnouncementToPlayer("You can't kick the lord", sender);
                 return false;
             }
-            if (f.marshalls.Contains(targetPlayer.VirtualPlayer.Id.ToString()))
+            if (f.marshalls.Contains(targetPlayer.VirtualPlayer.ToPlayerId()))
             {
                 this._informationComponent.SendAnnouncementToPlayer("You can't kick another marshall", sender);
                 return false;
@@ -349,7 +349,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
-            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.Id.ToString())
+            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
                 this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
                 return false;
@@ -472,21 +472,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
-            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.Id.ToString() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.Id.ToString()) == false)
+            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
                 this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
                 return false;
             }
             Faction f = this.Factions[factionIndex];
-            if (f.chestManagers.Contains(message.Player.VirtualPlayer.Id.ToString()))
+            if (f.chestManagers.Contains(message.Player.VirtualPlayer.ToPlayerId()))
             {
-                f.chestManagers.Remove(message.Player.VirtualPlayer.Id.ToString());
+                f.chestManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
                 this._informationComponent.SendAnnouncementToPlayer("Chest keys taken", message.Player);
                 this._informationComponent.SendAnnouncementToPlayer("Chest keys taken from " + message.Player.UserName, player);
             }
             else
             {
-                f.chestManagers.Add(message.Player.VirtualPlayer.Id.ToString());
+                f.chestManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
                 this._informationComponent.SendAnnouncementToPlayer("Chest keys given", message.Player);
                 this._informationComponent.SendAnnouncementToPlayer("Chest keys given to " + message.Player.UserName, player);
             }
@@ -497,22 +497,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
-            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.Id.ToString() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.Id.ToString()) == false)
+            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
                 this._informationComponent.SendAnnouncementToPlayer("Door is locked", player);
                 return false;
             }
             Faction f = this.Factions[factionIndex];
-            if (f.doorManagers.Contains(message.Player.VirtualPlayer.Id.ToString()))
+            if (f.doorManagers.Contains(message.Player.VirtualPlayer.ToPlayerId()))
             {
-                f.doorManagers.Remove(message.Player.VirtualPlayer.Id.ToString());
+                f.doorManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
                     this._informationComponent.SendAnnouncementToPlayer("Door keys taken", message.Player);
                 this._informationComponent.SendAnnouncementToPlayer("Door keys taken from " + message.Player.UserName, player);
             }
             else
             {
-                f.doorManagers.Add(message.Player.VirtualPlayer.Id.ToString());
+                f.doorManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
                     this._informationComponent.SendAnnouncementToPlayer("Door keys given", message.Player);
                 this._informationComponent.SendAnnouncementToPlayer("Door keys given to " + message.Player.UserName, player);
@@ -525,7 +525,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
-            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.Id.ToString())
+            if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
                 this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
                 return false;
@@ -539,7 +539,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (persistentEmpireRepresentative == null) return false;
             int playerFactionIndex = persistentEmpireRepresentative.GetFactionIndex();
             Faction f = this.Factions[playerFactionIndex];
-            string playerId = player.VirtualPlayer.Id.ToString();
+            string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
                 this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
@@ -580,7 +580,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (persistentEmpireRepresentative == null) return false;
             int playerFactionIndex = persistentEmpireRepresentative.GetFactionIndex();
             Faction f = this.Factions[playerFactionIndex];
-            string playerId = player.VirtualPlayer.Id.ToString();
+            string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
                 this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
@@ -639,15 +639,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     Faction joinedFromF = this.Factions[persistentEmpireRepresentative.GetFactionIndex()];
                     if (factionIndex != -1)
                     {
-                        if (joinedFromF.chestManagers.Contains(player.VirtualPlayer.Id.ToString()))
+                        if (joinedFromF.chestManagers.Contains(player.VirtualPlayer.ToPlayerId()))
                         {
-                            joinedFromF.chestManagers.Remove(player.VirtualPlayer.Id.ToString());
+                            joinedFromF.chestManagers.Remove(player.VirtualPlayer.ToPlayerId());
                         }
-                        if (joinedFromF.doorManagers.Contains(player.VirtualPlayer.Id.ToString()))
+                        if (joinedFromF.doorManagers.Contains(player.VirtualPlayer.ToPlayerId()))
                         {
-                            joinedFromF.doorManagers.Remove(player.VirtualPlayer.Id.ToString());
+                            joinedFromF.doorManagers.Remove(player.VirtualPlayer.ToPlayerId());
                         }
-                        if (joinedFromF.lordId == player.VirtualPlayer.Id.ToString())
+                        if (joinedFromF.lordId == player.VirtualPlayer.ToPlayerId())
                         {
                             joinedFromF.lordId = "";
                             joinedFromF.pollUnlockedAt = 0;
@@ -656,9 +656,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                             joinedFromF.doorManagers.Clear();
                             SaveSystemBehavior.HandleCreateOrSaveFaction(joinedFromF, persistentEmpireRepresentative.GetFactionIndex());
                         }
-                        if (joinedFromF.marshalls.Contains(player.VirtualPlayer.Id.ToString()))
+                        if (joinedFromF.marshalls.Contains(player.VirtualPlayer.ToPlayerId()))
                         {
-                            joinedFromF.marshalls.Remove(player.VirtualPlayer.Id.ToString());
+                            joinedFromF.marshalls.Remove(player.VirtualPlayer.ToPlayerId());
                         }
                     }
                 }
@@ -692,11 +692,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             bool updateStatus = true;
             Faction f = this.Factions[factionIndex];
-            updateStatus = f.marshalls.Contains(player.VirtualPlayer.Id.ToString()) == false;
+            updateStatus = f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false;
             if (updateStatus)
-                f.marshalls.Add(player.VirtualPlayer.Id.ToString());
+                f.marshalls.Add(player.VirtualPlayer.ToPlayerId());
             else
-                f.marshalls.Remove(player.VirtualPlayer.Id.ToString());
+                f.marshalls.Remove(player.VirtualPlayer.ToPlayerId());
             if (GameNetwork.IsServer)
             {
                 GameNetwork.BeginBroadcastModuleEvent();
@@ -709,14 +709,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
 
             Faction f = this.Factions[factionIndex];
-            if (player.VirtualPlayer.Id.ToString() != f.lordId)
+            if (player.VirtualPlayer.ToPlayerId() != f.lordId)
             {
                 f.chestManagers.Clear();
                 f.doorManagers.Clear();
                 f.marshalls.Clear();
             }
 
-            f.lordId = player.VirtualPlayer.Id.ToString();
+            f.lordId = player.VirtualPlayer.ToPlayerId();
             if (GameNetwork.IsServer)
             {
                 SaveSystemBehavior.HandleCreateOrSaveFaction(f, factionIndex);
@@ -821,8 +821,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = message.FactionIndex;
             Faction f = this.Factions[message.FactionIndex];
 
-            if (message.IsMarshall) f.marshalls.Add(message.TargetPlayer.VirtualPlayer.Id.ToString());
-            else f.marshalls.Remove(message.TargetPlayer.VirtualPlayer.Id.ToString());
+            if (message.IsMarshall) f.marshalls.Add(message.TargetPlayer.VirtualPlayer.ToPlayerId());
+            else f.marshalls.Remove(message.TargetPlayer.VirtualPlayer.ToPlayerId());
 
             if (GameNetwork.IsClient)
             {
@@ -846,7 +846,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative repr = peer.GetComponent<PersistentEmpireRepresentative>();
             if (repr == null) return true;
             if (repr.GetFaction() == null) return true;
-            if (repr.GetFaction().lordId != peer.VirtualPlayer.Id.ToString()) return true;
+            if (repr.GetFaction().lordId != peer.VirtualPlayer.ToPlayerId()) return true;
             PersistentEmpireRepresentative repr2 = message.TargetPlayer.GetComponent<PersistentEmpireRepresentative>();
             if (repr.GetFactionIndex() != repr2.GetFactionIndex()) return true;
             this.SetFactionLord(message.TargetPlayer, repr.GetFactionIndex());
@@ -858,7 +858,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             PersistentEmpireRepresentative repr = peer.GetComponent<PersistentEmpireRepresentative>();
             if (repr == null) return true;
             if (repr.GetFaction() == null) return true;
-            if (repr.GetFaction().lordId != peer.VirtualPlayer.Id.ToString()) return true;
+            if (repr.GetFaction().lordId != peer.VirtualPlayer.ToPlayerId()) return true;
             PersistentEmpireRepresentative repr2 = message.TargetPlayer.GetComponent<PersistentEmpireRepresentative>();
             if (repr.GetFactionIndex() != repr2.GetFactionIndex()) return true;
             this.AssignMarshall(message.TargetPlayer, repr.GetFactionIndex());

@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresSave.Database.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresSave.Database.Repositories
@@ -27,27 +29,30 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static int QueryBankBalance(NetworkCommunicator player)
         {
-            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
+            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString()
+                PlayerId = player.VirtualPlayer.Id.ToString(),
+                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars()
             });
             return collection.First().BankAmount;
         }
 
         public static void DepositToBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId", new
+            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
             {
                 PlayerId = player.VirtualPlayer.Id.ToString(),
+                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Amount = (amount * Tax_Rate) / 100
             });
         }
 
         public static int WithdrawFromBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId", new
+            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
             {
                 PlayerId = player.VirtualPlayer.Id.ToString(),
+                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Amount = amount
             });
 
