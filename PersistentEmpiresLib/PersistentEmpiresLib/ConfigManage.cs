@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.IO;
+using System.Xml;
 using TaleWorlds.ModuleManager;
 
 namespace PersistentEmpiresLib
@@ -7,10 +8,13 @@ namespace PersistentEmpiresLib
     {
         public static string XmlFile = "GeneralConfig";
 
+        internal static string RulesXmlFile = "Rules";
+
         public static int StartingGold { get; private set; }
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
         public static XmlDocument _xmlDocument = null;
+        public static XmlDocument _rulesDocument = null;
         public static XmlDocument XmlDocument
         {
             get
@@ -30,6 +34,26 @@ namespace PersistentEmpiresLib
 #endif
             }
         }
+
+#if SERVER
+        public static XmlDocument Rules
+        {
+            get
+            {
+                if (_rulesDocument == null)
+                {
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
+                    if (File.Exists(xmlPath))
+                    {
+                        _rulesDocument = new XmlDocument();
+                        _rulesDocument.Load(xmlPath);
+                    }
+                }
+
+                return _rulesDocument;
+            }
+        }
+#endif
 
         public static void Initialize()
         {

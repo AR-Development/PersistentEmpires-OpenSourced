@@ -1,0 +1,56 @@
+<Prefab>
+	<Constants>
+	</Constants>
+	<Window>
+		<!--<Standard.Background />-->
+		<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="850" SuggestedWidth="1000" MarginLeft ="100" MarginRight ="10" MarginTop="140" MarginBottom="80">
+			<Children>
+				<Standard.Window Parameter.Title="Server rules"  WidthSizePolicy="StretchToParent">
+					<Children>
+						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" PositionYOffset="0">
+							<Children>
+								<Widget WidthSizePolicy="StretchToParent" MarginTop="30" HeightSizePolicy="StretchToParent">
+									<Children>
+										<TextWidget SuggestedHeight="30" WidthSizePolicy="CoverChildren" MarginTop="0" HorizontalAlignment="Center" Text="@ForumLink" Brush="PESpawn.PressFToSpawn"/>
+										<TextWidget SuggestedHeight="30" WidthSizePolicy="CoverChildren" MarginTop="40" HorizontalAlignment="Left" Text="@Message" Brush="PESpawn.PressFToSpawn"/>
+										<ListPanel HeightSizePolicy="Fixed" SuggestedHeight="600" WidthSizePolicy="StretchToParent" PositionXOffset="0" PositionYOffset="100" >
+											<Children>
+												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" >
+													<Children>
+														<ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" AutoHideScrollBars="true" ClipRect="ItemListRect" ClipContents="true" InnerPanel="ItemListRect\ItemListPanel" MouseScrollAxis="Vertical" VerticalScrollbar="..\ItemListScrollbar2\Scrollbar">
+															<Children>
+																<Widget Id="ItemListRect" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent">
+																	<Children>
+																		<ListPanel Id="ItemListPanel" DataSource="{Rules}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+																			<ItemTemplate>
+																				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																					<Children>
+																						<!--Description-->
+																						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="6">
+																							<Children>
+																								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" Text="@RuleText" Brush="PESpawn.Hint"/>
+																							</Children>
+																						</ListPanel>
+																					</Children>
+																				</ListPanel>
+																			</ItemTemplate>
+																		</ListPanel>
+																	</Children>
+																</Widget>
+															</Children>
+														</ScrollablePanel>
+														<Standard.VerticalScrollbar Id="ItemListScrollbar2" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+													</Children>
+												</ListPanel>
+											</Children>
+										</ListPanel>
+									</Children>
+								</Widget>
+							</Children>
+						</ListPanel>
+					</Children>
+				</Standard.Window>
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

@@ -18,7 +18,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public event RevealedMoneyPouch OnRevealedMoneyPouch;
 
         Dictionary<NetworkCommunicator, long> LastDroppedMoney = new Dictionary<NetworkCommunicator, long>();
-        Dictionary<PE_MoneyBag, long> MoneyBagCreatedAt = new Dictionary<PE_MoneyBag, long>();
+        public Dictionary<PE_MoneyBag, long> MoneyBagCreatedAt = new Dictionary<PE_MoneyBag, long>();
 
         Dictionary<NetworkCommunicator, long> LastReveal = new Dictionary<NetworkCommunicator, long>();
         public Dictionary<Agent, bool> IgnoreAgentDropLoot = new Dictionary<Agent, bool>();

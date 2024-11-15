@@ -38,6 +38,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static AgentHungerBehavior Instance;
         public delegate void AgentHungerChangedDelegate(int hunger);
         public event AgentHungerChangedDelegate OnAgentHungerChanged;
+        public delegate void AgentConsumedEatableDelegate(NetworkCommunicator peer, Food food);
+        public static event AgentConsumedEatableDelegate OnAgentConsumedEatable;
 
         private class EatingAction
         {
@@ -117,6 +119,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.LastStarvingCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             }
         }
+        
         private void EatingActionLoop()
         {
             foreach (Agent agent in this.AgentsEating.Keys.ToList())
@@ -151,6 +154,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                     if (agent.Health > agent.HealthLimit) agent.Health = agent.HealthLimit;
                     agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
+                    if(OnAgentConsumedEatable != null)
+                    {
+                        OnAgentConsumedEatable(peer, action.Food);
+                    }
                     this.AgentsEating.Remove(agent);
                 }
             }

@@ -292,6 +292,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (this.IsWounded.ContainsKey(player) == false) return false;
             return this.IsWounded[player];
         }
+
+        public DateTime? GetPlayerWoundedUntil(NetworkCommunicator player)
+        {
+            if (this.WoundedUntil.ContainsKey(player) == false) return null;
+            return new DateTime(WoundedUntil[player].Value);
+        }
         #endregion
     }
 }
