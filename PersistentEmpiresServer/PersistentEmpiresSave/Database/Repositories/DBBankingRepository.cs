@@ -29,29 +29,27 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static int QueryBankBalance(NetworkCommunicator player)
         {
-            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
+            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString(),
-                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars()
+                PlayerId = player.VirtualPlayer.ToPlayerId()
             });
             return collection.First().BankAmount;
         }
 
         public static void DepositToBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
+            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString(),
-                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
+                PlayerId = player.VirtualPlayer.ToPlayerId(),
                 Amount = (amount * Tax_Rate) / 100
             });
         }
 
         public static int WithdrawFromBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId AND CustomName = @CustomName", new
+            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString(),
+                PlayerId = player.VirtualPlayer.ToPlayerId(),
                 CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Amount = amount
             });

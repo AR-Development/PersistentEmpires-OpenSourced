@@ -251,9 +251,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return rg.IsMatch(name);
         }
 
-        public void SyncPlayer(NetworkCommunicator networkPeer)
+        public static void SyncPlayer(NetworkCommunicator networkPeer)
         {
-            HandleLateNewClientAfterSynchronized(networkPeer);
+            var thisInstance = Mission.Current.GetMissionBehavior<PersistentEmpireBehavior>();
+            thisInstance.HandleLateNewClientAfterSynchronized(networkPeer);
         }
 
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator networkPeer)
@@ -278,7 +279,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (GameNetwork.IsServer)
             {
                 InformationComponent.Instance.SendMessage("Your player id is " + networkPeer.VirtualPlayer.Id.ToString(), Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), networkPeer);
-
 
                 List<PE_CastleBanner> castleBanners = this._castlesBehavior.castles.Values.ToList();
                 for (int i = 0; i < this._factionsBehavior.Factions.Keys.ToList().Count; i++)

@@ -41,19 +41,19 @@ namespace PersistentEmpiresSave.Database.Repositories
             if (players.Count() > 0) return false;
 
             string oldName = "SELECT CustomName FROM Players WHERE PlayerId = @PlayerId";
-            IEnumerable<DBPlayer> playerOldName = DBConnection.Connection.Query<DBPlayer>(fetchFirst, new
+            IEnumerable<DBPlayer> playerOldName = DBConnection.Connection.Query<DBPlayer>(oldName, new
             {
-                PlayerId = peer.VirtualPlayer.Id.ToString()
+                PlayerId = peer.VirtualPlayer.ToPlayerId()
             });
 
             // Upate all other tables
             DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{oldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
 
-            string updateQuery = "UPDATE Players SET CustomName = @customName WHERE PlayerId = @PlayerId AND CustomName = @OldName";
+            string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @PlayerId";
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
-                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                PlayerId = peer.VirtualPlayer.ToPlayerId(),
                 OldName = oldName
             });
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
@@ -137,7 +137,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             DBPlayer dbPlayer = new DBPlayer
             {
-                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                PlayerId = peer.VirtualPlayer.ToPlayerId(),
                 Name = peer.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Hunger = persistentEmpireRepresentative?.GetHunger() ?? 10,
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
@@ -212,7 +212,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             DBPlayer dbPlayer = new DBPlayer
             {
-                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                PlayerId = peer.VirtualPlayer.ToPlayerId(),
                 Name = peer.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Hunger = persistentEmpireRepresentative?.GetHunger() ?? 10,
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
@@ -310,7 +310,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static IEnumerable<DBPlayer> GetPlayer(NetworkCommunicator peer)
         {
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
-            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = peer.VirtualPlayer.Id.ToString() });
+            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = peer.VirtualPlayer.ToPlayerId() });
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT : " + result.Count());
             return result;
         }

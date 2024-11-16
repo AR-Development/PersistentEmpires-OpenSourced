@@ -306,7 +306,7 @@ namespace PersistentEmpiresLib.Helpers
                 AffectedPlayers = new Json<AffectedPlayer[]>(affectedPlayers),
                 CreatedAt = DateTime.UtcNow,
                 IssuerCoordinates = GetCoordinatesOfPlayer(issuer),
-                IssuerPlayerId = issuer.VirtualPlayer.Id.ToString(),
+                IssuerPlayerId = issuer.VirtualPlayer.ToPlayerId(),
                 IssuerPlayerName = issuer.UserName,
                 LogMessage = logMessage
             };

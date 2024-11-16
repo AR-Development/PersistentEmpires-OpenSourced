@@ -550,7 +550,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public static void OnAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)
         {
-
             if (OnGetPlayer != null && playerConnectionInfo != null)
             {
                 DBPlayer player = OnGetPlayer(playerConnectionInfo.PlayerID.ToString());
