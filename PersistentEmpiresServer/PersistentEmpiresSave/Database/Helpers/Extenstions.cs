@@ -13,10 +13,5 @@ namespace PersistentEmpiresSave.Database.Helpers
         {
             return tmp.Replace("'", @"\'");
         }
-
-        public static string ToPlayerId(this VirtualPlayer virtualPlayer)
-        {
-            return $"{virtualPlayer.Id.ToString()}_{virtualPlayer.UserName}";
-        }
     }
 }
