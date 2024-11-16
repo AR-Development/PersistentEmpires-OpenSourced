@@ -45,21 +45,27 @@ namespace PersistentEmpiresSave.Database.Repositories
             {
                 PlayerId = peer.VirtualPlayer.ToPlayerId()
             });
-            var playerOldNames = playerOldNameResult.FirstOrDefault().CustomName;
-            if(string.IsNullOrEmpty(playerOldNames))
+            var playerOldName = playerOldNameResult.FirstOrDefault().CustomName;
+            if(string.IsNullOrEmpty(playerOldName))
             {
-                playerOldNames = playerOldNameResult.FirstOrDefault().Name;
+                playerOldName = playerOldNameResult.FirstOrDefault().Name;
             }
-            
-            // Upate all other tables
-            DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldNames.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
 
+            // Upate all other tables
+            var playerComponent = peer?.GetComponent<PersistentEmpireRepresentative>();
+            var inventory = playerComponent.GetInventory();
+            inventory.InventoryId = inventory.InventoryId.Replace($"{playerOldName.EncodeSpecialMariaDbChars()}", $"{customName.EncodeSpecialMariaDbChars()}");
+            playerComponent.SetInventory(inventory);
+            SaveSystemBehavior.HandleCreateOrSavePlayerInventory(peer);
+
+            DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
             string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @PlayerId";
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
                 PlayerId = peer.VirtualPlayer.ToPlayerId(),
             });
+            
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
                 PlayerName = customName.EncodeSpecialMariaDbChars()

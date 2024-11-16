@@ -192,12 +192,22 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         public static void UpdateInventoryId(string oldInventoryId, string newInventoryId)
         {
-            string updateQuery = "UPDATE Inventories SET InventoryId = @InventoryId WHERE InventoryId = @OldInventoryId AND IsPlayerInventory = 1 ";
+            string updateQuery = "UPDATE Inventories SET InventoryId = @InventoryId WHERE InventoryId = @OldInventoryId ";
             DBConnection.Connection.Execute(updateQuery,
                 new
                 {
                     OldInventoryId = oldInventoryId,
                     InventoryId = newInventoryId
+                });
+        }
+
+        public static void DeleteInventoryId(string oldInventoryId, string newInventoryId)
+        {
+            string deleteQuery = "DELETE FROM Inventories WHERE InventoryId = @OldInventoryId ";
+            DBConnection.Connection.Execute(deleteQuery,
+                new
+                {
+                    OldInventoryId = oldInventoryId
                 });
         }
     }
