@@ -40,12 +40,17 @@ namespace PersistentEmpiresSave.Database.Repositories
             });
             if (players.Count() > 0) return false;
 
-            string oldName = "SELECT CustomName FROM Players WHERE PlayerId = @PlayerId";
+            string oldName = "SELECT CustomName, Name FROM Players WHERE PlayerId = @PlayerId";
             IEnumerable<DBPlayer> playerOldNameResult = DBConnection.Connection.Query<DBPlayer>(oldName, new
             {
                 PlayerId = peer.VirtualPlayer.ToPlayerId()
             });
             var playerOldNames = playerOldNameResult.FirstOrDefault().CustomName;
+            if(string.IsNullOrEmpty(playerOldNames))
+            {
+                playerOldNames = playerOldNameResult.FirstOrDefault().Name;
+            }
+            
             // Upate all other tables
             DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldNames.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
 
