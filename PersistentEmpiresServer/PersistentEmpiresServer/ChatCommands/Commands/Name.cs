@@ -79,8 +79,6 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
             LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerChangedName, null, new object[] { newName });
             AdminServerBehavior.Instance.LastChangedName[networkPeer] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-            DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(networkPeer.VirtualPlayer.Id, false);
-
             return true;
         }
     }
