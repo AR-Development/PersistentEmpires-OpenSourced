@@ -61,11 +61,12 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
             DBInventoryRepository.DeleteInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}");
 
-            string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @PlayerId";
+            string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @OldPlayerId";
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
                 PlayerId = peer.VirtualPlayer.ToPlayerId(),
+                OldPlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}",
             });
             
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
