@@ -468,6 +468,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if(result)
                 {
                     peer.VirtualPlayer.GetType().GetProperty("UserName").SetValue(peer.VirtualPlayer, customName);
+                    
+                    var playerComponent = peer.GetComponent<PersistentEmpireRepresentative>();
+                    var inventory = playerComponent.GetInventory();
+                    inventory.InventoryId = $"{peer.VirtualPlayer.Id.ToString()}_{customName}";
+                    playerComponent.SetInventory(inventory);
                 }
                 LogQuery(String.Format("OnPlayerUpdateCustomName Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
                 return result;

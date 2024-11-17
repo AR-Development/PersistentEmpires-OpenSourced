@@ -51,15 +51,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 playerOldName = playerOldNameResult.FirstOrDefault().Name;
             }
 
-            // Upate all other tables
-            var playerComponent = peer?.GetComponent<PersistentEmpireRepresentative>();
-            var inventory = playerComponent.GetInventory();
-            inventory.InventoryId = inventory.InventoryId.Replace($"{playerOldName.EncodeSpecialMariaDbChars()}", $"{customName.EncodeSpecialMariaDbChars()}");
-            playerComponent.SetInventory(inventory);
-            SaveSystemBehavior.HandleCreateOrSavePlayerInventory(peer);
-
             DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
-            DBInventoryRepository.DeleteInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}");
 
             string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @OldPlayerId";
             DBConnection.Connection.Execute(updateQuery, new
