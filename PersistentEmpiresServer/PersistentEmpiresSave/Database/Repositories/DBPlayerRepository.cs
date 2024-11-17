@@ -57,7 +57,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
-                PlayerId = peer.VirtualPlayer.ToPlayerId(),
+                PlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}",
                 OldPlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}",
             });
             
