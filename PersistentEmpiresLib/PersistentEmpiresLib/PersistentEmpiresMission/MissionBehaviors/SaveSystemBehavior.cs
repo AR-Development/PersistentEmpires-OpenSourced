@@ -465,6 +465,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (OnPlayerUpdateCustomName != null)
             {
                 var result = OnPlayerUpdateCustomName(peer, customName);
+                if(result)
+                {
+                    peer.VirtualPlayer.GetType().GetProperty("UserName").SetValue(peer.VirtualPlayer, customName);
+                }
                 LogQuery(String.Format("OnPlayerUpdateCustomName Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
                 return result;
             }
