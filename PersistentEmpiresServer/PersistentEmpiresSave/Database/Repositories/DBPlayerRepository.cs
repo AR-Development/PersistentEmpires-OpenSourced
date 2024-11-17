@@ -59,6 +59,8 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.HandleCreateOrSavePlayerInventory(peer);
 
             DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
+            DBInventoryRepository.DeleteInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}");
+
             string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @PlayerId";
             DBConnection.Connection.Execute(updateQuery, new
             {

@@ -201,13 +201,13 @@ namespace PersistentEmpiresSave.Database.Repositories
                 });
         }
 
-        public static void DeleteInventoryId(string oldInventoryId, string newInventoryId)
+        public static void DeleteInventoryId(string inventoryId)
         {
-            string deleteQuery = "DELETE FROM Inventories WHERE InventoryId = @OldInventoryId ";
-            DBConnection.Connection.Execute(deleteQuery,
+            string updateQuery = "DELETE FROM Inventories WHERE InventoryId = @InventoryId ";
+            DBConnection.Connection.Execute(updateQuery,
                 new
                 {
-                    OldInventoryId = oldInventoryId
+                    InventoryId = inventoryId,
                 });
         }
     }
