@@ -400,5 +400,11 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             return player;
         }
+
+        public static void DeletePlayer(string playerId)
+        {
+            Debug.Print("DeletePlayer for " + playerId);
+            DBConnection.Connection.Query<DBPlayer>("DELETE FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = playerId });
+        }
     }
 }
