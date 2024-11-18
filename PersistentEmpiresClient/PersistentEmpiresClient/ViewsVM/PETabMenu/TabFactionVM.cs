@@ -38,7 +38,8 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
         public void AddMember(TabPlayerVM tabPlyer)
         {
-            this.Members.Add(tabPlyer);
+            if(!Members.Contains(tabPlyer))
+                Members.Add(tabPlyer);
             base.OnPropertyChanged("MemberCount");
 
         }

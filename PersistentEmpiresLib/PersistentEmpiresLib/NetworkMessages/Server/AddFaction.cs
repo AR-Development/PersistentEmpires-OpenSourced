@@ -46,7 +46,9 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             this.faction.team = team;
             for (int i = 0; i < memberLength; i++)
             {
-                this.faction.members.Add(GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result));
+                var member = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+                if(!faction.members.Contains(member))
+                    faction.members.Add(member);
             }
 
             return result;

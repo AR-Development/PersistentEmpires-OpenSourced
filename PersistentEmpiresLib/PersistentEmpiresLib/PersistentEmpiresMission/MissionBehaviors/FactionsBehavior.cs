@@ -669,7 +669,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 LoggerHelper.LogAnAction(player, LogAction.PlayerFactionChange, null, new object[] { persistentEmpireRepresentative.GetFaction(), this.Factions[factionIndex] });
                 persistentEmpireRepresentative.SetFaction(this.Factions[factionIndex], factionIndex);
                 player.VirtualPlayer.BannerCode = this.Factions[factionIndex].banner.Serialize();
-                this.Factions[factionIndex].members.Add(player);
+                if(!Factions[factionIndex].members.Contains(player))
+                    Factions[factionIndex].members.Add(player);
             }
             else
             {

@@ -6,7 +6,7 @@ using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpires.Views.ViewsVM.PETabMenu
 {
-    public class TabPlayerVM : ViewModel
+    public class TabPlayerVM : ViewModel, IEquatable<TabPlayerVM>
     {
         private string _userName;
         private NetworkCommunicator _peer;
@@ -90,6 +90,26 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
                 this._peer.GetComponent<MissionPeer>().SetMuted(true);
                 base.OnPropertyChanged("IsVoiceMuted");
             }
+        }
+
+        public bool Equals(TabPlayerVM other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (this.GetType() != other.GetType())
+            {
+                return false;
+            }
+
+            return (_peer == other._peer);
         }
 
         [DataSourceProperty]
