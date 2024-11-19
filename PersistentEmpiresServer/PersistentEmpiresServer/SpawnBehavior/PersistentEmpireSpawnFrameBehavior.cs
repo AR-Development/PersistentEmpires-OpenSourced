@@ -201,6 +201,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None, null);
                         }
                         missionPeer.HasSpawnedAgentVisuals = false;
+                        missionPeer.ControlledAgent.UpdateAgentStats();
                     }
                 }
             }
