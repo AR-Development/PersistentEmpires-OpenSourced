@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.Factions;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using TaleWorlds.Core;
@@ -85,7 +86,7 @@ namespace PersistentEmpiresLib.SceneScripts
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = withdrawer.GetComponent<PersistentEmpireRepresentative>();
 
-            if ((this.GetFaction() == null || (this.GetFaction().lordId != withdrawer.VirtualPlayer.Id.ToString() && this.IsBroken() == false)) && this.NoPerm != true)
+            if ((this.GetFaction() == null || (this.GetFaction().lordId != withdrawer.VirtualPlayer.ToPlayerId() && this.IsBroken() == false)) && this.NoPerm != true)
             {
                 InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), withdrawer);
                 return;
@@ -104,7 +105,7 @@ namespace PersistentEmpiresLib.SceneScripts
             if (this.NoPerm) return true;
             if (this.GetFaction() == null) return false;
             if (this.IsBroken()) return true;
-            if (this.GetFaction().lordId != player.VirtualPlayer.Id.ToString()) return false;
+            if (this.GetFaction().lordId != player.VirtualPlayer.ToPlayerId()) return false;
             return true;
         }
 
@@ -114,7 +115,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if (this.NoPerm == false)
             {
-                if (this.GetFaction() == null || (this.GetFaction().lordId != depositer.VirtualPlayer.Id.ToString() && this.IsBroken() == false))
+                if (this.GetFaction() == null || (this.GetFaction().lordId != depositer.VirtualPlayer.ToPlayerId() && this.IsBroken() == false))
                 {
                     InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
                     return;

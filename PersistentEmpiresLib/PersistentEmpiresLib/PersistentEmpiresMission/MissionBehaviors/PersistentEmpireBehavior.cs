@@ -72,8 +72,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-
-
         public override MultiplayerGameType GetMissionType()
         {
             return MultiplayerGameType.FreeForAll;
@@ -234,7 +232,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-
         private void OnPlayerDies(NetworkCommunicator peer)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
@@ -252,6 +249,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // ^[a-zA-Z0-9\s,\[,\],\(,\)]*$
             Regex rg = new Regex(@"^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ.\s,\[,\],\(,\),_,-,\p{IsCJKUnifiedIdeographs}]*$");
             return rg.IsMatch(name);
+        }
+
+        public static void SyncPlayer(NetworkCommunicator networkPeer)
+        {
+            var thisInstance = Mission.Current.GetMissionBehavior<PersistentEmpireBehavior>();
+            thisInstance.HandleLateNewClientAfterSynchronized(networkPeer);
         }
 
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator networkPeer)
@@ -276,7 +279,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (GameNetwork.IsServer)
             {
                 InformationComponent.Instance.SendMessage("Your player id is " + networkPeer.VirtualPlayer.Id.ToString(), Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), networkPeer);
-
 
                 List<PE_CastleBanner> castleBanners = this._castlesBehavior.castles.Values.ToList();
                 for (int i = 0; i < this._factionsBehavior.Factions.Keys.ToList().Count; i++)
@@ -306,11 +308,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         Faction f = persistentEmpireRepresentative1.GetFaction();
 
                         GameNetwork.BeginModuleEventAsServer(networkPeer);
-                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.Id.ToString())));
+                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.ToPlayerId())));
                         GameNetwork.EndModuleEventAsServer();
                     }
                 }
-
 
                 GameNetwork.BeginModuleEventAsServer(networkPeer);
                 GameNetwork.WriteMessage(new AgentLabelConfig(this.agentLabelEnabled));

@@ -7,6 +7,7 @@ using TaleWorlds.MountAndBlade;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using System.Linq;
 using TaleWorlds.ObjectSystem;
+using PersistentEmpiresLib.Database.DBEntities;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -160,7 +161,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
 
                 //if your wounded AND your not healed yet then keep old timer
-                if (WoundedUntil.ContainsKey(player) && WoundedUntil[player].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds()) return;
+                if (WoundedUntil.ContainsKey(player) && WoundedUntil[player].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                {
+                    // Recalculate stats
+                    player.ControlledAgent.UpdateAgentStats();
+                    return;
+                }
 
                 // otherwise get new heal time
                 var woundTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
@@ -170,6 +176,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 persistentEmpireRepresentative.SetWounded(woundTime);
                 // Make sure it get saved in db
                 SaveSystemBehavior.HandleUpdateWoundedUntil(player, woundTime);
+
+                // Recalculate stats
+                player.ControlledAgent.UpdateAgentStats();
 
                 GameNetwork.BeginBroadcastModuleEvent();
                 GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, true));

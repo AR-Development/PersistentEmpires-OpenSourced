@@ -265,27 +265,28 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
         private void UpdateHumanAgentStats(Agent agent, AgentDrivenProperties agentDrivenProperties)
         {
             var isAgentWounded = WoundingBehavior.Instance.IsAgentWounded(agent);
-            var perkHandler = MPPerkObject.GetPerkHandler(agent);
-            var character = agent.Character;
-            var equipment = agent.Equipment;
-            var weaponsTotalWeight = equipment.GetTotalWeightOfWeapons();
-            weaponsTotalWeight *= 1f + ((perkHandler != null) ? perkHandler.GetEncumbrance(true) : 0f);
-
-            var mainHandWieldedItemIndex = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-            var mainWeaponItem = (mainHandWieldedItemIndex != EquipmentIndex.None) ? equipment[mainHandWieldedItemIndex].Item : null;
-            var mainWeaponWeaponComponentData = (mainHandWieldedItemIndex != EquipmentIndex.None) ? equipment[mainHandWieldedItemIndex].CurrentUsageItem : null;
-
-            var offHandWieldedItemIndex = agent.GetWieldedItemIndex(Agent.HandIndex.OffHand);
-            var offHandWieldedWeaponComponentData = (offHandWieldedItemIndex != EquipmentIndex.None) ? equipment[offHandWieldedItemIndex].CurrentUsageItem : null;
-
+            
             // 0 Set Wounded flags
             if (isAgentWounded)
             {
                 ApplyWoundedAgentProperties(agent, agentDrivenProperties);
 
-                base.SetAiRelatedProperties(agent, agentDrivenProperties, mainWeaponWeaponComponentData, offHandWieldedWeaponComponentData);
+                base.SetAiRelatedProperties(agent, agentDrivenProperties, null, null);
                 return;
             }
+            
+            var perkHandler = MPPerkObject.GetPerkHandler(agent);
+            var character = agent.Character;
+            var equipment = agent.Equipment;
+            var weaponsTotalWeight = equipment.GetTotalWeightOfWeapons();
+            
+            weaponsTotalWeight *= 1f + ((perkHandler != null) ? perkHandler.GetEncumbrance(true) : 0f);
+
+            var mainHandWieldedItemIndex = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+            var mainWeaponItem = (mainHandWieldedItemIndex != EquipmentIndex.None) ? equipment[mainHandWieldedItemIndex].Item : null;
+            var mainWeaponWeaponComponentData = (mainHandWieldedItemIndex != EquipmentIndex.None) ? equipment[mainHandWieldedItemIndex].CurrentUsageItem : null;
+            var offHandWieldedItemIndex = agent.GetWieldedItemIndex(Agent.HandIndex.OffHand);
+            var offHandWieldedWeaponComponentData = (offHandWieldedItemIndex != EquipmentIndex.None) ? equipment[offHandWieldedItemIndex].CurrentUsageItem : null;
 
             // 1. Calculate WeaponsEncumbrance
             if (mainHandWieldedItemIndex != EquipmentIndex.None)

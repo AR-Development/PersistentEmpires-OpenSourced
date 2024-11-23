@@ -224,7 +224,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (!message.Peer.IsMine)
                 {
                     this._factionsBehavior.SetPlayerFaction(message.Peer, message.FactionIndex, -1);
-                    if (message.IsMarshall) f.marshalls.Add(message.Peer.VirtualPlayer.Id.ToString());
+                    if (message.IsMarshall) f.marshalls.Add(message.Peer.VirtualPlayer.ToPlayerId());
                 }
                 message.Peer.GetComponent<PersistentEmpireRepresentative>().SetFaction(f, message.FactionIndex);
             }

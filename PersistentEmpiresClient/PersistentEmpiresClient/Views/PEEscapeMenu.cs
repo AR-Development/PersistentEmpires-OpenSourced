@@ -12,6 +12,7 @@ using TaleWorlds.MountAndBlade.Multiplayer.GauntletUI.Mission;
 using TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
+using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -87,7 +88,7 @@ namespace PersistentEmpires.Views.Views
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             }
 
-            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFaction() != null && (_persistentEmpireRepresentative.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.Id.ToString() || _persistentEmpireRepresentative.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.Id.ToString())))
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFaction() != null && (_persistentEmpireRepresentative.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.ToPlayerId() || _persistentEmpireRepresentative.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.ToPlayerId())))
             {
                 list.Add(new EscapeMenuItemVM(new TextObject("Manage Your Faction", null), delegate (object o)
                 {

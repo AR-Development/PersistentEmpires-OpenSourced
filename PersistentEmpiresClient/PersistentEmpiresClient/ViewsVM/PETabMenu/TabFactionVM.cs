@@ -5,6 +5,7 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpires.Views.ViewsVM.PETabMenu
 {
@@ -25,7 +26,7 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
             this.FactionIndex = factionIndex;
             foreach (NetworkCommunicator peer in faction.members)
             {
-                this.Members.Add(new TabPlayerVM(peer, faction.lordId == peer.VirtualPlayer.Id.ToString()));
+                this.Members.Add(new TabPlayerVM(peer, faction.lordId == peer.VirtualPlayer.ToPlayerId()));
             }
             base.RefreshValues();
         }
@@ -37,7 +38,8 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         }
         public void AddMember(TabPlayerVM tabPlyer)
         {
-            this.Members.Add(tabPlyer);
+            if(!Members.Contains(tabPlyer))
+                Members.Add(tabPlyer);
             base.OnPropertyChanged("MemberCount");
 
         }

@@ -90,6 +90,7 @@ namespace PersistentEmpiresLib
         {
             return this.playerInventory;
         }
+
         public void SetInventory(Inventory inventory)
         {
             this.playerInventory = inventory;

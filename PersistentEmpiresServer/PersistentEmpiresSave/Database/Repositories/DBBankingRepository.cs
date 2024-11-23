@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresSave.Database.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using PersistentEmpiresLib.Helpers;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresSave.Database.Repositories
@@ -29,7 +31,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString()
+                PlayerId = player.VirtualPlayer.ToPlayerId()
             });
             return collection.First().BankAmount;
         }
@@ -38,7 +40,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString(),
+                PlayerId = player.VirtualPlayer.ToPlayerId(),
                 Amount = (amount * Tax_Rate) / 100
             });
         }
@@ -47,7 +49,8 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId", new
             {
-                PlayerId = player.VirtualPlayer.Id.ToString(),
+                PlayerId = player.VirtualPlayer.ToPlayerId(),
+                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Amount = amount
             });
 

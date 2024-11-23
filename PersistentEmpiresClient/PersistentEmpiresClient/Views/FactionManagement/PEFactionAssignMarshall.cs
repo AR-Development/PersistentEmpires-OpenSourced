@@ -3,6 +3,8 @@ using PersistentEmpiresLib;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresLib.Helpers;
+
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
     public class PEFactionAssignMarshall : PEMenuItem
@@ -47,7 +49,7 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             dataSource.RefreshItems(faction, true);
             foreach (var member in dataSource.Members)
             {
-                if (faction.marshalls.Contains(member.Peer.VirtualPlayer.Id.ToString()))
+                if (faction.marshalls.Contains(member.Peer.VirtualPlayer.ToPlayerId()))
                 {
                     member.IsGranted = true;
                 }

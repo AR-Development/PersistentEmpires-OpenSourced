@@ -56,7 +56,9 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
                 this.Factions[factionIndex].team = team;
                 for (int j = 0; j < memberLength; j++)
                 {
-                    this.Factions[factionIndex].members.Add(GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result));
+                    var member = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+                    if(!Factions[factionIndex].members.Contains(member))
+                        Factions[factionIndex].members.Add(member); ;
                 }
                 int warDeclerationLength = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(0, 200, true), ref result);
                 for (int j = 0; j < warDeclerationLength; j++)

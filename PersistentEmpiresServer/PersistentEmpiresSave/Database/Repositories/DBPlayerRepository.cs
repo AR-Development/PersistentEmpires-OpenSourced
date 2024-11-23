@@ -40,12 +40,27 @@ namespace PersistentEmpiresSave.Database.Repositories
             });
             if (players.Count() > 0) return false;
 
-            string updateQuery = "UPDATE Players SET CustomName = @customName WHERE PlayerId = @PlayerId";
+            string oldName = "SELECT CustomName, Name FROM Players WHERE PlayerId = @PlayerId";
+            IEnumerable<DBPlayer> playerOldNameResult = DBConnection.Connection.Query<DBPlayer>(oldName, new
+            {
+                PlayerId = peer.VirtualPlayer.ToPlayerId()
+            });
+            var playerOldName = playerOldNameResult.FirstOrDefault().CustomName;
+            if(string.IsNullOrEmpty(playerOldName))
+            {
+                playerOldName = playerOldNameResult.FirstOrDefault().Name;
+            }
+
+            DBInventoryRepository.UpdateInventoryId($"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}", $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}");
+
+            string updateQuery = "UPDATE Players SET CustomName = @customName, PlayerId = @PlayerId WHERE PlayerId = @OldPlayerId";
             DBConnection.Connection.Execute(updateQuery, new
             {
                 CustomName = customName.EncodeSpecialMariaDbChars(),
-                PlayerId = peer.VirtualPlayer.Id.ToString()
+                PlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}",
+                OldPlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}",
             });
+            
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
                 PlayerName = customName.EncodeSpecialMariaDbChars()
@@ -94,7 +109,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static long? OnGetWoundedUntil(NetworkCommunicator player)
         {
-            IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId", 
+            IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId",
                 new { PlayerId = player.VirtualPlayer?.Id.ToString() });
             if (getQuery.Count() == 0) return null;
             return getQuery.First();
@@ -127,7 +142,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             DBPlayer dbPlayer = new DBPlayer
             {
-                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                PlayerId = peer.VirtualPlayer.ToPlayerId(),
                 Name = peer.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Hunger = persistentEmpireRepresentative?.GetHunger() ?? 10,
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
@@ -202,7 +217,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
             DBPlayer dbPlayer = new DBPlayer
             {
-                PlayerId = peer.VirtualPlayer.Id.ToString(),
+                PlayerId = peer.VirtualPlayer.ToPlayerId(),
                 Name = peer.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
                 Hunger = persistentEmpireRepresentative?.GetHunger() ?? 10,
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
@@ -300,7 +315,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static IEnumerable<DBPlayer> GetPlayer(NetworkCommunicator peer)
         {
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
-            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = peer.VirtualPlayer.Id.ToString() });
+            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = peer.VirtualPlayer.ToPlayerId() });
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT : " + result.Count());
             return result;
         }
@@ -377,6 +392,12 @@ namespace PersistentEmpiresSave.Database.Repositories
             Debug.Print("[Save Module] CREATED PLAYER TO DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
 
             return player;
+        }
+
+        public static void DeletePlayer(string playerId)
+        {
+            Debug.Print("DeletePlayer for " + playerId);
+            DBConnection.Connection.Query<DBPlayer>("DELETE FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = playerId });
         }
     }
 }

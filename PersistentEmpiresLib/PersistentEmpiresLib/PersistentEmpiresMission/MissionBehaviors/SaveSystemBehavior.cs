@@ -465,6 +465,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (OnPlayerUpdateCustomName != null)
             {
                 var result = OnPlayerUpdateCustomName(peer, customName);
+                if(result)
+                {
+                    peer.VirtualPlayer.GetType().GetProperty("UserName").SetValue(peer.VirtualPlayer, customName);
+                    
+                    var playerComponent = peer.GetComponent<PersistentEmpireRepresentative>();
+                    var inventory = playerComponent.GetInventory();
+                    inventory.InventoryId = $"{peer.VirtualPlayer.Id.ToString()}_{customName}";
+                    playerComponent.SetInventory(inventory);
+                }
                 LogQuery(String.Format("OnPlayerUpdateCustomName Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
                 return result;
             }
@@ -550,7 +559,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public static void OnAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)
         {
-
             if (OnGetPlayer != null && playerConnectionInfo != null)
             {
                 DBPlayer player = OnGetPlayer(playerConnectionInfo.PlayerID.ToString());

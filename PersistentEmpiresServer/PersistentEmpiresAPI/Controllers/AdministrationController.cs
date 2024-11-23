@@ -2,6 +2,7 @@
 using PersistentEmpiresAPI.DTO;
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresSave.Database;
 using PersistentEmpiresSave.Database.Repositories;
@@ -35,7 +36,7 @@ namespace PersistentEmpiresAPI.Controllers
 
             foreach (NetworkCommunicator communicator in GameNetwork.NetworkPeers.ToArray())
             {
-                if (communicator.VirtualPlayer.Id.ToString() == request.PlayerId && communicator.IsConnectionActive)
+                if (communicator.VirtualPlayer.ToPlayerId() == request.PlayerId && communicator.IsConnectionActive)
                 {
                     // DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(communicator.VirtualPlayer.Id, false);
                     PersistentEmpireRepresentative persistentEmpireRepresentative = communicator.GetComponent<PersistentEmpireRepresentative>();
@@ -66,7 +67,7 @@ namespace PersistentEmpiresAPI.Controllers
 
             foreach (NetworkCommunicator communicator in GameNetwork.NetworkPeers.ToArray())
             {
-                if (communicator.VirtualPlayer.Id.ToString() == request.PlayerId && communicator.IsConnectionActive)
+                if (communicator.VirtualPlayer.ToPlayerId() == request.PlayerId && communicator.IsConnectionActive)
                 {
                     InformationComponent.Instance.SendMessage("You have been kicked from the server. Please refer to discord for further information.", (new Color(1f, 0f, 0f)).ToUnsignedInteger(), communicator);
                     DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(communicator.VirtualPlayer.Id, false);
@@ -87,7 +88,7 @@ namespace PersistentEmpiresAPI.Controllers
 
             foreach (NetworkCommunicator communicator in GameNetwork.NetworkPeers.ToArray())
             {
-                if (communicator.VirtualPlayer.Id.ToString() == request.PlayerId && communicator.IsConnectionActive)
+                if (communicator.VirtualPlayer.ToPlayerId() == request.PlayerId && communicator.IsConnectionActive)
                 {
                     if (communicator.ControlledAgent != null && communicator.ControlledAgent.IsActive())
                     {
@@ -150,7 +151,7 @@ namespace PersistentEmpiresAPI.Controllers
 
             foreach (NetworkCommunicator communicator in GameNetwork.NetworkPeers.ToArray())
             {
-                if (communicator.VirtualPlayer.Id.ToString() == request.PlayerId && communicator.IsConnectionActive)
+                if (communicator.VirtualPlayer.ToPlayerId() == request.PlayerId && communicator.IsConnectionActive)
                 {
                     InformationComponent.Instance.SendMessage("You have been banned from the server. Reason is " + request.BanReason + " please refer to discord for further information.", (new Color(1f, 0f, 0f)).ToUnsignedInteger(), communicator);
                     DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(communicator.VirtualPlayer.Id, false);
