@@ -14,9 +14,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public Dictionary<ActionIndexCache, MBActionSet> ActionSetDictionary;
         private bool isActive;
+        public static string AnimationModuleName = "PersistentEmpires";
+        public static string AnimationFileName = "Animations";
+
         private List<string> ParseXml()
         {
-            string Animations = ModuleHelper.GetXmlPath("PersistentEmpires", "Animations");
+            string Animations = ModuleHelper.GetXmlPath(AnimationModuleName, AnimationFileName);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(Animations);
 

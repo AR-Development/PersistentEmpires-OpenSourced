@@ -1,6 +1,7 @@
 ﻿using PersistentEmpires.Views.ViewsVM;
 using PersistentEmpires.Views.ViewsVM.AnimationMenu;
 using PersistentEmpiresLib.NetworkMessages.Client;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System.Collections.Generic;
 using System.Xml;
 using TaleWorlds.Engine.GauntletUI;
@@ -16,14 +17,14 @@ namespace PersistentEmpires.Views.Views
         private bool IsActive;
         private PEAnimationMenuVM _dataSource;
         private GauntletLayer _gauntletLayer;
-
+        
 
         public PEAnimationsView() { }
 
         private List<PEAnimationSubMenuVM> ParseXml()
         {
             List<PEAnimationSubMenuVM> animationSubMenuVMs = new List<PEAnimationSubMenuVM>();
-            string Animations = ModuleHelper.GetXmlPath("PersistentEmpires", "Animations");
+            string Animations = ModuleHelper.GetXmlPath(AnimationBehavior.AnimationModuleName, AnimationBehavior.AnimationFileName);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(Animations);
 
