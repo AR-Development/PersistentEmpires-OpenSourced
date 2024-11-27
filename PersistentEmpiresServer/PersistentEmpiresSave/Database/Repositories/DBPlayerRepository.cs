@@ -110,7 +110,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         private static long? OnGetWoundedUntil(NetworkCommunicator player)
         {
             IEnumerable<long?> getQuery = DBConnection.Connection.Query<long?>("SELECT WoundedUntil FROM Players WHERE PlayerId = @PlayerId",
-                new { PlayerId = player.VirtualPlayer?.Id.ToString() });
+                new { PlayerId = player.VirtualPlayer?.ToPlayerId().ToString() });
             if (getQuery.Count() == 0) return null;
             return getQuery.First();
         }
