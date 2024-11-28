@@ -8,6 +8,8 @@ using PersistentEmpiresLib.NetworkMessages.Client;
 using System.Linq;
 using TaleWorlds.ObjectSystem;
 using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Helpers;
+using TaleWorlds.PlayerServices;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -19,11 +21,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ItemId = "pe_doctorscalpel";
         public int RequiredMedicineSkillForHealing = 50;
 
-        public Dictionary<NetworkCommunicator, KeyValuePair<bool, long>> WoundedUntil = new Dictionary<NetworkCommunicator, KeyValuePair<bool, long>>();
-        public Dictionary<NetworkCommunicator, Vec3> DeathPlace = new Dictionary<NetworkCommunicator, Vec3>();
-        public Dictionary<NetworkCommunicator, bool> IsWounded = new Dictionary<NetworkCommunicator, bool>();
-        public Dictionary<NetworkCommunicator, Tuple<bool, Equipment>> DeathEquipment = new Dictionary<NetworkCommunicator, Tuple<bool, Equipment>>();
-        public Dictionary<NetworkCommunicator, MissionEquipment> DeathWeaponEquipment = new Dictionary<NetworkCommunicator, MissionEquipment>();
+        public Dictionary<string, KeyValuePair<bool, long>> WoundedUntil = new Dictionary<string, KeyValuePair<bool, long>>();
+        public Dictionary<string, Vec3> DeathPlace = new Dictionary<string, Vec3>();
+        public Dictionary<string, bool> IsWounded = new Dictionary<string, bool>();
+        public Dictionary<string, Tuple<bool, Equipment>> DeathEquipment = new Dictionary<string, Tuple<bool, Equipment>>();
+        public Dictionary<string, MissionEquipment> DeathWeaponEquipment = new Dictionary<string, MissionEquipment>();
 #if SERVER
         private static List<string> ItemsWhichCanBeUsedByWounded = new List<string>();
 #endif
@@ -91,23 +93,24 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if(woundedUntil.HasValue)
             {
-                if(!WoundedUntil.ContainsKey(networkPeer))
+                if(!WoundedUntil.ContainsKey(networkPeer.VirtualPlayer?.ToPlayerId()))
                 {
-                    WoundedUntil.Add(networkPeer, new KeyValuePair<bool, long>(true, woundedUntil.Value));
+                    WoundedUntil.Add(networkPeer.VirtualPlayer?.ToPlayerId(), new KeyValuePair<bool, long>(true, woundedUntil.Value));
                 }
 
-                if (!IsWounded.ContainsKey(networkPeer))
+                if (!IsWounded.ContainsKey(networkPeer.VirtualPlayer?.ToPlayerId()))
                 {
-                    IsWounded.Add(networkPeer, true);
+                    IsWounded.Add(networkPeer.VirtualPlayer?.ToPlayerId(), true);
                 }
             }
 
-            foreach (NetworkCommunicator player in IsWounded.Keys.ToList())
+            foreach (string playerId in IsWounded.Keys.ToList())
             {
-                if (IsWounded.ContainsKey(player) && IsWounded[player])
+                if (IsWounded.ContainsKey(playerId) && IsWounded[playerId])
                 {
+                    var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == playerId).FirstOrDefault();
                     GameNetwork.BeginModuleEventAsServer(networkPeer);
-                    GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, true));
+                    GameNetwork.WriteMessage(new UpdateWoundedPlayer(peer, true));
                     GameNetwork.EndModuleEventAsServer();
                 }
             }
@@ -119,7 +122,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (!WoundingEnabled) return;
 
-            foreach (NetworkCommunicator player in WoundedUntil.Keys.ToList())
+            foreach (string player in WoundedUntil.Keys.ToList())
             {
                 if (!WoundedUntil.ContainsKey(player)) continue;
 
@@ -129,11 +132,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
                 else
                 {
-                    if (player.ControlledAgent != null)
+                    var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == player).FirstOrDefault();
+                    if (peer?.ControlledAgent != null)
                     {
-                        if (!ItemsWhichCanBeUsedByWounded.Contains(player.ControlledAgent.WieldedWeapon.Item?.StringId) || !AgentHungerBehavior.Instance.Eatables.Any(x=> x.Item == player.ControlledAgent.WieldedWeapon.Item))
+                        if (!ItemsWhichCanBeUsedByWounded.Contains(peer.ControlledAgent.WieldedWeapon.Item?.StringId) || !AgentHungerBehavior.Instance.Eatables.Any(x=> x.Item == peer.ControlledAgent.WieldedWeapon.Item))
                         {
-                            player.ControlledAgent?.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
+                            peer.ControlledAgent?.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
                         }
                     }
                 }
@@ -151,17 +155,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             )
             {
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();
-                DeathPlace[player] = affectedAgent.Position;
+                DeathPlace[player.VirtualPlayer?.ToPlayerId()] = affectedAgent.Position;
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
-                DeathEquipment[player] = new Tuple<bool, Equipment>(false, spawnEquipment);
+                DeathEquipment[player.VirtualPlayer?.ToPlayerId()] = new Tuple<bool, Equipment>(false, spawnEquipment);
                 // this.DeathWeaponEquipment[player] = affectedAgent.Equipment[Equip]
                 for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
                 {
-                    DeathEquipment[player].Item2[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
+                    DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item2[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
                 }
 
                 //if your wounded AND your not healed yet then keep old timer
-                if (WoundedUntil.ContainsKey(player) && WoundedUntil[player].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                if (WoundedUntil.ContainsKey(player.VirtualPlayer?.ToPlayerId()) && WoundedUntil[player.VirtualPlayer?.ToPlayerId()].Value < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
                     // Recalculate stats
                     player.ControlledAgent.UpdateAgentStats();
@@ -170,8 +174,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                 // otherwise get new heal time
                 var woundTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
-                WoundedUntil[player] = new KeyValuePair<bool, long>(false, woundTime);
-                IsWounded[player] = true;
+                WoundedUntil[player.VirtualPlayer?.ToPlayerId()] = new KeyValuePair<bool, long>(false, woundTime);
+                IsWounded[player.VirtualPlayer?.ToPlayerId()] = true;
                 var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
                 persistentEmpireRepresentative.SetWounded(woundTime);
                 // Make sure it get saved in db
@@ -212,11 +216,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private bool HandleRegisterClientEquipmentOnWound(NetworkCommunicator player, RegisterClientEquipmentOnWound message)
         {
-            if (DeathEquipment.ContainsKey(player))
+            if (DeathEquipment.ContainsKey(player.VirtualPlayer?.ToPlayerId()))
             {
-                var playerEquipment = DeathEquipment[player].Item2;
+                var playerEquipment = DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item2;
 
-                if (!DeathEquipment[player].Item1)
+                if (!DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item1)
                 {
                     if (playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
                     {
@@ -234,7 +238,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     {
                         playerEquipment[EquipmentIndex.Weapon3] = new EquipmentElement();
                     }
-                    DeathEquipment[player] = new Tuple<bool, Equipment>(true, playerEquipment);
+                    DeathEquipment[player.VirtualPlayer?.ToPlayerId()] = new Tuple<bool, Equipment>(true, playerEquipment);
                 }
             }
 
@@ -247,14 +251,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 #if CLIENT
 #endif
 #if SERVER        
-        public void HealPlayer(NetworkCommunicator player)
+        public void HealPlayer(string playerId)
         {
-            var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            if (!WoundedUntil.ContainsKey(player) || persistentEmpireRepresentative == null) return;
+            var player = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == playerId).FirstOrDefault();
+            var persistentEmpireRepresentative = player?.GetComponent<PersistentEmpireRepresentative>();
+            if (!WoundedUntil.ContainsKey(playerId) || persistentEmpireRepresentative == null) return;
 
             InformationComponent.Instance.SendMessage("You are no longer wounded.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
-            WoundedUntil.Remove(player);
-            IsWounded[player] = false;
+            WoundedUntil.Remove(playerId);
+            IsWounded[playerId] = false;
             persistentEmpireRepresentative.UnWound();
             GameNetwork.BeginBroadcastModuleEvent();
             GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));
@@ -277,10 +282,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             var communicator = affectedAgent.MissionPeer?.GetNetworkPeer();
             if (communicator == null) return;
-            if (!WoundedUntil.ContainsKey(communicator) || !WoundedUntil[communicator].Key) return;
+            if (!WoundedUntil.ContainsKey(communicator.VirtualPlayer?.ToPlayerId()) || !WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()].Key) return;
 
-            var deductedTime = WoundedUntil[communicator].Value / 2;
-            WoundedUntil[communicator] = new KeyValuePair<bool, long>(true, deductedTime);
+            var deductedTime = WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()].Value / 2;
+            WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()] = new KeyValuePair<bool, long>(true, deductedTime);
             var persistentEmpireRepresentative = communicator.GetComponent<PersistentEmpireRepresentative>();
             persistentEmpireRepresentative.SetWounded(deductedTime);
             // Make sure it get saved in db
@@ -298,14 +303,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public bool IsPlayerWounded(NetworkCommunicator player)
         {
-            if (this.IsWounded.ContainsKey(player) == false) return false;
-            return this.IsWounded[player];
+            if (this.IsWounded.ContainsKey(player.VirtualPlayer?.ToPlayerId()) == false) return false;
+            return this.IsWounded[player.VirtualPlayer?.ToPlayerId()];
         }
 
         public DateTime? GetPlayerWoundedUntil(NetworkCommunicator player)
         {
-            if (this.WoundedUntil.ContainsKey(player) == false) return null;
-            return new DateTime(WoundedUntil[player].Value);
+            if (this.WoundedUntil.ContainsKey(player.VirtualPlayer?.ToPlayerId()) == false) return null;
+            return new DateTime(WoundedUntil[player.VirtualPlayer?.ToPlayerId()].Value);
         }
         #endregion
     }

@@ -46,9 +46,9 @@ namespace PersistentEmpiresServer.SpawnBehavior
         {
             if (WoundingBehavior.Instance.WoundingEnabled 
                 && WoundingBehavior.Instance.IsPlayerWounded(peer)
-                && WoundingBehavior.Instance.DeathPlace.ContainsKey(peer))
+                && WoundingBehavior.Instance.DeathPlace.ContainsKey(peer.VirtualPlayer?.ToPlayerId()))
             {
-                return new MatrixFrame(Mat3.Identity, WoundingBehavior.Instance.DeathPlace[peer]);
+                return new MatrixFrame(Mat3.Identity, WoundingBehavior.Instance.DeathPlace[peer.VirtualPlayer?.ToPlayerId()]);
             }
 
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
@@ -102,13 +102,13 @@ namespace PersistentEmpiresServer.SpawnBehavior
 
                         if (WoundingBehavior.Instance.WoundingEnabled)
                         {
-                            if (WoundingBehavior.Instance.IsWounded.ContainsKey(networkCommunicator)
-                                && WoundingBehavior.Instance.IsWounded[networkCommunicator]
-                                && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator)
-                                && WoundingBehavior.Instance.DeathEquipment[networkCommunicator].Item1)
+                            if (WoundingBehavior.Instance.IsWounded.ContainsKey(networkCommunicator.VirtualPlayer?.ToPlayerId())
+                                && WoundingBehavior.Instance.IsWounded[networkCommunicator.VirtualPlayer?.ToPlayerId()]
+                                && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator.VirtualPlayer?.ToPlayerId())
+                                && WoundingBehavior.Instance.DeathEquipment[networkCommunicator.VirtualPlayer?.ToPlayerId()].Item1)
                             {
-                                agentBuildData.Equipment(WoundingBehavior.Instance.DeathEquipment[networkCommunicator].Item2);
-                                WoundingBehavior.Instance.DeathEquipment.Remove(networkCommunicator); // Done.
+                                agentBuildData.Equipment(WoundingBehavior.Instance.DeathEquipment[networkCommunicator.VirtualPlayer?.ToPlayerId()].Item2);
+                                WoundingBehavior.Instance.DeathEquipment.Remove(networkCommunicator.VirtualPlayer?.ToPlayerId()); // Done.
                             }
                         }
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Org.BouncyCastle.Utilities.Collections;
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Helpers;
@@ -7,7 +8,10 @@ using PersistentEmpiresSave.Database.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Security.AccessControl;
+using System.Security.Policy;
+using System.Xml.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -133,6 +137,46 @@ namespace PersistentEmpiresSave.Database.Repositories
                 DiscordId = id,
                 PlayerId = dbplayer.PlayerId
             });
+        }
+
+        public static void SavePlayerOnDeath(Equipment equipment, Vec3 deathPlace, long woundedUntil, string horse, string horseHarness, NetworkCommunicator peer)
+        {
+            DBPlayer dbPlayer;
+
+            if (equipment != null)
+            {
+                dbPlayer = CreateDBPlayer(peer, equipment);
+                dbPlayer.PosX = deathPlace.X;
+                dbPlayer.PosY = deathPlace.Y;
+                dbPlayer.PosZ = deathPlace.Z;
+            }
+            else
+            {
+                dbPlayer = CreateDBPlayer(peer);
+            }
+           
+            dbPlayer.WoundedUntil = woundedUntil;
+            dbPlayer.Horse = horse;
+            dbPlayer.HorseHarness = horseHarness;
+
+            UpsertPlayer(dbPlayer);
+        }
+
+        public static DBPlayer UpsertPlayer(DBPlayer dbPlayer)
+        {
+            Debug.Print($"[Save Module] INSERT/UPDATE PLAYER {dbPlayer.Id} ITEMS TO DB");
+            string query = @"
+        INSERT INTO Players (PlayerId, Name, Hunger, Health, Money, Horse, HorseHarness, Equipment_0, Equipment_1, Equipment_2, Equipment_3, Armor_Head, Armor_Body, Armor_Leg, Armor_Gloves, Armor_Cape, PosX, PosY, PosZ, FactionIndex, Class, Ammo_0, Ammo_1, Ammo_2, Ammo_3, WoundedUntil)
+        VALUES ";
+            if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
+            query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
+            query = query.TrimEnd(',');
+            query += @" 
+        ON DUPLICATE KEY UPDATE
+        Name = VALUES(Name), Hunger = VALUES(Hunger), Health = VALUES(Health), Money = VALUES(Money), Horse = VALUES(Horse), HorseHarness = VALUES(HorseHarness), Equipment_0 = VALUES(Equipment_0), Equipment_1 = VALUES(Equipment_1), Equipment_2 = VALUES(Equipment_2), Equipment_3 = VALUES(Equipment_3), Armor_Head = VALUES(Armor_Head), Armor_Body = VALUES(Armor_Body), Armor_Leg = VALUES(Armor_Leg), Armor_Gloves = VALUES(Armor_Gloves), Armor_Cape = VALUES(Armor_Cape), PosX = VALUES(PosX), PosY = VALUES(PosY), PosZ = VALUES(PosZ), FactionIndex = VALUES(FactionIndex), Class = VALUES(Class), Ammo_0 = VALUES(Ammo_0), Ammo_1 = VALUES(Ammo_1), Ammo_2 = VALUES(Ammo_2), Ammo_3 = VALUES(Ammo_3), WoundedUntil = VALUES(WoundedUntil)";
+            DBConnection.Connection.Execute(query);
+
+            return dbPlayer;
         }
 
         private static DBPlayer CreateDBPlayer(NetworkCommunicator peer)

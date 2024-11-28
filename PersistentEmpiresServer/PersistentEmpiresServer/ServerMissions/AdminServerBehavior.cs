@@ -624,7 +624,7 @@ namespace PersistentEmpiresServer.ServerMissions
                 return false;
             }
 
-            WoundingBehavior.Instance.HealPlayer(message.Player);
+            WoundingBehavior.Instance.HealPlayer(message.Player.VirtualPlayer?.ToPlayerId());
             LoggerHelper.LogAnAction(admin, LogAction.PlayerHealedPlayer, new AffectedPlayer[] { new AffectedPlayer(message.Player) });
 
             return true;
