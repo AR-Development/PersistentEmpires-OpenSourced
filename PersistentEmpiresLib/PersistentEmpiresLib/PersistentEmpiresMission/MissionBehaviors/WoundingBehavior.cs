@@ -261,6 +261,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             WoundedUntil.Remove(playerId);
             IsWounded[playerId] = false;
             persistentEmpireRepresentative.UnWound();
+            player.ControlledAgent.UpdateAgentStats();
+
             GameNetwork.BeginBroadcastModuleEvent();
             GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
