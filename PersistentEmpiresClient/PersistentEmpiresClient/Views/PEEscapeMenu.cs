@@ -13,6 +13,7 @@ using TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
 using PersistentEmpiresLib.Helpers;
+using PersistentEmpires.Views.Views;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -133,6 +134,17 @@ namespace PersistentEmpires.Views.Views
                 InformationManager.ShowInquiry(inquiry);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
 
+            list.Add(new EscapeMenuItemVM(new TextObject("Respawn", null), delegate (object o)
+            {
+                base.OnEscapeMenuToggled(false);
+                if (Agent.Main != null)
+                {
+                    GameNetwork.BeginModuleEventAsClient();
+                    GameNetwork.WriteMessage(new RequestRespawn("me"));
+                    GameNetwork.EndModuleEventAsClient();
+                }
+            }, null, DisableRespawn));
+
             list.Add(new EscapeMenuItemVM(new TextObject("{=InGwtrWt}Quit", null), delegate (object o)
             {
 
@@ -161,6 +173,16 @@ namespace PersistentEmpires.Views.Views
                 }, null, "", 0f, null), false, false);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             return list;
+        }
+
+        private Tuple<bool, TextObject> DisableRespawn()
+        {
+            if (WoundingBehavior.Instance != null && WoundingBehavior.Instance.IsAgentWounded(Agent.Main))
+            {
+                return new Tuple<bool, TextObject>(item1: true, new TextObject("You can't respawn when you are wounded. Rejoin game to change character."));
+            }
+
+            return new Tuple<bool, TextObject>(item1: false, TextObject.Empty);
         }
     }
 }

@@ -204,7 +204,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleUpdateWoundedPlayer(UpdateWoundedPlayer message)
         {
-            IsWounded[message.Player.VirtualPlayer.ToPlayerId()] = message.IsWounded;
+            IsWounded[message.Player.VirtualPlayer?.ToPlayerId()] = message.IsWounded;
         }
 #endif
 #if SERVER
