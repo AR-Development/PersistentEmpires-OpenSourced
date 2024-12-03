@@ -5,6 +5,7 @@ using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresSave.Database.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.DedicatedCustomServer;
+using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpiresServer.ServerMissions
@@ -61,8 +63,6 @@ namespace PersistentEmpiresServer.ServerMissions
                 DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(player.VirtualPlayer.Id, false);
             }
         }
-
-
 
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator networkPeer)
         {
@@ -179,6 +179,23 @@ namespace PersistentEmpiresServer.ServerMissions
                 networkMessageHandlerRegisterer.Register<RequestBecameGodlike>(this.HandleRequestBecameGodlike);
                 networkMessageHandlerRegisterer.Register<AdminChat>(this.HandleAdminChatFromServer);
                 networkMessageHandlerRegisterer.Register<RequestTpToPosition>(HandleRequestTpToPositionFromClient);
+                networkMessageHandlerRegisterer.Register<RequestRespawn>(HandleRequestRespawn);
+            }
+        }
+
+        private bool HandleRequestRespawn(NetworkCommunicator networkCommunicator, RequestRespawn message)
+        {
+            try
+            {
+                DBPlayerRepository.UpsertPlayer(networkCommunicator);
+                var representative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
+                representative.LoadFromDb = true;
+                networkCommunicator.ControlledAgent?.FadeOut(true, true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return true;
             }
         }
 
