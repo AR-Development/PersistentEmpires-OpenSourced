@@ -143,7 +143,7 @@ namespace PersistentEmpires.Views.Views
                     GameNetwork.WriteMessage(new RequestRespawn("me"));
                     GameNetwork.EndModuleEventAsClient();
                 }
-            }, null, DisableRespawn));
+            }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
 
             list.Add(new EscapeMenuItemVM(new TextObject("{=InGwtrWt}Quit", null), delegate (object o)
             {
@@ -173,16 +173,6 @@ namespace PersistentEmpires.Views.Views
                 }, null, "", 0f, null), false, false);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             return list;
-        }
-
-        private Tuple<bool, TextObject> DisableRespawn()
-        {
-            if (WoundingBehavior.Instance != null && WoundingBehavior.Instance.IsAgentWounded(Agent.Main))
-            {
-                return new Tuple<bool, TextObject>(item1: true, new TextObject("You can't respawn when you are wounded. Rejoin game to change character."));
-            }
-
-            return new Tuple<bool, TextObject>(item1: false, TextObject.Empty);
         }
     }
 }
