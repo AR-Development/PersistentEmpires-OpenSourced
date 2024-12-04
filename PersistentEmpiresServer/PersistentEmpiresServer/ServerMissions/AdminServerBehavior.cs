@@ -187,8 +187,9 @@ namespace PersistentEmpiresServer.ServerMissions
         {
             try
             {
-                DBPlayerRepository.UpsertPlayer(networkCommunicator);
+                var tmp = DBPlayerRepository.UpsertPlayer(networkCommunicator);
                 var representative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
+                representative.LoadedDbPosition = new Vec3(tmp.PosX, tmp.PosY, tmp.PosZ);
                 representative.LoadFromDb = true;
                 networkCommunicator.ControlledAgent?.FadeOut(true, true);
                 return true;
