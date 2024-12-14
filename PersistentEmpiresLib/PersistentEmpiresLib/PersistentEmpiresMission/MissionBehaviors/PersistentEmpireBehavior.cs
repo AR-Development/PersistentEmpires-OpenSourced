@@ -79,6 +79,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected override void HandleEarlyNewClientAfterLoadingFinished(NetworkCommunicator networkPeer)
         {
             networkPeer.AddComponent<PersistentEmpireRepresentative>();
+
+            GameNetwork.BeginModuleEventAsServer(networkPeer);
+            GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
+            GameNetwork.EndModuleEventAsServer();
         }
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
         {
@@ -158,10 +162,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnPlayerConnectedToServer(networkPeer);
             networkPeer.QuitFromMission = false;
-
-            GameNetwork.BeginModuleEventAsServer(networkPeer);
-            GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
-            GameNetwork.EndModuleEventAsServer();
         }
 
 #if SERVER
