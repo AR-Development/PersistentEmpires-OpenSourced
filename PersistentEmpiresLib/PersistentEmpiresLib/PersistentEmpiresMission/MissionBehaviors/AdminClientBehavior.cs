@@ -51,5 +51,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             AdminTps.Add(adminTp);
         }
+
+        public override void OnPlayerConnectedToServer(NetworkCommunicator networkPeer)
+        {
+            base.OnPlayerConnectedToServer(networkPeer);
+
+            GameNetwork.BeginModuleEventAsServer(networkPeer);
+            GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
+            GameNetwork.EndModuleEventAsServer();
+        }
     }
 }

@@ -3,6 +3,7 @@ using NAudio;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PersistentEmpires.Views.ViewsVM;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
@@ -11,6 +12,7 @@ using System.Linq;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Network.Messages;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 
 namespace PersistentEmpires.Views.Views
@@ -115,58 +117,87 @@ namespace PersistentEmpires.Views.Views
 
         }
 
+        public override void OnBehaviorInitialize()
+        {
+            base.OnBehaviorInitialize();
+
+            var networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            networkMessageHandlerRegisterer.RegisterBaseHandler<EnableVoiceChat>(new GameNetworkMessage.ServerMessageHandlerDelegate<GameNetworkMessage>(this.HandleEnableVoiceChat));
+        }
+
+        public override void OnRemoveBehavior()
+        {
+            base.OnRemoveBehavior();
+            var networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
+            networkMessageHandlerRegisterer.RegisterBaseHandler<EnableVoiceChat>(new GameNetworkMessage.ServerMessageHandlerDelegate<GameNetworkMessage>(this.HandleEnableVoiceChat));
+        }        
+
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
-            this._proximityChatComponent = base.Mission.GetMissionBehavior<ProximityChatComponent>();
-            if (this._proximityChatComponent != null)
-            {
-                this.IsActive = true;
-                this._proximityChatComponent.OnVoicePlayMessage += HandleVoicePlayMessage;
-                this._proximityChatComponent.OnVoicePlayerJoined += HandleVoicePlayerJoined;
-                this._proximityChatComponent.OnVoicePlayerLeaved += HandleVoicePlayerLeaved;
-                this._proximityChatComponent.OnOptionsClicked += HandleOptionsClicked;
-            }
-            try
-            {
-                InitializeVoiceChatComponents();
-            }
-            catch (Exception e)
-            {
-                this.IsActive = false;
-                this.VoiceChatEnabled = false;
-            }
+        }
 
-            int waveInDevices = WaveIn.DeviceCount;
-            List<WaveInCapabilities> devices = new List<WaveInCapabilities>();
-            for (int waveInDevice = -1; waveInDevice < waveInDevices; waveInDevice++)
+        private void HandleEnableVoiceChat(GameNetworkMessage networkMessage)
+        {
+            var message = networkMessage as EnableVoiceChat;
+            if (message != null)
             {
+                VoiceChatEnabled = message.Enabled;
+                if (!message.Enabled)
+                {
+                    return;
+                }
+
+                this._proximityChatComponent = base.Mission.GetMissionBehavior<ProximityChatComponent>();
+                if (this._proximityChatComponent != null)
+                {
+                    this.IsActive = true;
+                    this._proximityChatComponent.OnVoicePlayMessage += HandleVoicePlayMessage;
+                    this._proximityChatComponent.OnVoicePlayerJoined += HandleVoicePlayerJoined;
+                    this._proximityChatComponent.OnVoicePlayerLeaved += HandleVoicePlayerLeaved;
+                    this._proximityChatComponent.OnOptionsClicked += HandleOptionsClicked;
+                }
                 try
                 {
-                    WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
-                    devices.Add(deviceInfo);
+                    InitializeVoiceChatComponents();
                 }
                 catch (Exception e)
                 {
-                    // 
+                    this.IsActive = false;
+                    this.VoiceChatEnabled = false;
                 }
-            }
 
-            List<WaveOutCapabilities> outDevices = new List<WaveOutCapabilities>();
-            int waveOutDevices = WaveOut.DeviceCount;
-            for (int waveOutDevice = -1; waveOutDevice < waveOutDevices; waveOutDevice++)
-            {
-                try
+                int waveInDevices = WaveIn.DeviceCount;
+                List<WaveInCapabilities> devices = new List<WaveInCapabilities>();
+                for (int waveInDevice = -1; waveInDevice < waveInDevices; waveInDevice++)
                 {
-                    outDevices.Add(WaveOut.GetCapabilities(waveOutDevice));
+                    try
+                    {
+                        WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
+                        devices.Add(deviceInfo);
+                    }
+                    catch (Exception e)
+                    {
+                        // 
+                    }
                 }
-                catch (Exception e)
-                {
-                    // 
-                }
-            }
 
-            this._dataSource = new PEVoiceChatOptionsVM(devices, outDevices, true, this.CloseOptions, this.ApplyOptions, this.StartTest, this.StopTest);
+                List<WaveOutCapabilities> outDevices = new List<WaveOutCapabilities>();
+                int waveOutDevices = WaveOut.DeviceCount;
+                for (int waveOutDevice = -1; waveOutDevice < waveOutDevices; waveOutDevice++)
+                {
+                    try
+                    {
+                        outDevices.Add(WaveOut.GetCapabilities(waveOutDevice));
+                    }
+                    catch (Exception e)
+                    {
+                        // 
+                    }
+                }
+
+                this._dataSource = new PEVoiceChatOptionsVM(devices, outDevices, true, this.CloseOptions, this.ApplyOptions, this.StartTest, this.StopTest);
+            }
         }
 
         private void CloseOptions()
