@@ -80,9 +80,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             networkPeer.AddComponent<PersistentEmpireRepresentative>();
 
+#if SERVER
             GameNetwork.BeginModuleEventAsServer(networkPeer);
             GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
             GameNetwork.EndModuleEventAsServer();
+#endif
         }
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
         {
