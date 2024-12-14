@@ -158,6 +158,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnPlayerConnectedToServer(networkPeer);
             networkPeer.QuitFromMission = false;
+
+            GameNetwork.BeginModuleEventAsServer(networkPeer);
+            GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
+            GameNetwork.EndModuleEventAsServer();
         }
 
 #if SERVER
