@@ -913,7 +913,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected void HandlePlayerJoinedFaction(PlayerJoinedFaction packet)
         {
             this.SetPlayerFaction(packet.player, packet.factionIndex, packet.joinedFrom);
-            if (packet.player.IsMine)
+            if (packet.player.IsMine && packet.factionIndex >= 0 && packet.factionIndex < this.Factions.Count())
             {
                 Faction f = this.Factions[packet.factionIndex];
                 InformationManager.DisplayMessage(new InformationMessage("You have joined " + f.name, Color.FromUint(f.banner.GetPrimaryColor())));

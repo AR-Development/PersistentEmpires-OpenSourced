@@ -284,7 +284,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             var communicator = affectedAgent.MissionPeer?.GetNetworkPeer();
             if (communicator == null) return;
-            if (!WoundedUntil.ContainsKey(communicator.VirtualPlayer?.ToPlayerId()) || !WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()].Key) return;
+            if (!WoundedUntil.ContainsKey(communicator.VirtualPlayer?.ToPlayerId()) || WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()].Key) return;
 
             var deductedTime = WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()].Value - (WoundingTime * 30);
             WoundedUntil[communicator.VirtualPlayer?.ToPlayerId()] = new KeyValuePair<bool, long>(true, deductedTime);
