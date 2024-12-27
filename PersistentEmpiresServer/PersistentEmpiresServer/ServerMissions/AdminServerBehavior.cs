@@ -40,11 +40,11 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public string BanFilePath()
         {
-            return ModuleHelper.GetModuleFullPath("PersistentEmpires") + this.BanFile;
+            return ModuleHelper.GetModuleFullPath(Main.ModuleName) + this.BanFile;
         }
         public string AdminPlayerFilePath()
         {
-            return ModuleHelper.GetModuleFullPath("PersistentEmpires") + this.AdminFile;
+            return ModuleHelper.GetModuleFullPath(Main.ModuleName) + this.AdminFile;
         }
         public void BanPlayer(NetworkCommunicator player, int seconds)
         {

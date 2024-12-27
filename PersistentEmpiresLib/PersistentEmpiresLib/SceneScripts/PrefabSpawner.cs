@@ -73,7 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
         protected void LoadSpawnableItems()
         {
-            string SpawnPath = ModuleHelper.GetXmlPath("PersistentEmpires", "PrefabSpawner/" + this.SpawningPrefabsXml);
+            string SpawnPath = ModuleHelper.GetXmlPath(Main.ModuleName, "PrefabSpawner/" + this.SpawningPrefabsXml);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(SpawnPath);
             foreach (XmlNode node in xmlDocument.SelectNodes("/SpawnItems/SpawnItem"))
