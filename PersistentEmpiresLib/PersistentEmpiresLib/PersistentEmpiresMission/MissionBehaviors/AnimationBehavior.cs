@@ -14,7 +14,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public Dictionary<ActionIndexCache, MBActionSet> ActionSetDictionary;
         private bool isActive;
-        public static string AnimationModuleName = Main.ModuleName;
+        public static string AnimationModuleName = "PersistentEmpires";
         public static string AnimationFileName = "Animations";
 
         private List<string> ParseXml()

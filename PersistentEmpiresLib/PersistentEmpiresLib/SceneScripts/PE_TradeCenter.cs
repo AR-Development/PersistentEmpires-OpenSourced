@@ -73,7 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
             base.DescriptionMessage = descriptionMessage;
             this.tradingCenterBehavior = Mission.Current.GetMissionBehavior<TradingCenterBehavior>();
             this.castlesBehavior = Mission.Current.GetMissionBehavior<CastlesBehavior>();
-            string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Markets/" + this.XmlFile);
+            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Markets/" + this.XmlFile);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlPath);
             this.MarketItems = new List<MarketItem>();

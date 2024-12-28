@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
-using PersistentEmpiresLib;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -20,7 +19,7 @@ namespace PersistentEmpiresAPI
 
         public static int GetConfigPort()
         {
-            string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Configs/" + XmlFile);
+            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlPath);
             XmlNode portElement = xmlDocument.SelectSingleNode("/ApiConfig/Port");
@@ -29,7 +28,7 @@ namespace PersistentEmpiresAPI
 
         public static string GetSecretKey()
         {
-            string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Configs/" + XmlFile);
+            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlPath);
             XmlNode secretElement = xmlDocument.SelectSingleNode("/ApiConfig/SecretKey");
