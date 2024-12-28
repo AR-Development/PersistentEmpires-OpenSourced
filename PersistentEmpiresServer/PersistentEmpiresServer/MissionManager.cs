@@ -1,5 +1,4 @@
-﻿using PersistentEmpiresLib;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using PersistentEmpiresServer.SpawnBehavior;
 using TaleWorlds.Core;
@@ -14,7 +13,7 @@ namespace PersistentEmpiresServer
         [MissionMethod]
         public static void OpenPersistentEmpires(string scene)
         {
-            MissionState.OpenNew(Main.ModuleName, new MissionInitializerRecord(scene), delegate (Mission missionController)
+            MissionState.OpenNew("PersistentEmpires", new MissionInitializerRecord(scene), delegate (Mission missionController)
             {
                 return new MissionBehavior[]
                     {
