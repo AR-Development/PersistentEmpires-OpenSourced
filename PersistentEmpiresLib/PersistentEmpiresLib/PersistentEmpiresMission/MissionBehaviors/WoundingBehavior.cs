@@ -108,7 +108,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 if (IsWounded.ContainsKey(playerId) && IsWounded[playerId])
                 {
-                    var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == playerId).FirstOrDefault();
+                    //var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == playerId).FirstOrDefault();
                     GameNetwork.BeginModuleEventAsServer(networkPeer);
                     GameNetwork.WriteMessage(new UpdateWoundedPlayer(peer, true));
                     GameNetwork.EndModuleEventAsServer();

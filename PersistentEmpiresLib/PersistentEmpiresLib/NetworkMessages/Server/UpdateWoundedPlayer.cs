@@ -10,12 +10,12 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
 
         }
-        public UpdateWoundedPlayer(NetworkCommunicator player, bool isWounded)
+        public UpdateWoundedPlayer(string playerId, bool isWounded)
         {
-            this.Player = player;
+            this.PlayerId = playerId;
             this.IsWounded = isWounded;
         }
-        public NetworkCommunicator Player;
+        public string PlayerId;
         public bool IsWounded;
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -30,14 +30,14 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.Player = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+            this.PlayerId = GameNetworkMessage.ReadStringFromPacket(ref result);
             this.IsWounded = GameNetworkMessage.ReadBoolFromPacket(ref result);
             return result;
         }
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Player);
+            GameNetworkMessage.WriteStringToPacket(this.PlayerId);
             GameNetworkMessage.WriteBoolToPacket(this.IsWounded);
         }
     }
