@@ -28,6 +28,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
         public override void OnRemoveBehavior()
         {
+            AdminTps.Clear();
             base.OnRemoveBehavior();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Remove);
         }
