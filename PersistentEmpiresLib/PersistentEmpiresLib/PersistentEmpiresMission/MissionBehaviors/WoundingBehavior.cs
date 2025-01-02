@@ -108,9 +108,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 if (IsWounded.ContainsKey(playerId) && IsWounded[playerId])
                 {
-                    //var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == playerId).FirstOrDefault();
                     GameNetwork.BeginModuleEventAsServer(networkPeer);
-                    GameNetwork.WriteMessage(new UpdateWoundedPlayer(peer, true));
+                    GameNetwork.WriteMessage(new UpdateWoundedPlayer(playerId, true));
                     GameNetwork.EndModuleEventAsServer();
                 }
             }
@@ -185,7 +184,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 player.ControlledAgent.UpdateAgentStats();
 
                 GameNetwork.BeginBroadcastModuleEvent();
-                GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, true));
+                GameNetwork.WriteMessage(new UpdateWoundedPlayer(player.VirtualPlayer?.ToPlayerId(), true));
                 GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
 
                 InformationComponent.Instance.SendMessage("You are now wounded.", Color.ConvertStringToColor("#F44336FF").ToUnsignedInteger(), player);
@@ -264,7 +263,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             player.ControlledAgent?.UpdateAgentStats();
 
             GameNetwork.BeginBroadcastModuleEvent();
-            GameNetwork.WriteMessage(new UpdateWoundedPlayer(player, false));
+            GameNetwork.WriteMessage(new UpdateWoundedPlayer(playerId, false));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
 
