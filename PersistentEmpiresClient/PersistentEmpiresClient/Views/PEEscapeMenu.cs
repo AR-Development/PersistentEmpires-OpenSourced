@@ -134,16 +134,16 @@ namespace PersistentEmpires.Views.Views
                 InformationManager.ShowInquiry(inquiry);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
 
-            list.Add(new EscapeMenuItemVM(new TextObject("Respawn", null), delegate (object o)
-            {
-                base.OnEscapeMenuToggled(false);
-                if (Agent.Main != null)
-                {
-                    GameNetwork.BeginModuleEventAsClient();
-                    GameNetwork.WriteMessage(new RequestRespawn("me"));
-                    GameNetwork.EndModuleEventAsClient();
-                }
-            }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+            //list.Add(new EscapeMenuItemVM(new TextObject("Respawn", null), delegate (object o)
+            //{
+            //    base.OnEscapeMenuToggled(false);
+            //    if (Agent.Main != null)
+            //    {
+            //        GameNetwork.BeginModuleEventAsClient();
+            //        GameNetwork.WriteMessage(new RequestRespawn("me"));
+            //        GameNetwork.EndModuleEventAsClient();
+            //    }
+            //}, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
 
             list.Add(new EscapeMenuItemVM(new TextObject("{=InGwtrWt}Quit", null), delegate (object o)
             {
