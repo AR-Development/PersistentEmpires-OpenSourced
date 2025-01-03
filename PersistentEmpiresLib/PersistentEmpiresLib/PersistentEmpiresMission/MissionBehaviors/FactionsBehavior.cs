@@ -662,15 +662,24 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         }
                     }
                 }
-                this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(player);
+
+                var tmpMember = this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x=> x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
+                if(tmpMember != null)
+                {
+                    this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(tmpMember);
+                }
             }
             if (factionIndex != -1)
             {
                 LoggerHelper.LogAnAction(player, LogAction.PlayerFactionChange, null, new object[] { persistentEmpireRepresentative.GetFaction(), this.Factions[factionIndex] });
                 persistentEmpireRepresentative.SetFaction(this.Factions[factionIndex], factionIndex);
                 player.VirtualPlayer.BannerCode = this.Factions[factionIndex].banner.Serialize();
-                if(!Factions[factionIndex].members.Contains(player))
+
+                var tmpMember = this.Factions[factionIndex].members.Where(x => x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
+                if(tmpMember == null)
+                {
                     Factions[factionIndex].members.Add(player);
+                }
             }
             else
             {
