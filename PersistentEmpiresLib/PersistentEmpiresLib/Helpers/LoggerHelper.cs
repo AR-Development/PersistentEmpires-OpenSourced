@@ -307,8 +307,8 @@ namespace PersistentEmpiresLib.Helpers
                 CreatedAt = DateTime.UtcNow,
                 IssuerCoordinates = GetCoordinatesOfPlayer(issuer),
                 IssuerPlayerId = issuer.VirtualPlayer.ToPlayerId(),
-                IssuerPlayerName = issuer.UserName,
-                LogMessage = logMessage
+                IssuerPlayerName = issuer.UserName.Replace("'", @"\'").Replace("\"", "\'"),
+                LogMessage = logMessage.Replace("'", @"\'").Replace("\"", "\'")
             };
             if (OnLogAction != null)
             {
