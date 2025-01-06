@@ -109,7 +109,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     if (persistentEmpireRepresentative == null) continue;
                     if (persistentEmpireRepresentative.GetHunger() > 0) continue;
                     if (peer.ControlledAgent.Health <= 10) continue;
-                    float reduceAmount = peer.ControlledAgent.Health - 10 > 10 ? 10 : 10 - peer.ControlledAgent.Health;
+                    //float reduceAmount = peer.ControlledAgent.Health - 10 > 10 ? 10 : 10 - peer.ControlledAgent.Health;
+                    float reduceAmount = peer.ControlledAgent.Health > 10 ? 2 : 0;
                     peer.ControlledAgent.Health -= reduceAmount;
                 }
                 this.LastStarvingCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
