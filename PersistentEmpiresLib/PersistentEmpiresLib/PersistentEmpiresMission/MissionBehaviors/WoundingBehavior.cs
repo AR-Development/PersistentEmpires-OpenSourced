@@ -143,6 +143,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        private static List<Agent.KillInfo> _killInfoToBeExcluded = new List<Agent.KillInfo>()
+        { Agent.KillInfo.Punch, Agent.KillInfo.MountHit, Agent.KillInfo.Gravity, Agent.KillInfo.ShieldBash, Agent.KillInfo.WeaponBash, Agent.KillInfo.Kick,  Agent.KillInfo.TeamSwitch};
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
@@ -170,6 +172,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     player.ControlledAgent.UpdateAgentStats();
                     return;
                 }
+                // check if we should put player in wounded mode
+                if (affectedAgent == affectorAgent) return;
+                if (_killInfoToBeExcluded.Contains(blow.OverrideKillInfo)) return;
+                if (blow.WeaponRecordWeaponFlags == 0) return;
 
                 // otherwise get new heal time
                 var woundTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);

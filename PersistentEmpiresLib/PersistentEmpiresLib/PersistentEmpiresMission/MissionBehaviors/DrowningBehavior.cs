@@ -55,6 +55,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         blow.SwingDirection.Normalize();
                         blow.Direction = blow.SwingDirection;
                         blow.DamageCalculated = true;
+                        blow.IsFallDamage = true;
                         sbyte mainHandItemBoneIndex = agent.Monster.MainHandItemBoneIndex;
                         AttackCollisionData attackCollisionDataForDebugPurpose = AttackCollisionData.GetAttackCollisionDataForDebugPurpose(false, false, false, true, false, false, false, false, false, false, false, false, CombatCollisionResult.StrikeAgent, -1, 0, 2, blow.BoneIndex, BoneBodyPartType.Head, mainHandItemBoneIndex, Agent.UsageDirection.AttackLeft, -1, CombatHitResultFlags.NormalHit, 0.5f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, Vec3.Up, blow.Direction, blow.GlobalPosition, Vec3.Zero, Vec3.Zero, agent.Velocity, Vec3.Up);
                         agent.RegisterBlow(blow, attackCollisionDataForDebugPurpose);
