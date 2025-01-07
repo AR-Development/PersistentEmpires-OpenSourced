@@ -143,8 +143,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        private static List<Agent.KillInfo> _killInfoToBeExcluded = new List<Agent.KillInfo>()
-        { Agent.KillInfo.Punch, Agent.KillInfo.MountHit, Agent.KillInfo.Gravity, Agent.KillInfo.ShieldBash, Agent.KillInfo.WeaponBash, Agent.KillInfo.Kick,  Agent.KillInfo.TeamSwitch};
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
@@ -172,28 +170,28 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     player.ControlledAgent.UpdateAgentStats();
                     return;
                 }
+                
                 // check if we should put player in wounded mode
-                if (affectedAgent == affectorAgent) return;
-                if (_killInfoToBeExcluded.Contains(blow.OverrideKillInfo)) return;
-                if (blow.WeaponRecordWeaponFlags == 0) return;
+                if (blow.WeaponRecordWeaponFlags != 0 || blow.OverrideKillInfo == Agent.KillInfo.Gravity)
+                {
+                    // otherwise get new heal time
+                    var woundTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
+                    WoundedUntil[player.VirtualPlayer?.ToPlayerId()] = new KeyValuePair<bool, long>(false, woundTime);
+                    IsWounded[player.VirtualPlayer?.ToPlayerId()] = true;
+                    var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+                    persistentEmpireRepresentative.SetWounded(woundTime);
+                    // Make sure it get saved in db
+                    SaveSystemBehavior.HandleUpdateWoundedUntil(player, woundTime);
 
-                // otherwise get new heal time
-                var woundTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + (WoundingTime * 60);
-                WoundedUntil[player.VirtualPlayer?.ToPlayerId()] = new KeyValuePair<bool, long>(false, woundTime);
-                IsWounded[player.VirtualPlayer?.ToPlayerId()] = true;
-                var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-                persistentEmpireRepresentative.SetWounded(woundTime);
-                // Make sure it get saved in db
-                SaveSystemBehavior.HandleUpdateWoundedUntil(player, woundTime);
+                    // Recalculate stats
+                    player.ControlledAgent.UpdateAgentStats();
 
-                // Recalculate stats
-                player.ControlledAgent.UpdateAgentStats();
+                    GameNetwork.BeginBroadcastModuleEvent();
+                    GameNetwork.WriteMessage(new UpdateWoundedPlayer(player.VirtualPlayer?.ToPlayerId(), true));
+                    GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
 
-                GameNetwork.BeginBroadcastModuleEvent();
-                GameNetwork.WriteMessage(new UpdateWoundedPlayer(player.VirtualPlayer?.ToPlayerId(), true));
-                GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
-
-                InformationComponent.Instance.SendMessage("You are now wounded.", Color.ConvertStringToColor("#F44336FF").ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage("You are now wounded.", Color.ConvertStringToColor("#F44336FF").ToUnsignedInteger(), player);
+                }
             }
         }
 #endif
