@@ -8,5 +8,10 @@ namespace PersistentEmpiresLib.Helpers
         {
             return $"{virtualPlayer.Id.ToString()}_{virtualPlayer.UserName}";
         }
+
+        public static string EncodeSpecialMariaDbChars(this string tmp)
+        {
+            return tmp.Replace(@"""", "'").Replace(@"''", @"'").Replace(@"'", @"\'").Replace(@"\\", @"\");
+        }
     }
 }
