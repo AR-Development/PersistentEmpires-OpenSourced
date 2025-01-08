@@ -134,7 +134,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     var peer = GameNetwork.NetworkPeers.Where(x => x.VirtualPlayer?.ToPlayerId() == player).FirstOrDefault();
                     if (peer?.ControlledAgent != null)
                     {
-                        if (!string.IsNullOrEmpty(peer.ControlledAgent.WieldedWeapon.Item?.StringId) && (!ItemsWhichCanBeUsedByWounded.Contains(peer.ControlledAgent.WieldedWeapon.Item?.StringId) || !AgentHungerBehavior.Instance.Eatables.Any(x=> x.Item == peer.ControlledAgent.WieldedWeapon.Item)))
+                        if (!string.IsNullOrEmpty(peer.ControlledAgent.WieldedWeapon.Item?.StringId) && (!ItemsWhichCanBeUsedByWounded.Contains(peer.ControlledAgent.WieldedWeapon.Item?.StringId) || !AgentHungerBehavior.Instance.Eatables.Any(x=> x.Item.StringId == peer.ControlledAgent.WieldedWeapon.Item?.StringId)))
                         {
                             peer.ControlledAgent?.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
                         }
