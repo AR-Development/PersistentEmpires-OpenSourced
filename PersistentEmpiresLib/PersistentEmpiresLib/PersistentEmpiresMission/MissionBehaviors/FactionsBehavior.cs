@@ -663,10 +663,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
 
-                var tmpMember = this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x=> x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
-                if(tmpMember != null)
+                var tmpMember = Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x=> x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
+                if (tmpMember == null)
                 {
-                    this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(tmpMember);
+                    tmpMember = Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x => x.VirtualPlayer?.Id == player.VirtualPlayer?.Id).FirstOrDefault();
+                }
+                if (tmpMember != null)
+                {
+                    Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(tmpMember);
                 }
             }
             if (factionIndex != -1)
