@@ -39,6 +39,15 @@ namespace PersistentEmpires.Views.ViewsVM.PETabMenu
         {
             return _peer;
         }
+        public void UpdatePeer(NetworkCommunicator peer, bool isLord)
+        {
+            _peer = peer;
+            UserName = peer.UserName;
+            IsLord = isLord;
+            // InformationManager.DisplayMessage(new InformationMessage("virtualPlayerName: " + peer.VirtualPlayer.UserName));
+
+            base.RefreshValues();
+        }
 
         [DataSourceProperty]
         public int KillCount
