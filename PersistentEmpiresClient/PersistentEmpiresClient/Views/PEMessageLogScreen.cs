@@ -110,12 +110,12 @@ namespace PersistentEmpires.Views.Views
 
         private void HandleShoutMessageFromServerForLog(ShoutMessageServer message)
         {
-            AddToLog($"{message.Sender.UserName}: {message.Message}");
+            AddToLog($"{message.Message}");
         }
 
         private void HandleLocalMessageFromServerForLog(LocalMessageServer message)
         {
-            AddToLog($"{message.Sender.UserName}: {message.Message}");
+            AddToLog($"{message.Message}");
         }
 
         public void AddToLog(string message)
