@@ -271,6 +271,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
 
+        public void UpdatePlayerWoundTime(NetworkCommunicator player, long newTime)
+        {
+            var playerId = player.VirtualPlayer?.ToPlayerId();
+
+            if (!WoundedUntil.ContainsKey(playerId) || WoundedUntil[playerId].Key) return;
+
+            WoundedUntil[playerId] = new KeyValuePair<bool, long>(true, newTime);
+            
+            var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+
+            persistentEmpireRepresentative.SetWounded(newTime);
+            SaveSystemBehavior.HandleUpdateWoundedUntil(player, newTime);
+        }
+
         public static void AddItmemToItemsWhichCanBeUsedByWoundedList(string itemId)
         {
             ItemsWhichCanBeUsedByWounded.Add(itemId);
