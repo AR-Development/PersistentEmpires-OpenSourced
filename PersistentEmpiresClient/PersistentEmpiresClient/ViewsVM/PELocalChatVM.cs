@@ -15,6 +15,12 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._textInput;
             set
             {
+                if (value.Length > 600)
+                {
+                    value = $"{value.Substring(0, 600)}...";
+                    base.OnPropertyChangedWithValue(value, "TextInput");
+                }
+                
                 if (value != this._textInput)
                 {
                     this._textInput = value;
@@ -27,7 +33,7 @@ namespace PersistentEmpires.Views.ViewsVM
         {
             get => this._isFocused;
             set
-            {
+            {                
                 if (value != this._isFocused)
                 {
                     this._isFocused = value;
