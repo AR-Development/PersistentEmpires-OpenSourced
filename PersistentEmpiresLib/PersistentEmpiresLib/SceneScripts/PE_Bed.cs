@@ -17,8 +17,8 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public bool ForMount = false;
 
-        private long UseStartedAt = 0;
-        private long UseWillEndAt = 0;
+        public long UseStartedAt = 0;
+        public long UseWillEndAt = 0;
         protected override bool LockUserFrames
         {
             get

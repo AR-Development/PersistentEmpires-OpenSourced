@@ -20,7 +20,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             _checkpoints = new Dictionary<int, (string Message, string DebugMessage)>()
             {
                 //{ 180, ("3 hours", "Server will be restarted in 3 hours.") },
-                //{3600, ("1 hour", "Server will be restarted in 1 hour.") },
+                {3600, ("1 hour", "Server will be restarted in 1 hour.") },
                 {1800, ("30 minutes", "Server will be restarted in 30 minutes.") },
                 {900, ("15 minutes", "Server will be restarted in 15 minutes.") },
                 {300, ("5 minutes", "Server will be restarted in 5 minutes.") },
