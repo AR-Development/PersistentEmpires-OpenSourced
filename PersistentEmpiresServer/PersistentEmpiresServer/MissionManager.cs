@@ -13,7 +13,7 @@ namespace PersistentEmpiresServer
         [MissionMethod]
         public static void OpenPersistentEmpires(string scene)
         {
-            MissionState.OpenNew("PERP", new MissionInitializerRecord(scene), delegate (Mission missionController)
+            MissionState.OpenNew("PersistentEmpires", new MissionInitializerRecord(scene), delegate (Mission missionController)
             {
                 return new MissionBehavior[]
                     {

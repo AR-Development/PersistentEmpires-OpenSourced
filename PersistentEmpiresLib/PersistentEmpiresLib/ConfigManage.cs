@@ -22,7 +22,7 @@ namespace PersistentEmpiresLib
 #if SERVER
                 if(_xmlDocument == null)
                 {
-                    string xmlPath = ModuleHelper.GetXmlPath("PERP", "Configs/" + XmlFile);
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
                     _xmlDocument = new XmlDocument();
                     _xmlDocument.Load(xmlPath);
                 }
@@ -42,7 +42,7 @@ namespace PersistentEmpiresLib
             {
                 if (_rulesDocument == null)
                 {
-                    string xmlPath = ModuleHelper.GetXmlPath("PERP", "Configs/" + RulesXmlFile);
+                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
                     if (File.Exists(xmlPath))
                     {
                         _rulesDocument = new XmlDocument();

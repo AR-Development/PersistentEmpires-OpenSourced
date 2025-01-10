@@ -46,7 +46,7 @@ namespace PersistentEmpiresLib.SceneScripts
     public class PE_CraftingStation : PE_UsableFromDistance
     {
         public string StationName = "Carpenter Bench";
-        public string ModuleFolder = "PERP";
+        public string ModuleFolder = "PersistentEmpires";
         public CraftingComponent craftingComponent { get; private set; }
         public PE_UpgradeableBuildings upgradeableBuilding { get; private set; }
         private PlayerInventoryComponent playerInventoryComponent;
