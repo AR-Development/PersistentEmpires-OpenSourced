@@ -143,6 +143,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        private static List<string> trainingWeapons = new List<string>() { "PE_wooden_sword_t1", "PE_wooden_sword_t2" };
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
@@ -170,7 +171,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     player.ControlledAgent.UpdateAgentStats();
                     return;
                 }
-                
+
+                if(trainingWeapons.Contains(affectorAgent.WieldedWeapon.Item?.StringId))
+                {
+                    return;
+                }
+
                 // check if we should put player in wounded mode
                 if (blow.WeaponRecordWeaponFlags != 0 || blow.OverrideKillInfo == Agent.KillInfo.Gravity)
                 {

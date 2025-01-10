@@ -27,7 +27,7 @@ namespace PersistentEmpiresLib.SceneScripts
     public class PE_ImportExport : PE_UsableFromDistance
     {
         public string XmlFile = "importexport";
-        public string ModuleFolder = "PersistentEmpires";
+        public string ModuleFolder = "PERP";
         public string TradeableItems { get; private set; }
         private List<GoodItem> goodItems;
         private ImportExportComponent importExportComponent;
