@@ -20,7 +20,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public static Random random;
         public string InventoryName = "Chest";
         public string InventoryId = "";
-        public float Distance = 0.6f;
+        public float Distance = 1f;
         public int CastleId = -1;
         public int Slot = 30; // Max value can be 256
         public int StackCount = 10; // Max value can be 256
