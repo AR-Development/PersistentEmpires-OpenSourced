@@ -6,19 +6,8 @@ using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresLib.SceneScripts
 {
-    public abstract class PE_UsableSynchedObject : PE_UsableFromDistance
+    public abstract class PE_UsableSynchedObject : UsableMissionObject
     {
-        public override void OnUse(Agent userAgent)
-        {
-            if (!base.IsUsable(userAgent))
-            {
-                userAgent.StopUsingGameObjectMT(false);
-                return;
-            }
-
-            base.OnUse(userAgent);
-        }
-
         public void AddBodyFlagsSynchedPE(BodyFlags flags, bool applyToChildren = true)
         {
             if ((base.GameEntity.BodyFlag & flags) != flags)

@@ -192,7 +192,7 @@ namespace PersistentEmpiresLib.SceneScripts
         }        
 
         public override void OnUse(Agent userAgent)
-        {            
+        {
             base.OnUse(userAgent);
             Debug.Print("[USING LOG] AGENT USE " + this.GetType().Name + " ID " + this.InventoryId + " PLAYER " + userAgent.MissionPeer.DisplayedName);
             if (this.GameEntity == null || this.InteractionEntity == null) return;
