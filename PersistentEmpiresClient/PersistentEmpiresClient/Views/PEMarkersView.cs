@@ -55,7 +55,7 @@ namespace PersistentEmpires.Views.Views
             this._dataSource.AddChatBubble(player, player.UserName + " revealed his money pouch (" + Gold + "g)", "#FFEB3BFF");
         }
 
-        private void OnLocalChatMessage(NetworkCommunicator Sender, string Message, bool shout)
+        public void OnLocalChatMessage(NetworkCommunicator Sender, string Message, bool shout)
         {
             if (Sender.ControlledAgent == null) return;
             if (Sender.Equals(GameNetwork.MyPeer)) return;
