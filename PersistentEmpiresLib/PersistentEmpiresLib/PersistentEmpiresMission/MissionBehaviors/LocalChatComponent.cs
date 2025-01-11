@@ -13,13 +13,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
     {
         public delegate void LocalChatMessageDelegate(NetworkCommunicator Sender, String Message, bool shout);
         public delegate void CustomBubbleMessageDelegate(NetworkCommunicator Sender, String Message, bool shout);
+        public delegate void CustomBubbleMessageDelegate2(NetworkCommunicator Sender, String Message, string color);
 
         public delegate bool PrefixHandleLocalChatFromClient(NetworkCommunicator Sender, String Message, bool shout);
 
         public event LocalChatMessageDelegate OnLocalChatMessage;
         public event CustomBubbleMessageDelegate OnCustomBubbleMessage;
+        public event CustomBubbleMessageDelegate2 OnCustomBubbleMessage2;
         public event PrefixHandleLocalChatFromClient OnPrefixHandleLocalChatFromClient;
-
 
         public override void OnBehaviorInitialize()
         {

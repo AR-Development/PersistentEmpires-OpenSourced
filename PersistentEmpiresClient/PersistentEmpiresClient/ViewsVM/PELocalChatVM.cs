@@ -15,9 +15,9 @@ namespace PersistentEmpires.Views.ViewsVM
             get => this._textInput;
             set
             {
-                if (value.Length > 600)
+                if (value.Length > 500)
                 {
-                    value = $"{value.Substring(0, 600)}...";
+                    value = $"{value.Substring(0, 500)}...";
                     base.OnPropertyChangedWithValue(value, "TextInput");
                 }
                 

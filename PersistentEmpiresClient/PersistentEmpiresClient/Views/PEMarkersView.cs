@@ -23,6 +23,7 @@ namespace PersistentEmpires.Views.Views
             this.moneyPouchBehavior = base.Mission.GetMissionBehavior<MoneyPouchBehavior>();
             this.localChatComponent.OnLocalChatMessage += this.OnLocalChatMessage;
             this.localChatComponent.OnCustomBubbleMessage += this.OnCustomBubbleMessage;
+            this.localChatComponent.OnCustomBubbleMessage2 += this.OnCustomBubbleMessage2;
             this.moneyPouchBehavior.OnRevealedMoneyPouch += this.OnRevealedMoneyPouch;
             this.factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
             this.factionsBehavior.OnPlayerJoinedFaction += this.OnPlayerJoinedFaction;
@@ -38,6 +39,16 @@ namespace PersistentEmpires.Views.Views
 
 
             this._dataSource.AddChatBubble(Sender, Message, "#ab47bcFF");
+        }
+
+        public void OnCustomBubbleMessage2(NetworkCommunicator Sender, string Message, string color)
+        {
+            if (Sender.ControlledAgent == null) return;
+            if (Sender.Equals(GameNetwork.MyPeer)) return;
+            if (this._peMapView.IsActive) return;
+
+
+            this._dataSource.AddChatBubble(Sender, Message, color);
         }
 
         private void OnPlayerJoinedFaction(int factionIndex, Faction faction, int joinedFromIndex, NetworkCommunicator player)
