@@ -20,6 +20,7 @@ namespace PersistentEmpiresLib.SceneScripts
         public static Random random;
         public string InventoryName = "Chest";
         public string InventoryId = "";
+        public float Distance = 0.6f;
         public int CastleId = -1;
         public int Slot = 30; // Max value can be 256
         public int StackCount = 10; // Max value can be 256
@@ -193,6 +194,13 @@ namespace PersistentEmpiresLib.SceneScripts
 
         public override void OnUse(Agent userAgent)
         {
+            float distance = base.GameEntity.GetGlobalFrame().origin.Distance(userAgent.Position);
+            if (distance >= this.Distance)
+            {
+                userAgent.StopUsingGameObjectMT(false);
+                return;
+            }
+
             base.OnUse(userAgent);
             Debug.Print("[USING LOG] AGENT USE " + this.GetType().Name + " ID " + this.InventoryId + " PLAYER " + userAgent.MissionPeer.DisplayedName);
             if (this.GameEntity == null || this.InteractionEntity == null) return;
