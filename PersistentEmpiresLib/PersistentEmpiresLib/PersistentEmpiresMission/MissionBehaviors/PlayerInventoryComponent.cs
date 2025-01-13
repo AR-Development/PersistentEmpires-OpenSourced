@@ -1072,7 +1072,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         draggedCount - returnedAmount
                     });
                 }
-                else if (droppedToInventory.StartsWith("PlayerInventory") && this.draggedFromInventory.StartsWith("Equipment"))
+                else if (droppedToInventory.StartsWith("PlayerInventory") && draggedFromInventory.StartsWith("Equipment"))
                 {
 
                     ItemObject item = draggedItem;
@@ -1082,11 +1082,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         draggedCount - returnedAmount
                     });
                 }
-                else if (droppedToInventory.StartsWith("Equipment") && this.draggedFromInventory.StartsWith("PlayerInventory"))
+                else if (droppedToInventory.StartsWith("Equipment") && draggedFromInventory.StartsWith("PlayerInventory"))
                 {
 
                     ItemObject item = draggedItem;
-                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFrom    Inventory, null, new object[] {
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromInventory, null, new object[] {
                         draggedFromInventory,
                         item,
                         draggedCount - returnedAmount
