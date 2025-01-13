@@ -27,6 +27,8 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerClosesChest = "PlayerClosesChest"; // Done
         public static readonly string PlayerTransferredItemToChest = "PlayerTransferredItemToChest"; // Done
         public static readonly string PlayerTransferredItemFromChest = "PlayerTransferredItemFromChest"; // Done
+        public static readonly string PlayerTransferredItemToInventory = "PlayerTransferredItemToInventory"; // Done
+        public static readonly string PlayerTransferredItemFromInventory = "PlayerTransferredItemFromInventory"; // Done
         public static readonly string PlayerOpensStockpile = "PlayerOpensStockpile";// Done
         public static readonly string PlayerClosesStockpile = "PlayerClosesStockpile";// Done
         public static readonly string PlayerBuysStockpile = "PlayerBuysStockpile";// Done
