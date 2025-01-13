@@ -502,14 +502,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
-        internal static void HandleSavePlayerEquipmentOnDeath(NetworkCommunicator communicator, Equipment equipment)
-        {
-            if (OnPlayerUpdateWoundedUntil != null)
-            {
-                OnPlayerUpdateWoundedUntil(communicator, woundTime);
-            }
-        }
-
         internal static long? HandleGetWoundedUntil(NetworkCommunicator communicator)
         {
             long? woundedUntill = null;
