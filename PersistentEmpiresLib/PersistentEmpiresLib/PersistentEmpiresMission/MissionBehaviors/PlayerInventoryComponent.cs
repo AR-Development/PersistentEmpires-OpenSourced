@@ -1022,6 +1022,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         1
                     });
                 }
+                else if (droppedToInventory.StartsWith("Equipment") && draggedFromInventory.StartsWith("PlayerInventory"))
+                {
+
+                    ItemObject item = draggedItem;
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromInventory, null, new object[] {
+                        draggedFromInventory,
+                        item,
+                        1
+                    });
+                }
             }
             else if (droppedToInventory == "PlayerInventory" || this.CustomInventories.ContainsKey(droppedToInventory))
             {
@@ -1077,16 +1087,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                     ItemObject item = draggedItem;
                     LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemToInventory, null, new object[] {
-                        draggedFromInventory,
-                        item,
-                        draggedCount - returnedAmount
-                    });
-                }
-                else if (droppedToInventory.StartsWith("Equipment") && draggedFromInventory.StartsWith("PlayerInventory"))
-                {
-
-                    ItemObject item = draggedItem;
-                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromInventory, null, new object[] {
                         draggedFromInventory,
                         item,
                         draggedCount - returnedAmount
