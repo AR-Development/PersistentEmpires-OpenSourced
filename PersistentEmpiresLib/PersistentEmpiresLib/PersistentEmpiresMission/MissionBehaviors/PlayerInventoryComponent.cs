@@ -67,13 +67,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            
+
             List<DBInventory> savedInventoriesAsList = SaveSystemBehavior.HandleGetAllInventories().ToList();
             this.CustomInventories = new Dictionary<string, Inventory>();
             List<GameEntity> gameEntities = new List<GameEntity>();
             // This is done to ensure derived scripts from PE_InventoryEntity are included
             Mission.Scene.GetEntities(ref gameEntities);
-            var tmp = gameEntities.Select(x => x.GetScriptComponents().OfType<PE_InventoryEntity>()).SelectMany(y=> y).Where(z=> z!= null);
+            var tmp = gameEntities.Select(x => x.GetScriptComponents().OfType<PE_InventoryEntity>()).SelectMany(y => y).Where(z => z != null);
 
             foreach (PE_InventoryEntity inventoryEntity in tmp)//gameEntities.Select((g) => g.GetFirstScriptOfType<PE_InventoryEntity>()))
             {
@@ -485,8 +485,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             this.CustomInventories[droppedLoot.InventoryId].ExpandInventoryWithItem(droppedItem, droppedCount, droppedAmmo);
             // player.ControlledAgent.Get
-            LoggerHelper.LogAnAction(player, LogAction.PlayerDroppedItem, null, new object[] { 
-                droppedLoot.InventoryId, 
+            LoggerHelper.LogAnAction(player, LogAction.PlayerDroppedItem, null, new object[] {
+                droppedLoot.InventoryId,
                 inventory,
                 droppedItem,
                 droppedCount
@@ -545,7 +545,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             LoggerHelper.LogAnAction(player, LogAction.PlayerRevealedItemBag, affectedPlayers.ToArray());
             return true;
-        }    
+        }
 #endif
         #endregion
 
@@ -562,16 +562,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
 #endif
 #if SERVER
-public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
+        public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
         {
             GameNetwork.NetworkMessageHandlerRegisterer networkMessageHandlerRegisterer = new GameNetwork.NetworkMessageHandlerRegisterer(mode);
-                networkMessageHandlerRegisterer.Register<RequestOpenInventory>(this.HandleRequestOpenInventoryFromClient);
-                networkMessageHandlerRegisterer.Register<RequestInventoryTransfer>(this.HandleRequestInventoryTransferFromClient);
-                networkMessageHandlerRegisterer.Register<ClosedInventory>(this.HandleClosedInventoryFromClient);
-                networkMessageHandlerRegisterer.Register<InventoryHotkey>(this.HandleRequestInventoryHotkey);
-                networkMessageHandlerRegisterer.Register<InventorySplitItem>(this.HandleRequestSplit);
-                networkMessageHandlerRegisterer.Register<RequestDropItemFromInventory>(this.HandleRequestDropItemFromInventory);
-                networkMessageHandlerRegisterer.Register<RequestRevealItemBag>(this.HandleRequestRevealItemBag);
+            networkMessageHandlerRegisterer.Register<RequestOpenInventory>(this.HandleRequestOpenInventoryFromClient);
+            networkMessageHandlerRegisterer.Register<RequestInventoryTransfer>(this.HandleRequestInventoryTransferFromClient);
+            networkMessageHandlerRegisterer.Register<ClosedInventory>(this.HandleClosedInventoryFromClient);
+            networkMessageHandlerRegisterer.Register<InventoryHotkey>(this.HandleRequestInventoryHotkey);
+            networkMessageHandlerRegisterer.Register<InventorySplitItem>(this.HandleRequestSplit);
+            networkMessageHandlerRegisterer.Register<RequestDropItemFromInventory>(this.HandleRequestDropItemFromInventory);
+            networkMessageHandlerRegisterer.Register<RequestRevealItemBag>(this.HandleRequestRevealItemBag);
         }
 
         private bool ClosedInventoryOnServer(NetworkCommunicator player, string inventoryId)
@@ -1043,8 +1043,6 @@ public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer
                     }
                 }
 
-
-
                 GameNetwork.BeginModuleEventAsServer(player);
                 GameNetwork.WriteMessage(new ExecuteInventoryTransfer(
                     DraggedTag,
@@ -1071,9 +1069,28 @@ public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer
                     LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromChest, null, new object[] {
                         draggedFromInventory,
                         item,
-                        draggedCount - returnedAmount 
+                        draggedCount - returnedAmount
                     });
+                }
+                else if (droppedToInventory.StartsWith("PlayerInventory") && this.draggedFromInventory.StartsWith("Equipment"))
+                {
 
+                    ItemObject item = draggedItem;
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemToInventory, null, new object[] {
+                        draggedFromInventory,
+                        item,
+                        draggedCount - returnedAmount
+                    });
+                }
+                else if (droppedToInventory.StartsWith("Equipment") && this.draggedFromInventory.StartsWith("PlayerInventory"))
+                {
+
+                    ItemObject item = draggedItem;
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFrom    Inventory, null, new object[] {
+                        draggedFromInventory,
+                        item,
+                        draggedCount - returnedAmount
+                    });
                 }
             }
             // Update other peers
@@ -1118,8 +1135,8 @@ public void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer
                 }
             }
             return true;
-        }        
+        }
 #endif
-        #endregion        
+        #endregion
     }
 }
