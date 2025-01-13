@@ -65,7 +65,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 equipments.Add(spawnEquipment[EquipmentIndex.Weapon3].Item?.StringId);
 
                 GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(equipments));
+                GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(equipments, affectedAgent.MissionPeer.GetNetworkPeer()?.VirtualPlayer?.ToPlayerId()));
                 GameNetwork.EndModuleEventAsClient();
             }
         }
