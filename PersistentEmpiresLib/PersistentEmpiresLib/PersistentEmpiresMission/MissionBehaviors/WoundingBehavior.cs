@@ -24,6 +24,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public Dictionary<string, KeyValuePair<bool, long>> WoundedUntil = new Dictionary<string, KeyValuePair<bool, long>>();
         public Dictionary<string, Vec3> DeathPlace = new Dictionary<string, Vec3>();
         public Dictionary<string, bool> IsWounded = new Dictionary<string, bool>();
+        private static object _lock = new object();
         public Dictionary<string, Tuple<bool, Equipment>> DeathEquipment = new Dictionary<string, Tuple<bool, Equipment>>();
         public Dictionary<string, MissionEquipment> DeathWeaponEquipment = new Dictionary<string, MissionEquipment>();
 #if SERVER
@@ -157,11 +158,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();
                 DeathPlace[player.VirtualPlayer?.ToPlayerId()] = affectedAgent.Position;
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
-                DeathEquipment[player.VirtualPlayer?.ToPlayerId()] = new Tuple<bool, Equipment>(false, spawnEquipment);
-                // this.DeathWeaponEquipment[player] = affectedAgent.Equipment[Equip]
-                for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
+                lock (_lock)
                 {
-                    DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item2[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
+                    DeathEquipment[player.VirtualPlayer?.ToPlayerId()] = new Tuple<bool, Equipment>(false, spawnEquipment);
+                    // this.DeathWeaponEquipment[player] = affectedAgent.Equipment[Equip]
+                    for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
+                    {
+                        DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item2[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
+                    }
                 }
 
                 //if your wounded AND your not healed yet then keep old timer
@@ -225,29 +229,35 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private bool HandleRegisterClientEquipmentOnWound(NetworkCommunicator player, RegisterClientEquipmentOnWound message)
         {
-            if (DeathEquipment.ContainsKey(player.VirtualPlayer?.ToPlayerId()))
+            lock (_lock)
             {
-                var playerEquipment = DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item2;
-
-                if (!DeathEquipment[player.VirtualPlayer?.ToPlayerId()].Item1)
+                if (DeathEquipment.ContainsKey(message.PlayerId))
                 {
-                    if (playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
+                    var playerEquipment = DeathEquipment[message.PlayerId].Item2;
+
+                    if (!DeathEquipment[message.PlayerId].Item1)
                     {
-                        playerEquipment[EquipmentIndex.Weapon0] = new EquipmentElement();
+                        if (playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
+                        {
+                            playerEquipment[EquipmentIndex.Weapon0] = new EquipmentElement();
+                        }
+                        if (playerEquipment[EquipmentIndex.Weapon1].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[1]) ? null : message.Equipments[1]))
+                        {
+                            playerEquipment[EquipmentIndex.Weapon1] = new EquipmentElement();
+                        }
+                        if (playerEquipment[EquipmentIndex.Weapon2].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[2]) ? null : message.Equipments[2]))
+                        {
+                            playerEquipment[EquipmentIndex.Weapon2] = new EquipmentElement();
+                        }
+                        if (playerEquipment[EquipmentIndex.Weapon3].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[3]) ? null : message.Equipments[3]))
+                        {
+                            playerEquipment[EquipmentIndex.Weapon3] = new EquipmentElement();
+                        }
+                        DeathEquipment[message.PlayerId] = new Tuple<bool, Equipment>(true, playerEquipment);
+
+                        // Update items in db
+                        SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);
                     }
-                    if (playerEquipment[EquipmentIndex.Weapon1].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[1]) ? null : message.Equipments[1]))
-                    {
-                        playerEquipment[EquipmentIndex.Weapon1] = new EquipmentElement();
-                    }
-                    if (playerEquipment[EquipmentIndex.Weapon2].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[2]) ? null : message.Equipments[2]))
-                    {
-                        playerEquipment[EquipmentIndex.Weapon2] = new EquipmentElement();
-                    }
-                    if (playerEquipment[EquipmentIndex.Weapon3].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[3]) ? null : message.Equipments[3]))
-                    {
-                        playerEquipment[EquipmentIndex.Weapon3] = new EquipmentElement();
-                    }
-                    DeathEquipment[player.VirtualPlayer?.ToPlayerId()] = new Tuple<bool, Equipment>(true, playerEquipment);
                 }
             }
 

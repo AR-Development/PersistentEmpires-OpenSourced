@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using MySqlConnector;
 using Org.BouncyCastle.Utilities.Collections;
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Database.DBEntities;
@@ -32,7 +33,46 @@ namespace PersistentEmpiresSave.Database.Repositories
             SaveSystemBehavior.OnPlayerUpdateCustomName += OnPlayerUpdateCustomName;
             SaveSystemBehavior.OnPlayerUpdateWoundedUntil += OnPlayerUpdateWoundedUntil;
             SaveSystemBehavior.OnSaveDefaultsForNewPlayer += OnSaveDefaultsForNewPlayer;
+            SaveSystemBehavior.OnSavePlayerEquipmentOnDeath += OnSavePlayerEquipmentOnDeath;
             SaveSystemBehavior.OnGetWoundedUntil += OnGetWoundedUntil;
+        }
+
+        private static void OnSavePlayerEquipmentOnDeath(string playerId, Equipment equipment)
+        {
+            DBPlayer dbPlayer = new DBPlayer();
+            Debug.Print($"[Save Module] OnSavePlayerEquipmentOnDeath {playerId} ITEMS TO DB");
+            string equipment0 = "", equipment1 = "", equipment2 = "", equipment3 = "";
+            int amo0 = 0, amo1 = 0, amo2 = 0, amo3 = 0;
+
+            if (!equipment[EquipmentIndex.Weapon0].IsEmpty)
+            {
+                equipment0 = equipment[EquipmentIndex.Weapon0].Item.StringId;
+                amo0 = ItemHelper.GetMaximumAmmo(equipment[EquipmentIndex.Weapon0].Item);
+            }
+
+            if (!equipment[EquipmentIndex.Weapon1].IsEmpty)
+            {
+                equipment1 = equipment[EquipmentIndex.Weapon1].Item.StringId;
+                amo1 = ItemHelper.GetMaximumAmmo(equipment[EquipmentIndex.Weapon1].Item);
+            }
+
+            if (!equipment[EquipmentIndex.Weapon2].IsEmpty)
+            {
+                equipment2 = equipment[EquipmentIndex.Weapon2].Item.StringId;
+                amo2 = ItemHelper.GetMaximumAmmo(equipment[EquipmentIndex.Weapon2].Item);
+            }
+
+            if (!equipment[EquipmentIndex.Weapon3].IsEmpty)
+            {
+                equipment3 = equipment[EquipmentIndex.Weapon3].Item.StringId;
+                amo3 = ItemHelper.GetMaximumAmmo(equipment[EquipmentIndex.Weapon3].Item);
+            }
+
+            var updateSql = $"UPDATE players SET Equipment_0 = '{equipment0}', Equipment_1 = '{equipment1}', Equipment_2 = '{equipment2}' , Equipment_3 = '{equipment3}', " +
+                $"Ammo_0 = {amo0}, Ammo_1 = {amo1}, Ammo_2 = {amo2}, Ammo_3 = {amo3} "
+                + $"WHERE PlayerId='{playerId}';";
+
+            DBConnection.Connection.Execute(updateSql);
         }
 
         private static bool OnPlayerUpdateCustomName(NetworkCommunicator peer, string customName)

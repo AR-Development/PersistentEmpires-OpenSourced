@@ -112,7 +112,6 @@ namespace PersistentEmpiresServer.SpawnBehavior
                             }
                         }
 
-
                         agentBuildData.BodyProperties(GetBodyProperties(component, component.Culture));
                         agentBuildData.Age((int)agentBuildData.AgentBodyProperties.Age);
 

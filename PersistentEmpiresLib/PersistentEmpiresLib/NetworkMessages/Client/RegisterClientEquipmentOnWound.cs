@@ -9,11 +9,13 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
     public sealed class RegisterClientEquipmentOnWound : GameNetworkMessage
     {
         public List<string> Equipments;
+        public string PlayerId;
         public RegisterClientEquipmentOnWound() { }
 
-        public RegisterClientEquipmentOnWound(List<string> playerEquipment)
+        public RegisterClientEquipmentOnWound(List<string> playerEquipment, string playerId)
         {
             Equipments = playerEquipment;
+            PlayerId = playerId;
         }
 
         protected override MultiplayerMessageFilter OnGetLogFilter()
@@ -34,6 +36,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
             {
                 Equipments.Add(GameNetworkMessage.ReadStringFromPacket(ref result));
             }
+            PlayerId = GameNetworkMessage.ReadStringFromPacket(ref result);
             return result;
         }
 
@@ -44,6 +47,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
             {
                 GameNetworkMessage.WriteStringToPacket(Equipments[i]);
             }
+            GameNetworkMessage.WriteStringToPacket(PlayerId);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate DBPlayer GetPlayer(string playerId);
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
         public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
+        public delegate void SavePlayerEquipmentOnDeath(string playerId, Equipment equipment);
         public delegate void SaveDefaultsForNewPlayer(NetworkCommunicator peer, Equipment equipment);
         public delegate long? GetWoundedUntil(NetworkCommunicator peer);
 
@@ -78,6 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
+        public static event SavePlayerEquipmentOnDeath OnSavePlayerEquipmentOnDeath;
         public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
         public static event GetWoundedUntil OnGetWoundedUntil;
         
@@ -286,6 +288,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
+        public static void HandleSavePlayerEquipmentOnDeath(string playerId, Equipment equipment)
+        {
+            Debug.Print("[Save System] Is OnSavePlayerEquipmentOnDeath null ? " + (OnCreateOrSavePlayer == null).ToString());
+            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (OnSavePlayerEquipmentOnDeath != null)
+            {
+                OnSavePlayerEquipmentOnDeath(playerId, equipment);
+            }
+        }
+        
         public static void HandleSaveDefaultsForNewPlayer(NetworkCommunicator networkCommunicator, Equipment equipment)
         {
             Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnCreateOrSavePlayer == null).ToString());
@@ -487,6 +499,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 OnPlayerUpdateWoundedUntil(communicator, woundTime);
                 LogQuery(String.Format("OnPlayerUpdateWoundedUntil Took {0} ms", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - rightNow));
+            }
+        }
+
+        internal static void HandleSavePlayerEquipmentOnDeath(NetworkCommunicator communicator, Equipment equipment)
+        {
+            if (OnPlayerUpdateWoundedUntil != null)
+            {
+                OnPlayerUpdateWoundedUntil(communicator, woundTime);
             }
         }
 
