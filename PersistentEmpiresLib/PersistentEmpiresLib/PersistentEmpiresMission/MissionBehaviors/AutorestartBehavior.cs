@@ -60,11 +60,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (_checkpoints.ContainsKey(remainingSeconds))
             {
-                InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
-                if (remainingSeconds <= 300)
-                {
-                    InformationComponent.Instance.BroadcastAnnouncement($"[AutoRestart] {_checkpoints[remainingSeconds].DebugMessage}");
-                }
+                InformationComponent.Instance.BroadcastAnnouncement($"{_checkpoints[remainingSeconds].DebugMessage}");
+                //InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
                 Debug.Print(_checkpoints[remainingSeconds].DebugMessage);
             }
         }
