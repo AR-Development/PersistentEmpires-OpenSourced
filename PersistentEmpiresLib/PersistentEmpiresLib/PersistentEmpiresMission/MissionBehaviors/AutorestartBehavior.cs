@@ -27,7 +27,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {60, ("1 minute", "Server will be restarted in 1 minute.") },
                 {30, ("30 seconds", "Server will be restarted in 30 seconds.") },
                 {20, ("20 seconds", "Server will be restarted in 20 seconds.") },
-                {10, ("10 seconds", "Log the fuck off before you lose yo shit to the final messages.") }
+                {10, ("10 seconds", "Log the fuck off before you lose yo shit.") }
             };
         }
 
@@ -61,6 +61,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (_checkpoints.ContainsKey(remainingSeconds))
             {
                 InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
+                if (remainingSeconds <= 300)
+                {
+                    InformationComponent.Instance.BroadcastAnnouncement($"[AutoRestart] {_checkpoints[remainingSeconds].DebugMessage}");
+                }
                 Debug.Print(_checkpoints[remainingSeconds].DebugMessage);
             }
         }
