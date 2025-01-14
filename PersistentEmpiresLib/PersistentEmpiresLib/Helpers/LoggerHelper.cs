@@ -160,9 +160,9 @@ namespace PersistentEmpiresLib.Helpers
                 case nameof(LogAction.PlayerTransferredItemFromChest):
                     return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemToInventory):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to the inventory({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from I inventory to the inventory({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemFromInventory):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the inventory({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to I inventory from the inventory({(string)oParams[0]})";
                 case nameof(LogAction.PlayerOpensStockpile):
                 case nameof(LogAction.PlayerClosesStockpile):
                     return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensStockpile ? "accessed to" : "closed")} a stockpile market. Xml file of market is {((PE_StockpileMarket)oParams[0]).XmlFile}";
