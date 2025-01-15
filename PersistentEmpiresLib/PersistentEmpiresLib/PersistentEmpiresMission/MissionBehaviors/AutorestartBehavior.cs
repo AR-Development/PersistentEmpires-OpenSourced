@@ -41,6 +41,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        private static bool saveAllOnceBeforeRestart= true;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
@@ -52,8 +53,25 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            
+            if(saveAllOnceBeforeRestart && IsActive && remainingSeconds <= 5)
+            {
+                try
+                {
+                    var saveSystemBehavior = Mission.GetMissionBehavior<SaveSystemBehavior>();
 
-            if (IsActive && remainingSeconds <= 0)
+                    if (saveSystemBehavior != null)
+                    {
+                        // Trigger new save all
+                        saveAllOnceBeforeRestart = false;
+                        saveSystemBehavior.LastSaveAt -= saveSystemBehavior.SaveDuration;
+                    }
+                }
+                catch (Exception ex) 
+                { 
+                }
+            }
+            else if (IsActive && remainingSeconds <= 0)
             {
                 throw new Exception("Server auto restart.");
             }
