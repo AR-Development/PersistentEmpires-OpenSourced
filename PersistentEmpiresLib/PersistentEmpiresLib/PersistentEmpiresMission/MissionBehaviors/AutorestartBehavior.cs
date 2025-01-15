@@ -54,7 +54,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-            if (saveAllOnceBeforeRestart && IsActive && remainingSeconds <= 5)
+            if (saveAllOnceBeforeRestart && IsActive && remainingSeconds <= 2)
             {
                 try
                 {
