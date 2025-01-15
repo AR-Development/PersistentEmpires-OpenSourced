@@ -232,62 +232,86 @@ namespace PersistentEmpiresSave.Database.Repositories
                 FactionIndex = persistentEmpireRepresentative?.GetFactionIndex() ?? 0,
                 Health = (int)(peer.ControlledAgent?.Health ?? 100),
                 Money = persistentEmpireRepresentative?.Gold ?? 100,
-                Class = persistentEmpireRepresentative?.GetClassId() ?? PersistentEmpireBehavior.DefaultClass,
-                PosX = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.X : 0,
-                PosY = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Y : 0,
-                PosZ = peer.ControlledAgent?.IsActive() == true ? peer.ControlledAgent.Position.Z : 0,
+                Class = persistentEmpireRepresentative?.GetClassId() ?? PersistentEmpireBehavior.DefaultClass,            
                 WoundedUntil = persistentEmpireRepresentative.GetWoundedUntil(),
             };
-
-            if (peer.ControlledAgent?.IsActive() == true && persistentEmpireRepresentative != null)
+            try
             {
-                MissionEquipment wieldedEquipment = peer.ControlledAgent.Equipment;
-                Equipment armors = peer.ControlledAgent.SpawnEquipment;
-
-                for (int i = 0; i < 4; i++)
+                if(peer.ControlledAgent != null)
                 {
-                    if (!wieldedEquipment[i].IsEmpty)
+                    dbPlayer.PosX = peer.ControlledAgent.Position.X;
+                    dbPlayer.PosY = peer.ControlledAgent.Position.Y;
+                    dbPlayer.PosZ = peer.ControlledAgent.Position.Z;
+                }
+                else
+                {
+                    dbPlayer.PosX = 0;
+                    dbPlayer.PosY = 0;
+                    dbPlayer.PosZ = 0;
+                }
+            }
+            catch 
+            {
+                dbPlayer.PosX = 0;
+                dbPlayer.PosY = 0;
+                dbPlayer.PosZ = 0;
+            }
+
+            if (peer.ControlledAgent != null && persistentEmpireRepresentative != null)
+            {
+                try
+                {
+                    MissionEquipment wieldedEquipment = peer.ControlledAgent.Equipment;
+                    Equipment armors = peer.ControlledAgent.SpawnEquipment;
+
+                    for (int i = 0; i < 4; i++)
                     {
-                        switch (i)
+                        if (!wieldedEquipment[i].IsEmpty)
                         {
-                            case 0:
-                                dbPlayer.Equipment_0 = wieldedEquipment[i].Item.StringId;
-                                dbPlayer.Ammo_0 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
-                                    ? (int)wieldedEquipment[i].Amount
-                                    : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
-                                break;
-                            case 1:
-                                dbPlayer.Equipment_1 = wieldedEquipment[i].Item.StringId;
-                                dbPlayer.Ammo_1 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
-                                    ? (int)wieldedEquipment[i].Amount
-                                    : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
-                                break;
-                            case 2:
-                                dbPlayer.Equipment_2 = wieldedEquipment[i].Item.StringId;
-                                dbPlayer.Ammo_2 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
-                                    ? (int)wieldedEquipment[i].Amount
-                                    : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
-                                break;
-                            case 3:
-                                dbPlayer.Equipment_3 = wieldedEquipment[i].Item.StringId;
-                                dbPlayer.Ammo_3 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
-                                    ? (int)wieldedEquipment[i].Amount
-                                    : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
-                                break;
+                            switch (i)
+                            {
+                                case 0:
+                                    dbPlayer.Equipment_0 = wieldedEquipment[i].Item.StringId;
+                                    dbPlayer.Ammo_0 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
+                                        ? (int)wieldedEquipment[i].Amount
+                                        : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
+                                    break;
+                                case 1:
+                                    dbPlayer.Equipment_1 = wieldedEquipment[i].Item.StringId;
+                                    dbPlayer.Ammo_1 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
+                                        ? (int)wieldedEquipment[i].Amount
+                                        : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
+                                    break;
+                                case 2:
+                                    dbPlayer.Equipment_2 = wieldedEquipment[i].Item.StringId;
+                                    dbPlayer.Ammo_2 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
+                                        ? (int)wieldedEquipment[i].Amount
+                                        : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
+                                    break;
+                                case 3:
+                                    dbPlayer.Equipment_3 = wieldedEquipment[i].Item.StringId;
+                                    dbPlayer.Ammo_3 = wieldedEquipment[i].IsAnyConsumable() || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Crossbow || wieldedEquipment[i].Item.Type == ItemObject.ItemTypeEnum.Musket
+                                        ? (int)wieldedEquipment[i].Amount
+                                        : ItemHelper.GetMaximumAmmo(wieldedEquipment[i].Item);
+                                    break;
+                            }
                         }
                     }
+
+                    dbPlayer.Armor_Head = !armors[EquipmentIndex.Head].IsEmpty ? armors[EquipmentIndex.Head].Item.StringId : null;
+                    dbPlayer.Armor_Body = !armors[EquipmentIndex.Body].IsEmpty ? armors[EquipmentIndex.Body].Item.StringId : null;
+                    dbPlayer.Armor_Cape = !armors[EquipmentIndex.Cape].IsEmpty ? armors[EquipmentIndex.Cape].Item.StringId : null;
+                    dbPlayer.Armor_Leg = !armors[EquipmentIndex.Leg].IsEmpty ? armors[EquipmentIndex.Leg].Item.StringId : null;
+                    dbPlayer.Armor_Gloves = !armors[EquipmentIndex.Gloves].IsEmpty ? armors[EquipmentIndex.Gloves].Item.StringId : null;
+
+                    if (peer.ControlledAgent.MountAgent != null)
+                    {
+                        dbPlayer.Horse = peer.ControlledAgent.MountAgent.SpawnEquipment[EquipmentIndex.ArmorItemEndSlot].Item?.StringId;
+                        dbPlayer.HorseHarness = peer.ControlledAgent.MountAgent.SpawnEquipment[EquipmentIndex.HorseHarness].Item?.StringId;
+                    }
                 }
-
-                dbPlayer.Armor_Head = !armors[EquipmentIndex.Head].IsEmpty ? armors[EquipmentIndex.Head].Item.StringId : null;
-                dbPlayer.Armor_Body = !armors[EquipmentIndex.Body].IsEmpty ? armors[EquipmentIndex.Body].Item.StringId : null;
-                dbPlayer.Armor_Cape = !armors[EquipmentIndex.Cape].IsEmpty ? armors[EquipmentIndex.Cape].Item.StringId : null;
-                dbPlayer.Armor_Leg = !armors[EquipmentIndex.Leg].IsEmpty ? armors[EquipmentIndex.Leg].Item.StringId : null;
-                dbPlayer.Armor_Gloves = !armors[EquipmentIndex.Gloves].IsEmpty ? armors[EquipmentIndex.Gloves].Item.StringId : null;
-
-                if (peer.ControlledAgent.MountAgent != null)
+                catch (Exception e)
                 {
-                    dbPlayer.Horse = peer.ControlledAgent.MountAgent.SpawnEquipment[EquipmentIndex.ArmorItemEndSlot].Item?.StringId;
-                    dbPlayer.HorseHarness = peer.ControlledAgent.MountAgent.SpawnEquipment[EquipmentIndex.HorseHarness].Item?.StringId;
                 }
             }
 
