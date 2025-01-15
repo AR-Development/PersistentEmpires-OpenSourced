@@ -999,7 +999,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                                 draggedItem.Type == ItemObject.ItemTypeEnum.Bolts ||
                                 draggedItem.Type == ItemObject.ItemTypeEnum.Bullets)
                         {
-                            weapon = new MissionWeapon(draggedItem, null, b, (short)draggedAmmo);
+                            //weapon = new MissionWeapon(draggedItem, null, b, (short)draggedAmmo);
+                            weapon = new MissionWeapon(draggedItem, null, b, player.ControlledAgent.Equipment[draggedIndex].Amount);
+                            
                         }
                         else
                         {
