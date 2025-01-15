@@ -53,9 +53,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-            if (IsActive && remainingSeconds <= 0)
+            if(IsActive && remainingSeconds <= 2)
             {
-                throw new Exception("Server auto restart.");
+                var saveBehavior = Mission.Current.GetMissionBehavior<SaveSystemBehavior>();
+
+                if (saveBehavior != null) 
+                {
+                    saveBehavior.LastSaveAt -= saveBehavior.SaveDuration;
+                }
+            }
+            else if (IsActive && remainingSeconds <= 0)
+            {
+                if (!SaveSystemBehavior.IsRunning)
+                {
+                    throw new Exception("Server auto restart.");
+                }
             }
 
             if (_checkpoints.ContainsKey(remainingSeconds) && !_checkpoints[remainingSeconds].shown)
