@@ -256,7 +256,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         DeathEquipment[message.PlayerId] = new Tuple<bool, Equipment>(true, playerEquipment);
 
                         // Update items in db
-                        SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);
+                        SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);                        
                     }
                 }
             }
