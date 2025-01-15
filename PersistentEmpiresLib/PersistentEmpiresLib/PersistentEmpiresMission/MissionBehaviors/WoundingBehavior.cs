@@ -47,7 +47,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
 
-            if (affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
+            if (affectedAgent == Mission.Current.MainAgent && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
                                     && agentState == AgentState.Killed
                                     && affectedAgent.MissionPeer != null
                                     && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false)
