@@ -1008,7 +1008,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                             weapon = new MissionWeapon(draggedItem, null, b);
                             if (loadedBolt.Item  != null)
                             {
-                                weapon.SetAmmo(loadedBolt);
+                                weapon.ReloadAmmo(loadedBolt, loadedBolt.ReloadPhaseCount);
                             }
                         }
                         player.ControlledAgent.EquipWeaponWithNewEntity((EquipmentIndex)droppedIndex, ref weapon);
