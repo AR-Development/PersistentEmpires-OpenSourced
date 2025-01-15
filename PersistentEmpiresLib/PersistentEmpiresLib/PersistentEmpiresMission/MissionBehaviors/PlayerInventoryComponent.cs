@@ -841,7 +841,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             string droppedToInventory = string.Join("_", droppedTag.Take(droppedTag.Length - 1));
             int draggedIndex = int.Parse(draggedTag.Last());
             int droppedIndex = int.Parse(droppedTag.Last());
-            MissionWeapon loadedBolt = MissionWeapon.Invalid;
             ItemObject draggedItem = null;
             InventorySlot itemAddedFrom = null;
             int draggedAmmo = 0;
@@ -865,16 +864,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     draggedItem.ItemType == ItemObject.ItemTypeEnum.Bullets)
                 {
                     draggedAmmo = player.ControlledAgent.Equipment[draggedIndex].Amount;
-                }
-                if (draggedIndex >= 0 && draggedIndex <= 3)
-                {
-                    try
-                    {
-                        loadedBolt = player.ControlledAgent.Equipment[draggedIndex].AmmoWeapon;
-                    }
-                    catch (Exception ex)
-                    {
-                    }
                 }
                 draggedCount = agentEquipment[draggedIndex].IsEmpty ? 0 : 1;
             }
@@ -1016,10 +1005,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         else
                         {
                             weapon = new MissionWeapon(draggedItem, null, b);
-                            if (loadedBolt.Item != null)
-                            {
-                                weapon.ReloadAmmo(loadedBolt, loadedBolt.ReloadPhaseCount);
-                            }
                         }
                         player.ControlledAgent.EquipWeaponWithNewEntity((EquipmentIndex)droppedIndex, ref weapon);
                         player.ControlledAgent.RemoveEquippedWeapon((EquipmentIndex)draggedIndex);
