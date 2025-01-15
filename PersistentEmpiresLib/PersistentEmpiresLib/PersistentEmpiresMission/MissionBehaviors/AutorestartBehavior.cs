@@ -41,6 +41,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        private static bool needToBeTrigged = true;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
@@ -53,10 +54,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-            if(IsActive && remainingSeconds <= 2)
+            if(needToBeTrigged && IsActive && remainingSeconds <= 2)
             {
                 var saveBehavior = Mission.Current.GetMissionBehavior<SaveSystemBehavior>();
 
+                needToBeTrigged = false;
+                
                 if (saveBehavior != null) 
                 {
                     saveBehavior.LastSaveAt -= saveBehavior.SaveDuration;
