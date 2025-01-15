@@ -130,11 +130,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
         {
-            //PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            //if (persistentEmpireRepresentative != null)
-            //{
-            //    persistentEmpireRepresentative.GetInventory().EmptyInventory();
-            //}
+            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            if (!WoundingBehavior.Instance.WoundingEnabled && persistentEmpireRepresentative != null)
+            {
+                persistentEmpireRepresentative.GetInventory().EmptyInventory();
+            }
             if (this.OpenedByPeerInventory.ContainsKey(player))
             {
                 if (this.OpenedByPeerInventory[player] != null)
@@ -1002,12 +1002,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         {
                             //weapon = new MissionWeapon(draggedItem, null, b, (short)draggedAmmo);
                             weapon = new MissionWeapon(draggedItem, null, b, player.ControlledAgent.Equipment[draggedIndex].Amount);
-                            
+
                         }
                         else
                         {
                             weapon = new MissionWeapon(draggedItem, null, b);
-                            if (loadedBolt.Item  != null)
+                            if (loadedBolt.Item != null)
                             {
                                 weapon.ReloadAmmo(loadedBolt, loadedBolt.ReloadPhaseCount);
                             }
