@@ -866,7 +866,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     draggedAmmo = player.ControlledAgent.Equipment[draggedIndex].Amount;
                 }
-                loadedBolt = player.ControlledAgent.Equipment[draggedIndex].AmmoWeapon;
+                if (draggedIndex >= 0 && draggedIndex <= 3)
+                {
+                    try
+                    {
+                        loadedBolt = player.ControlledAgent.Equipment[draggedIndex].AmmoWeapon;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
                 draggedCount = agentEquipment[draggedIndex].IsEmpty ? 0 : 1;
             }
             else if (draggedFromInventory == "PlayerInventory")
