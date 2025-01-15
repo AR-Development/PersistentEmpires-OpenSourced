@@ -130,11 +130,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
         {
-            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            if (persistentEmpireRepresentative != null)
-            {
-                persistentEmpireRepresentative.GetInventory().EmptyInventory();
-            }
+            //PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+            //if (persistentEmpireRepresentative != null)
+            //{
+            //    persistentEmpireRepresentative.GetInventory().EmptyInventory();
+            //}
             if (this.OpenedByPeerInventory.ContainsKey(player))
             {
                 if (this.OpenedByPeerInventory[player] != null)
