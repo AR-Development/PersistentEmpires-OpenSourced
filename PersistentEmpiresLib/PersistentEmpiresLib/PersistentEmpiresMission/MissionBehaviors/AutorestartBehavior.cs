@@ -53,8 +53,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            
-            if(saveAllOnceBeforeRestart && IsActive && remainingSeconds <= 5)
+
+            if (saveAllOnceBeforeRestart && IsActive && remainingSeconds <= 5)
             {
                 try
                 {
@@ -67,11 +67,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         saveSystemBehavior.LastSaveAt -= saveSystemBehavior.SaveDuration;
                     }
                 }
-                catch (Exception ex) 
-                { 
+                catch (Exception ex)
+                {
                 }
             }
-            else if (IsActive && remainingSeconds <= 0)
+            else if (IsActive && remainingSeconds <= 0 && !SaveSystemBehavior.IsRunning)
             {
                 throw new Exception("Server auto restart.");
             }

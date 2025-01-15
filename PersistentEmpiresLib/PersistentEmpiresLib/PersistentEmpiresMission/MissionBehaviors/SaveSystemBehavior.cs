@@ -597,6 +597,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // Define your error logging logic
         }
 
+        public static bool IsRunning { get { return _running; } }
         private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
