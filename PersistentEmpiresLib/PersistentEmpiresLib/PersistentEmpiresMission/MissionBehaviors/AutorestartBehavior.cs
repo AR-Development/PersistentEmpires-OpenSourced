@@ -54,13 +54,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             int remainingSeconds = (int)(_restartAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-            if(needToBeTrigged && IsActive && remainingSeconds <= 2)
+            if (needToBeTrigged && IsActive && remainingSeconds <= 2)
             {
                 var saveBehavior = Mission.Current.GetMissionBehavior<SaveSystemBehavior>();
 
                 needToBeTrigged = false;
-                
-                if (saveBehavior != null) 
+
+                if (saveBehavior != null)
                 {
                     saveBehavior.LastSaveAt -= saveBehavior.SaveDuration;
                 }
@@ -78,6 +78,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 _checkpoints[remainingSeconds] = (true, _checkpoints[remainingSeconds].Message, _checkpoints[remainingSeconds].DebugMessage);
                 //InformationComponent.Instance.BroadcastAnnouncement($"{_checkpoints[remainingSeconds].DebugMessage}");
                 InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
+                InformationComponent.Instance.BroadcastMessage(_checkpoints[remainingSeconds].DebugMessage, Colors.Red.ToUnsignedInteger());
                 Debug.Print(_checkpoints[remainingSeconds].DebugMessage);
             }
         }
