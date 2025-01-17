@@ -75,10 +75,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (_checkpoints.ContainsKey(remainingSeconds) && !_checkpoints[remainingSeconds].shown)
             {
-                _checkpoints[remainingSeconds] = (true, _checkpoints[remainingSeconds].Message, _checkpoints[remainingSeconds].DebugMessage);
-                //InformationComponent.Instance.BroadcastAnnouncement($"{_checkpoints[remainingSeconds].DebugMessage}");
-                InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
-                InformationComponent.Instance.BroadcastMessage(_checkpoints[remainingSeconds].DebugMessage, Colors.Red.ToUnsignedInteger());
+                InformationComponent.Instance.BroadcastAnnouncement($"{_checkpoints[remainingSeconds].DebugMessage}");
+                //InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage);
                 Debug.Print(_checkpoints[remainingSeconds].DebugMessage);
             }
         }

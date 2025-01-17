@@ -55,6 +55,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public void HandleOnAnnouncementFromServer(Announcement announcement)
         {
+            InformationManager.ClearAllMessages();
             InformationManager.AddSystemNotification(announcement.Message);
         }
 
