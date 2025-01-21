@@ -255,8 +255,23 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         }
                         DeathEquipment[message.PlayerId] = new Tuple<bool, Equipment>(true, playerEquipment);
 
+                        var weapon0 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon0].Item, null, null);
+                        player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon0, ref weapon0);
+
+                        var weapon1 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon1].Item, null, null);
+                        player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon1, ref weapon1);
+
+                        var weapon2 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon2].Item, null, null);
+                        player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon2, ref weapon2);
+
+                        var weapon3 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon3].Item, null, null);
+                        player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon3, ref weapon3);
+
+                        // Save Current equipment, 
+                        SaveSystemBehavior.HandleCreateOrSavePlayer(player);
                         // Update items in db
-                        SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);                        
+                        //SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);
+                        
                     }
                 }
             }
