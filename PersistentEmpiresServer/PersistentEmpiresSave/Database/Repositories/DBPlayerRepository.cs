@@ -130,7 +130,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(updateQuery, new
             {
                 WoundedUntil = woundedUntil,
-                PlayerId = dbplayer.PlayerId
+                PlayerId = dbplayer.PlayerId.EncodeSpecialMariaDbChars()
             });
         }
 
@@ -142,7 +142,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         VALUES ";
             var dbPlayer = CreateDBPlayer(player, equipment);
             if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
-            query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
+            query += $"('{dbPlayer.PlayerId.EncodeSpecialMariaDbChars()}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
             // remove last ","
             query = query.TrimEnd(',');
             query += @" 
@@ -175,7 +175,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(updateQuery, new
             {
                 DiscordId = id,
-                PlayerId = dbplayer.PlayerId
+                PlayerId = dbplayer.PlayerId.EncodeSpecialMariaDbChars()
             });
         }
 
@@ -209,7 +209,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         INSERT INTO Players (PlayerId, Name, Hunger, Health, Money, Horse, HorseHarness, Equipment_0, Equipment_1, Equipment_2, Equipment_3, Armor_Head, Armor_Body, Armor_Leg, Armor_Gloves, Armor_Cape, PosX, PosY, PosZ, FactionIndex, Class, Ammo_0, Ammo_1, Ammo_2, Ammo_3, WoundedUntil)
         VALUES ";
             if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
-            query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
+            query += $"('{dbPlayer.PlayerId.EncodeSpecialMariaDbChars()}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
             query = query.TrimEnd(',');
             query += @" 
         ON DUPLICATE KEY UPDATE
@@ -455,7 +455,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         VALUES ";
             var dbPlayer = CreateDBPlayer(player);
             if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
-            query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
+            query += $"('{dbPlayer.PlayerId.EncodeSpecialMariaDbChars()}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
             // remove last ","
             query = query.TrimEnd(',');
             query += @" 
@@ -478,7 +478,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 {
                     var dbPlayer = CreateDBPlayer(player);
                     if (dbPlayer.FactionIndex == -1) dbPlayer.FactionIndex = 0;
-                    query += $"('{dbPlayer.PlayerId}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
+                    query += $"('{dbPlayer.PlayerId.EncodeSpecialMariaDbChars()}', '{dbPlayer.Name.EncodeSpecialMariaDbChars()}', {dbPlayer.Hunger}, {dbPlayer.Health}, {dbPlayer.Money}, '{(string.IsNullOrEmpty(dbPlayer.Horse) ? "null" : dbPlayer.Horse)}', '{(string.IsNullOrEmpty(dbPlayer.HorseHarness) ? "null" : dbPlayer.HorseHarness)}', '{dbPlayer.Equipment_0}', '{dbPlayer.Equipment_1}', '{dbPlayer.Equipment_2}', '{dbPlayer.Equipment_3}', '{dbPlayer.Armor_Head}', '{dbPlayer.Armor_Body}', '{dbPlayer.Armor_Leg}', '{dbPlayer.Armor_Gloves}', '{dbPlayer.Armor_Cape}', {dbPlayer.PosX}, {dbPlayer.PosY}, {dbPlayer.PosZ}, {dbPlayer.FactionIndex}, '{dbPlayer.Class}', {dbPlayer.Ammo_0}, {dbPlayer.Ammo_1}, {dbPlayer.Ammo_2}, {dbPlayer.Ammo_3}, {(dbPlayer.WoundedUntil.HasValue ? dbPlayer.WoundedUntil.Value.ToString() : "NULL")}),";
                 }
                 // remove last ","
                 query = query.TrimEnd(',');
