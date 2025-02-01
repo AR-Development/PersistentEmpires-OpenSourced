@@ -149,10 +149,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
 
-            if (affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
-                && agentState == AgentState.Killed && WoundingEnabled
-                && affectedAgent.MissionPeer != null
-                && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive
+            if (WoundingEnabled && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
+                && agentState == AgentState.Killed && affectedAgent.MissionPeer != null
+                //&& affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false && affectedAgent.MissionPeer.GetNetworkPeer().IsConnectionActive
             )
             {
                 var player = affectedAgent.MissionPeer.GetNetworkPeer();
@@ -237,6 +236,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
                     if (!DeathEquipment[message.PlayerId].Item1)
                     {
+                        DeathEquipment[message.PlayerId] = new Tuple<bool, Equipment>(true, playerEquipment);
+
                         if (playerEquipment[EquipmentIndex.Weapon0].Item?.StringId != (string.IsNullOrEmpty(message.Equipments[0]) ? null : message.Equipments[0]))
                         {
                             playerEquipment[EquipmentIndex.Weapon0] = new EquipmentElement();
@@ -253,8 +254,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         {
                             playerEquipment[EquipmentIndex.Weapon3] = new EquipmentElement();
                         }
-                        DeathEquipment[message.PlayerId] = new Tuple<bool, Equipment>(true, playerEquipment);
-
+                        
                         var weapon0 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon0].Item, null, null);
                         player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon0, ref weapon0);
 
@@ -271,7 +271,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         SaveSystemBehavior.HandleCreateOrSavePlayer(player);
                         // Update items in db
                         //SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);
-                        
                     }
                 }
             }

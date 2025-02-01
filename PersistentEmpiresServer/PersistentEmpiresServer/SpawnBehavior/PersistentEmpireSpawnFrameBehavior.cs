@@ -88,6 +88,12 @@ namespace PersistentEmpiresServer.SpawnBehavior
                     PersistentEmpireRepresentative persistentEmpireRepresentative = networkCommunicator.GetComponent<PersistentEmpireRepresentative>();
                     if (component != null && component.ControlledAgent == null && component.HasSpawnedAgentVisuals && !this.CanUpdateSpawnEquipment(component) && persistentEmpireRepresentative != null)
                     {
+                        if (WoundingBehavior.Instance.WoundingEnabled 
+                            && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator.VirtualPlayer?.ToPlayerId())
+                            && !WoundingBehavior.Instance.DeathEquipment[networkCommunicator.VirtualPlayer?.ToPlayerId()].Item1)
+                        {
+                            continue;
+                        }
 
                         MultiplayerClassDivisions.MPHeroClass mpheroClassForPeer = MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>().FirstOrDefault((mpHeroClass) => mpHeroClass.HeroCharacter.StringId == persistentEmpireRepresentative.GetClassId());
 
@@ -103,9 +109,7 @@ namespace PersistentEmpiresServer.SpawnBehavior
                         if (WoundingBehavior.Instance.WoundingEnabled)
                         {
                             if (WoundingBehavior.Instance.IsWounded.ContainsKey(networkCommunicator.VirtualPlayer?.ToPlayerId())
-                                && WoundingBehavior.Instance.IsWounded[networkCommunicator.VirtualPlayer?.ToPlayerId()]
-                                && WoundingBehavior.Instance.DeathEquipment.ContainsKey(networkCommunicator.VirtualPlayer?.ToPlayerId())
-                                && WoundingBehavior.Instance.DeathEquipment[networkCommunicator.VirtualPlayer?.ToPlayerId()].Item1)
+                                && WoundingBehavior.Instance.IsWounded[networkCommunicator.VirtualPlayer?.ToPlayerId()])
                             {
                                 agentBuildData.Equipment(WoundingBehavior.Instance.DeathEquipment[networkCommunicator.VirtualPlayer?.ToPlayerId()].Item2);
                                 WoundingBehavior.Instance.DeathEquipment.Remove(networkCommunicator.VirtualPlayer?.ToPlayerId()); // Done.
