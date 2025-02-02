@@ -48,6 +48,7 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerSpawnsItem = "PlayerSpawnsItem"; // Done
         public static readonly string PlayerItemGathers = "PlayerItemGathers"; // Done
         public static readonly string PlayerBansPlayer = "PlayerBansPlayer"; // Done
+        public static readonly string PlayerUnBansPlayer = "PlayerUnBansPlayer"; // Done
         public static readonly string PlayerKicksPlayer = "PlayerKicksPlayer"; // Done
         public static readonly string PlayerTempBanPlayer = "PlayerTempBanPlayer"; // Done
         public static readonly string PlayerFadesPlayer = "PlayerFadesPlayer"; // Done
@@ -205,6 +206,8 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} gathered an item from ItemGathering script {((ItemObject)oParams[0]).Name}";
                 case nameof(LogAction.PlayerBansPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} banned a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerUnBansPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} unbanned a player: {(string)oParams[0]}";
                 case nameof(LogAction.PlayerTempBanPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} temp banned a player: {AffectedPlayersToString(affectedPlayers)}";
                 case nameof(LogAction.PlayerKicksPlayer):

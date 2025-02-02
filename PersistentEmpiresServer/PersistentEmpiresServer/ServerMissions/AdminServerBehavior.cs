@@ -9,6 +9,7 @@ using PersistentEmpiresSave.Database.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -35,6 +36,8 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public delegate void BanPlayerDelegate(string PlayerId, string PlayerName, long BanEndsAt);
         public static event BanPlayerDelegate OnBanPlayer;
+        public delegate void BanUnPlayerDelegate(string AdminId, string PlayerId);
+        public static event BanUnPlayerDelegate OnUnBanPlayer;
 
         public static AdminServerBehavior Instance { get; private set; }
 
@@ -46,6 +49,7 @@ namespace PersistentEmpiresServer.ServerMissions
         {
             return ModuleHelper.GetModuleFullPath("PersistentEmpires") + this.AdminFile;
         }
+        
         public void BanPlayer(NetworkCommunicator player, int seconds)
         {
             long bannedUntil = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + seconds;
@@ -61,6 +65,25 @@ namespace PersistentEmpiresServer.ServerMissions
             if (player.IsConnectionActive)
             {
                 DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(player.VirtualPlayer.Id, false);
+            }
+        }
+
+        public bool UnBanPlayer(string playerId)
+        {
+            if (!File.Exists(BanFilePath()))
+            {
+                return false;
+            }
+            try
+            {
+                List<string> bannedPlayers = File.ReadAllLines(BanFilePath()).ToList().Where(x => !x.Contains(playerId)).ToList();
+                File.WriteAllLines(BanFilePath(), bannedPlayers.ToArray());
+
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                return false;
             }
         }
 
@@ -163,6 +186,7 @@ namespace PersistentEmpiresServer.ServerMissions
             {
                 networkMessageHandlerRegisterer.Register<RequestTempBan>(this.HandleRequestTempBanFromClient);
                 networkMessageHandlerRegisterer.Register<RequestPermBan>(this.HandleRequestPermBanFromClient);
+                networkMessageHandlerRegisterer.Register<RequestUnBan>(HandleRequestUnBan);
                 networkMessageHandlerRegisterer.Register<RequestKick>(this.HandleRequestKickFromClient);
                 networkMessageHandlerRegisterer.Register<RequestKill>(this.HandleRequestKillFromClient);
                 networkMessageHandlerRegisterer.Register<RequestFade>(this.HandleRequestFadeFromClient);
@@ -179,7 +203,7 @@ namespace PersistentEmpiresServer.ServerMissions
                 networkMessageHandlerRegisterer.Register<RequestBecameGodlike>(this.HandleRequestBecameGodlike);
                 networkMessageHandlerRegisterer.Register<AdminChat>(this.HandleAdminChatFromServer);
                 networkMessageHandlerRegisterer.Register<RequestTpToPosition>(HandleRequestTpToPositionFromClient);
-                networkMessageHandlerRegisterer.Register<RequestRespawn>(HandleRequestRespawn);
+                networkMessageHandlerRegisterer.Register<RequestRespawn>(HandleRequestRespawn);                
             }
         }
 
@@ -405,6 +429,36 @@ namespace PersistentEmpiresServer.ServerMissions
             LoggerHelper.LogAnAction(admin, LogAction.PlayerBansPlayer, new AffectedPlayer[] { new AffectedPlayer(message.Player) });
             return true;
         }
+
+        public bool HandleRequestUnBan(NetworkCommunicator admin, RequestUnBan message)
+        {
+            var persistentEmpireRepresentative = admin.GetComponent<PersistentEmpireRepresentative>();
+
+            if (!persistentEmpireRepresentative.IsAdmin)
+            {
+                return false;
+            }
+
+            if (OnUnBanPlayer == null)
+            {
+                if(UnBanPlayer(message.PlayerId))
+                {
+                    LoggerHelper.LogAnAction(admin, LogAction.PlayerBansPlayer, null, new object[] { message.PlayerId });
+                    InformationComponent.Instance.SendMessage("Player was unbanned", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
+                }
+                else
+                {
+                    InformationComponent.Instance.SendMessage("Something went wrong", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
+                }
+            }
+            else
+            {
+                OnUnBanPlayer(message.AdminId, message.PlayerId);
+            }
+            
+            return true;
+        }
+        
         public bool HandleRequestKickFromClient(NetworkCommunicator admin, RequestKick message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = admin.GetComponent<PersistentEmpireRepresentative>();

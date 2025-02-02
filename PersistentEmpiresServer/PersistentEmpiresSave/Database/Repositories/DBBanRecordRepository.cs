@@ -1,7 +1,14 @@
 ﻿using Dapper;
+using MySqlConnector;
+using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Database.DBEntities;
+using PersistentEmpiresLib.Helpers;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Linq;
+using System.Windows.Forms;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
@@ -18,6 +25,26 @@ namespace PersistentEmpiresSave.Database.Repositories
             BanPlayer(PlayerId, PlayerName, BanEndsAt, "Banned in-game");
         }
 
+        public static void AdminServerBehavior_OnUnBanPlayer(string adminId, string playerId)
+        {
+            var admin = GameNetwork.NetworkPeers.FirstOrDefault(x => x.VirtualPlayer?.ToPlayerId() == adminId);
+
+            if(admin == null)
+            {
+                return;
+            }
+
+            if(UnBanPlayer(playerId))
+            {
+                LoggerHelper.LogAnAction(admin, LogAction.PlayerBansPlayer, null, new object[] { playerId });
+                InformationComponent.Instance.SendMessage("Player was unbanned", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
+            }
+            else
+            {
+                InformationComponent.Instance.SendMessage("Something went wrong", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
+            }
+        }
+        
         public static void BanPlayer(string playerId, string playerName, long banEndsAt, string banReason)
         {
             DBBanRecord banRecord = new DBBanRecord
@@ -33,6 +60,50 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(insertSql, banRecord);
         }
 
+        public static bool UnBanPlayer(string playerId)
+        {
+            var conn = new MySqlConnection(DBConnection.Connection.ConnectionString);
+            int exists = 0;
+            try
+            {
+                conn.Open();
+                var sql = $"SELECT EXISTS(SELECT * " +
+                $"FROM BanRecords " +
+                $"WHERE PlayerId = '{playerId}'); ";
+                var cmdSelect = new MySqlCommand(sql, conn);
+                var rdr = cmdSelect.ExecuteReader();
+                while (rdr.Read())
+                {
+                    exists = int.Parse(rdr[0].ToString());
+                }
+                rdr.Close();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            try
+            {
+                if (exists == 1)
+                {
+                    string deleteQuerry = "DELETE FROM BanRecords WHERE PlayerId = @PlayerId ";
+                    DBConnection.Connection.Execute(deleteQuerry,
+                    new
+                    {
+                        PlayerId = playerId,
+                    });
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+        
         public static void UnbanPlayer(string playerId, string unbanReason)
         {
             string updateSql = "UPDATE BanRecords SET BanEndsAt = 0, UnbanReason = @UnbanReason WHERE PlayerId = @PlayerId";
