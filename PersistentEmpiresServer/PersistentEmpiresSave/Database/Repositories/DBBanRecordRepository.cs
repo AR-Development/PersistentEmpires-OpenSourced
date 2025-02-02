@@ -34,7 +34,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 return;
             }
 
-            if(UnBanPlayer(playerId))
+            if(UnBanPlayer(playerId, adminId))
             {
                 LoggerHelper.LogAnAction(admin, LogAction.PlayerBansPlayer, null, new object[] { playerId });
                 InformationComponent.Instance.SendMessage("Player was unbanned", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
@@ -60,7 +60,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             DBConnection.Connection.Execute(insertSql, banRecord);
         }
 
-        public static bool UnBanPlayer(string playerId)
+        public static bool UnBanPlayer(string playerId, string adminId)
         {
             var conn = new MySqlConnection(DBConnection.Connection.ConnectionString);
             int exists = 0;
@@ -69,7 +69,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 conn.Open();
                 var sql = $"SELECT EXISTS(SELECT * " +
                 $"FROM BanRecords " +
-                $"WHERE PlayerId = '{playerId}'); ";
+                $"WHERE BanEndsAt >= @CurrentTime AND PlayerId = '{playerId}'); ";
                 var cmdSelect = new MySqlCommand(sql, conn);
                 var rdr = cmdSelect.ExecuteReader();
                 while (rdr.Read())
@@ -91,8 +91,8 @@ namespace PersistentEmpiresSave.Database.Repositories
             {
                 if (exists == 1)
                 {
-                    string deleteQuerry = "DELETE FROM BanRecords WHERE PlayerId = @PlayerId ";
-                    DBConnection.Connection.Execute(deleteQuerry,
+                    string upateQuerry = $"UPDATE BanRecords SET UnbanReason = 'Unbanned in game by {adminId}' WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId";
+                    DBConnection.Connection.Execute(upateQuerry,
                     new
                     {
                         PlayerId = playerId,
