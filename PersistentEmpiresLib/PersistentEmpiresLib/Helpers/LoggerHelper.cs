@@ -246,7 +246,7 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForAgent((Agent)oParams[0], dateTime)} dismounted a horse";
                 case nameof(LogAction.PlayerChangedName):
                     return $"{FormatLogForPlayer(issuer, dateTime)} changed his name to {(string)oParams[0]}";
-                case nameof(LogAction.SaveDefaultsForNewPlayer):
+                case nameof(LogAction.OnSaveDefaultsForNewPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} OnSaveDefaultsForNewPlayer{(string)oParams[0]}";
                 case nameof(LogAction.UpsertPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayer{(string)oParams[0]}";
