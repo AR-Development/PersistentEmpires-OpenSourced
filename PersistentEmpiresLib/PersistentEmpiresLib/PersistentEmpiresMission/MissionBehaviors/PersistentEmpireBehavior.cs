@@ -46,6 +46,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         // public static string ServerSignature = "";
         private static string _defaultClass = "pe_peasant";
         public static string DefaultClass { get { return _defaultClass; } }
+        public static PersistentEmpireBehavior Instanse = null;
 
         public static void SetDefaultClass(string defaultClass)
         {
@@ -259,8 +260,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public static void SyncPlayer(NetworkCommunicator networkPeer)
         {
-            var thisInstance = Mission.Current.GetMissionBehavior<PersistentEmpireBehavior>();
-            thisInstance.HandleLateNewClientAfterSynchronized(networkPeer);
+            Instanse.HandleLateNewClientAfterSynchronized(networkPeer);
         }
 
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator networkPeer)
@@ -421,6 +421,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);
 #if SERVER
+            Instanse = this;
             ConfigManager.Initialize();
             this.agentLabelEnabled = ConfigManager.GetBoolConfig("AgentLabelEnabled", true);
 #endif

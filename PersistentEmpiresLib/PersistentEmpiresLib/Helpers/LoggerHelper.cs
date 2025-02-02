@@ -70,7 +70,7 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerMountedHorse = "PlayerMountedHorse";
         public static readonly string PlayerDismountedHorse = "PlayerDismountedHorse";
         public static readonly string PlayerChangedName = "PlayerChangedName";
-        public static readonly string SaveDefaultsForNewPlayer = "OnSaveDefaultsForNewPlayer";
+        public static readonly string OnSaveDefaultsForNewPlayer = "OnSaveDefaultsForNewPlayer";
         public static readonly string UpsertPlayer = "UpsertPlayer";
     }
 
