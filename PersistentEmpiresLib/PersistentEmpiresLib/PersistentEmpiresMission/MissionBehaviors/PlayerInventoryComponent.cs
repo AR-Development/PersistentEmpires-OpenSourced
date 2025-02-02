@@ -1018,7 +1018,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if (this.CustomInventories.ContainsKey(draggedFromInventory))
                 {
                     ItemObject item = draggedItem;
-                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromChest, null, new object[] {
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerEquipedItemFromChest, null, new object[] {
                         draggedFromInventory,
                         item,
                         1
@@ -1028,7 +1028,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
 
                     ItemObject item = draggedItem;
-                    LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemFromInventory, null, new object[] {
+                    LoggerHelper.LogAnAction(player, LogAction.PlayerEquiptedFromInventory, null, new object[] {
                         draggedFromInventory,
                         item,
                         1
@@ -1071,7 +1071,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     LoggerHelper.LogAnAction(player, LogAction.PlayerTransferredItemToChest, null, new object[] {
                         droppedToInventory,
                         item,
-                        draggedCount - returnedAmount
+                        draggedCount - returnedAmount,
+                        draggedFromInventory
                     });
                 }
                 else if (droppedToInventory.StartsWith("PlayerInventory") && this.CustomInventories.ContainsKey(draggedFromInventory))

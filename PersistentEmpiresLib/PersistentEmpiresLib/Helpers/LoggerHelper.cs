@@ -27,6 +27,8 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerClosesChest = "PlayerClosesChest"; // Done
         public static readonly string PlayerTransferredItemToChest = "PlayerTransferredItemToChest"; // Done
         public static readonly string PlayerTransferredItemFromChest = "PlayerTransferredItemFromChest"; // Done
+        public static readonly string PlayerEquipedItemFromChest = "PlayerEquipedItemFromChest"; // Done        
+        public static readonly string PlayerEquiptedFromInventory = "PlayerEquiptedFromInventory"; // Done        
         public static readonly string PlayerTransferredItemToInventory = "PlayerTransferredItemToInventory"; // Done
         public static readonly string PlayerTransferredItemFromInventory = "PlayerTransferredItemFromInventory"; // Done
         public static readonly string PlayerOpensStockpile = "PlayerOpensStockpile";// Done
@@ -155,10 +157,14 @@ namespace PersistentEmpiresLib.Helpers
                 case nameof(LogAction.PlayerOpensChest):
                 case nameof(LogAction.PlayerClosesChest):
                     return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensChest ? "opened" : "closed")} a chest/loot of {((Inventory)oParams[0]).InventoryId}";
+                case nameof(LogAction.PlayerEquipedItemFromChest):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} equipted {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
+                case nameof(LogAction.PlayerEquiptedFromInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} equipted {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the inventory ({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemToChest):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to the chest({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from {(string)oParams[3]} inventory to the chest({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemFromChest):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]} to I inventory)";
                 case nameof(LogAction.PlayerTransferredItemToInventory):
                     return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from I inventory to the inventory({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemFromInventory):
