@@ -47,10 +47,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
 
-            if (affectedAgent == Mission.Current.MainAgent && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled
-                                    && agentState == AgentState.Killed
-                                    && affectedAgent.MissionPeer != null
-                                    && affectedAgent.MissionPeer.GetNetworkPeer().QuitFromMission == false)
+            if (affectedAgent.IsHuman 
+                && affectedAgent == Mission.Current.MainAgent 
+                && affectedAgent.IsPlayerControlled
+                && agentState == AgentState.Killed
+                && affectedAgent.MissionPeer != null)
             {
                 var spawnEquipment = affectedAgent.SpawnEquipment.Clone(true);
                 for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot; equipmentIndex < EquipmentIndex.NumAllWeaponSlots; equipmentIndex++)
@@ -58,11 +59,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     spawnEquipment[equipmentIndex] = new EquipmentElement(affectedAgent.Equipment[equipmentIndex].Item);
                 }
 
-                var equipments = new List<string>();
-                equipments.Add(spawnEquipment[EquipmentIndex.Weapon0].Item?.StringId);
-                equipments.Add(spawnEquipment[EquipmentIndex.Weapon1].Item?.StringId);
-                equipments.Add(spawnEquipment[EquipmentIndex.Weapon2].Item?.StringId);
-                equipments.Add(spawnEquipment[EquipmentIndex.Weapon3].Item?.StringId);
+                var equipments = new List<string>
+                {
+                    spawnEquipment[EquipmentIndex.Weapon0].Item?.StringId,
+                    spawnEquipment[EquipmentIndex.Weapon1].Item?.StringId,
+                    spawnEquipment[EquipmentIndex.Weapon2].Item?.StringId,
+                    spawnEquipment[EquipmentIndex.Weapon3].Item?.StringId
+                };
 
                 GameNetwork.BeginModuleEventAsClient();
                 GameNetwork.WriteMessage(new RegisterClientEquipmentOnWound(equipments, affectedAgent.MissionPeer.GetNetworkPeer()?.VirtualPlayer?.ToPlayerId()));
