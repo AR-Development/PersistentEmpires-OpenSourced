@@ -1,7 +1,10 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Server;
+﻿using PersistentEmpiresLib.Helpers;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -19,6 +22,49 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 this.OnAdminPanelClick();
             }
+        }
+
+        public void HandleUnbanPlayerClick()
+        {
+            InformationManager.ShowTextInquiry(
+             new TextInquiryData(
+             "Unban player"
+             , "Write players id"
+             , true
+             , true
+             , "Select"
+             , "Cancel"
+             , OnIdWritten
+             , (Action)null
+             , false
+             , IsNameApplicable
+             , ""
+             , ""));
+        }
+        
+        private void OnIdWritten(string name)
+        {
+            var message = new RequestUnBan(GameNetwork.MyPeer.VirtualPlayer?.ToPlayerId(), name);
+            GameNetwork.BeginModuleEventAsClient();
+            GameNetwork.WriteMessage(message);
+            GameNetwork.EndModuleEventAsClient();
+        }
+
+        private Tuple<bool, string> IsNameApplicable(string inputText)
+        {
+            var reg = new Regex(@"^[0-9.]+$");
+            var result = reg.Match(inputText);
+
+            if (!result.Success)
+                return new Tuple<bool, string>(false, "Wrong format");
+
+            if (string.IsNullOrWhiteSpace(inputText))
+                return new Tuple<bool, string>(false, "Id must be a sting of valid characters");
+
+            if (inputText.Length > 30)
+                return new Tuple<bool, string>(false, "Id is not valid");
+
+            return new Tuple<bool, string>(true, inputText);
         }
 
         public override void OnBehaviorInitialize()

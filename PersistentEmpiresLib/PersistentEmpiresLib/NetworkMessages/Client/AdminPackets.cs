@@ -283,6 +283,44 @@ namespace PersistentEmpiresLib.NetworkMessages.Client
         }
     }
     [DefineGameNetworkMessageTypeForMod(GameNetworkMessageSendType.FromClient)]
+    public sealed class RequestUnBan : GameNetworkMessage
+    {
+        public string AdminId;
+        public string PlayerId;
+        public RequestUnBan() { }
+        public RequestUnBan(string adminId, string playerId)
+        {
+            AdminId = adminId;
+            PlayerId = playerId;
+        }
+
+        protected override MultiplayerMessageFilter OnGetLogFilter()
+        {
+            return MultiplayerMessageFilter.Administration;
+        }
+
+        protected override string OnGetLogFormat()
+        {
+            return "Received RequestUnBan";
+        }
+
+        protected override bool OnRead()
+        {
+            var result = true;
+
+            AdminId = GameNetworkMessage.ReadStringFromPacket(ref result);
+            PlayerId = GameNetworkMessage.ReadStringFromPacket(ref result);
+
+            return result;
+        }
+
+        protected override void OnWrite()
+        {
+            GameNetworkMessage.WriteStringToPacket(AdminId);
+            GameNetworkMessage.WriteStringToPacket(PlayerId);
+        }
+    }
+    [DefineGameNetworkMessageTypeForMod(GameNetworkMessageSendType.FromClient)]
     public sealed class RequestKick : GameNetworkMessage
     {
         public NetworkCommunicator Player;

@@ -145,6 +145,16 @@ namespace PersistentEmpires.Views.Views
             //    }
             //}, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
 
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.IsAdmin)
+            {
+                list.Add(new EscapeMenuItemVM(new TextObject("Unban player", null), delegate (object o)
+                {
+                    base.OnEscapeMenuToggled(false);
+                    this._adminBehavior.HandleUnbanPlayerClick();
+
+                }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+            }
+
             list.Add(new EscapeMenuItemVM(new TextObject("{=InGwtrWt}Quit", null), delegate (object o)
             {
 
@@ -157,20 +167,20 @@ namespace PersistentEmpires.Views.Views
                         GameTexts.FindText("str_yes", null).ToString(),
                         GameTexts.FindText("str_no", null).ToString(),
                         delegate ()
-                {
-                    LobbyClient gameClient = NetworkMain.GameClient;
-                    if (gameClient.CurrentState == LobbyClient.State.InCustomGame)
-                    {
-                        gameClient.QuitFromCustomGame();
-                        return;
-                    }
-                    if (gameClient.CurrentState == LobbyClient.State.HostingCustomGame)
-                    {
-                        gameClient.EndCustomGame();
-                        return;
-                    }
-                    gameClient.QuitFromMatchmakerGame();
-                }, null, "", 0f, null), false, false);
+                        {
+                            LobbyClient gameClient = NetworkMain.GameClient;
+                            if (gameClient.CurrentState == LobbyClient.State.InCustomGame)
+                            {
+                                gameClient.QuitFromCustomGame();
+                                return;
+                            }
+                            if (gameClient.CurrentState == LobbyClient.State.HostingCustomGame)
+                            {
+                                gameClient.EndCustomGame();
+                                return;
+                            }
+                            gameClient.QuitFromMatchmakerGame();
+                        }, null, "", 0f, null), false, false);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             return list;
         }
