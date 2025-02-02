@@ -91,7 +91,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             {
                 if (exists == 1)
                 {
-                    string upateQuerry = $"UPDATE BanRecords SET UnbanReason = 'Unbanned in game by {adminId}' WHERE BanEndsAt >= Now() AND PlayerId = @PlayerId";
+                    string upateQuerry = $"UPDATE BanRecords SET BanEndsAt = 0, UnbanReason = 'Unbanned in game by {adminId}' WHERE BanEndsAt >= Now() AND PlayerId = @PlayerId";
                     DBConnection.Connection.Execute(upateQuerry,
                     new
                     {
