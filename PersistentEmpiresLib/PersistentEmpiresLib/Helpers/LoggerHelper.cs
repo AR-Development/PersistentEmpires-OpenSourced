@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using static PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors.SaveSystemBehavior;
 
 namespace PersistentEmpiresLib.Helpers
 {
@@ -68,6 +69,8 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerMountedHorse = "PlayerMountedHorse";
         public static readonly string PlayerDismountedHorse = "PlayerDismountedHorse";
         public static readonly string PlayerChangedName = "PlayerChangedName";
+        public static readonly string SaveDefaultsForNewPlayer = "OnSaveDefaultsForNewPlayer";
+        public static readonly string UpsertPlayer = "UpsertPlayer";
     }
 
     public class LoggerHelper
@@ -240,6 +243,10 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForAgent((Agent)oParams[0], dateTime)} dismounted a horse";
                 case nameof(LogAction.PlayerChangedName):
                     return $"{FormatLogForPlayer(issuer, dateTime)} changed his name to {(string)oParams[0]}";
+                case nameof(LogAction.SaveDefaultsForNewPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} OnSaveDefaultsForNewPlayer{(string)oParams[0]}";
+                case nameof(LogAction.UpsertPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayer{(string)oParams[0]}";
                 default:
                     return actionType;
             }

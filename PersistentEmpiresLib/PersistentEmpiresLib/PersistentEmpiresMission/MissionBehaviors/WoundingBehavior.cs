@@ -270,8 +270,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         var weapon3 = new MissionWeapon(playerEquipment[EquipmentIndex.Weapon3].Item, null, null);
                         player.ControlledAgent?.EquipWeaponWithNewEntity(EquipmentIndex.Weapon3, ref weapon3);
 
+                        var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
                         // Save Current equipment, 
-                        SaveSystemBehavior.HandleCreateOrSavePlayer(player);
+                        if (player.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
+                        {
+                            SaveSystemBehavior.HandleCreateOrSavePlayer(player);
+                        }
                         // Update items in db
                         //SaveSystemBehavior.HandleSavePlayerEquipmentOnDeath(message.PlayerId, playerEquipment);
                     }

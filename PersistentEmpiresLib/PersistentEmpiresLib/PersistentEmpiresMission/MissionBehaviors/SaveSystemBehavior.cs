@@ -79,7 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
-        public static event SavePlayerEquipmentOnDeath OnSavePlayerEquipmentOnDeath;
+        //public static event SavePlayerEquipmentOnDeath OnSavePlayerEquipmentOnDeath;
         public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
         public static event GetWoundedUntil OnGetWoundedUntil;
         
@@ -288,19 +288,19 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
-        public static void HandleSavePlayerEquipmentOnDeath(string playerId, Equipment equipment)
-        {
-            Debug.Print("[Save System] Is OnSavePlayerEquipmentOnDeath null ? " + (OnCreateOrSavePlayer == null).ToString());
-            long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            if (OnSavePlayerEquipmentOnDeath != null)
-            {
-                OnSavePlayerEquipmentOnDeath(playerId, equipment);
-            }
-        }
+        //public static void HandleSavePlayerEquipmentOnDeath(string playerId, Equipment equipment)
+        //{
+        //    Debug.Print("[Save System] Is OnSavePlayerEquipmentOnDeath null ? " + (OnSavePlayerEquipmentOnDeath == null).ToString());
+        //    long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        //    if (OnSavePlayerEquipmentOnDeath != null)
+        //    {
+        //        OnSavePlayerEquipmentOnDeath(playerId, equipment);
+        //    }
+        //}
         
         public static void HandleSaveDefaultsForNewPlayer(NetworkCommunicator networkCommunicator, Equipment equipment)
         {
-            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnCreateOrSavePlayer == null).ToString());
+            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnSaveDefaultsForNewPlayer == null).ToString());
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             if (OnSaveDefaultsForNewPlayer != null)
             {
@@ -519,7 +519,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionResultReady(missionResult);
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
-                if (peer.ControlledAgent != null)
+                var persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+
+                if (peer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
                 {
                     HandleCreateOrSavePlayer(peer);
                     HandleCreateOrSavePlayerInventory(peer);
@@ -549,7 +551,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
-                if (peer.ControlledAgent != null)
+                var persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+
+                if (peer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
                 {
                     HandleCreateOrSavePlayer(peer);
                     HandleCreateOrSavePlayerInventory(peer);

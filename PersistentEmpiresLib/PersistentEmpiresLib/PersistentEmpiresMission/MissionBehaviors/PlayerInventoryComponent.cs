@@ -303,7 +303,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     this.OpenedByPeerInventory.Remove(player);
                 }
 
-                SaveSystemBehavior.HandleCreateOrSavePlayer(player);
+                if (player.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
+                {
+                    SaveSystemBehavior.HandleCreateOrSavePlayer(player);
+                }
 
                 LoggerHelper.LogAnAction(player, LogAction.PlayerDroppedLoot, null, new object[] { lootInventory });
 
