@@ -69,7 +69,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 conn.Open();
                 var sql = $"SELECT EXISTS(SELECT * " +
                 $"FROM BanRecords " +
-                $"WHERE BanEndsAt >= @CurrentTime AND PlayerId = '{playerId}'); ";
+                $"WHERE BanEndsAt >= Now() AND PlayerId = '{playerId}'); ";
                 var cmdSelect = new MySqlCommand(sql, conn);
                 var rdr = cmdSelect.ExecuteReader();
                 while (rdr.Read())
@@ -91,7 +91,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             {
                 if (exists == 1)
                 {
-                    string upateQuerry = $"UPDATE BanRecords SET UnbanReason = 'Unbanned in game by {adminId}' WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId";
+                    string upateQuerry = $"UPDATE BanRecords SET UnbanReason = 'Unbanned in game by {adminId}' WHERE BanEndsAt >= Now() AND PlayerId = @PlayerId";
                     DBConnection.Connection.Execute(upateQuerry,
                     new
                     {
