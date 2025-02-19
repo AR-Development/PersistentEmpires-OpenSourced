@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
@@ -20,15 +22,51 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         }
 
         string tmp = "";
-        private void TryToFindItem(string itemId)
+        List<string> tmpFoundItems;
+        private void TryToFindItem()
         {
-            tmp = itemId.Replace("*", "").ToLower();
             var item = MBObjectManager.Instance.GetObject<ItemObject>(Find);
 
             if(item != null)
             {
-                ItemId = item.StringId;
+                tmpFoundItems.Add(item.StringId);
             }
+            else
+            {
+                if(tmpFoundItems.Any())
+                {
+                    if(tmpFoundItems.Count() == 1)
+                    {
+                        ItemId = tmpFoundItems[0];
+                    }
+                    else
+                    {
+                        MBInformationManager.ShowMultiSelectionInquiry(
+                    new MultiSelectionInquiryData("Choose item"
+                    , "Which item did you look for?"
+                    , tmpFoundItems.Select(x => new InquiryElement(x, $"{x}", null)).ToList()
+                    , true
+                    , 1
+                    , 1
+                    , "Select"
+                    , "Cancel"
+                    , DoSelectItem
+                    , DoCancel));
+                    }
+                }
+            }
+        }
+
+        private void DoCancel(List<InquiryElement> list)
+        {
+            tmpFoundItems = null;
+        }
+
+        private void DoSelectItem(List<InquiryElement> list)
+        {
+            var itemId = list.FirstOrDefault().Identifier as string;
+
+            ItemId = itemId;
         }
 
         private bool Find(ItemObject item)
@@ -49,7 +87,10 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 
                     if(_itemId.StartsWith("*") && _itemId.EndsWith("*") && _itemId.Length > 3)
                     {
-                        TryToFindItem(_itemId);
+                        tmp = _itemId.Replace("*", "").ToLower();
+                        tmpFoundItems = new List<string>();
+
+                        TryToFindItem();
                     }
                 }
             }
