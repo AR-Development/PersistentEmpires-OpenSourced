@@ -47,7 +47,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
                     this._itemId = value;
                     base.OnPropertyChangedWithValue(value, "ItemId");
 
-                    if(_itemId.StartsWith("*") && _itemId.EndsWith("*"))
+                    if(_itemId.StartsWith("*") && _itemId.EndsWith("*") && _itemId.Length > 3)
                     {
                         TryToFindItem(_itemId);
                     }
