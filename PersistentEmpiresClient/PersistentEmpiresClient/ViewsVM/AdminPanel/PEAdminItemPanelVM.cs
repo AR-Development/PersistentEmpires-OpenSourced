@@ -23,6 +23,11 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 
         string tmp = "";
         List<string> tmpFoundItems;
+        private bool Find(ItemObject item)
+        {
+            return item.StringId.ToLower().Contains(tmp) && !tmpFoundItems.Contains(item.StringId);
+        }
+
         private void TryToFindItem()
         {
             var item = MBObjectManager.Instance.GetObject<ItemObject>(Find);
@@ -68,12 +73,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             var itemId = list.FirstOrDefault().Identifier as string;
 
             ItemId = itemId;
-        }
-
-        private bool Find(ItemObject item)
-        {
-            return item.StringId.ToLower().Contains(tmp) && !tmpFoundItems.Contains(tmp);
-        }
+        }        
 
         [DataSourceProperty]
         public string ItemId
