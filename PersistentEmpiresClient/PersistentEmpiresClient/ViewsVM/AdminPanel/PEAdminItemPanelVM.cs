@@ -50,7 +50,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
                         MBInformationManager.ShowMultiSelectionInquiry(
                     new MultiSelectionInquiryData("Choose item"
                     , "Which item did you look for?"
-                    , tmpFoundItems.Select(x => new InquiryElement(x, $"{x}", null)).ToList()
+                    , tmpFoundItems.OrderBy(x=> x).Select(x => new InquiryElement(x, $"{x}", null)).ToList()
                     , true
                     , 1
                     , 1
