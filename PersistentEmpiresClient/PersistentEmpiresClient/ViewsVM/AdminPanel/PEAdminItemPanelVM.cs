@@ -30,6 +30,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             if(item != null)
             {
                 tmpFoundItems.Add(item.StringId);
+                TryToFindItem();
             }
             else
             {
