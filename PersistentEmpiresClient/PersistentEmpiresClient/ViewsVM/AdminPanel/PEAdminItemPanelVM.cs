@@ -72,7 +72,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 
         private bool Find(ItemObject item)
         {
-            return item.StringId.ToLower().Contains(tmp);
+            return item.StringId.ToLower().Contains(tmp) && !tmpFoundItems.Contains(tmp);
         }
 
         [DataSourceProperty]
