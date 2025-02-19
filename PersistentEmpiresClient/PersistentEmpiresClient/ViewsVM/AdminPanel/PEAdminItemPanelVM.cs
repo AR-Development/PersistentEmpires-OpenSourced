@@ -22,7 +22,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         string tmp = "";
         private void TryToFindItem(string itemId)
         {
-            tmp = itemId.Replace("*", "");
+            tmp = itemId.Replace("*", "").ToLower();
             var item = MBObjectManager.Instance.GetObject<ItemObject>(Find);
 
             if(item != null)
@@ -33,7 +33,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 
         private bool Find(ItemObject item)
         {
-            return item.StringId.Contains(tmp);
+            return item.StringId.ToLower().Contains(tmp);
         }
 
         [DataSourceProperty]
