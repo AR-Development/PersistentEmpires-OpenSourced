@@ -1,5 +1,7 @@
 ﻿using System;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.ObjectSystem;
 
 namespace PersistentEmpires.Views.ViewsVM.AdminPanel
 {
@@ -17,6 +19,23 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
             this._onCancel = _onCancel;
         }
 
+        string tmp = "";
+        private void TryToFindItem(string itemId)
+        {
+            tmp = itemId.Replace("*", "");
+            var item = MBObjectManager.Instance.GetObject<ItemObject>(Find);
+
+            if(item != null)
+            {
+                ItemId = item.StringId;
+            }
+        }
+
+        private bool Find(ItemObject item)
+        {
+            return item.StringId.Contains(tmp);
+        }
+
         [DataSourceProperty]
         public string ItemId
         {
@@ -27,9 +46,15 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
                 {
                     this._itemId = value;
                     base.OnPropertyChangedWithValue(value, "ItemId");
+
+                    if(_itemId.StartsWith("*") && _itemId.EndsWith("*"))
+                    {
+                        TryToFindItem(_itemId);
+                    }
                 }
             }
-        }
+        }        
+
         [DataSourceProperty]
         public int Count
         {
