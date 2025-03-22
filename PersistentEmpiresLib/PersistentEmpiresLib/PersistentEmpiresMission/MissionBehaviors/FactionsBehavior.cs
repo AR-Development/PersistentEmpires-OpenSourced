@@ -176,7 +176,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
-        }
 #endif
         }
 
