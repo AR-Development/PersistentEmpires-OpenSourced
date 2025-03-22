@@ -76,10 +76,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
-            if (GameNetwork.IsServer)
-            {
-                this.isActive = ConfigManager.GetBoolConfig("AnimationsEnabled", false);
-            }
+#if SERVER
+            this.isActive = ConfigManager.GetBoolConfig("AnimationsEnabled", false);
+#endif
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
         }
         public override void OnRemoveBehavior()

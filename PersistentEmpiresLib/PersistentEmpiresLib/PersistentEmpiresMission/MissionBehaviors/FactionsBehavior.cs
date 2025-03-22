@@ -58,16 +58,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.FactionDeclaredWarLast = new Dictionary<int, long>();
             this._informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-
-            if (GameNetwork.IsServer)
-            {
-                this.WarDeclareTimeOut = ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
-                this.PeaceDeclareTimeOut = ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
-                this.MaxBannerLength = ConfigManager.GetIntConfig("MaxBannerLength", 100);
-
-
-            }
-
+#if SERVER
+            this.WarDeclareTimeOut = ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
+            this.PeaceDeclareTimeOut = ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
+            this.MaxBannerLength = ConfigManager.GetIntConfig("MaxBannerLength", 100);
+#endif
         }
 
         public static bool PatchGlobalChat_OnClientEventPlayerMessageTeam(NetworkCommunicator networkPeer, PlayerMessageTeam message)
@@ -107,85 +102,82 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.FactionBanners[factionBanner.FactionIndex] = factionBanner;
             }
 
-            if (GameNetwork.IsServer)
+#if SERVER
+            BasicCultureObject commonerCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("CommonerCulture", "empire"));
+            BasicCultureObject outlawCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("OutlawCulture", "empire"));
+
+            Banner banner = new Banner(ConfigManager.GetStrConfig("CommonerBanner", "17.1.148.1836.1836.765.786.1.0.-30.100.0.143.-295.425.764.764.1.0.0"));
+            Banner banner2 = new Banner(ConfigManager.GetStrConfig("OutlawBanner", "24.193.116.1536.1536.768.768.1.0.0"));
+
+            Faction commoners = new Faction(commonerCulture, banner, ConfigManager.GetStrConfig("CommonerName", "Commoners"));
+            Faction outlaws = new Faction(outlawCulture, banner2, ConfigManager.GetStrConfig("OutlawName", "Outlaws"));
+
+            //Factions Setup
+
+            commoners.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, commonerCulture.BackgroundColor1, commonerCulture.ForegroundColor1, banner);
+            outlaws.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, outlawCulture.BackgroundColor1, outlawCulture.ForegroundColor1, banner2);
+            outlaws.team.SetIsEnemyOf(outlaws.team, true);
+            outlaws.team.SetIsEnemyOf(commoners.team, true);
+            commoners.team.SetIsEnemyOf(commoners.team, true);
+
+            this.AddFaction(0, commoners);
+            this.AddFaction(1, outlaws);
+
+            List<GameEntity> _gameEntites = new List<GameEntity>();
+            base.Mission.Scene.GetAllEntitiesWithScriptComponent<PEFactionBanner>(ref _gameEntites);
+            List<DBFactions> dbFactions = SaveSystemBehavior.HandleGetFactions().ToList();
+            Dictionary<int, DBFactions> savedFactions = new Dictionary<int, DBFactions>();
+            foreach (DBFactions dbFaction in dbFactions)
             {
-                BasicCultureObject commonerCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("CommonerCulture", "empire"));
-                BasicCultureObject outlawCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("OutlawCulture", "empire"));
-
-                Banner banner = new Banner(ConfigManager.GetStrConfig("CommonerBanner", "17.1.148.1836.1836.765.786.1.0.-30.100.0.143.-295.425.764.764.1.0.0"));
-                Banner banner2 = new Banner(ConfigManager.GetStrConfig("OutlawBanner", "24.193.116.1536.1536.768.768.1.0.0"));
-
-                Faction commoners = new Faction(commonerCulture, banner, ConfigManager.GetStrConfig("CommonerName", "Commoners"));
-                Faction outlaws = new Faction(outlawCulture, banner2, ConfigManager.GetStrConfig("OutlawName", "Outlaws"));
-
-                //Factions Setup
-
-                commoners.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, commonerCulture.BackgroundColor1, commonerCulture.ForegroundColor1, banner);
-                outlaws.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, outlawCulture.BackgroundColor1, outlawCulture.ForegroundColor1, banner2);
-                outlaws.team.SetIsEnemyOf(outlaws.team, true);
-                outlaws.team.SetIsEnemyOf(commoners.team, true);
-                commoners.team.SetIsEnemyOf(commoners.team, true);
-
-                this.AddFaction(0, commoners);
-                this.AddFaction(1, outlaws);
-
-                List<GameEntity> _gameEntites = new List<GameEntity>();
-                base.Mission.Scene.GetAllEntitiesWithScriptComponent<PEFactionBanner>(ref _gameEntites);
-                List<DBFactions> dbFactions = SaveSystemBehavior.HandleGetFactions().ToList();
-                Dictionary<int, DBFactions> savedFactions = new Dictionary<int, DBFactions>();
-                foreach (DBFactions dbFaction in dbFactions)
+                savedFactions[dbFaction.FactionIndex] = dbFaction;
+            }
+            if (_gameEntites.Count > 0)
+            {
+                foreach (GameEntity _factionBanner in _gameEntites)
                 {
-                    savedFactions[dbFaction.FactionIndex] = dbFaction;
-                }
-                if (_gameEntites.Count > 0)
-                {
-                    foreach (GameEntity _factionBanner in _gameEntites)
+                    PEFactionBanner peFactionBanner = _factionBanner.GetFirstScriptOfType<PEFactionBanner>();
+                    if (this.Factions.ContainsKey(peFactionBanner.FactionIndex))
                     {
-                        PEFactionBanner peFactionBanner = _factionBanner.GetFirstScriptOfType<PEFactionBanner>();
-                        if (this.Factions.ContainsKey(peFactionBanner.FactionIndex))
-                        {
-                            continue;
-                        }
-                        BasicCultureObject factionCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
-
-                        Banner factBanner;
-                        Faction fact;
-
-                        if (savedFactions.ContainsKey(peFactionBanner.FactionIndex))
-                        {
-                            factBanner = new Banner(savedFactions[peFactionBanner.FactionIndex].BannerKey);
-                            fact = new Faction(factionCulture, factBanner, savedFactions[peFactionBanner.FactionIndex].Name);
-                            fact.lordId = savedFactions[peFactionBanner.FactionIndex].LordId;
-                            fact.LoadMarshallsFromSerialized(savedFactions[peFactionBanner.FactionIndex].Marshalls);
-                        }
-                        else
-                        {
-                            factBanner = new Banner(peFactionBanner.GetBannerKey());
-                            fact = new Faction(factionCulture, factBanner, peFactionBanner.FactionName);
-                        }
-
-
-                        fact.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, factBanner.GetPrimaryColor(), factBanner.GetSecondaryColor(), factBanner);
-                        this.AddFaction(peFactionBanner.FactionIndex, fact);
+                        continue;
                     }
-                }
-                List<Faction> factions = this.Factions.Values.ToList();
+                    BasicCultureObject factionCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
+                    Banner factBanner;
+                    Faction fact;
 
-                for (int i = 0; i < factions.Count; i++)
-                {
-                    Faction fact1 = factions[i];
-                    for (int j = 0; j < factions.Count; j++)
+                    if (savedFactions.ContainsKey(peFactionBanner.FactionIndex))
                     {
-                        Faction fact2 = factions[j];
+                        factBanner = new Banner(savedFactions[peFactionBanner.FactionIndex].BannerKey);
+                        fact = new Faction(factionCulture, factBanner, savedFactions[peFactionBanner.FactionIndex].Name);
+                        fact.lordId = savedFactions[peFactionBanner.FactionIndex].LordId;
+                        fact.LoadMarshallsFromSerialized(savedFactions[peFactionBanner.FactionIndex].Marshalls);
+                    }
+                    else
+                    {
+                        factBanner = new Banner(peFactionBanner.GetBannerKey());
+                        fact = new Faction(factionCulture, factBanner, peFactionBanner.FactionName);
+                    }
 
-                        if (!fact1.team.IsEnemyOf(fact2.team))
-                        {
-                            fact1.team.SetIsEnemyOf(fact2.team, true);
-                        }
+                    fact.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, factBanner.GetPrimaryColor(), factBanner.GetSecondaryColor(), factBanner);
+                    this.AddFaction(peFactionBanner.FactionIndex, fact);
+                }
+            }
+            List<Faction> factions = this.Factions.Values.ToList();
+
+            for (int i = 0; i < factions.Count; i++)
+            {
+                Faction fact1 = factions[i];
+                for (int j = 0; j < factions.Count; j++)
+                {
+                    Faction fact2 = factions[j];
+
+                    if (!fact1.team.IsEnemyOf(fact2.team))
+                    {
+                        fact1.team.SetIsEnemyOf(fact2.team, true);
                     }
                 }
             }
-
+        }
+#endif
         }
 
         public void AddFaction(int factionIndex, Faction f)

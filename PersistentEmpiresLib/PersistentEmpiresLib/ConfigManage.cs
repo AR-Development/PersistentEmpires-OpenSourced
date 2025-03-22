@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if SERVER
+using System.IO;
 using System.Xml;
 using TaleWorlds.ModuleManager;
 
@@ -7,9 +8,7 @@ namespace PersistentEmpiresLib
     public class ConfigManager
     {
         public static string XmlFile = "GeneralConfig";
-
         internal static string RulesXmlFile = "Rules";
-
         public static int StartingGold { get; private set; }
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
@@ -19,7 +18,7 @@ namespace PersistentEmpiresLib
         {
             get
             {
-#if SERVER
+
                 if(_xmlDocument == null)
                 {
                     string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
@@ -28,14 +27,9 @@ namespace PersistentEmpiresLib
                 }
 
                 return _xmlDocument;
-#endif
-#if CLIENT
-                return null;
-#endif
             }
         }
 
-#if SERVER
         public static XmlDocument Rules
         {
             get
@@ -53,7 +47,6 @@ namespace PersistentEmpiresLib
                 return _rulesDocument;
             }
         }
-#endif
 
         public static void Initialize()
         {
@@ -94,3 +87,4 @@ namespace PersistentEmpiresLib
         }
     }
 }
+#endif
