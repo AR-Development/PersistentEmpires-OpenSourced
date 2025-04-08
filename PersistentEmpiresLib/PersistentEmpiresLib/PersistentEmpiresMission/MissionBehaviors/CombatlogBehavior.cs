@@ -16,10 +16,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             CombatlogBehavior.Instance = this;
-            if (GameNetwork.IsServer)
-            {
-                this.Duration = ConfigManager.GetIntConfig("CombatlogDuration", 5);
-            }
+#if SERVER
+            this.Duration = ConfigManager.GetIntConfig("CombatlogDuration", 5);
+#endif
         }
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
         {

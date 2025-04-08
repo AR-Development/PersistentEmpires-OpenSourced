@@ -13,12 +13,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            if (GameNetwork.IsServer)
-            {
-                this.ItemId = ConfigManager.GetStrConfig("PickpocketingItem", "pe_stealing_dagger");
-                this.ThousandPercentage = ConfigManager.GetIntConfig("PickpocketingPercentageThousands", 50);
-                this.RequiredPickpocketing = ConfigManager.GetIntConfig("RequiredPickpocketing", 10);
-            }
+#if SERVER
+            this.ItemId = ConfigManager.GetStrConfig("PickpocketingItem", "pe_stealing_dagger");
+            this.ThousandPercentage = ConfigManager.GetIntConfig("PickpocketingPercentageThousands", 50);
+            this.RequiredPickpocketing = ConfigManager.GetIntConfig("RequiredPickpocketing", 10);
+#endif
             Instance = this;
         }
 

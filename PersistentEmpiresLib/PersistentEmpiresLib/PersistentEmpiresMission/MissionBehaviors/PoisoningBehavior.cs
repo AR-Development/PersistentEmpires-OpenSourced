@@ -18,12 +18,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
+#if SERVER
 
-            if (GameNetwork.IsServer)
-            {
-                this.PoisionItemId = ConfigManager.GetStrConfig("PoisonItemId", "pe_poison_dagger");
-                this.AntidoteItemId = ConfigManager.GetStrConfig("AntidoteItemId", "pe_antidote");
-            }
+            this.PoisionItemId = ConfigManager.GetStrConfig("PoisonItemId", "pe_poison_dagger");
+            this.AntidoteItemId = ConfigManager.GetStrConfig("AntidoteItemId", "pe_antidote");
+#endif
         }
 
         public override void OnMissionTick(float dt)

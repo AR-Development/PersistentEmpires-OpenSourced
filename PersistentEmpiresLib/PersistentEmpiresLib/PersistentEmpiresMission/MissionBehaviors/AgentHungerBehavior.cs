@@ -203,15 +203,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 Instance = this;
             }
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
-                this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
-                this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
-                this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
-                this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
-                this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
-            }
+#if SERVER
+            this.HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
+            this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
+            this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
+            this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
+            this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
+            this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
+#endif
             Debug.Print("[PE] LOADING EATABLES...");
             this.LoadEatables("PersistentEmpires");
 

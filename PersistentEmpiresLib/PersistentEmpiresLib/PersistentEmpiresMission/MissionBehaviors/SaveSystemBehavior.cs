@@ -564,13 +564,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
+#if SERVER
             AppDomain.CurrentDomain.ProcessExit += HandleApplicationExit;
             AppDomain.CurrentDomain.UnhandledException += HandleExceptionalExit;
 
             SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 600);
-
             HandleStartMigration();
-
+#endif
         }
 
         public static void OnAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)

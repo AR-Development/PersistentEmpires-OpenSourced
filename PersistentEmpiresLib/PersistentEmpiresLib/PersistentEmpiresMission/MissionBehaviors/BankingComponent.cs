@@ -30,11 +30,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.BankAmountLimit = ConfigManager.GetIntConfig("BankAmountLimit", 0);
-                this.BankTaxRate = 100 - ConfigManager.GetIntConfig("BankTaxRate", 10);
-            }
+#if SERVER
+            this.BankAmountLimit = ConfigManager.GetIntConfig("BankAmountLimit", 0);
+            this.BankTaxRate = 100 - ConfigManager.GetIntConfig("BankTaxRate", 10);
+#endif
         }
 
         private void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)

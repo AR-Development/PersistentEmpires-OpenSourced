@@ -25,11 +25,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             inventoryComponent = base.Mission.GetMissionBehavior<PlayerInventoryComponent>();
             moneyPouchBehavior = base.Mission.GetMissionBehavior<MoneyPouchBehavior>();
-            if (GameNetwork.IsServer)
-            {
-                dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
-            }
+#if SERVER
+            dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
+#endif
         }
+
         public override void OnRemoveBehavior()
         {
             base.OnRemoveBehavior();
