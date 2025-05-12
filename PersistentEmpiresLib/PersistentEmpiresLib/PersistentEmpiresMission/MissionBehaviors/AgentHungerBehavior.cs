@@ -213,11 +213,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
             }
             Debug.Print("[PE] LOADING EATABLES...");
-            this.LoadEatables("PersistentEmpires");
+            this.LoadEatables(Main.ModuleName);
 
             foreach (ModuleInfo module in ModuleHelper.GetModules())
             {
-                if (module.Id == "PersistentEmpires") continue;
+                if (module.Id == Main.ModuleName) continue;
                 this.LoadEatables(module.Id);
             }
         }

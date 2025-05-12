@@ -52,7 +52,7 @@ namespace PersistentEmpiresServer
             AdminServerBehavior.OnBanPlayer += DBBanRecordRepository.AdminServerBehavior_OnBanPlayer;
             AdminServerBehavior.OnUnBanPlayer += DBBanRecordRepository.AdminServerBehavior_OnUnBanPlayer;
 
-            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode("PersistentEmpires"));
+            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode(Main.ModuleName));
         }
     }
 }
