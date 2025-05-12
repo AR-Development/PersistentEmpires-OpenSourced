@@ -59,11 +59,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.RepairTimeoutAfterHit = ConfigManager.GetIntConfig("RepairTimeoutAfterHit", 5 * 60);
-                this.InitializeSyncMessages();
-            }
+#if SERVER
+            this.RepairTimeoutAfterHit = ConfigManager.GetIntConfig("RepairTimeoutAfterHit", 5 * 60);
+            this.InitializeSyncMessages();
+#endif
         }
 
         public void InitializeSyncMessages()

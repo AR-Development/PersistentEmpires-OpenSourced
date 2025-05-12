@@ -257,7 +257,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Regex rg = new Regex(@"^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ.\s,\[,\],\(,\),_,-,\p{IsCJKUnifiedIdeographs}]*$");
             return rg.IsMatch(name);
         }
-
+#if SERVER
         public static void SyncPlayer(NetworkCommunicator networkPeer)
         {
             Instanse.HandleLateNewClientAfterSynchronized(networkPeer);
@@ -416,7 +416,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             SendRulesToNewClient(networkPeer);
 #endif
         }
-
+#endif
         public override void AfterStart()
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);

@@ -29,11 +29,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+#if SERVER
 
-            if (GameNetwork.IsServer)
-            {
-                this.DropPercentage = ConfigManager.GetIntConfig("DeathMoneyDropPercentage", 25);
-            }
+            this.DropPercentage = ConfigManager.GetIntConfig("DeathMoneyDropPercentage", 25);
+#endif
         }
         public override void OnRemoveBehavior()
         {

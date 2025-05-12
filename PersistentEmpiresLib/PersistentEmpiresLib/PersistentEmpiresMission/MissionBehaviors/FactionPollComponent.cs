@@ -180,13 +180,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this._informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
             this._factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+#if SERVER
 
-            if (GameNetwork.IsServer)
-            {
-                this.LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
-                this.LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
-            }
-
+            this.LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
+            this.LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+#endif
         }
 
         public override void OnRemoveBehavior()

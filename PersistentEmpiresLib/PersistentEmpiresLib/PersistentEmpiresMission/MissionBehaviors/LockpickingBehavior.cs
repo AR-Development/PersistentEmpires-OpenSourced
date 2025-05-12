@@ -19,11 +19,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnBehaviorInitialize();
             random = new Random();
             Instance = this;
-            if (GameNetwork.IsServer)
-            {
-                this.ItemId = ConfigManager.GetStrConfig("LockpickItem", "pe_lockpick");
-
-            }
+#if SERVER
+            this.ItemId = ConfigManager.GetStrConfig("LockpickItem", "pe_lockpick");
+#endif
         }
 
         public override void OnMissionTick(float dt)
