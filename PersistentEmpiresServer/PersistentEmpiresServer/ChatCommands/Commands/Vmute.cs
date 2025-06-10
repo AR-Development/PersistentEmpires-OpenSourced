@@ -76,7 +76,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public string Description()
         {
-            return $"Mutes a player from voice chat. Caution ! First user that contains the provided input will be muted. Usage {Command()} <Player Name>";
+            return $"Mutes a player from voice chat. Caution ! First user that contains the provided input will be muted. Usage {Command()} Player Name";
         }
 
         public string DetailedDescription()
