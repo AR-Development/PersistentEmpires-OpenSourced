@@ -49,7 +49,7 @@ namespace PersistentEmpires.Views.Views
             this._factionPollComponent = base.Mission.GetMissionBehavior<FactionPollComponent>();
             this._adminBehavior = base.Mission.GetMissionBehavior<AdminClientBehavior>();
             this._proximityChatComponent = base.Mission.GetMissionBehavior<ProximityChatComponent>();
-            TextObject title = new TextObject("Persistent Empires");
+            TextObject title = new TextObject("Mod menu");
             this.DataSource = new MPEscapeMenuVM(null, title);
         }
 
