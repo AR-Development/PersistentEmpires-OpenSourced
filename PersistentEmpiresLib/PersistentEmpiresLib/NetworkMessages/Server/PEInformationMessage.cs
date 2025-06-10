@@ -8,6 +8,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     {
         public string Message;
         public uint Color;
+
         public PEInformationMessage()
         {
         }

@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.NetworkMessages.Server;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ChatCommands.Commands;
 using System.Collections.Generic;
 using TaleWorlds.MountAndBlade;
@@ -9,7 +10,7 @@ namespace PersistentEmpiresServer.ChatCommands
 {
     internal static class Extensions
     {
-        internal static void SendMessageToPlayers(this Command command, NetworkCommunicator player, int distance, string message)
+        internal static void SendMessageToPlayers(this Command command, NetworkCommunicator player, int distance, string message, uint color, bool bubble, string logAction)
         {
             var position = player.ControlledAgent.Position;
             var affectedPlayers = new List<AffectedPlayer>();
@@ -23,17 +24,25 @@ namespace PersistentEmpiresServer.ChatCommands
 
                 if (d < distance)
                 {
-                    GameNetwork.BeginModuleEventAsServer(otherPlayer);
-                    GameNetwork.WriteMessage(new CustomBubbleMessage(player, message));
-                    GameNetwork.EndModuleEventAsServer();
+                    InformationComponent.Instance.SendMessage(message, color, player);
+
+                    if (bubble)
+                    {
+                        GameNetwork.BeginModuleEventAsServer(otherPlayer);
+                        GameNetwork.WriteMessage(new CustomBubbleMessage(player, message, color));
+                        GameNetwork.EndModuleEventAsServer();
+                    }
+
                     if (otherPlayer != player)
                     {
                         affectedPlayers.Add(new AffectedPlayer(otherPlayer));
                     }
                 }
             }
+            if (string.IsNullOrEmpty(logAction))
+                logAction = LogAction.LocalChat;
 
-            LoggerHelper.LogAnAction(player, LogAction.LocalChat, affectedPlayers.ToArray(), new object[] { message });
+            LoggerHelper.LogAnAction(player, logAction, affectedPlayers.ToArray(), new object[] { message });
         }
     }
 }

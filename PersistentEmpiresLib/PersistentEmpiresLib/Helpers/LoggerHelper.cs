@@ -12,6 +12,10 @@ namespace PersistentEmpiresLib.Helpers
 {
     public static class LogAction
     {
+        public static readonly string DiceCommand = "DiceCommand";
+        public static readonly string DoCommand = "DoCommand";
+        public static readonly string MeCommand = "MeCommand";// Done
+        public static readonly string RollCommand = "RollCommand"; // Done
         public static readonly string LocalChat = "LocalChat"; // Done
         public static readonly string TeamChat = "TeamChat"; // Done
         public static readonly string PlayerHitToAgent = "PlayerHitAgent"; // Done
@@ -139,6 +143,10 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} joined to the server.";
                 case nameof(LogAction.PlayerDisconnected):
                     return $"{FormatLogForPlayer(issuer, dateTime)} disconnected from the server.";
+                case nameof(LogAction.MeCommand):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(string)oParams[0]} Receivers: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.RollCommand):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(string)oParams[0]} Receivers: {AffectedPlayersToString(affectedPlayers)}";
                 case nameof(LogAction.LocalChat):
                 case nameof(LogAction.TeamChat):
                     return $"{FormatLogForPlayer(issuer, dateTime)} said \"[{(string)oParams[0]}]\". Receivers: {AffectedPlayersToString(affectedPlayers)}";

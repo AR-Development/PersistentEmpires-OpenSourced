@@ -7,13 +7,16 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class QuickInformation : GameNetworkMessage
     {
         public string Message;
+        public uint Color;
+
         public QuickInformation()
         {
         }
 
-        public QuickInformation(string message)
+        public QuickInformation(string message, uint color)
         {
-            this.Message = message;
+            Message = message;
+            Color = color;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -28,14 +31,16 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.Message = GameNetworkMessage.ReadStringFromPacket(ref result);
+            Message = GameNetworkMessage.ReadStringFromPacket(ref result);
+            Color = GameNetworkMessage.ReadUintFromPacket(CompressionBasic.ColorCompressionInfo, ref result);
 
             return result;
         }
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteStringToPacket(this.Message);
+            GameNetworkMessage.WriteStringToPacket(Message);
+            GameNetworkMessage.WriteUintToPacket(Color, CompressionBasic.ColorCompressionInfo);
         }
     }
 }
