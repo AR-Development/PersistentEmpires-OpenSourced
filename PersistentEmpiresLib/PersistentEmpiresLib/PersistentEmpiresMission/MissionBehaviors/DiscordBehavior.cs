@@ -13,8 +13,8 @@ namespace PersistentEmpiresServer.ServerMissions
         private static string DiscordAdminMessageUrl;
         private static bool DiscordAnnounceEnabled;
         private static string DiscordAnnounceUrl;
-        private static bool DiscordServerRestartEnabled;
-        private static string DiscordServerRestartUrl;
+        private static bool DiscordServeStatusEnabled;
+        private static string DiscordServeStatusUrl;
         public DiscordBehavior()
         {
         }
@@ -27,13 +27,13 @@ namespace PersistentEmpiresServer.ServerMissions
             DiscordAdminMessageUrl = ConfigManager.GetStrConfig("DiscordAdminMessageUrl", "");
             DiscordAnnounceEnabled = ConfigManager.GetBoolConfig("DiscordAnnounceEnabled", true);
             DiscordAnnounceUrl = ConfigManager.GetStrConfig("DiscordAnnounceUrl", "");
-            DiscordServerRestartEnabled = ConfigManager.GetBoolConfig("DiscordServerRestartEnabled", true);
-            DiscordServerRestartUrl = ConfigManager.GetStrConfig("DiscordServerRestartUrl", "");
+            DiscordServeStatusEnabled = ConfigManager.GetBoolConfig("DiscordServeStatusEnabled", true);
+            DiscordServeStatusUrl = ConfigManager.GetStrConfig("DiscordServeStatusUrl", "");
         }
 
-        public static bool NotifyServerRestart(string message)
+        public static bool NotifyServerStatus(string message)
         {
-            if (!DiscordServerRestartEnabled || string.IsNullOrEmpty(DiscordServerRestartUrl))
+            if (!DiscordServeStatusEnabled || string.IsNullOrEmpty(DiscordServeStatusUrl))
             {
                 return false;
             }
@@ -44,7 +44,7 @@ namespace PersistentEmpiresServer.ServerMissions
                     message +
                     "\"}", System.Text.Encoding.UTF8, "application/json");
 
-            return Notify(content, DiscordServerRestartUrl);
+            return Notify(content, DiscordServeStatusUrl);
         }
 
         public static bool NotifyAdminMessage(string message)
