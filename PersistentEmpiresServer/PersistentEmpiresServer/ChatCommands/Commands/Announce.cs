@@ -35,6 +35,8 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public bool Execute(NetworkCommunicator networkPeer, string[] args)
         {
+            if (args == null) return false;
+
             InformationComponent.Instance.BroadcastAnnouncement("[" + networkPeer.UserName + "] " + String.Join(" ", args), Color);
             return true;
         }

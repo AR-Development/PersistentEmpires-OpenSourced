@@ -39,7 +39,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public bool Execute(NetworkCommunicator networkPeer, string[] args)
         {
-            if (args.Any())
+            if (args != null && args.Any())
             {
                 var command = ChatCommandSystem.Instance.commands[args.First()];
 

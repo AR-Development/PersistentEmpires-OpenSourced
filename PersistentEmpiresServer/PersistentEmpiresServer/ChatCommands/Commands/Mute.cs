@@ -37,7 +37,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public bool Execute(NetworkCommunicator networkPeer, string[] args)
         {
-            if (args.Length == 0)
+            if (args == null || args.Length == 0)
             {
                 InformationComponent.Instance.SendMessage("Please provide a username. Player that contains provided input will be muted", Color, networkPeer);
 

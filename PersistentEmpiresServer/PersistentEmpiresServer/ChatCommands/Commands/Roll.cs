@@ -44,7 +44,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
             var maxInt = 100;
             int tmp;
 
-            if (args.Count() > 1)
+            if (args != null && args.Count() > 1)
             {
                 if (int.TryParse(args[1], out tmp))
                 {
@@ -59,7 +59,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 }
             }
 
-            if (args.Count() > 2)
+            if (args != null && args.Count() > 2)
             {
                 if (int.TryParse(args[2], out tmp))
                 {

@@ -37,7 +37,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public bool Execute(NetworkCommunicator player, string[] args)
         {
-            if (player.ControlledAgent == null) return false;
+            if (player.ControlledAgent == null || args == null) return false;
 
             var message = String.Join(" ", args) + " (" + player.UserName + ")";
 

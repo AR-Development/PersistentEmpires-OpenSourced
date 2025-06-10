@@ -62,6 +62,12 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 }
             }
 
+            if (args == null)
+            {
+                InformationComponent.Instance.SendMessage("Custom name cannot be empty", Color, networkPeer);
+                return false;
+            }
+
             string newName = String.Join(" ", args);
             if (newName.Length == 0)
             {
