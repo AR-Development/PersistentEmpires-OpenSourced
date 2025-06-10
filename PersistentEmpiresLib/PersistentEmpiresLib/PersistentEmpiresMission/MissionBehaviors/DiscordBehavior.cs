@@ -55,8 +55,8 @@ namespace PersistentEmpiresServer.ServerMissions
             }
             
             var content = new StringContent("{\"content\": \"" +
-                    $"UTC time: {DateTime.UtcNow.ToLocalTime()}" +
-                    Environment.NewLine +
+                    //$"UTC time: {DateTime.UtcNow.ToLocalTime()}" +
+                    //Environment.NewLine +
                     message +
                     "\"}", System.Text.Encoding.UTF8, "application/json");
 
