@@ -38,7 +38,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
         {
             string[] commands = ChatCommandSystem.Instance.commands.Keys.ToArray();
 
-            InformationComponent.Instance.BroadcastAnnouncement("-==== Command List ===-", Color);
+            InformationComponent.Instance.SendMessage($"-==== Command List ===-", Color, networkPeer);
 
             foreach (string command in commands)
             {
