@@ -1,4 +1,4 @@
-﻿
+﻿#if SERVER
 using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Collections.Generic;
@@ -35,10 +35,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-#if SERVER
+
             IsActive = ConfigManager.GetBoolConfig("AutorestartActive", true);
             IntervalHour = ConfigManager.GetIntConfig("AutorestartIntervalHours", 24);
-#endif
         }
 
         private static bool needToBeTrigged = true;
@@ -85,3 +84,4 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
     }
 }
+#endif
