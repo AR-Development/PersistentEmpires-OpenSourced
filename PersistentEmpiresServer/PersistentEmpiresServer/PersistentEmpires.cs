@@ -27,9 +27,6 @@ namespace PersistentEmpiresServer
             CompressionBasic.PositionCompressionInfo = new CompressionInfo.Float(-200f, 10385f, 22);
             CompressionBasic.PlayerCompressionInfo = new CompressionInfo.Integer(-1, 1048576, true);
 
-
-
-
             starterObject.AddModel(new PEAgentStatCalculateModel());
             starterObject.AddModel(new DefaultItemValueModel());
             starterObject.AddModel(new PEAgentApplyDamageModel());
@@ -39,6 +36,7 @@ namespace PersistentEmpiresServer
 
         public override void OnMultiplayerGameStart(Game game, object starterObject)
         {
+            DiscordBehavior.NotifyServerStatus("Server is starting");
             InformationManager.DisplayMessage(new InformationMessage("** Persistent Empires, Multiplayer Game Start Loading..."));
             Debug.Print("** Persistent Empires, Multiplayer Game Start Loading...");
 

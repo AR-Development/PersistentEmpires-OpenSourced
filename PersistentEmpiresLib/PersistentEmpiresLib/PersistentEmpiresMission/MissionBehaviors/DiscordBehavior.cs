@@ -15,6 +15,9 @@ namespace PersistentEmpiresServer.ServerMissions
         private static string DiscordAnnounceUrl;
         private static bool DiscordServeStatusEnabled;
         private static string DiscordServeStatusUrl;
+        private static bool DiscordExceptionEnabled;
+        private static string DiscordExceptionUrl;
+
         public DiscordBehavior()
         {
         }
@@ -29,6 +32,24 @@ namespace PersistentEmpiresServer.ServerMissions
             DiscordAnnounceUrl = ConfigManager.GetStrConfig("DiscordAnnounceUrl", "");
             DiscordServeStatusEnabled = ConfigManager.GetBoolConfig("DiscordServeStatusEnabled", true);
             DiscordServeStatusUrl = ConfigManager.GetStrConfig("DiscordServeStatusUrl", "");
+            DiscordExceptionEnabled = ConfigManager.GetBoolConfig("DiscordExceptionEnabled", true);
+            DiscordExceptionUrl = ConfigManager.GetStrConfig("DiscordExceptionUrl", "");
+        }
+
+        public static bool NotifyException(string message)
+        {
+            if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
+            {
+                return false;
+            }
+
+            var content = new StringContent("{\"content\": \"" +
+                    $"UTC time: {DateTime.UtcNow.ToLocalTime()}" +
+                    Environment.NewLine +
+                    message +
+                    "\"}", System.Text.Encoding.UTF8, "application/json");
+
+            return Notify(content, DiscordExceptionUrl);
         }
 
         public static bool NotifyServerStatus(string message)

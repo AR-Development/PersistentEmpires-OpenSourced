@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.SceneScripts;
+using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -543,11 +544,25 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 Debug.Print(e.InnerException.StackTrace);
                 Debug.Print(e.InnerException.ToString());
             }
+            
+            var s = e.Message;
+            s+= Environment.NewLine + e.Message;
+            s += Environment.NewLine + e.StackTrace;
+            s += Environment.NewLine + e.ToString();
+            if (e.InnerException != null)
+            {
+                s += Environment.NewLine + e.InnerException.Message;
+                s += Environment.NewLine + e.InnerException.StackTrace;
+                s += Environment.NewLine + e.InnerException.ToString();
+            }
+
+            DiscordBehavior.NotifyException(s);
             HandleApplicationExit(sender, args);
         }
 
         private void HandleApplicationExit(object sender, EventArgs e)
         {
+            DiscordBehavior.NotifyServerStatus("SERVER CRASH DETECTED");
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
