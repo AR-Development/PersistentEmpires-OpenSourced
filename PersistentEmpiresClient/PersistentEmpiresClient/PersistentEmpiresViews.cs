@@ -13,7 +13,7 @@ namespace PersistentEmpires.Views
     [ViewCreatorModule]
     public class PersistentEmpireViews
     {
-        [ViewMethod("PersistentEmpires")]
+        [ViewMethod("PERP")]
         public static MissionView[] OpenPersistentEmpires(Mission mission)
         {
             List<MissionView> list = new List<MissionView>();
