@@ -51,7 +51,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
             InformationComponent.Instance.SendMessage("Wrong format", Color, networkPeer);
 
-            return true;
+            return false;
         }
 
         public string Description()

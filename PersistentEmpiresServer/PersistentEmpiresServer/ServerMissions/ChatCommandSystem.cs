@@ -18,7 +18,7 @@ namespace PersistentEmpiresServer.ServerMissions
         internal bool DisableGlobalChat;
         internal PatreonRegistryBehavior patreonRegistry;
         internal Dictionary<NetworkCommunicator, bool> Muted;
-        internal string CommandPrefix = "!";
+        public string CommandPrefix;
         internal string DefaultMessageColor = "#FFFDFDFD";
 
         public override void OnBehaviorInitialize()
