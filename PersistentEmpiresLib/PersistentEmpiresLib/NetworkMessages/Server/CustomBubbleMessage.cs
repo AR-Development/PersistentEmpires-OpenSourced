@@ -16,7 +16,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
 
         public string Message { get; private set; }
         public NetworkCommunicator Sender { get; private set; }
-        public uint Color;
+        public uint Color { get; private set; }
 
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
