@@ -37,6 +37,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
         {
             if (args == null) return false;
 
+            DiscordBehavior.NotifyAnnounce(String.Join(" ", args));
             InformationComponent.Instance.BroadcastAnnouncement("[" + networkPeer.UserName + "] " + String.Join(" ", args), Color);
             return true;
         }

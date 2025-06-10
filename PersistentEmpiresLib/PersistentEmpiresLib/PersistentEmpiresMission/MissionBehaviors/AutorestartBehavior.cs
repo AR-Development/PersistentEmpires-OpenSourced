@@ -1,4 +1,5 @@
 ﻿
+using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 _checkpoints[remainingSeconds] = (true, _checkpoints[remainingSeconds].Message, _checkpoints[remainingSeconds].DebugMessage);
                 //InformationComponent.Instance.BroadcastAnnouncement($"{_checkpoints[remainingSeconds].DebugMessage}");
+                DiscordBehavior.NotifyServerRestart(_checkpoints[remainingSeconds].DebugMessage);
                 InformationComponent.Instance.BroadcastQuickInformation(_checkpoints[remainingSeconds].DebugMessage, Colors.Red.ToUnsignedInteger());
                 InformationComponent.Instance.BroadcastMessage(_checkpoints[remainingSeconds].DebugMessage, Colors.Red.ToUnsignedInteger());
                 Debug.Print(_checkpoints[remainingSeconds].DebugMessage);

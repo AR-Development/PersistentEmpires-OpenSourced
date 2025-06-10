@@ -62,6 +62,7 @@ namespace PersistentEmpiresServer
                         new MissionScoreboardComponent(new TDMScoreboardData()),
                         new MissionAgentPanicHandler(), // APTAL ERAYIN İŞLERİ
 						new AdminServerBehavior(),
+                        new DiscordBehavior(),
                         new BankingComponent(),
                         new PatreonRegistryBehavior(),
                         new TradingCenterBehavior(),
