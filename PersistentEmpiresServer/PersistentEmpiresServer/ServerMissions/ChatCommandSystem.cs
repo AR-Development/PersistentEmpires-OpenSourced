@@ -14,7 +14,7 @@ namespace PersistentEmpiresServer.ServerMissions
     public class ChatCommandSystem : MissionNetwork
     {
         internal Dictionary<string, Command> commands;
-        internal static ChatCommandSystem Instance;
+        public static ChatCommandSystem Instance;
         internal bool DisableGlobalChat;
         internal PatreonRegistryBehavior patreonRegistry;
         internal Dictionary<NetworkCommunicator, bool> Muted;
