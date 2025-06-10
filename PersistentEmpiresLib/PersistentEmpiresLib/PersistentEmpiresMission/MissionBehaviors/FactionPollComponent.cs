@@ -230,6 +230,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             if(!LordPollEnabled)
             {
+                _informationComponent.SendAnnouncementToPlayer("Lord poll is disabled", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
 
