@@ -17,6 +17,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private int LordPollRequiredGold = 1000; /// ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
         private int LordPollTimeOut = 60; /// ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+        private bool LordPollEnabled = true;
+
         public class FactionPoll
         {
             private List<NetworkCommunicator> _participantsToVote;
@@ -176,14 +178,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            this._ongoingPolls = new Dictionary<int, FactionPoll>();
-            this._informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
-            this._factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
-            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            _ongoingPolls = new Dictionary<int, FactionPoll>();
+            _informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
+            _factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
+            AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
 #if SERVER
 
-            this.LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
-            this.LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+            LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
+            LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+            LordPollEnabled = ConfigManager.GetBoolConfig("LordPollEnabled", true);
 #endif
         }
 
@@ -225,6 +228,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
         public void OpenLordPollServer(NetworkCommunicator pollCreatorPeer, NetworkCommunicator targetPeer)
         {
+            if(!LordPollEnabled)
+            {
+                return;
+            }
+
             if (pollCreatorPeer == null)
             {
                 // Reject return
