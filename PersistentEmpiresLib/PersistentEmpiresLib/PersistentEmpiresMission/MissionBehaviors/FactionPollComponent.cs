@@ -232,7 +232,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (targetPeer == null)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             if (!pollCreatorPeer.IsConnectionActive)
@@ -242,7 +242,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (!targetPeer.IsConnectionActive)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             MissionPeer creatorMPeer = pollCreatorPeer.GetComponent<MissionPeer>();
@@ -261,12 +261,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (targetRepresentative.GetFactionIndex() <= 1 || pollCreatorRepresentative.GetFactionIndex() <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are in one of the default factions. You cant create a lord poll", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer("You are in one of the default factions. You cant create a lord poll", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             if (targetRepresentative.GetFactionIndex() != pollCreatorRepresentative.GetFactionIndex())
             {
-                this._informationComponent.SendAnnouncementToPlayer("Your candidate is not in the same faction with you", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer("Your candidate is not in the same faction with you", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
 
@@ -289,12 +289,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 if (this._ongoingPolls[targetRepresentative.GetFactionIndex()].IsOpen)
                 {
-                    this._informationComponent.SendAnnouncementToPlayer("There is already an on going poll", pollCreatorPeer);
+                    this._informationComponent.SendAnnouncementToPlayer("There is already an on going poll", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                     return;
                 }
                 if (Environment.TickCount - this._ongoingPolls[targetRepresentative.GetFactionIndex()].CloseTime < LordPollTimeOut * 1000)
                 {
-                    this._informationComponent.SendAnnouncementToPlayer("Please wait a little to create a new poll", pollCreatorPeer);
+                    this._informationComponent.SendAnnouncementToPlayer("Please wait a little to create a new poll", pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                     return;
                 }
             }

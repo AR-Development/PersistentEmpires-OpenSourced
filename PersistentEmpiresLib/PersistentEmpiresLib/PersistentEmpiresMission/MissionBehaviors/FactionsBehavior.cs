@@ -77,7 +77,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     if (n.IsConnectionActive && n.IsNetworkActive)
                     {
-                        InformationComponent.Instance.SendQuickInformationToPlayer("[" + networkPeer.UserName + "] " + updated, n);
+                        InformationComponent.Instance.SendQuickInformationToPlayer("[" + networkPeer.UserName + "] " + updated, n, Colors.Red.ToUnsignedInteger());
                     }
                 }
 
@@ -269,7 +269,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Faction f = persistentEmpireRepresentative.GetFaction();
             if (f.lordId != sender.VirtualPlayer.ToPlayerId() && f.marshalls.Contains(sender.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do this.", sender);
+                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do this.", sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             NetworkCommunicator targetPlayer = message.Target;
@@ -277,22 +277,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (targetRepresentative == null) return false;
             if (targetPlayer.Equals(sender) && f.lordId != targetPlayer.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick yourself or the lord.", sender);
+                this._informationComponent.SendAnnouncementToPlayer("You can't kick yourself or the lord.", sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.lordId == targetPlayer.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick the lord", sender);
+                this._informationComponent.SendAnnouncementToPlayer("You can't kick the lord", sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.marshalls.Contains(targetPlayer.VirtualPlayer.ToPlayerId()))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick another marshall", sender);
+                this._informationComponent.SendAnnouncementToPlayer("You can't kick another marshall", sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (targetRepresentative.GetFactionIndex() != persistentEmpireRepresentative.GetFactionIndex())
             {
-                this._informationComponent.SendAnnouncementToPlayer("This player is not in same faction with you", sender);
+                this._informationComponent.SendAnnouncementToPlayer("This player is not in same faction with you", sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             this.SetPlayerFaction(targetPlayer, 0, targetRepresentative.GetFactionIndex());
@@ -342,7 +342,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             //if(updateFactionBanner.BannerCode.Split('.').Length % 10 != 0)
@@ -465,21 +465,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             Faction f = this.Factions[factionIndex];
             if (f.chestManagers.Contains(message.Player.VirtualPlayer.ToPlayerId()))
             {
                 f.chestManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken from " + message.Player.UserName, player);
+                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken", message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken from " + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             else
             {
                 f.chestManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys given", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys given to " + message.Player.UserName, player);
+                this._informationComponent.SendAnnouncementToPlayer("Chest keys given", message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer("Chest keys given to " + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             return true;
         }
@@ -490,7 +490,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Door is locked", player);
+                this._informationComponent.SendAnnouncementToPlayer("Door is locked", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             Faction f = this.Factions[factionIndex];
@@ -498,15 +498,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 f.doorManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
-                    this._informationComponent.SendAnnouncementToPlayer("Door keys taken", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Door keys taken from " + message.Player.UserName, player);
+                    this._informationComponent.SendAnnouncementToPlayer("Door keys taken", message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer("Door keys taken from " + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             else
             {
                 f.doorManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
-                    this._informationComponent.SendAnnouncementToPlayer("Door keys given", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Door keys given to " + message.Player.UserName, player);
+                    this._informationComponent.SendAnnouncementToPlayer("Door keys given", message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer("Door keys given to " + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             return true;
         }
@@ -518,7 +518,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             this.UpdateFactionName(factionIndex, updateFactionName.NewName);
@@ -533,22 +533,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
+                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex == playerFactionIndex)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't declare war to yourself", player);
+                this._informationComponent.SendAnnouncementToPlayer("You can't declare war to yourself", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player);
+                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.warDeclaredTo.Contains(message.FactionIndex))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You already declared a war to this faction", player);
+                this._informationComponent.SendAnnouncementToPlayer("You already declared a war to this faction", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (FactionDeclaredWarLast.ContainsKey(playerFactionIndex) && DateTimeOffset.UtcNow.ToUnixTimeSeconds() < FactionDeclaredWarLast[playerFactionIndex] + WarDeclareTimeOut)
@@ -574,22 +574,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
+                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex == playerFactionIndex)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't make peace with yourself", player);
+                this._informationComponent.SendAnnouncementToPlayer("You can't make peace with yourself", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player);
+                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (!f.warDeclaredTo.Contains(message.FactionIndex))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You didn't declared a war.", player);
+                this._informationComponent.SendAnnouncementToPlayer("You didn't declared a war.", player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (FactionDeclaredWarLast.ContainsKey(playerFactionIndex) && DateTimeOffset.UtcNow.ToUnixTimeSeconds() < FactionDeclaredWarLast[playerFactionIndex] + PeaceDeclareTimeOut)

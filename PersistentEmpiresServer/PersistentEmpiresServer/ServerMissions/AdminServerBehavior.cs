@@ -94,7 +94,7 @@ namespace PersistentEmpiresServer.ServerMissions
             if (GameNetwork.IsClientOrReplay) return;
             if (IsPlayerBanned(networkPeer))
             {
-                InformationComponent.Instance.SendAnnouncementToPlayer("You are banned from the server. Please refer to discord server for information", networkPeer);
+                InformationComponent.Instance.SendAnnouncementToPlayer("You are banned from the server. Please refer to discord server for information", networkPeer, Colors.Red.ToUnsignedInteger());
                 InformationComponent.Instance.SendMessage("You are banned from the server. Please refer to discord server for information", Color.ConvertStringToColor("#d32f2fff").ToUnsignedInteger(), networkPeer);
                 Task.Delay(3000).ContinueWith(_ =>
                 {

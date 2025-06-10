@@ -141,7 +141,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     GameNetwork.BeginBroadcastModuleEvent();
                     GameNetwork.WriteMessage(new UpdateCastle(this));
                     GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
-                    InformationComponent.Instance.BroadcastQuickInformation(this.CastleName + " have been captured by " + capturerFaction.name);
+                    InformationComponent.Instance.BroadcastQuickInformation(this.CastleName + " have been captured by " + capturerFaction.name, Colors.Red.ToUnsignedInteger());
                     userAgent.RemoveEquippedWeapon(userAgent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
                 }
             }
