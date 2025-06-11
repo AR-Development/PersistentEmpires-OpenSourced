@@ -181,6 +181,39 @@ namespace PersistentEmpiresServer.ServerMissions
             return Notify(request, DiscordExceptionUrl);
         }
 
+        public static bool NotifyException(string ex)
+        {
+            if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
+            {
+                return false;
+            }
+
+            var request = new
+            {
+                username = ServerName,
+                content = "Exception Report",
+                embeds = new List<object>
+                {
+                    new
+                    {
+                        title = "UNHANDLED EXCEPTION THROWN",
+                        color = int.Parse(ColorRed, System.Globalization.NumberStyles.HexNumber),
+                        fields = new List<object>
+                        {
+                            new
+                            {
+                                name = "Exception",
+                                value = ex,
+                                inline = false,
+                            },
+                        }
+                    },
+                }
+            };
+
+            return Notify(request, DiscordExceptionUrl);
+        }
+
         public static bool NotifyServerStatus(string message, string color)
         {
             if (!DiscordServeStatusEnabled || string.IsNullOrEmpty(DiscordServeStatusUrl))
