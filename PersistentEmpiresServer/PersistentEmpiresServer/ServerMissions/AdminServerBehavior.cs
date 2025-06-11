@@ -231,6 +231,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         private bool HandleAdminChatFromServer(NetworkCommunicator player, AdminChat message)
         {
+            DiscordBehavior.NotifyAdminMessage(player.UserName, message.Message);
             foreach (NetworkCommunicator oPlayer in GameNetwork.NetworkPeers)
             {
                 if (oPlayer.IsConnectionActive)
