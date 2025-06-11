@@ -208,18 +208,32 @@ namespace PersistentEmpiresServer.ServerMissions
             return Notify(request, DiscordServeStatusUrl);
         }
 
-        public static bool NotifyAdminMessage(string message)
+        public static bool NotifyAdminMessage(string player, string message)
         {
             if(!DiscordAdminMessageEnabled || string.IsNullOrEmpty(DiscordAdminMessageUrl))
             {
                 return false;
             }
-            
-            var content = new StringContent("{\"content\": \"" +
-                    message +
-                    "\"}", System.Text.Encoding.UTF8, "application/json");
 
-            return Notify(request, DiscordAdminMessageUrl);
+            var request = new
+            {
+                username = ServerName,
+                embeds = new List<object>
+                {
+                    new
+                    {
+                        title = "Admin chat",
+                        description = message,
+                        color = int.Parse(ColorGreen, System.Globalization.NumberStyles.HexNumber),
+                        author = new
+                        {
+                            name = player,
+                        },
+                    },
+                }
+            };
+
+            return Notify(request, DiscordServeStatusUrl);
         }
 
         public static bool NotifyAnnounce(string user, string message)

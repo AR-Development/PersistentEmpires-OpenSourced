@@ -553,7 +553,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleApplicationExit(object sender, EventArgs e)
         {
-            DiscordBehavior.NotifyServerStatus("SERVER CRASH DETECTED", , DiscordBehavior.ColorRed);
+            DiscordBehavior.NotifyServerStatus("SERVER CRASH DETECTED", DiscordBehavior.ColorRed);
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
