@@ -602,6 +602,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        public static DBPlayer GetDBPlayer(string playerId)
+        {
+            if (OnGetPlayer != null && !string.IsNullOrEmpty(playerId))
+            {
+                DBPlayer player = OnGetPlayer(playerId);
+
+                return player;
+            }
+
+            return null;
+        }
+
         public static void RglExceptionThrown(System.Diagnostics.StackTrace e, Exception rglException)
         {
             // Define your error logging logic

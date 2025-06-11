@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Text;
 using System.Linq;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
@@ -242,13 +244,13 @@ namespace PersistentEmpiresServer.ServerMissions
             return Notify(request, DiscordServeStatusUrl);
         }
 
-        public static bool NotifyAdminMessage(string player, string message)
+        public static bool NotifyAdminMessage(NetworkCommunicator player, string message)
         {
             if(!DiscordAdminMessageEnabled || string.IsNullOrEmpty(DiscordAdminMessageUrl))
             {
                 return false;
             }
-
+            //DBPlayer dBPlayer = SaveSystemBehavior.GetDBPlayer(player.VirtualPlayer.ToPlayerId());
             var request = new
             {
                 username = ServerName,
@@ -262,6 +264,7 @@ namespace PersistentEmpiresServer.ServerMissions
                         author = new
                         {
                             name = player,
+                            //url = string.IsNullOrEmpty(dBPlayer.DiscordId) ? "" : ,
                         },
                     },
                 }
