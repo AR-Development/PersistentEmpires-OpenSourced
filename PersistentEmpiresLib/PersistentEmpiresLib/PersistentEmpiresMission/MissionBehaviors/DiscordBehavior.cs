@@ -300,16 +300,18 @@ namespace PersistentEmpiresServer.ServerMissions
 
         private static bool Notify(object request, string url)
         {
-            var dataString = JsonConvert.SerializeObject(request);
-            var content = new StringContent(dataString, Encoding.UTF8, "application/json");
-
-            if (HttpClient == null)
-            {
-                HttpClient = new HttpClient();
-            }
             try
             {
+                var dataString = JsonConvert.SerializeObject(request);
+                var content = new StringContent(dataString, Encoding.UTF8, "application/json");
+
+                if (HttpClient == null)
+                {
+                    HttpClient = new HttpClient();
+                }
+                
                 var response = HttpClient.PostAsync(url, content).Result;
+                
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
