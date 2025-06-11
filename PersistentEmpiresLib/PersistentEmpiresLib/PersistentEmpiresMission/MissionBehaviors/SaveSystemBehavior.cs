@@ -1,7 +1,9 @@
-﻿using PersistentEmpiresLib.Database.DBEntities;
+﻿#if SERVER
+using PersistentEmpiresServer.ServerMissions;
+#endif
+using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
