@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Linq;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresServer.ServerMissions
@@ -98,7 +99,7 @@ namespace PersistentEmpiresServer.ServerMissions
                             new
                             {
                                 name = "Affected Players",
-                                value = dbLog.AffectedPlayers,
+                                value = string.Join(", ", dbLog.AffectedPlayers.Value.Select(x=> x.SteamId + "." + x.PlayerName + "(" + x.FactionName + ")")),
                                 inline = false,
                             }
                         }
