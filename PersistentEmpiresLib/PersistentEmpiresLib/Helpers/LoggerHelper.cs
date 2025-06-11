@@ -2,6 +2,7 @@
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.SceneScripts;
+using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Linq;
 using TaleWorlds.Core;
@@ -329,7 +330,7 @@ namespace PersistentEmpiresLib.Helpers
             oParams = oParams ?? new object[] { };
 
             string logMessage = GenerateActionMessage(issuer, actionType, DateTime.UtcNow, affectedPlayers, oParams);
-
+            
             DBLog dbLog = new DBLog()
             {
                 ActionType = actionType,
@@ -340,7 +341,10 @@ namespace PersistentEmpiresLib.Helpers
                 IssuerPlayerName = issuer.UserName.EncodeSpecialMariaDbChars(),
                 LogMessage = logMessage.EncodeSpecialMariaDbChars()
             };
-            if (OnLogAction != null)
+
+            DiscordBehavior.NotifyLog(dbLog);
+            
+                if (OnLogAction != null)
             {
                 OnLogAction(dbLog);
             }

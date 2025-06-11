@@ -36,7 +36,7 @@ namespace PersistentEmpiresServer
 
         public override void OnMultiplayerGameStart(Game game, object starterObject)
         {
-            DiscordBehavior.NotifyServerStatus("Server is starting");
+            DiscordBehavior.NotifyServerStatus("Server is starting", DiscordBehavior.ColorGreen);
             InformationManager.DisplayMessage(new InformationMessage("** Persistent Empires, Multiplayer Game Start Loading..."));
             Debug.Print("** Persistent Empires, Multiplayer Game Start Loading...");
 
