@@ -41,7 +41,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public event FactionKeyFetchedHandler OnFactionKeyFetched;
         public Dictionary<int, Faction> Factions { get; set; }
         public Dictionary<int, PEFactionBanner> FactionBanners { get; set; }
-
         public Dictionary<int, long> FactionDeclaredWarLast { get; set; }
 
         /* Configs */
@@ -49,6 +48,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public int WarDeclareTimeOut = 30; // ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
         public int PeaceDeclareTimeOut = 30; // ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
         public int MaxBannerLength = 100; // ConfigManager.GetIntConfig("MaxBannerLength", 100);
+        public static bool CanUseDiplomacy = true;
 
         public override void OnBehaviorInitialize()
         {
@@ -62,6 +62,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.WarDeclareTimeOut = ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
             this.PeaceDeclareTimeOut = ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
             this.MaxBannerLength = ConfigManager.GetIntConfig("MaxBannerLength", 100);
+            CanUseDiplomacy = ConfigManager.GetBoolConfig("CanUseDiplomacy", true);
 #endif
         }
 

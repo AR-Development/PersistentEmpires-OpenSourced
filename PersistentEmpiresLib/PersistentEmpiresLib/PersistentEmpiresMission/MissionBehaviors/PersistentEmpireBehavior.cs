@@ -314,7 +314,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         Faction f = persistentEmpireRepresentative1.GetFaction();
 
                         GameNetwork.BeginModuleEventAsServer(networkPeer);
-                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()), FactionPollComponent.LordPollEnabled));
+                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()), FactionPollComponent.LordPollEnabled, FactionsBehavior.CanUseDiplomacy));
                         GameNetwork.EndModuleEventAsServer();
                     }
                 }
