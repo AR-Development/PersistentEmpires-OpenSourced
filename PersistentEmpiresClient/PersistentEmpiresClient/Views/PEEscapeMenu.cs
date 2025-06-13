@@ -101,7 +101,7 @@ namespace PersistentEmpires.Views.Views
                     this._factionManagementComponent.OnFactionManagementClickHandler();
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             }
-            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFactionIndex() > 1)
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.CanUsePoll && _persistentEmpireRepresentative.GetFactionIndex() > 1)
             {
                 list.Add(new EscapeMenuItemVM(new TextObject("Poll A Lord", null), delegate (object o)
                 {

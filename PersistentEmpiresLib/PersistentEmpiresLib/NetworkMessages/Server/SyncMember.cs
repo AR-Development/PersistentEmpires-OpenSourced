@@ -9,12 +9,14 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public NetworkCommunicator Peer;
         public int FactionIndex;
         public bool IsMarshall;
+        public bool CanUseLordPoll;
         public SyncMember() { }
-        public SyncMember(NetworkCommunicator Peer, int FactionIndex, bool IsMarshall)
+        public SyncMember(NetworkCommunicator Peer, int FactionIndex, bool IsMarshall, bool canUseLordPoll)
         {
-            this.Peer = Peer;
-            this.FactionIndex = FactionIndex;
-            this.IsMarshall = IsMarshall;
+            Peer = Peer;
+            FactionIndex = FactionIndex;
+            IsMarshall = IsMarshall;
+            CanUseLordPoll = canUseLordPoll;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -29,17 +31,19 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.Peer = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
-            this.FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
-            this.IsMarshall = GameNetworkMessage.ReadBoolFromPacket(ref result);
+            Peer = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+            FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
+            IsMarshall = GameNetworkMessage.ReadBoolFromPacket(ref result);
+            CanUseLordPoll = GameNetworkMessage.ReadBoolFromPacket(ref result);
             return result;
         }
 
         protected override void OnWrite()
         {
-            GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Peer);
-            GameNetworkMessage.WriteIntToPacket(this.FactionIndex, new CompressionInfo.Integer(-1, 200, true));
-            GameNetworkMessage.WriteBoolToPacket(this.IsMarshall);
+            GameNetworkMessage.WriteNetworkPeerReferenceToPacket(Peer);
+            GameNetworkMessage.WriteIntToPacket(FactionIndex, new CompressionInfo.Integer(-1, 200, true));
+            GameNetworkMessage.WriteBoolToPacket(IsMarshall);
+            GameNetworkMessage.WriteBoolToPacket(CanUseLordPoll);
         }
     }
 }

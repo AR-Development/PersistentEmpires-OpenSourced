@@ -28,6 +28,7 @@ namespace PersistentEmpiresLib
         public bool KickedFromFaction = false;
         public long DisconnectedAt = 0;
         public bool LoadFromDb = false;
+        public bool CanUsePoll = false;
         public Vec3 LoadedDbPosition;
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
@@ -189,6 +190,10 @@ namespace PersistentEmpiresLib
         {
             return WoundedUntil;
         }
-    }
 
+        internal void SetCanUsePoll(bool canUseLordPoll)
+        {
+            CanUsePoll = canUseLordPoll;
+        }
+    }
 }
