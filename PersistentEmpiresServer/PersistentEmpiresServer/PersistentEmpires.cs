@@ -61,7 +61,7 @@ namespace PersistentEmpiresServer
         public override void OnGameInitializationFinished(Game game)
         {
             base.OnGameInitializationFinished(game);
-            DiscordBehavior.NotifyServerStatus("Restarting is runing", DiscordBehavior.ColorGreen);
+            DiscordBehavior.NotifyServerStatus("Server is runing", DiscordBehavior.ColorGreen);
         }
 #endif
     }
