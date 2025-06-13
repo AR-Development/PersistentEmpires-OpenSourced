@@ -11,11 +11,11 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public bool IsMarshall;
         public bool CanUseLordPoll;
         public SyncMember() { }
-        public SyncMember(NetworkCommunicator Peer, int FactionIndex, bool IsMarshall, bool canUseLordPoll)
+        public SyncMember(NetworkCommunicator peer, int factionIndex, bool isMarshall, bool canUseLordPoll)
         {
-            Peer = Peer;
-            FactionIndex = FactionIndex;
-            IsMarshall = IsMarshall;
+            Peer = peer;
+            FactionIndex = factionIndex;
+            IsMarshall = isMarshall;
             CanUseLordPoll = canUseLordPoll;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
