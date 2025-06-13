@@ -17,7 +17,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private int LordPollRequiredGold = 1000; /// ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
         private int LordPollTimeOut = 60; /// ConfigManager.GetIntConfig("LordPollTimeOut", 60);
-        private bool LordPollEnabled = true;
+        internal static bool LordPollEnabled = true;
 
         public class FactionPoll
         {
