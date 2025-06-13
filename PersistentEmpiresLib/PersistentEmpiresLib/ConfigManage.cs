@@ -80,6 +80,7 @@ namespace PersistentEmpiresLib
             XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);
             return portElement == null ? defValue : int.Parse(portElement.InnerText);
         }
+
         public static string GetStrConfig(string config, string defValue)
         {
             XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);

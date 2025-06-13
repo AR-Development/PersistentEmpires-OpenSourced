@@ -1,16 +1,12 @@
 ﻿#if SERVER
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using PersistentEmpiresLib;
-using PersistentEmpiresLib.Database.DBEntities;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Linq;
 using TaleWorlds.MountAndBlade;
-using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
-using PersistentEmpiresLib.Helpers;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
@@ -34,15 +30,10 @@ namespace PersistentEmpiresServer.ServerMissions
         public const string ColorRed = "E7421F";
         public const string ColorPurple = "C61FE6";
         public const string ColorYellow = "E6C71F";
+        public static bool Initialized = false;
 
         public DiscordBehavior()
         {
-        }
-
-        public override void OnBehaviorInitialize()
-        {
-            base.OnBehaviorInitialize();
-
             DiscordAdminMessageEnabled = ConfigManager.GetBoolConfig("DiscordAdminMessageEnabled", true);
             DiscordAdminMessageUrl = ConfigManager.GetStrConfig("DiscordAdminMessageUrl", "");
             DiscordAnnounceEnabled = ConfigManager.GetBoolConfig("DiscordAnnounceEnabled", true);
