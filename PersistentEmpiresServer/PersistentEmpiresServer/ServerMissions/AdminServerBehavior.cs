@@ -203,7 +203,8 @@ namespace PersistentEmpiresServer.ServerMissions
                 networkMessageHandlerRegisterer.Register<RequestBecameGodlike>(this.HandleRequestBecameGodlike);
                 networkMessageHandlerRegisterer.Register<AdminChat>(this.HandleAdminChatFromServer);
                 networkMessageHandlerRegisterer.Register<RequestTpToPosition>(HandleRequestTpToPositionFromClient);
-                networkMessageHandlerRegisterer.Register<RequestRespawn>(HandleRequestRespawn);                
+                networkMessageHandlerRegisterer.Register<RequestRespawn>(HandleRequestRespawn);
+                networkMessageHandlerRegisterer.Register<FactionAdminAssignLord>(this.HandleFactionAdminAssignLord);
             }
         }
 
@@ -331,6 +332,15 @@ namespace PersistentEmpiresServer.ServerMissions
             return true;
         }
 
+        private bool HandleFactionAdminAssignLord(NetworkCommunicator player, FactionAdminAssignLord message)
+        {
+            var persistentEmpireRepresentative = message.TargetPlayer.GetComponent<PersistentEmpireRepresentative>();
+            var factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
+
+            factionsBehavior.SetPlayerFaction(message.TargetPlayer, message.TargetFactionId, persistentEmpireRepresentative.GetFactionIndex());
+            return true;
+        }
+        
         private bool HandleRequestItemSpawn(NetworkCommunicator player, RequestItemSpawn message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
