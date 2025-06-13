@@ -29,6 +29,7 @@ namespace PersistentEmpiresLib
         public long DisconnectedAt = 0;
         public bool LoadFromDb = false;
         public bool CanUsePoll = false;
+        public bool CanUseDiplomacy = false;
         public Vec3 LoadedDbPosition;
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
@@ -194,6 +195,11 @@ namespace PersistentEmpiresLib
         internal void SetCanUsePoll(bool canUseLordPoll)
         {
             CanUsePoll = canUseLordPoll;
+        }
+
+        internal void SetCanUseDiplomacy(bool canUseDiplomacy)
+        {
+            CanUseDiplomacy = canUseDiplomacy;
         }
     }
 }

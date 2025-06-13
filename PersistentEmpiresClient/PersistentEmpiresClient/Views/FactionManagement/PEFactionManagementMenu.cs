@@ -77,11 +77,14 @@ namespace PersistentEmpires.Views.Views.FactionManagement
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnKickSomeoneFromFactionClickHandler();
                 }));
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Diplomacy Menu"), () =>
+                if (myRepr.CanUseDiplomacy)
                 {
-                    this.CloseManagementMenu();
-                    this._factionManagementComponent.OnDiplomacyMenuClickHandler();
-                }));
+                    managementItemVM.Add(new ManagementItemVM(new TextObject("Diplomacy Menu"), () =>
+                    {
+                        this.CloseManagementMenu();
+                        this._factionManagementComponent.OnDiplomacyMenuClickHandler();
+                    }));
+                }
                 managementItemVM.Add(new ManagementItemVM(new TextObject("Manage door keys"), () =>
                 {
                     this.CloseManagementMenu();

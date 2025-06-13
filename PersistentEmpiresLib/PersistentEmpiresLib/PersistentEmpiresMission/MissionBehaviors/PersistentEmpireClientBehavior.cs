@@ -227,6 +227,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     if (message.IsMarshall) f.marshalls.Add(message.Peer.VirtualPlayer.ToPlayerId());
 
                     message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUsePoll(message.CanUseLordPoll);
+                    message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUseDiplomacy(message.CanUseDiplomacy);
                 }
                 message.Peer.GetComponent<PersistentEmpireRepresentative>().SetFaction(f, message.FactionIndex);
             }

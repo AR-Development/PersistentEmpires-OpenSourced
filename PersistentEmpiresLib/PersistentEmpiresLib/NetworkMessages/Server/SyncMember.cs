@@ -10,13 +10,15 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         public int FactionIndex;
         public bool IsMarshall;
         public bool CanUseLordPoll;
+        public bool CanUseDiplomacy;
         public SyncMember() { }
-        public SyncMember(NetworkCommunicator peer, int factionIndex, bool isMarshall, bool canUseLordPoll)
+        public SyncMember(NetworkCommunicator peer, int factionIndex, bool isMarshall, bool canUseLordPoll, bool canUseDiplomacy)
         {
             Peer = peer;
             FactionIndex = factionIndex;
             IsMarshall = isMarshall;
             CanUseLordPoll = canUseLordPoll;
+            CanUseDiplomacy = canUseDiplomacy;
         }
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -35,6 +37,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             FactionIndex = GameNetworkMessage.ReadIntFromPacket(new CompressionInfo.Integer(-1, 200, true), ref result);
             IsMarshall = GameNetworkMessage.ReadBoolFromPacket(ref result);
             CanUseLordPoll = GameNetworkMessage.ReadBoolFromPacket(ref result);
+            CanUseDiplomacy = GameNetworkMessage.ReadBoolFromPacket(ref result);
             return result;
         }
 
@@ -44,6 +47,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
             GameNetworkMessage.WriteIntToPacket(FactionIndex, new CompressionInfo.Integer(-1, 200, true));
             GameNetworkMessage.WriteBoolToPacket(IsMarshall);
             GameNetworkMessage.WriteBoolToPacket(CanUseLordPoll);
+            GameNetworkMessage.WriteBoolToPacket(CanUseDiplomacy);
         }
     }
 }
