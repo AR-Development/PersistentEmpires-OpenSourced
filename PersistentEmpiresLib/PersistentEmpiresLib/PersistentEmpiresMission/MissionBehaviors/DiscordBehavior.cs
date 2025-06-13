@@ -14,16 +14,126 @@ namespace PersistentEmpiresServer.ServerMissions
     public class DiscordBehavior : MissionNetwork
     {
         private static HttpClient HttpClient = null;
-        private static bool DiscordAdminMessageEnabled;
-        private static string DiscordAdminMessageUrl;
-        private static bool DiscordAnnounceEnabled;
-        private static string DiscordAnnounceUrl;
-        private static bool DiscordServeStatusEnabled;
-        private static string DiscordServeStatusUrl;
-        private static bool DiscordExceptionEnabled;
-        private static string DiscordExceptionUrl;
-        private static bool DiscordLogEnabled;
-        private static string DiscordLogUrl;
+        private static bool? _discordAdminMessageEnabled;
+        private static bool DiscordAdminMessageEnabled
+        {
+            get
+            {
+                if (_discordAdminMessageEnabled == null)
+                {
+                    _discordAdminMessageEnabled = ConfigManager.GetBoolConfig("DiscordAdminMessageEnabled", true);
+                }
+                return _discordAdminMessageEnabled.Value;
+            }
+        }
+        private static string _discordAdminMessageUrl;
+        private static string DiscordAdminMessageUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_discordAdminMessageUrl))
+                {
+                    _discordAdminMessageUrl = ConfigManager.GetStrConfig("DiscordAdminMessageUrl", "");
+                }
+                return _discordAdminMessageUrl;
+            }
+        }
+        private static bool? _discordAnnounceEnabled;
+        private static bool DiscordAnnounceEnabled
+        {
+            get
+            {
+                if (_discordAnnounceEnabled == null)
+                {
+                    _discordAnnounceEnabled = ConfigManager.GetBoolConfig("DiscordAnnounceEnabled", true);
+                }
+                return _discordAnnounceEnabled.Value;
+            }
+        }
+        private static string _discordAnnounceUrl;
+        private static string DiscordAnnounceUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_discordAnnounceUrl))
+                {
+                    _discordAnnounceUrl = ConfigManager.GetStrConfig("DiscordAnnounceUrl", "");
+                }
+                return _discordAnnounceUrl;
+            }
+        }
+        private static bool? _discordServeStatusEnabled;
+        private static bool DiscordServeStatusEnabled
+        {
+            get
+            {
+                if (_discordServeStatusEnabled == null)
+                {
+                    _discordServeStatusEnabled = ConfigManager.GetBoolConfig("DiscordServeStatusEnabled", true);
+                }
+                return _discordServeStatusEnabled.Value;
+            }
+        }
+        private static string _discordServeStatusUrl;
+        private static string DiscordServeStatusUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_discordServeStatusUrl))
+                {
+                    _discordServeStatusUrl = ConfigManager.GetStrConfig("DiscordServeStatusUrl", "");
+                }
+                return _discordServeStatusUrl;
+            }
+        }
+        private static bool? _discordExceptionEnabled;
+        private static bool DiscordExceptionEnabled
+        {
+            get
+            {
+                if (_discordExceptionEnabled == null)
+                {
+                    _discordExceptionEnabled = ConfigManager.GetBoolConfig("DiscordExceptionEnabled", true);
+                }
+                return _discordExceptionEnabled.Value;
+            }
+        }
+        private static string _discordExceptionUrl;
+        private static string DiscordExceptionUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_discordExceptionUrl))
+                {
+                    _discordExceptionUrl = ConfigManager.GetStrConfig("DiscordExceptionUrl", "");
+                }
+                return _discordExceptionUrl;
+            }
+        }
+        private static bool? _discordLogEnabled;
+        private static bool DiscordLogEnabled
+        {
+            get
+            {
+                if (_discordLogEnabled == null)
+                {
+                    _discordLogEnabled = ConfigManager.GetBoolConfig("DiscordLogEnabled", true);
+                }
+                return _discordLogEnabled.Value;
+            }
+        }
+        private static string _discordLogUrl;
+        private static string DiscordLogUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_discordLogUrl))
+                {
+                    _discordLogUrl = ConfigManager.GetStrConfig("DiscordLogUrl", "");
+                }
+                return _discordLogUrl;
+            }
+        }
         private static string ServerName = "Server Watcher";
         public const string ColorBlue = "1F61E6";
         public const string ColorGreen = "80E61F";
@@ -34,16 +144,6 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public DiscordBehavior()
         {
-            DiscordAdminMessageEnabled = ConfigManager.GetBoolConfig("DiscordAdminMessageEnabled", true);
-            DiscordAdminMessageUrl = ConfigManager.GetStrConfig("DiscordAdminMessageUrl", "");
-            DiscordAnnounceEnabled = ConfigManager.GetBoolConfig("DiscordAnnounceEnabled", true);
-            DiscordAnnounceUrl = ConfigManager.GetStrConfig("DiscordAnnounceUrl", "");
-            DiscordServeStatusEnabled = ConfigManager.GetBoolConfig("DiscordServeStatusEnabled", true);
-            DiscordServeStatusUrl = ConfigManager.GetStrConfig("DiscordServeStatusUrl", "");
-            DiscordExceptionEnabled = ConfigManager.GetBoolConfig("DiscordExceptionEnabled", true);
-            DiscordExceptionUrl = ConfigManager.GetStrConfig("DiscordExceptionUrl", "");
-            DiscordLogEnabled = ConfigManager.GetBoolConfig("DiscordLogEnabled", true);
-            DiscordLogUrl = ConfigManager.GetStrConfig("DiscordLogUrl", "");
         }
 
         public static bool NotifyLog(PersistentEmpiresLib.Database.DBEntities.DBLog dbLog)
