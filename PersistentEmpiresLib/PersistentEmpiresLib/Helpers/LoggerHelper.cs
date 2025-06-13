@@ -2,13 +2,14 @@
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.SceneScripts;
-using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+#if SERVER
+using PersistentEmpiresServer.ServerMissions;
 using static PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors.SaveSystemBehavior;
-
+#endif
 namespace PersistentEmpiresLib.Helpers
 {
     public static class LogAction
@@ -341,9 +342,9 @@ namespace PersistentEmpiresLib.Helpers
                 IssuerPlayerName = issuer.UserName.EncodeSpecialMariaDbChars(),
                 LogMessage = logMessage.EncodeSpecialMariaDbChars()
             };
-
+#if SERVER
             DiscordBehavior.NotifyLog(dbLog);
-            
+#endif
                 if (OnLogAction != null)
             {
                 OnLogAction(dbLog);
