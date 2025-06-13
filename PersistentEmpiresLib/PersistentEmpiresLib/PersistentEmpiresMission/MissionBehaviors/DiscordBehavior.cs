@@ -231,7 +231,7 @@ namespace PersistentEmpiresServer.ServerMissions
                     new
                     {
                         title = message,
-                        description = message,
+                        //description = message,
                         color = int.Parse(color, System.Globalization.NumberStyles.HexNumber),
                         author = new
                         {

@@ -35,8 +35,7 @@ namespace PersistentEmpiresServer
         }
 
         public override void OnMultiplayerGameStart(Game game, object starterObject)
-        {
-            DiscordBehavior.NotifyServerStatus("Server is starting", DiscordBehavior.ColorGreen);
+        {            
             InformationManager.DisplayMessage(new InformationMessage("** Persistent Empires, Multiplayer Game Start Loading..."));
             Debug.Print("** Persistent Empires, Multiplayer Game Start Loading...");
 
@@ -52,5 +51,18 @@ namespace PersistentEmpiresServer
 
             TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode(Main.ModuleName));
         }
+#if SERVER
+        protected override void OnSubModuleLoad()
+        {
+            base.OnSubModuleLoad();
+            DiscordBehavior.NotifyServerStatus("Restarting server...", DiscordBehavior.ColorYellow);
+        }
+
+        public override void OnGameInitializationFinished(Game game)
+        {
+            base.OnGameInitializationFinished(game);
+            DiscordBehavior.NotifyServerStatus("Restarting is runing", DiscordBehavior.ColorGreen);
+        }
+#endif
     }
 }
