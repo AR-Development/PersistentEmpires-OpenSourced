@@ -337,7 +337,7 @@ namespace PersistentEmpiresServer.ServerMissions
             var persistentEmpireRepresentative = message.TargetPlayer.GetComponent<PersistentEmpireRepresentative>();
             var factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
 
-            factionsBehavior.SetPlayerFaction(message.TargetPlayer, message.TargetFactionId, persistentEmpireRepresentative.GetFactionIndex());
+            factionsBehavior.AssignMarshall(message.TargetPlayer, message.TargetFactionId, persistentEmpireRepresentative.GetFactionIndex());
             return true;
         }
         
