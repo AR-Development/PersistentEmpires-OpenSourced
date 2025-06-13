@@ -50,7 +50,7 @@ namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons
                 var factionId = (int)obj.FirstOrDefault().Identifier;
 
                 GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new RequestKill(SelectedPlayer.GetPeer()));
+                GameNetwork.WriteMessage(new FactionAdminAssignLord(SelectedPlayer.GetPeer(), factionId));
                 GameNetwork.EndModuleEventAsClient();
             }
             catch (Exception ex)

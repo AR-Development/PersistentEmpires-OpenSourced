@@ -19,6 +19,7 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
         {
             _adminButtons = new MBBindingList<PEAdminButtonVM>()
             {
+                new MakeLord(),
                 new PermBan(),
                 new TempBan(),
                 new Kick(),
