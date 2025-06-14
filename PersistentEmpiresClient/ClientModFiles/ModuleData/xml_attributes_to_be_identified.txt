@@ -1,4 +1,0 @@
-PersistentEmpires/ModuleData/module_strings.xml: base.strings.string.text
-PersistentEmpires/ModuleData/broken_tools.xml: Items.Item.name, Items.CraftedItem.name
-PersistentEmpires/ModuleData/mpclassdivisions.xml: MPClassDivisions.MPClassDivision.Perks.Perk.name
-PersistentEmpires/ModuleData/mpcharacters.xml: MPCharacters.NPCCharacter.name

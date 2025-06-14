@@ -203,13 +203,10 @@
 		<None Update="ModuleData\Languages\std_persistent_empires.xml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="ModuleData\module_strings.xml">
+		<None Update="ModuleData\Languages\std_common_strings_xml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="ModuleData\native_strings.xml">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="ModuleData\xml_attributes_to_be_identified.txt">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="SubModule.xml">
