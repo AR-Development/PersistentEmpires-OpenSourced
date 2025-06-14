@@ -3,6 +3,7 @@ using PersistentEmpires.Views.ViewsVM.AdminPanel;
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -57,31 +58,32 @@ namespace PersistentEmpires.Views.Views
         private IEnumerable<PEAdminMenuItemVM> GetList()
         {
             List<PEAdminMenuItemVM> menuItemVm = new List<PEAdminMenuItemVM>();
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Player Management"), () =>
+            
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.PlayerManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminPlayerManagementView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Item Management"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.ItemManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminItemPanelView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Faction Management"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.FactionManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminFactionView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Give Yourself Money"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.GiveMoney", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminGoldView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Became Godlike"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.BecameGodlike", null), () =>
             {
                 this.CloseAdminPanel();
                 GameNetwork.BeginModuleEventAsClient();
@@ -89,19 +91,19 @@ namespace PersistentEmpires.Views.Views
                 GameNetwork.EndModuleEventAsClient();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Remove Unused Boats"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.RemoveUnusedBoats", null), () =>
             {
-                this.CloseAdminPanel();
+                CloseAdminPanel();
                 InformationManager.DisplayMessage(new InformationMessage("Not implemented yet"));
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Remove Unused Attachable"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.RemoveUnusedAttachable", null), () =>
             {
-                this.CloseAdminPanel();
+                CloseAdminPanel();
                 InformationManager.DisplayMessage(new InformationMessage("Not implemented yet"));
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(new TextObject("Teleport to locations"), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.TpToLocation", null), () =>
             {
                 CloseAdminPanel();
                 Mission.GetMissionBehavior<PEAdminTeleportView>().OnOpen();
