@@ -59,31 +59,31 @@ namespace PersistentEmpires.Views.Views
         {
             List<PEAdminMenuItemVM> menuItemVm = new List<PEAdminMenuItemVM>();
             
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PlayerManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMPlayerManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminPlayerManagementView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVM.ItemManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMItemManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminItemPanelView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("FactionManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMFactionManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminFactionView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVM.GiveMoney", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMGiveMoney", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminGoldView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.BecameGodlike", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMBecameGodlike", null), () =>
             {
                 this.CloseAdminPanel();
                 GameNetwork.BeginModuleEventAsClient();
@@ -91,19 +91,19 @@ namespace PersistentEmpires.Views.Views
                 GameNetwork.EndModuleEventAsClient();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.RemoveUnusedBoats", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMRemoveUnusedBoats", null), () =>
             {
                 CloseAdminPanel();
                 InformationManager.DisplayMessage(new InformationMessage("Not implemented yet"));
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.RemoveUnusedAttachable", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMRemoveUnusedAttachable", null), () =>
             {
                 CloseAdminPanel();
                 InformationManager.DisplayMessage(new InformationMessage("Not implemented yet"));
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.TpToLocation", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVMTpToLocation", null), () =>
             {
                 CloseAdminPanel();
                 Mission.GetMissionBehavior<PEAdminTeleportView>().OnOpen();

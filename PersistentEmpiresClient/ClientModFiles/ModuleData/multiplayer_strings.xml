@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <strings>	
 	<!--PEAdminMenuItemVM-->
-	<string id="PlayerManagement" text="{=PEAdminMenuItemVM.PlayerManagement}Player Management1" />
-	<string id="AdminVM.ItemManagement" text="{=PEAdminMenuItemVM.ItemManagement}Item Management" />
-	<string id="FactionManagement" text="Faction Management" />
-	<string id="AdminVM.GiveMoney" text="Give Yourself Money" />
-	<string id="PEAdminMenuItemVM.BecameGodlike" text="{=PEAdminMenuItemVM.BecameGodlike}Became Godlike" />
-	<string id="PEAdminMenuItemVM.RemoveUnusedBoats" text="{=PEAdminMenuItemVM.RemoveUnusedBoats}Remove Unused Boats" />
-	<string id="PEAdminMenuItemVM.RemoveUnusedAttachable" text="{=PEAdminMenuItemVM.RemoveUnusedAttachable}Remove Unused Attachable" />
-	<string id="PEAdminMenuItemVM.TpToLocation" text="{=PEAdminMenuItemVM.TpToLocation}Teleport to locations" />
+	<string id="AdminVMPlayerManagement" text="Player Management" />
+	<string id="AdminVMItemManagement" text="Item Management" />
+	<string id="AdminVMFactionManagement" text="Faction Management" />
+	<string id="AdminVMGiveMoney" text="Give Yourself Money" />
+	<string id="AdminVMBecameGodlike" text="Became Godlike" />
+	<string id="AdminVMRemoveUnusedBoats" text="Remove Unused Boats" />
+	<string id="AdminVMRemoveUnusedAttachable" text="Remove Unused Attachable" />
+	<string id="AdminVMTpToLocation" text="Teleport to locations" />
 </strings>
