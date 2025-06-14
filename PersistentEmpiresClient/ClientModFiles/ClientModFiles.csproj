@@ -200,10 +200,7 @@
 		<None Update="GUI\SpriteParts\ui_pe_inventory\rightpanel.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="ModuleData\Languages\std_persistent_empires.xml">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="ModuleData\Languages\std_common_strings_xml">
+		<None Update="ModuleData\multiplayer_strings.xml">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="ModuleData\native_strings.xml">

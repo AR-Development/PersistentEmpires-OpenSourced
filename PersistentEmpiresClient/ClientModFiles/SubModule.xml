@@ -184,5 +184,8 @@
 				<GameType value="MultiplayerGame" />
 			</IncludedGameTypes>
 		</XmlNode>
+		<XmlNode>
+			<XmlName id="GameText" path="multiplayer_strings"/>
+		</XmlNode>
 	</Xmls>
 </Module>

@@ -12,13 +12,4 @@
 	<string id="str_multiplayer_official_game_type_description.PersistentEmpires" text="{=PEstr1}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
 	<string id="str_multiplayer_official_game_type_explainer.PersistentEmpires" text="{=PEstr2}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
 	<string id="str_multiplayer_official_game_type_objective_info.PersistentEmpires" text="{=PEstr3}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
-	<!--Common-->
-	<string id="PEAdminMenuItemVM.PlayerManagement" text="{=PEAdminMenuItemVM.PlayerManagement}Player Management1" />
-	<string id="PEAdminMenuItemVM.ItemManagement" text="{=PEAdminMenuItemVM.ItemManagement}Item Management" />
-	<string id="PEAdminMenuItemVM.FactionManagement" text="{=PEAdminMenuItemVM.FactionManagement}Faction Management" />
-	<string id="PEAdminMenuItemVM.GiveMoney" text="{=PEAdminMenuItemVM.GiveMoney}Give Yourself Money" />
-	<string id="PEAdminMenuItemVM.BecameGodlike" text="{=PEAdminMenuItemVM.BecameGodlike}Became Godlike" />
-	<string id="PEAdminMenuItemVM.RemoveUnusedBoats" text="{=PEAdminMenuItemVM.RemoveUnusedBoats}Remove Unused Boats" />
-	<string id="PEAdminMenuItemVM.RemoveUnusedAttachable" text="{=PEAdminMenuItemVM.RemoveUnusedAttachable}Remove Unused Attachable" />
-	<string id="PEAdminMenuItemVM.TpToLocation" text="{=PEAdminMenuItemVM.TpToLocation}Teleport to locations" />
 </strings>

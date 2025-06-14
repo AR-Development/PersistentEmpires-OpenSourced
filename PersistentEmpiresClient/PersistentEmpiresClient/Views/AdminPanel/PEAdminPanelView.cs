@@ -59,25 +59,25 @@ namespace PersistentEmpires.Views.Views
         {
             List<PEAdminMenuItemVM> menuItemVm = new List<PEAdminMenuItemVM>();
             
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.PlayerManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PlayerManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminPlayerManagementView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.ItemManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVM.ItemManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminItemPanelView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.FactionManagement", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("FactionManagement", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminFactionView>().OnOpen();
             }));
 
-            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("PEAdminMenuItemVM.GiveMoney", null), () =>
+            menuItemVm.Add(new PEAdminMenuItemVM(GameTexts.FindText("AdminVM.GiveMoney", null), () =>
             {
                 this.CloseAdminPanel();
                 base.Mission.GetMissionBehavior<PEAdminGoldView>().OnOpen();
