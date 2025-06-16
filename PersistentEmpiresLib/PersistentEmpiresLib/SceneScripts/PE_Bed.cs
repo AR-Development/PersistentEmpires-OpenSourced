@@ -130,13 +130,13 @@ namespace PersistentEmpiresLib.SceneScripts
                 PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
                 if (persistentEmpireRepresentative.GetHunger() < 15 && this.ForMount == false)
                 {
-                    InformationComponent.Instance.SendMessage("You need to eat something", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Bed1", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
                 if (this.ForMount && userAgent.MountAgent.Health < 20)
                 {
-                    InformationComponent.Instance.SendMessage("Horse too wounded", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Bed2", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }

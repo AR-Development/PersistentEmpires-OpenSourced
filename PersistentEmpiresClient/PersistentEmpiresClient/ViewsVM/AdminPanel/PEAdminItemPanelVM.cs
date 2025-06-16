@@ -48,14 +48,14 @@ namespace PersistentEmpires.Views.ViewsVM.AdminPanel
                     else
                     {
                         MBInformationManager.ShowMultiSelectionInquiry(
-                    new MultiSelectionInquiryData("Choose item"
-                    , "Which item did you look for?"
+                    new MultiSelectionInquiryData(GameTexts.FindText("PEAdminItemPanelInqCaption", null).ToString()
+                    , GameTexts.FindText("PEAdminItemPanelInqText", null).ToString()
                     , tmpFoundItems.OrderBy(x=> x).Select(x => new InquiryElement(x, $"{x}", null)).ToList()
                     , true
                     , 1
                     , 1
-                    , "Select"
-                    , "Cancel"
+                    , GameTexts.FindText("PE_InquiryData_Select", null).ToString()
+                    , GameTexts.FindText("PE_InquiryData_Cancel", null).ToString()
                     , DoSelectItem
                     , DoCancel));
                     }

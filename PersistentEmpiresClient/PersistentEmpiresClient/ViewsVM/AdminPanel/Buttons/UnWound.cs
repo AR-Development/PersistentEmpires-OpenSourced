@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons
@@ -7,7 +8,7 @@ namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons
     {
         public override string GetCaption()
         {
-            return "UnWound";
+            return GameTexts.FindText("PEAdminButtonunWound", null).ToString();
         }
 
         public override void Execute()

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -89,7 +90,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (updatedMarketItems.Count > 0)
             {
                 craftingReward = ((craftingReward / updatedMarketItems.Count) * 6) * count;
-                InformationComponent.Instance.SendMessage("Crafting box imported your reward is " + craftingReward + " denar.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("StockpileMarketComponent1", null).ToString() + craftingReward + GameTexts.FindText("StockpileMarketComponent2", null).ToString(), Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), peer);
                 representative.GoldGain(craftingReward);
                 List<int> updatedSlots = playerInventory.RemoveCountedItemSynced(box.BoxItem, count);
                 foreach (int i in updatedSlots)
@@ -213,17 +214,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             MarketItem marketItem = stockpileMarket.MarketItems[message.ItemIndex];
             if (marketItem.Stock == 0)
             {
-                InformationComponent.Instance.SendMessage("There is no stocks", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("StockpileMarketComponent3", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             if (persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(marketItem.Item, 1) == false)
             {
-                InformationComponent.Instance.SendMessage("Inventory is full", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("StockpileMarketComponent4", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
             if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(marketItem.BuyPrice()))
             {
-                InformationComponent.Instance.SendMessage("You don't have enough gold", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             List<int> updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(marketItem.Item, 1, ItemHelper.GetMaximumAmmo(marketItem.Item));
@@ -285,7 +286,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (!persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(marketItem.Item, 1))
             {
-                InformationComponent.Instance.SendMessage("You don't have that item in your inventory", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("StockpileMarketComponent6", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
 
@@ -308,7 +309,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (arrowCheckFlag == false)
             {
-                InformationComponent.Instance.SendMessage("You can't sell not filled ammo packs", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("StockpileMarketComponent7", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
 

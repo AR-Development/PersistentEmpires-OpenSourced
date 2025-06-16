@@ -4,6 +4,7 @@ using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
 using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -141,7 +142,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleShoutMessageFromServer(ShoutMessageServer message)
         {
-            InformationManager.DisplayMessage(new InformationMessage("[SHOUT] " + message.Sender.UserName + ": " + message.Message, Color.ConvertStringToColor("#AFAFAFFF")));
+            InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("LocalChatComponent1", null).ToString() + message.Sender.UserName + ": " + message.Message, Color.ConvertStringToColor("#AFAFAFFF")));
             if (this.OnLocalChatMessage != null)
             {
                 this.OnLocalChatMessage(message.Sender, message.Message, true);
@@ -150,7 +151,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleLocalMessageFromServer(LocalMessageServer message)
         {
-            InformationManager.DisplayMessage(new InformationMessage("[LOCAL] " + message.Sender.UserName + ": " + message.Message, Color.ConvertStringToColor("#DADADAFF")));
+            InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("LocalChatComponent2", null).ToString() + message.Sender.UserName + ": " + message.Message, Color.ConvertStringToColor("#DADADAFF")));
             if (this.OnLocalChatMessage != null)
             {
                 this.OnLocalChatMessage(message.Sender, message.Message, false);

@@ -5,6 +5,7 @@ using PersistentEmpiresLib.SceneScripts;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -28,12 +29,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             InformationManager.ShowTextInquiry(
              new TextInquiryData(
-             "Unban player"
-             , "Write players id"
+             GameTexts.FindText("AdminClientBehaviorInqCaption", null).ToString()
+             , GameTexts.FindText("AdminClientBehaviorInqText", null).ToString()
              , true
              , true
-             , "Select"
-             , "Cancel"
+             , GameTexts.FindText("PE_InquiryData_Select", null).ToString()
+             , GameTexts.FindText("PE_InquiryData_Cancel", null).ToString()
              , OnIdWritten
              , (Action)null
              , false
@@ -56,13 +57,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             var result = reg.Match(inputText);
 
             if (!result.Success)
-                return new Tuple<bool, string>(false, "Wrong format");
+                return new Tuple<bool, string>(false, GameTexts.FindText("AdminClientBehaviorError1", null).ToString());
 
             if (string.IsNullOrWhiteSpace(inputText))
-                return new Tuple<bool, string>(false, "Id must be a sting of valid characters");
+                return new Tuple<bool, string>(false, GameTexts.FindText("AdminClientBehaviorError2", null).ToString());
 
             if (inputText.Length > 30)
-                return new Tuple<bool, string>(false, "Id is not valid");
+                return new Tuple<bool, string>(false, GameTexts.FindText("AdminClientBehaviorError3", null).ToString());
 
             return new Tuple<bool, string>(true, inputText);
         }

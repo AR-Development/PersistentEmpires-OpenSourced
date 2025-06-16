@@ -55,7 +55,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleRevealMoneyPouchServer(RevealMoneyPouchServer message)
         {
-            InformationManager.DisplayMessage(new InformationMessage(message.Player.UserName + " revealed his money pouch (" + message.Gold + "g)", Color.ConvertStringToColor("#FFEB3BFF")));
+            InformationManager.DisplayMessage(new InformationMessage(message.Player.UserName + GameTexts.FindText("MoneyPouchBehavior1", null).ToString() + message.Gold + GameTexts.FindText("MoneyPouchBehavior2", null).ToString(), Color.ConvertStringToColor("#FFEB3BFF")));
 
             if (this.OnRevealedMoneyPouch != null)
             {

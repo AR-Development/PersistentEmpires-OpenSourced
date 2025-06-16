@@ -3,6 +3,7 @@ using PersistentEmpiresClient.ViewsVM;
 using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.SceneScripts;
 using System;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace PersistentEmpires.Views.ViewsVM
@@ -53,7 +54,7 @@ namespace PersistentEmpires.Views.ViewsVM
                 {
                     if (value == 0)
                     {
-                        InformationManager.DisplayMessage(new InformationMessage("Crafting completed!", new Color(0, 1f, 0)));
+                        InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PECraftingStationCompleted", null).ToString(), new Color(0, 1f, 0)));
                     }
                     this._pastDuration = value;
                     base.OnPropertyChangedWithValue(value, "PastDuration");

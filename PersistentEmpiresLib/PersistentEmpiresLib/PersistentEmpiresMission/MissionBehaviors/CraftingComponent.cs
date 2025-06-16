@@ -87,7 +87,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     bool hasEveryItem = craftingAction.craftable.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
                     if (!hasEveryItem)
                     {
-                        InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("CraftingComponent1", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                         this.craftings.Remove(player);
                         GameNetwork.BeginBroadcastModuleEvent();
                         GameNetwork.WriteMessage(new CraftingCompleted(player));
@@ -207,30 +207,30 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }*/
             if (craftingStation.upgradeableBuilding != null && craftingStation.upgradeableBuilding.CurrentTier < requestedCraft.Tier)
             {
-                InformationComponent.Instance.SendMessage("Upgrade the building first", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("CraftingComponent2", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
             if (this.craftings.ContainsKey(peer))
             {
-                InformationComponent.Instance.SendMessage("You already in crafting", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("CraftingComponent3", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
             if (requestedCraft.RequiredEngineering > peer.ControlledAgent.Character.GetSkillValue(requestedCraft.RelevantSkill))
             {
-                InformationComponent.Instance.SendMessage("You are not qualified enough.", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Qualified", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             PersistentEmpireRepresentative persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
             if (persistentEmpireRepresentative == null) return false;
             if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(requestedCraft.Item, requestedCraft.OutputCount))
             {
-                InformationComponent.Instance.SendMessage("You have not enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             bool hasEveryItem = requestedCraft.Recipe.All((r) => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.Item, r.NeededCount));
             if (!hasEveryItem)
             {
-                InformationComponent.Instance.SendMessage("You don't have all of the items required.", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("CraftingComponent6", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             // Start crafting...

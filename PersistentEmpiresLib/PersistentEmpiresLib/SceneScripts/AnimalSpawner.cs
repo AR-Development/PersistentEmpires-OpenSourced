@@ -129,7 +129,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     bool inventoryContainsEveryItem = this.NeededReceipt.All((r) => playerInventory.IsInventoryIncludes(r.Item, r.NeededCount));
                     if (!inventoryContainsEveryItem)
                     {
-                        InformationComponent.Instance.SendMessage("Required Items:", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Required_Items", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                         foreach (Receipt r in this.NeededReceipt)
                         {
                             InformationComponent.Instance.SendMessage(r.NeededCount + " * " + r.Item.Name.ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
@@ -138,7 +138,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     }
                     if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(this.DenarCost))
                     {
-                        InformationComponent.Instance.SendMessage("You don't have enough money", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                         return;
                     }
 
@@ -169,13 +169,13 @@ namespace PersistentEmpiresLib.SceneScripts
                 NetworkCommunicator peer = userAgent.MissionPeer.GetNetworkPeer();
                 if (this.SpawnedAnimals.Count >= this.MaxAgentCount)
                 {
-                    InformationComponent.Instance.SendMessage("Spawner maxed out", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_AnimalSpawner1", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
                 if (this.HasUser)
                 {
-                    InformationComponent.Instance.SendMessage("Someone is using it already...", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Already_In_Use", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }

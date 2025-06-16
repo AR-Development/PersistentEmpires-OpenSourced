@@ -56,12 +56,12 @@ namespace PersistentEmpires.Views.ViewsVM
             // InformationManager.DisplayMessage(new InformationMessage("Hello"));
             InformationManager.ShowInquiry(
                 new InquiryData(
-                    "Are you sure ?",
-                    "You are about to drop " + draggedItem.Item.Name.ToString() + "x" + draggedItem.Count + " to the ground. Are you sure ?",
+                    GameTexts.FindText("PEInventoryInqCaption", null).ToString(),
+                    GameTexts.FindText("PEInventoryInqText1", null).ToString() + draggedItem.Item.Name.ToString() + GameTexts.FindText("PEInventoryInqText2", null).ToString() + draggedItem.Count + GameTexts.FindText("PEInventoryInqText3", null).ToString(),
                     true,
                     true,
-                    "Yes",
-                    "No",
+                    GameTexts.FindText("PE_InquiryData_Yes", null).ToString(),
+                    GameTexts.FindText("PE_InquiryData_No", null).ToString(),
                     () =>
                     {
                         GameNetwork.BeginModuleEventAsClient();

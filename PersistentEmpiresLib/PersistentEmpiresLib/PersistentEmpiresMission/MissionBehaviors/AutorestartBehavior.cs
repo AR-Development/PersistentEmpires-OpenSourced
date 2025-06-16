@@ -20,15 +20,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             _checkpoints = new Dictionary<int, (bool shown, string Message, string DebugMessage)>()
             {
-                //{ 180, ("3 hours", "Server will be restarted in 3 hours.") },
-                {3600, (false, "1 hour", "Server will be restarted in 1 hour.") },
-                {1800, (false, "30 minutes", "Server will be restarted in 30 minutes.") },
-                {900, (false, "15 minutes", "Server will be restarted in 15 minutes.") },
-                {300, (false, "5 minutes", "Server will be restarted in 5 minutes.") },
-                {60, (false,"1 minute", "Server will be restarted in 1 minute.") },
-                {30, (false, "30 seconds", "Server will be restarted in 30 seconds.") },
-                {20, (false, "20 seconds", "Server will be restarted in 20 seconds.") },
-                {10, (false, "10 seconds", "Log the fuck off before you lose yo shit.") }
+                //{ 180, ("3 hours", GameTexts.FindText("AutorestartBehavior1", null).ToString()) },
+                {3600, (false, "1 hour", GameTexts.FindText("AutorestartBehavior2", null).ToString()) },
+                {1800, (false, "30 minutes", GameTexts.FindText("AutorestartBehavior3", null).ToString()) },
+                {900, (false, "15 minutes", GameTexts.FindText("AutorestartBehavior4", null).ToString()) },
+                {300, (false, "5 minutes", GameTexts.FindText("AutorestartBehavior5", null).ToString()) },
+                {60, (false,"1 minute", GameTexts.FindText("AutorestartBehavior6", null).ToString()) },
+                {30, (false, "30 seconds", GameTexts.FindText("AutorestartBehavior7", null).ToString()) },
+                {20, (false, "20 seconds", GameTexts.FindText("AutorestartBehavior8", null).ToString()) },
+                {10, (false, "10 seconds", GameTexts.FindText("AutorestartBehavior9", null).ToString()) }
             };
         }
 

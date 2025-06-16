@@ -38,7 +38,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     if (player.IsConnectionActive)
                     {
-                        InformationComponent.Instance.SendMessage("You can be healed now.", new Color(0f, 1f, 0f).ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("CombatlogBehavior1", null).ToString(), new Color(0f, 1f, 0f).ToUnsignedInteger(), player);
                     }
                     this.CombatLogTimer.Remove(player);
                 }
@@ -63,7 +63,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (shouldWarn)
             {
-                InformationComponent.Instance.SendMessage("You are in combat ! You will not be healed for " + this.Duration + " seconds", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("CombatlogBehavior2", null).ToString() + this.Duration + GameTexts.FindText("CombatlogBehavior3", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
             }
         }
 

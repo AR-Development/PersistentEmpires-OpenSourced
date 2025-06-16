@@ -15,7 +15,7 @@ namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons
     {
         public override string GetCaption()
         {
-            return "Make Lord";
+            return GameTexts.FindText("PEAdminButtonMakeLord", null).ToString();
         }
 
         public override void Execute()
@@ -23,14 +23,14 @@ namespace PersistentEmpiresClient.ViewsVM.AdminPanel.Buttons
             var factionBehavior = Mission.Current.GetMissionBehavior<FactionsBehavior>();
              
             MBInformationManager.ShowMultiSelectionInquiry(
-                new MultiSelectionInquiryData("Faction selection"
-                    , "Choose faction"
+                new MultiSelectionInquiryData(GameTexts.FindText("PEAdminButtonMakeLordInqCaption", null).ToString()
+                    , GameTexts.FindText("PEAdminButtonMakeLordInqText", null).ToString()
                     , factionBehavior.Factions.Select(x => new InquiryElement(x.Key, $"{x.Value.name}", null)).ToList()
                     , true
                     , 1
                     , 1
-                    , "Select"
-                    , "Cancel"
+                    , GameTexts.FindText("PE_InquiryData_Select", null).ToString()
+                    , GameTexts.FindText("PE_InquiryData_Cancel", null).ToString()
                     , DoSelectFaction
                     , DoCancelAction));
 
