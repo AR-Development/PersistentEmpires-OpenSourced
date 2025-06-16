@@ -196,7 +196,4 @@
 	<!--PE_Bed-->
 	<string id="PE_Bed1" text="You need to eat something" />
 	<string id="PE_Bed2" text="Horse too wounded" />
-	<!--FactionsBehavior-->
-	<string id="FactionsBehavior1" text="You" />
-	
 </strings>
