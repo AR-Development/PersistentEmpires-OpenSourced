@@ -16,7 +16,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate void AdminPanelClick();
         public event AdminPanelClick OnAdminPanelClick;
         public static List<AdminTp> AdminTps = new List<AdminTp>();
+#if SERVER
         public static bool CanUseSuicide = true;
+#endif
 
         public void HandleAdminPanelClick()
         {
@@ -73,8 +75,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-
+#if SERVER
             CanUseSuicide = ConfigManager.GetBoolConfig("CanUseSuicide", true);
+#endif
         }
         public override void OnRemoveBehavior()
         {
