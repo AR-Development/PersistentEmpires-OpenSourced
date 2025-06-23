@@ -115,25 +115,27 @@ namespace PersistentEmpires.Views.Views
                     this._factionManagementComponent.OnFactionLordPollClickHandler();
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             }
-            //list.Add(new EscapeMenuItemVM(new TextObject("Commit Suicide", null), delegate (object o)
-            //{
-            //    InquiryData inquiry = new InquiryData("Are you sure ?", "You will die and lose your items. Are you sure ?", true, true, "Yes", "No", () =>
-            //        {
-            //            base.OnEscapeMenuToggled(false);
-            //            if (Agent.Main != null)
-            //            {
-            //                GameNetwork.BeginModuleEventAsClient();
-            //                GameNetwork.WriteMessage(new RequestSuicide());
-            //                GameNetwork.EndModuleEventAsClient();
-            //            }
-            //        },
-            //    () =>
-            //    {
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.CanUseSuicide)
+            {
+                list.Add(new EscapeMenuItemVM(new TextObject("Commit Suicide", null), delegate (object o)
+                {
+                    InquiryData inquiry = new InquiryData("Are you sure ?", "You will die and lose your items. Are you sure ?", true, true, "Yes", "No", () =>
+                        {
+                            base.OnEscapeMenuToggled(false);
+                            if (Agent.Main != null)
+                            {
+                                GameNetwork.BeginModuleEventAsClient();
+                                GameNetwork.WriteMessage(new RequestSuicide());
+                                GameNetwork.EndModuleEventAsClient();
+                            }
+                        },
+                    () =>
+                    {
 
-            //    });
-            //    InformationManager.ShowInquiry(inquiry);
-            //}, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
-
+                    });
+                    InformationManager.ShowInquiry(inquiry);
+                }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+            }
             //list.Add(new EscapeMenuItemVM(new TextObject("Respawn", null), delegate (object o)
             //{
             //    base.OnEscapeMenuToggled(false);

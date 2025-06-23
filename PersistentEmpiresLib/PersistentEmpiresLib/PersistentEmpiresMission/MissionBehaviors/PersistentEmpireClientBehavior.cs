@@ -222,6 +222,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUsePoll(message.CanUseLordPoll);
                 message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUseDiplomacy(message.CanUseDiplomacy);
+                message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUseSuicide(message.CanUseSuicide);
             }
 
             if (message.FactionIndex != -1)
