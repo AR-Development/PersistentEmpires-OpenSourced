@@ -218,6 +218,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleSyncMember(SyncMember message)
         {
+            if (message.Peer.IsMine)
+            {
+                message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUsePoll(message.CanUseLordPoll);
+                message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUseDiplomacy(message.CanUseDiplomacy);
+            }
+
             if (message.FactionIndex != -1)
             {
                 Faction f = this._factionsBehavior.Factions[message.FactionIndex];
@@ -225,10 +231,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     this._factionsBehavior.SetPlayerFaction(message.Peer, message.FactionIndex, -1);
                     if (message.IsMarshall) f.marshalls.Add(message.Peer.VirtualPlayer.ToPlayerId());
-
-                    message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUsePoll(message.CanUseLordPoll);
-                    message.Peer.GetComponent<PersistentEmpireRepresentative>().SetCanUseDiplomacy(message.CanUseDiplomacy);
                 }
+
                 message.Peer.GetComponent<PersistentEmpireRepresentative>().SetFaction(f, message.FactionIndex);
             }
         }
