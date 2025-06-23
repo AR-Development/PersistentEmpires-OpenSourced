@@ -78,6 +78,7 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerChangedName = "PlayerChangedName";
         public static readonly string OnSaveDefaultsForNewPlayer = "OnSaveDefaultsForNewPlayer";
         public static readonly string UpsertPlayer = "UpsertPlayer";
+        public static readonly string UpsertPlayerInventory = "UpsertPlayerInventory";
     }
 
     public class LoggerHelper
@@ -260,6 +261,8 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} OnSaveDefaultsForNewPlayer{(string)oParams[0]}";
                 case nameof(LogAction.UpsertPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayer{(string)oParams[0]}";
+                case nameof(LogAction.UpsertPlayerInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayerInventory{(string)oParams[0]}";
                 default:
                     return actionType;
             }

@@ -109,6 +109,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             string updateQuery = "UPDATE Inventories SET InventorySerialized = @InventorySerialized WHERE InventoryId = @InventoryId";
             DBConnection.Connection.Execute(updateQuery, new { InventoryId = dbInventory.InventoryId, InventorySerialized = dbInventory.InventorySerialized });
             Debug.Print("[Save Module] UPDATED INVENTORY FOR PLAYER " + (networkCommunicator != null ? networkCommunicator.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
+            LoggerHelper.LogAnAction(networkCommunicator, LogAction.UpsertPlayerInventory, null, new object[] { dbInventory.InventorySerialized });
             return dbInventory;
         }        
 
