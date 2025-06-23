@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Linq;
 using TaleWorlds.MountAndBlade;
+using System.Threading.Tasks;
 
 namespace PersistentEmpiresServer.ServerMissions
 {
@@ -96,139 +97,147 @@ namespace PersistentEmpiresServer.ServerMissions
         {
         }
 
-        public static bool NotifyLog(PersistentEmpiresLib.Database.DBEntities.DBLog dbLog)
+        public static void NotifyLog(PersistentEmpiresLib.Database.DBEntities.DBLog dbLog)
         {
-            if (!DiscordLogEnabled || string.IsNullOrEmpty(DiscordLogUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
-            }
-
-            var request = new
-            {
-                username = ServerName,
-                content = "Log",
-                embeds = new List<object>
+                if (!DiscordLogEnabled || string.IsNullOrEmpty(DiscordLogUrl))
                 {
-                    new
-                    {
-                        title = dbLog.ActionType,
-                        color = int.Parse(ColorGreen, System.Globalization.NumberStyles.HexNumber),
-                        fields = new List<object>
-                        {
-                            new
-                            {
-                                name = "Player name",
-                                value = dbLog.IssuerPlayerName,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "Player Id",
-                                value = dbLog.IssuerPlayerId,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "Coordinates",
-                                value = dbLog.IssuerCoordinates,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "Message",
-                                value = dbLog.LogMessage,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "Affected Players",
-                                value = string.Join(", ", dbLog.AffectedPlayers.Value.Select(x=> x.SteamId + "." + x.PlayerName + "(" + x.FactionName + ")")),
-                                inline = false,
-                            }
-                        }
-                    },
+                    return;
                 }
-            };
 
-            return Notify(request, DiscordLogUrl);
+                var request = new
+                {
+                    username = ServerName,
+                    content = "Log",
+                    embeds = new List<object>
+                    {
+                        new
+                        {
+                            title = dbLog.ActionType,
+                            color = int.Parse(ColorGreen, System.Globalization.NumberStyles.HexNumber),
+                            fields = new List<object>
+                            {
+                                new
+                                {
+                                    name = "Player name",
+                                    value = dbLog.IssuerPlayerName,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "Player Id",
+                                    value = dbLog.IssuerPlayerId,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "Coordinates",
+                                    value = dbLog.IssuerCoordinates,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "Message",
+                                    value = dbLog.LogMessage,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "Affected Players",
+                                    value = string.Join(", ", dbLog.AffectedPlayers.Value.Select(x=> x.SteamId + "." + x.PlayerName + "(" + x.FactionName + ")")),
+                                    inline = false,
+                                }
+                            }
+                        },
+                    }
+                };
+
+                Notify(request, DiscordLogUrl);
+            });
         }
 
-        public static bool NotifyException(Exception ex)
+        public static void NotifyException(Exception ex)
         {
-            if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
-            }
-
-            var request = new
-            {
-                username = ServerName,
-                content = "Exception Report",
-                embeds = new List<object>
+                if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
                 {
-                    new
-                    {
-                        title = "UNHANDLED EXCEPTION THROWN",
-                        color = int.Parse(ColorRed, System.Globalization.NumberStyles.HexNumber),
-                        fields = new List<object>
-                        {
-                            new
-                            {
-                                name = "Message",
-                                value = ex.Message,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "StackTrace",
-                                value = ex.StackTrace,
-                                inline = true,
-                            },
-                            new
-                            {
-                                name = "Exception",
-                                value = ex.ToString(),
-                                inline = true,
-                            }
-                        }
-                    },
-                    new
-                    {
-                        title = "Inner Exception",
-                        color = int.Parse(ColorRed, System.Globalization.NumberStyles.HexNumber),
-                        fields = new List<object>
-                        {
-                            new
-                            {
-                                name = "Message",
-                                value = ex.InnerException?.Message,
-                                inline = false,
-                            },
-                            new
-                            {
-                                name = "StackTrace",
-                                value = ex.InnerException?.StackTrace,
-                                inline = true,
-                            },
-                            new
-                            {
-                                name = "Exception",
-                                value = ex.InnerException?.ToString(),
-                                inline = true,
-                            }
-                        }
-                    },
+                    return;
                 }
-            };
 
-            return Notify(request, DiscordExceptionUrl);
+                var request = new
+                {
+                    username = ServerName,
+                    content = "Exception Report",
+                    embeds = new List<object>
+                    {
+                        new
+                        {
+                            title = "UNHANDLED EXCEPTION THROWN",
+                            color = int.Parse(ColorRed, System.Globalization.NumberStyles.HexNumber),
+                            fields = new List<object>
+                            {
+                                new
+                                {
+                                    name = "Message",
+                                    value = ex.Message,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "StackTrace",
+                                    value = ex.StackTrace,
+                                    inline = true,
+                                },
+                                new
+                                {
+                                    name = "Exception",
+                                    value = ex.ToString(),
+                                    inline = true,
+                                }
+                            }
+                        },
+                        new
+                        {
+                            title = "Inner Exception",
+                            color = int.Parse(ColorRed, System.Globalization.NumberStyles.HexNumber),
+                            fields = new List<object>
+                            {
+                                new
+                                {
+                                    name = "Message",
+                                    value = ex.InnerException?.Message,
+                                    inline = false,
+                                },
+                                new
+                                {
+                                    name = "StackTrace",
+                                    value = ex.InnerException?.StackTrace,
+                                    inline = true,
+                                },
+                                new
+                                {
+                                    name = "Exception",
+                                    value = ex.InnerException?.ToString(),
+                                    inline = true,
+                                }
+                            }
+                        },
+                    }
+                };
+
+                Notify(request, DiscordExceptionUrl);
+            });
         }
 
-        public static bool NotifyException(string ex)
+        public static void NotifyException(string ex)
         {
-            if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
+                if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
+            {
+                return;
             }
 
             var request = new
@@ -254,14 +263,17 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
             };
 
-            return Notify(request, DiscordExceptionUrl);
+            Notify(request, DiscordExceptionUrl);
+            });
         }
 
-        public static bool NotifyServerStatus(string message, string color)
+        public static void NotifyServerStatus(string message, string color)
         {
-            if (!DiscordServeStatusEnabled || string.IsNullOrEmpty(DiscordServeStatusUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
+                if (!DiscordServeStatusEnabled || string.IsNullOrEmpty(DiscordServeStatusUrl))
+            {
+                return;
             }
 
             var request = new
@@ -282,14 +294,17 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
             };
 
-            return Notify(request, DiscordServeStatusUrl);
+            Notify(request, DiscordServeStatusUrl);
+            });
         }
 
-        public static bool NotifyAdminMessage(NetworkCommunicator player, string message)
+        public static void NotifyAdminMessage(NetworkCommunicator player, string message)
         {
-            if(!DiscordAdminMessageEnabled || string.IsNullOrEmpty(DiscordAdminMessageUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
+                if (!DiscordAdminMessageEnabled || string.IsNullOrEmpty(DiscordAdminMessageUrl))
+            {
+                return;
             }
             //DBPlayer dBPlayer = SaveSystemBehavior.GetDBPlayer(player.VirtualPlayer.ToPlayerId());
             var request = new
@@ -311,14 +326,17 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
             };
 
-            return Notify(request, DiscordServeStatusUrl);
+            Notify(request, DiscordServeStatusUrl);
+            });
         }
 
-        public static bool NotifyAnnounce(string user, string message)
+        public static void NotifyAnnounce(string user, string message)
         {
-            if (!DiscordAnnounceEnabled || string.IsNullOrEmpty(DiscordAnnounceUrl))
+            Task.Factory.StartNew(() =>
             {
-                return false;
+                if (!DiscordAnnounceEnabled || string.IsNullOrEmpty(DiscordAnnounceUrl))
+            {
+                return;
             }
 
             var request = new
@@ -339,10 +357,11 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
             };
 
-            return Notify(request, DiscordAnnounceUrl);
+            Notify(request, DiscordAnnounceUrl);
+            });
         }
 
-        private static bool Notify(object request, string url)
+        private static void Notify(object request, string url)
         {
             try
             {
@@ -355,12 +374,10 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
                 
                 var response = HttpClient.PostAsync(url, content).Result;
-                
-                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                return false;
+
             }
         }
     }
