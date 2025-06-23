@@ -202,7 +202,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     GameNetwork.WriteMessage(new UpdateWoundedPlayer(player.VirtualPlayer?.ToPlayerId(), true));
                     GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
 
-                    InformationComponent.Instance.SendMessage("You are now wounded.", Color.ConvertStringToColor("#F44336FF").ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("WoundingBehavior1", null).ToString(), Color.ConvertStringToColor("#F44336FF").ToUnsignedInteger(), player);
                 }
             }
         }
@@ -297,7 +297,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             var persistentEmpireRepresentative = player?.GetComponent<PersistentEmpireRepresentative>();
             if (!WoundedUntil.ContainsKey(playerId) || persistentEmpireRepresentative == null) return;
 
-            InformationComponent.Instance.SendMessage("You are no longer wounded.", Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
+            InformationComponent.Instance.SendMessage(GameTexts.FindText("WoundingBehavior2", null).ToString(), Color.ConvertStringToColor("#4CAF50FF").ToUnsignedInteger(), player);
             WoundedUntil.Remove(playerId);
             IsWounded[playerId] = false;
             persistentEmpireRepresentative.UnWound();

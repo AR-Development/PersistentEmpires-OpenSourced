@@ -9,6 +9,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using PersistentEmpiresLib.Helpers;
+using TaleWorlds.Core;
 
 namespace PersistentEmpires.Views.Views.FactionManagement
 {
@@ -47,23 +48,23 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             List<ManagementItemVM> managementItemVM = new List<ManagementItemVM>();
             if (PlayerIsLord())
             {
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Change Faction Banner"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementChangeBanner", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnBannerChangeClickHandler();
                 }));
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Change Faction Name"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementChangeFactionName", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnNameChangeClickHandler();
                 }));
 
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Assign Marshall"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementAssignMarshall", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnAssignMarshallClickHandler();
                 }));
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Transfer Lordship"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementTransferLordship", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnAssignTransferLordshipClickHandler();
@@ -72,31 +73,31 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             }
             if (PlayerIsLordOrMarshall())
             {
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Kick Someone From Faction"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementKickFromFaction", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnKickSomeoneFromFactionClickHandler();
                 }));
                 if (myRepr.CanUseDiplomacy)
                 {
-                    managementItemVM.Add(new ManagementItemVM(new TextObject("Diplomacy Menu"), () =>
+                    managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementDiplomacy", null), () =>
                     {
                         this.CloseManagementMenu();
                         this._factionManagementComponent.OnDiplomacyMenuClickHandler();
                     }));
                 }
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Manage door keys"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementManageDoorKeys", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnManageDoorKeysClickHandler();
                 }));
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Manage chest keys"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementManageChestKeys", null), () =>
                 {
                     this.CloseManagementMenu();
                     this._factionManagementComponent.OnManageChestKeyClickHandler();
                 }));
 
-                managementItemVM.Add(new ManagementItemVM(new TextObject("Close"), () =>
+                managementItemVM.Add(new ManagementItemVM(GameTexts.FindText("FactionManagementClose", null), () =>
                 {
                     this.CloseManagementMenu();
                 }));

@@ -88,7 +88,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
             if ((this.GetFaction() == null || (this.GetFaction().lordId != withdrawer.VirtualPlayer.ToPlayerId() && this.IsBroken() == false)) && this.NoPerm != true)
             {
-                InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), withdrawer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Dont_Have_Keys", null).ToString(), TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), withdrawer);
                 return;
             }
             if (amount > this.Gold)
@@ -117,14 +117,14 @@ namespace PersistentEmpiresLib.SceneScripts
             {
                 if (this.GetFaction() == null || (this.GetFaction().lordId != depositer.VirtualPlayer.ToPlayerId() && this.IsBroken() == false))
                 {
-                    InformationComponent.Instance.SendMessage("You don't have the keys", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Dont_Have_Keys", null).ToString(), TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
                     return;
                 }
             }
 
             if (persistentEmpireRepresentative.ReduceIfHaveEnoughGold(amount) == false)
             {
-                InformationComponent.Instance.SendMessage("You don't have enough gold", TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), TaleWorlds.Library.Color.ConvertStringToColor("#ff0000ff").ToUnsignedInteger(), depositer);
                 return;
             }
             this.UpdateGold(this.Gold + amount);

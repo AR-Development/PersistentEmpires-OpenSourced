@@ -9,6 +9,7 @@ using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -449,7 +450,7 @@ namespace PersistentEmpires.Views.Views
             }
             catch (MmException e)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Invalid microphone please change it from your options menu.", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PlayerVoiceDataError", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
             }
             catch (InvalidOperationException e)
             {

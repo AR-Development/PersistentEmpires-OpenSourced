@@ -222,7 +222,7 @@ namespace PersistentEmpiresLib.SceneScripts
                         }
                         else
                         {
-                            InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                            InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                         }
                     }
                 }

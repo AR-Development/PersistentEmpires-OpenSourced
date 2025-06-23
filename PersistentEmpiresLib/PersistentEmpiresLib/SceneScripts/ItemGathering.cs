@@ -176,7 +176,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 SkillObject requiredSkillObject = MBObjectManager.Instance.GetObject<SkillObject>(this.RequiredSkillId);
                 if (userAgent.Character.GetSkillValue(requiredSkillObject) < this.RequiredSkill)
                 {
-                    InformationComponent.Instance.SendMessage("You are not qualified enough", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Qualified", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
@@ -184,7 +184,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 // MissionWeapon wieldedItem = userAgent.Equipment[wieldedItemIndex];
                 if (this.NeededItem == "" && wieldedItemIndex != EquipmentIndex.None)
                 {
-                    InformationComponent.Instance.SendMessage("You need to empty your hands.", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Empty_Your_Hands", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }
@@ -221,7 +221,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 Inventory playerInventory = persistentEmpireRepresentative.GetInventory();
                 if (!playerInventory.HasEnoughRoomFor(this.DropsItemObject, this.DropCount))
                 {
-                    InformationComponent.Instance.SendMessage("You don't have enough room in your inventory.", new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), userAgent.MissionPeer.GetNetworkPeer());
                     userAgent.StopUsingGameObjectMT(false);
                     return;
                 }

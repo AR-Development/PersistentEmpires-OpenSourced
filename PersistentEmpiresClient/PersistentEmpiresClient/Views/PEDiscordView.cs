@@ -1,6 +1,7 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using System;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
@@ -52,7 +53,7 @@ namespace PersistentEmpires.Views.Views
         {
             if (this.DiscordNotWorks)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Unable to connect discord.", Color.ConvertStringToColor("#d32f2fff")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEDiscordViewError1", null).ToString(), Color.ConvertStringToColor("#d32f2fff")));
                 return;
             }
             discord.GetUserManager().OnCurrentUserUpdate += this.OnCurrentUserUpdate;

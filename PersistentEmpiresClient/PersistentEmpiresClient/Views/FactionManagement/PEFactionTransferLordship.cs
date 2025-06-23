@@ -2,6 +2,7 @@
 using PersistentEmpiresLib;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.NetworkMessages.Client;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 namespace PersistentEmpires.Views.Views.FactionManagement
@@ -23,7 +24,11 @@ namespace PersistentEmpires.Views.Views.FactionManagement
             },
             (PEFactionMemberItemVM selectedMember) =>
             {
-                InquiryData data = new InquiryData("Are you sure ?", "Are you sure to transfer your lordship to another player ?", true, true, "Yes", "No", () =>
+                
+                InquiryData data = new InquiryData(GameTexts.FindText("TransferLordshipVerifyCaption", null).ToString(), 
+                    GameTexts.FindText("TransferLordshipVerify", null).ToString(), true, true,
+                    GameTexts.FindText("PE_InquiryData_Yes", null).ToString(),
+                    GameTexts.FindText("PE_InquiryData_No", null).ToString(), () =>
                 {
                     GameNetwork.BeginModuleEventAsClient();
                     GameNetwork.WriteMessage(new RequestLordshipTransfer(selectedMember.Peer));

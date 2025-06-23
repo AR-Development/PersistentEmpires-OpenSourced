@@ -49,7 +49,7 @@ namespace PersistentEmpires.Views.Views
             this._factionPollComponent = base.Mission.GetMissionBehavior<FactionPollComponent>();
             this._adminBehavior = base.Mission.GetMissionBehavior<AdminClientBehavior>();
             this._proximityChatComponent = base.Mission.GetMissionBehavior<ProximityChatComponent>();
-            TextObject title = new TextObject("Mod menu");
+            TextObject title = GameTexts.FindText("EscapeMenuCaption", null);
             this.DataSource = new MPEscapeMenuVM(null, title);
         }
 
@@ -73,7 +73,7 @@ namespace PersistentEmpires.Views.Views
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             if (this._proximityChatComponent != null)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Voice Chat Options", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuVC", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     this._proximityChatComponent.HandleOption();
@@ -81,7 +81,7 @@ namespace PersistentEmpires.Views.Views
             }
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.IsAdmin)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Admin Panel", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuAdmin", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     this._adminBehavior.HandleAdminPanelClick();
@@ -91,7 +91,7 @@ namespace PersistentEmpires.Views.Views
 
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFaction() != null && (_persistentEmpireRepresentative.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.ToPlayerId() || _persistentEmpireRepresentative.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.ToPlayerId())))
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Manage Your Faction", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuFaction", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     if (this._factionManagementComponent == null)
@@ -103,7 +103,7 @@ namespace PersistentEmpires.Views.Views
             }
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.CanUsePoll && _persistentEmpireRepresentative.GetFactionIndex() > 1)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Poll A Lord", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuPollLord", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     if (this._factionManagementComponent == null)
@@ -147,7 +147,7 @@ namespace PersistentEmpires.Views.Views
 
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.IsAdmin)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Unban player", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenUnban", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     this._adminBehavior.HandleUnbanPlayerClick();

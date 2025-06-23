@@ -99,7 +99,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int skill = peer.ControlledAgent.Character.GetSkillValue(DefaultSkills.Trade);
             if (skill < 10)
             {
-                InformationComponent.Instance.SendMessage("You are not qualified enough", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Qualified", null).ToString(), Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), peer);
                 return false;
             }
 
@@ -108,12 +108,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             List<PE_TradeCenter> otherTradeCenters = base.Mission.GetActiveEntitiesWithScriptComponentOfType<PE_TradeCenter>().Select(g => g.GetFirstScriptOfType<PE_TradeCenter>()).Where(p => p != tradeCenter).OrderByDescending(p => p.MarketItems[message.ItemIndex].SellPrice()).ToList();
 
-            InformationComponent.Instance.SendMessage("Price List", Color.ConvertStringToColor("#03dac6ff").ToUnsignedInteger(), peer);
+            InformationComponent.Instance.SendMessage(GameTexts.FindText("TradingCenterBehavior2", null).ToString(), Color.ConvertStringToColor("#03dac6ff").ToUnsignedInteger(), peer);
             foreach (PE_TradeCenter oTradeCenter in otherTradeCenters)
             {
                 MarketItem otherMarketItem = oTradeCenter.MarketItems[message.ItemIndex];
                 Color color = otherMarketItem.SellPrice() > marketItem.BuyPrice() ? Color.ConvertStringToColor("#00C853FF") : Color.ConvertStringToColor("#B71C1CFF");
-                InformationComponent.Instance.SendMessage(otherMarketItem.SellPrice().ToString() + " gold at " + oTradeCenter.GetCastleName(), color.ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(otherMarketItem.SellPrice().ToString() + GameTexts.FindText("TradingCenterBehavior3", null).ToString() + oTradeCenter.GetCastleName(), color.ToUnsignedInteger(), peer);
             }
 
             return true;
@@ -160,7 +160,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (!persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(marketItem.Item, 1))
             {
-                InformationComponent.Instance.SendMessage("You don't have that item in your inventory", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("TradingCenterBehavior4", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
 
@@ -183,7 +183,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (arrowCheckFlag == false)
             {
-                InformationComponent.Instance.SendMessage("You can't sell not filled ammo packs", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("TradingCenterBehavior5", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
 
@@ -237,17 +237,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             MarketItem marketItem = stockpileMarket.MarketItems[message.ItemIndex];
             if (marketItem.Stock == 0)
             {
-                InformationComponent.Instance.SendMessage("There is no stocks", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("TradingCenterBehavior6", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             if (persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(marketItem.Item, 1) == false)
             {
-                InformationComponent.Instance.SendMessage("Inventory is full", new Color(1f, 0, 0).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("TradingCenterBehavior7", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), peer);
                 return false;
             }
             if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(marketItem.BuyPrice()))
             {
-                InformationComponent.Instance.SendMessage("You don't have enough gold", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                 return false;
             }
             List<int> updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(marketItem.Item, 1, ItemHelper.GetMaximumAmmo(marketItem.Item));

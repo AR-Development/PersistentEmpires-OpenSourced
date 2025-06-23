@@ -5,6 +5,7 @@ using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -48,12 +49,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             if (!persistentEmpireRepresentative.GetInventory().HasEnoughRoomFor(message.Item, 1))
             {
-                InformationComponent.Instance.SendMessage("You don't have enough space", (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space", null).ToString(), (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
                 return false;
             }
             if (!persistentEmpireRepresentative.ReduceIfHaveEnoughGold(good.ImportPrice))
             {
-                InformationComponent.Instance.SendMessage("You don't have enough money", (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
                 return false;
             }
             List<int> updatedSlots = persistentEmpireRepresentative.GetInventory().AddCountedItemSynced(message.Item, 1, ItemHelper.GetMaximumAmmo(message.Item));
@@ -78,7 +79,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             bool itemExists = persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(message.Item, 1);
             if (!itemExists)
             {
-                InformationComponent.Instance.SendMessage("You don't have this item", (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("ImportExportComponent3", null).ToString(), (new Color(1f, 0, 0)).ToUnsignedInteger(), player);
                 return false;
             }
             List<int> updatedSlots = persistentEmpireRepresentative.GetInventory().RemoveCountedItemSynced(message.Item, 1);
