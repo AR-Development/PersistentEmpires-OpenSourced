@@ -130,11 +130,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         public override void OnPlayerDisconnectedFromServer(NetworkCommunicator player)
         {
-            PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
-            if (!WoundingBehavior.Instance.WoundingEnabled && persistentEmpireRepresentative != null)
+            var persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
+
+            if (persistentEmpireRepresentative != null)
             {
                 persistentEmpireRepresentative.GetInventory().EmptyInventory();
             }
+
             if (this.OpenedByPeerInventory.ContainsKey(player))
             {
                 if (this.OpenedByPeerInventory[player] != null)
@@ -169,7 +171,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 EquipmentIndex shieldIndex = affectedAgent.GetWieldedItemIndex(Agent.HandIndex.OffHand);
                 if (shieldIndex != EquipmentIndex.None)
                 {
-
                     MissionWeapon weapon = new MissionWeapon(affectedAgent.Equipment[shieldIndex].Item, null, null, affectedAgent.Equipment[shieldIndex].Ammo);
                     affectedAgent.RemoveEquippedWeapon(shieldIndex);
                     affectedAgent.EquipWeaponWithNewEntity(shieldIndex, ref weapon);
@@ -179,10 +180,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (GameNetwork.IsServer && affectedAgent.MissionPeer != null && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled)
             {
                 NetworkCommunicator player = affectedAgent.MissionPeer.GetNetworkPeer();
-                if (player.IsConnectionActive && player.IsNetworkActive)
+
+                if (agentState == AgentState.Killed &&
+                        player.QuitFromMission == false &&
+                        player.IsConnectionActive)
                 {
+                    // Save inventory on KO
                     SaveSystemBehavior.HandleCreateOrSavePlayerInventory(player);
                 }
+
                 if (this.OpenedByPeerInventory.ContainsKey(player))
                 {
                     if (this.OpenedByPeerInventory[player] != null)
@@ -196,7 +202,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 GameNetwork.WriteMessage(new ForceCloseInventory());
                 GameNetwork.EndModuleEventAsServer();
             }
-
+            
             // Possibly used on client, thats why I dont move this whole function just to Server side code
             if (this.IgnoreAgentDropLoot.ContainsKey(affectedAgent))
             {
