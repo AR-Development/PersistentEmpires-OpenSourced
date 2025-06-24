@@ -230,8 +230,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 persistentEmpireRepresentative.IsFirstAgentSpawned = false;
                 SaveSystemBehavior.HandleCreateOrSavePlayer(networkPeer);
-                //Moved to OnAgentRemoved to save inventory on KOs
-                //SaveSystemBehavior.HandleCreateOrSavePlayerInventory(networkPeer);
+                SaveSystemBehavior.HandleCreateOrSavePlayerInventory(networkPeer);
 
             }
             if (networkPeer.ControlledAgent != null && networkPeer.ControlledAgent.MountAgent != null)

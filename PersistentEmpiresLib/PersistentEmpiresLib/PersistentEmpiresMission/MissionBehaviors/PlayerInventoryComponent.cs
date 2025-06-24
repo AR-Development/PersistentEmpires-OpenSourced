@@ -179,7 +179,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (GameNetwork.IsServer && affectedAgent.MissionPeer != null && affectedAgent.IsHuman && affectedAgent.IsPlayerControlled)
             {
                 NetworkCommunicator player = affectedAgent.MissionPeer.GetNetworkPeer();
-                SaveSystemBehavior.HandleCreateOrSavePlayerInventory(player);
+                if (player.IsConnectionActive && player.IsNetworkActive)
+                {
+                    SaveSystemBehavior.HandleCreateOrSavePlayerInventory(player);
+                }
                 if (this.OpenedByPeerInventory.ContainsKey(player))
                 {
                     if (this.OpenedByPeerInventory[player] != null)
