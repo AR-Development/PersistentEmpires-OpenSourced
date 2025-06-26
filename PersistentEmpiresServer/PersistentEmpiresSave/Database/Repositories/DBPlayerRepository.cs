@@ -163,7 +163,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static DBPlayer OnGetPlayer(string playerId)
         {
-            IEnumerable<DBPlayer> getQuery = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId", new { PlayerId = playerId });
+            IEnumerable<DBPlayer> getQuery = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId order by UpdatedAt desc", new { PlayerId = playerId });
             if (getQuery.Count() == 0) return null;
             return getQuery.First();
         }
