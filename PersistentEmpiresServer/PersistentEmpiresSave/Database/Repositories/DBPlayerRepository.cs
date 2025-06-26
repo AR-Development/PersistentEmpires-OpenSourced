@@ -430,6 +430,14 @@ namespace PersistentEmpiresSave.Database.Repositories
             return result;
         }
 
+        public static IEnumerable<DBPlayer> GetPlayerBySteamId(NetworkCommunicator peer)
+        {
+            Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
+            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId order by UpdatedAt desc", new { PlayerId = peer.VirtualPlayer.Id.ToString() });
+            Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT : " + result.Count());
+            return result;
+        }
+
         public static IEnumerable<DBPlayer> GetPlayerFromId(string playerId)
         {
             return DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = playerId });
@@ -442,9 +450,15 @@ namespace PersistentEmpiresSave.Database.Repositories
             created = false;
             if (getQuery.Count() == 0)
             {
-                created = true;
-                DBPlayerRepository.CreatePlayer(peer);
-                getQuery = DBPlayerRepository.GetPlayer(peer);
+                // Fallback
+                getQuery = DBPlayerRepository.GetPlayerBySteamId(peer);
+
+                if (getQuery.Count() == 0)
+                {
+                    created = true;
+                    DBPlayerRepository.CreatePlayer(peer);
+                    getQuery = DBPlayerRepository.GetPlayer(peer);
+                }
             }
             return getQuery.First();
         }
