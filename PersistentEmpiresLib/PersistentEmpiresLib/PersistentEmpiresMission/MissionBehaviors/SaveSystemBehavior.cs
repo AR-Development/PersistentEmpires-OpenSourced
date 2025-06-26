@@ -591,6 +591,14 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 if(player == null)
                 {
                     player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}%");
+
+                    if (player != null)
+                    {
+                        if (string.IsNullOrEmpty(player.CustomName))
+                        {
+                            player.CustomName = player.Name;
+                        }
+                    }
                 }
                 if (player != null && player.CustomName != null && player.CustomName != "" && player.CustomName.IsEmpty() == false)
                 {
