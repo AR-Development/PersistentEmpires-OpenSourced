@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using System.Xml.Linq;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -586,7 +587,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             if (OnGetPlayer != null && playerConnectionInfo != null)
             {
-                DBPlayer player = OnGetPlayer(playerConnectionInfo.PlayerID.ToString());
+                DBPlayer player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}_{playerConnectionInfo.Name}");
+                if(player == null)
+                {
+                    player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}*");
+                }
                 if (player != null && player.CustomName != null && player.CustomName != "" && player.CustomName.IsEmpty() == false)
                 {
                     playerConnectionInfo.Name = player.CustomName;
@@ -603,18 +608,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
-        }
-
-        public static DBPlayer GetDBPlayer(string playerId)
-        {
-            if (OnGetPlayer != null && !string.IsNullOrEmpty(playerId))
-            {
-                DBPlayer player = OnGetPlayer(playerId);
-
-                return player;
-            }
-
-            return null;
         }
 
         public static void RglExceptionThrown(System.Diagnostics.StackTrace e, Exception rglException)

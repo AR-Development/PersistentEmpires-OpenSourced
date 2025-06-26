@@ -104,7 +104,7 @@ namespace PersistentEmpiresSave.Database.Repositories
                 PlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{customName.EncodeSpecialMariaDbChars()}",
                 OldPlayerId = $"{peer.VirtualPlayer.Id.ToString()}_{playerOldName.EncodeSpecialMariaDbChars()}",
             });
-            
+
             IEnumerable<DBPlayerName> playerNames = DBConnection.Connection.Query<DBPlayerName>("SELECT PlayerName FROM PlayerNames WHERE PlayerName = @PlayerName", new
             {
                 PlayerName = customName.EncodeSpecialMariaDbChars()
@@ -163,7 +163,7 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static DBPlayer OnGetPlayer(string playerId)
         {
-            IEnumerable<DBPlayer> getQuery = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId = @PlayerId", new { PlayerId = playerId });
+            IEnumerable<DBPlayer> getQuery = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId", new { PlayerId = playerId });
             if (getQuery.Count() == 0) return null;
             return getQuery.First();
         }
