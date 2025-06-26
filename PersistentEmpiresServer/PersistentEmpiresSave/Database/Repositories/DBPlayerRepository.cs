@@ -433,7 +433,7 @@ namespace PersistentEmpiresSave.Database.Repositories
         public static IEnumerable<DBPlayer> GetPlayerBySteamId(NetworkCommunicator peer)
         {
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!"));
-            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId order by UpdatedAt desc", new { PlayerId = peer.VirtualPlayer.Id.ToString() });
+            IEnumerable<DBPlayer> result = DBConnection.Connection.Query<DBPlayer>("SELECT * FROM Players WHERE PlayerId like @PlayerId order by UpdatedAt desc", new { PlayerId = peer.VirtualPlayer.Id.ToString() + "%" });
             Debug.Print("[Save Module] LOAD PLAYER FROM DB " + (peer != null ? peer.UserName : "NETWORK COMMUNICATOR IS NULL !!!!") + " RESULT COUNT : " + result.Count());
             return result;
         }

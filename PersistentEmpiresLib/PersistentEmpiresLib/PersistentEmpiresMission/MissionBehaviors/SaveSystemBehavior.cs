@@ -590,7 +590,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 DBPlayer player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}_{playerConnectionInfo.Name}");
                 if(player == null)
                 {
-                    player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}*");
+                    player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}%");
                     if(player != null)
                     {
                         if(string.IsNullOrEmpty(player.CustomName))
