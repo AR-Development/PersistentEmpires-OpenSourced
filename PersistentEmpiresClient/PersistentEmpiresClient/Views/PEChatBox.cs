@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using TaleWorlds.GauntletUI;
 using TaleWorlds.InputSystem;
 using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.ScreenSystem;
@@ -33,6 +34,25 @@ namespace PersistentEmpires.Views.Views
                             {
                                 if (focusedLayer.Input.IsKeyDown(InputKey.LeftControl))
                                 {
+                                    if (focusedLayer.Input.IsKeyDown(InputKey.LeftAlt))
+                                    {
+                                        if (focusedLayer.Input.IsKeyPressed(InputKey.Up))
+                                        {
+                                            chatLogWidget.VerticalAlignment = VerticalAlignment.Top;
+                                        }
+                                        else if (focusedLayer.Input.IsKeyReleased(InputKey.Down))
+                                        {
+                                            chatLogWidget.VerticalAlignment = VerticalAlignment.Bottom;
+                                        }
+                                        else if (focusedLayer.Input.IsKeyPressed(InputKey.Right))
+                                        {
+                                            chatLogWidget.HorizontalAlignment = HorizontalAlignment.Right;
+                                        }
+                                        else if (focusedLayer.Input.IsKeyReleased(InputKey.Left))
+                                        {
+                                            chatLogWidget.HorizontalAlignment = HorizontalAlignment.Left;
+                                        }
+                                    }
                                     if (focusedLayer.Input.IsKeyPressed(InputKey.Up))
                                     {
                                         var h = chatLogWidget.SuggestedHeight;
