@@ -107,7 +107,7 @@ namespace PersistentEmpiresHarmony.Patches
         } 
     }
 
-    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToWhisperTarget", new Type[] { typeof(string) })]
+    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToWhisperTarget", new Type[] { typeof(string), typeof(string), typeof(string) })]
     public class ChatBox_SendMessageToWhisperTarget
     {
         [HarmonyPrefix]
