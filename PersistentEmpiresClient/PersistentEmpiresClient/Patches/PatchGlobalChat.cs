@@ -1,10 +1,12 @@
-﻿using PersistentEmpiresLib.NetworkMessages.Client;
+﻿using HarmonyLib;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresHarmony.Patches
-{
+{    
     public class PatchGlobalChat
     {
         public delegate bool PlayerGlobalChatHandler(NetworkCommunicator peer, string message, bool teamOnly);
@@ -42,27 +44,42 @@ namespace PersistentEmpiresHarmony.Patches
             return true;
         }
 
-        public static void PrefixSendMessageToAll(string message, List<VirtualPlayer> receiverList)
-        {
-            if (message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-        }
+        //public static void PrefixSendMessageToAll(string message, List<VirtualPlayer> receiverList)
+        //{
+        //    if (message != "")
+        //    {
+        //        GameNetwork.BeginModuleEventAsClient();
+        //        GameNetwork.WriteMessage(new LocalMessage(message));
+        //        GameNetwork.EndModuleEventAsClient();
+        //    }
+        //}
 
-        public static void PrefixSendMessageToTeam(string message, List<VirtualPlayer> receiverList)
-        {
-            if (message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-        }
+        //public static void PrefixSendMessageToTeam(string message, List<VirtualPlayer> receiverList)
+        //{
+        //    if (message != "")
+        //    {
+        //        GameNetwork.BeginModuleEventAsClient();
+        //        GameNetwork.WriteMessage(new LocalMessage(message));
+        //        GameNetwork.EndModuleEventAsClient();
+        //    }
+        //}
 
-        public static void PrefixSendMessageToWhisperTarget(string message, string platformName, string whisperTarget)
+        //public static void PrefixSendMessageToWhisperTarget(string message, string platformName, string whisperTarget)
+        //{
+        //    if (message != "")
+        //    {
+        //        GameNetwork.BeginModuleEventAsClient();
+        //        GameNetwork.WriteMessage(new LocalMessage(message));
+        //        GameNetwork.EndModuleEventAsClient();
+        //    }
+        //}
+    }
+
+    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToAll", new Type[] { typeof(string) })]
+    public class ChatBox_SendMessageToAll
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(ref string message)
         {
             if (message != "")
             {
@@ -70,6 +87,39 @@ namespace PersistentEmpiresHarmony.Patches
                 GameNetwork.WriteMessage(new LocalMessage(message));
                 GameNetwork.EndModuleEventAsClient();
             }
+            return false; // Skip original method
+        }
+    }
+
+    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToTeam", new Type[] { typeof(string) })]
+    public class ChatBox_SendMessageToTeam
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(ref string message)
+        {
+            if (message != "")
+            {
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.EndModuleEventAsClient();
+            }
+            return false; // Skip original method
+        } 
+    }
+
+    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToWhisperTarget", new Type[] { typeof(string) })]
+    public class ChatBox_SendMessageToWhisperTarget
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(ref string message)
+        {
+            if (message != "")
+            {
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.EndModuleEventAsClient();
+            }
+            return false; // Skip original method
         }
     }
 }
