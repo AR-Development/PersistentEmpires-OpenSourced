@@ -1,9 +1,12 @@
 ﻿using HarmonyLib;
 using PersistentEmpiresClient.Patches;
 using PersistentEmpiresHarmony.Patches;
+using PersistentEmpiresLib.NetworkMessages.Client;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using TaleWorlds.Core;
 using TaleWorlds.DotNet;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Diamond;
@@ -63,12 +66,22 @@ namespace PersistentEmpiresClient
             prefix = typeof(PatchGlobalChat).GetMethod("PrefixClientEventPlayerMessageAll", BindingFlags.Public | BindingFlags.Static);
             HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
             Debug.Print("** Persistent Harmony ** Patched [ChatBox::HandleClientEventPlayerMessageAll]", 0, Debug.DebugColor.Yellow);
-
             original = typeof(ChatBox).GetMethod("HandleClientEventPlayerMessageTeam", BindingFlags.NonPublic | BindingFlags.Instance);
             prefix = typeof(PatchGlobalChat).GetMethod("PrefixClientEventPlayerMessageTeam", BindingFlags.Public | BindingFlags.Static);
             HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
             Debug.Print("** Persistent Harmony ** Patched [ChatBox::HandleClientEventPlayerMessageTeam]", 0, Debug.DebugColor.Yellow);
-
+            original = typeof(ChatBox).GetMethod("SendMessageToAll", BindingFlags.Public | BindingFlags.Instance);
+            prefix = typeof(PatchGlobalChat).GetMethod("PrefixSendMessageToAll", BindingFlags.Public | BindingFlags.Static);
+            HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
+            Debug.Print("** Persistent Harmony ** Patched [ChatBox::PrefixSendMessageToAll]", 0, Debug.DebugColor.Yellow);
+            original = typeof(ChatBox).GetMethod("SendMessageToTeam", BindingFlags.Public | BindingFlags.Instance);
+            prefix = typeof(PatchGlobalChat).GetMethod("PrefixSendMessageToTeam", BindingFlags.Public | BindingFlags.Static);
+            HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
+            Debug.Print("** Persistent Harmony ** Patched [ChatBox::PrefixSendMessageToTeam]", 0, Debug.DebugColor.Yellow);
+            original = typeof(ChatBox).GetMethod("SendMessageToWhisperTarget", BindingFlags.Public | BindingFlags.Instance);
+            prefix = typeof(PatchGlobalChat).GetMethod("PrefixSendMessageToWhisperTarget", BindingFlags.Public | BindingFlags.Static);
+            HarmonyHandle.Patch(original, prefix: new HarmonyMethod(prefix));
+            Debug.Print("** Persistent Harmony ** Patched [ChatBox::PrefixSendMessageToWhisperTarget]", 0, Debug.DebugColor.Yellow);
 
             original = typeof(Managed).GetMethod("GetStackTraceRaw", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(StackTrace), typeof(int) }, null);
             prefix = typeof(PatchStackTraceRaw).GetMethod("GetStackTraceRawDeep", BindingFlags.Public | BindingFlags.Static);

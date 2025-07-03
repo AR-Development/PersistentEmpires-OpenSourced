@@ -1,4 +1,6 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
+using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpiresHarmony.Patches
@@ -24,15 +26,6 @@ namespace PersistentEmpiresHarmony.Patches
 
         public static bool PrefixClientEventPlayerMessageAll(NetworkCommunicator networkPeer, NetworkMessages.FromClient.PlayerMessageAll message)
         {
-            if (message.Message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message.Message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-            //GameNetwork.BeginModuleEventAsClient();
-            //GameNetwork.WriteMessage(new ShoutMessage(message.Message));
-            //GameNetwork.EndModuleEventAsClient();
             if (OnClientEventPlayerMessageAll != null)
             {
                 return OnClientEventPlayerMessageAll(networkPeer, message);
@@ -42,20 +35,41 @@ namespace PersistentEmpiresHarmony.Patches
 
         public static bool PrefixClientEventPlayerMessageTeam(NetworkCommunicator networkPeer, NetworkMessages.FromClient.PlayerMessageTeam message)
         {
-            if (message.Message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message.Message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-            //GameNetwork.BeginModuleEventAsClient();
-            //GameNetwork.WriteMessage(new ShoutMessage(message.Message));
-            //GameNetwork.EndModuleEventAsClient();
             if (OnClientEventPlayerMessageTeam != null)
             {
                 return OnClientEventPlayerMessageTeam(networkPeer, message);
             }
             return true;
+        }
+
+        public static void PrefixSendMessageToAll(string message, List<VirtualPlayer> receiverList)
+        {
+            if (message != "")
+            {
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.EndModuleEventAsClient();
+            }
+        }
+
+        public static void PrefixSendMessageToTeam(string message, List<VirtualPlayer> receiverList)
+        {
+            if (message != "")
+            {
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.EndModuleEventAsClient();
+            }
+        }
+
+        public static void PrefixSendMessageToWhisperTarget(string message, string platformName, string whisperTarget)
+        {
+            if (message != "")
+            {
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.EndModuleEventAsClient();
+            }
         }
     }
 }
