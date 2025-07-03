@@ -119,6 +119,7 @@ namespace PersistentEmpiresClient
             Instance = new HarmonyLibClient();
             Instance.HarmonyHandle = new HarmonyLib.Harmony("mentalrob.persistentempires-client.bannerlord");
             Instance.Initialize();
+            Instance.HarmonyHandle.PatchAll();
         }
     }
 }
