@@ -2,8 +2,13 @@
 using PersistentEmpiresLib.NetworkMessages.Client;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Diamond;
+using TaleWorlds.MountAndBlade.ViewModelCollection.Multiplayer;
 
 namespace PersistentEmpiresHarmony.Patches
 {    
@@ -44,82 +49,24 @@ namespace PersistentEmpiresHarmony.Patches
             return true;
         }
 
-        //public static void PrefixSendMessageToAll(string message, List<VirtualPlayer> receiverList)
-        //{
-        //    if (message != "")
-        //    {
-        //        GameNetwork.BeginModuleEventAsClient();
-        //        GameNetwork.WriteMessage(new LocalMessage(message));
-        //        GameNetwork.EndModuleEventAsClient();
-        //    }
-        //}
-
-        //public static void PrefixSendMessageToTeam(string message, List<VirtualPlayer> receiverList)
-        //{
-        //    if (message != "")
-        //    {
-        //        GameNetwork.BeginModuleEventAsClient();
-        //        GameNetwork.WriteMessage(new LocalMessage(message));
-        //        GameNetwork.EndModuleEventAsClient();
-        //    }
-        //}
-
-        //public static void PrefixSendMessageToWhisperTarget(string message, string platformName, string whisperTarget)
-        //{
-        //    if (message != "")
-        //    {
-        //        GameNetwork.BeginModuleEventAsClient();
-        //        GameNetwork.WriteMessage(new LocalMessage(message));
-        //        GameNetwork.EndModuleEventAsClient();
-        //    }
-        //}
-    }
-
-    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToAll", new Type[] { typeof(string) })]
-    public class ChatBox_SendMessageToAll
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(ref string message)
+        public static bool PrefixExecuteSendMessage(MPChatVM __instance)
         {
-            if (message != "")
+            string str = __instance.WrittenText;
+            if (string.IsNullOrEmpty(str))
             {
+                __instance.WrittenText = string.Empty;
+            }
+            else
+            {
+                if (str.Length > __instance.MaxMessageLength)
+                    str = __instance.WrittenText.Substring(0, __instance.MaxMessageLength);
+
                 GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message));
+                GameNetwork.WriteMessage(new LocalMessage(str));
                 GameNetwork.EndModuleEventAsClient();
             }
-            return false; // Skip original method
-        }
-    }
 
-    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToTeam", new Type[] { typeof(string) })]
-    public class ChatBox_SendMessageToTeam
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(ref string message)
-        {
-            if (message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-            return false; // Skip original method
-        } 
-    }
-
-    [HarmonyPatch(typeof(TaleWorlds.MountAndBlade.ChatBox), "SendMessageToWhisperTarget", new Type[] { typeof(string), typeof(string), typeof(string) })]
-    public class ChatBox_SendMessageToWhisperTarget
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(ref string message)
-        {
-            if (message != "")
-            {
-                GameNetwork.BeginModuleEventAsClient();
-                GameNetwork.WriteMessage(new LocalMessage(message));
-                GameNetwork.EndModuleEventAsClient();
-            }
-            return false; // Skip original method
+            return true;
         }
     }
 }
