@@ -319,7 +319,7 @@ namespace PersistentEmpiresServer.ServerMissions
                         color = int.Parse(ColorGreen, System.Globalization.NumberStyles.HexNumber),
                         author = new
                         {
-                            name = player,
+                            name = player.VirtualPlayer?.UserName,
                             //url = string.IsNullOrEmpty(dBPlayer.DiscordId) ? "" : ,
                         },
                     },
