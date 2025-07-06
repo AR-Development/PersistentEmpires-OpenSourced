@@ -1,7 +1,17 @@
-﻿using TaleWorlds.MountAndBlade;
+﻿using HarmonyLib;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using TaleWorlds.Core;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Diamond;
+using TaleWorlds.MountAndBlade.ViewModelCollection.Multiplayer;
 
 namespace PersistentEmpiresHarmony.Patches
-{
+{    
     public class PatchGlobalChat
     {
         public delegate bool PlayerGlobalChatHandler(NetworkCommunicator peer, string message, bool teamOnly);
@@ -36,6 +46,26 @@ namespace PersistentEmpiresHarmony.Patches
             {
                 return OnClientEventPlayerMessageTeam(networkPeer, message);
             }
+            return true;
+        }
+
+        public static bool PrefixExecuteSendMessage(MPChatVM __instance)
+        {
+            string str = __instance.WrittenText;
+            if (string.IsNullOrEmpty(str))
+            {
+                __instance.WrittenText = string.Empty;
+            }
+            else
+            {
+                if (str.Length > __instance.MaxMessageLength)
+                    str = __instance.WrittenText.Substring(0, __instance.MaxMessageLength);
+
+                GameNetwork.BeginModuleEventAsClient();
+                GameNetwork.WriteMessage(new LocalMessage(str));
+                GameNetwork.EndModuleEventAsClient();
+            }
+
             return true;
         }
     }
