@@ -326,7 +326,7 @@ namespace PersistentEmpiresServer.ServerMissions
                 }
             };
 
-            Notify(request, DiscordServeStatusUrl);
+            Notify(request, DiscordAdminMessageUrl);
             });
         }
 
