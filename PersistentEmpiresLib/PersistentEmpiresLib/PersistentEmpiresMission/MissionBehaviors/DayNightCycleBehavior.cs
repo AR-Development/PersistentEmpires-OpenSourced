@@ -11,18 +11,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
+
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+
             if (this.Mission.Scene.GetFirstEntityWithScriptComponent<PE_DayNightCycle>() != null)
             {
                 this.DayNightCycle = this.Mission.Scene.GetFirstEntityWithScriptComponent<PE_DayNightCycle>().GetFirstScriptOfType<PE_DayNightCycle>();
             }
 
             Debug.Print(" ===> DAYNIGHT CYCLE CHECK " + (this.DayNightCycle == null).ToString() + " <====== ");
-            Debug.Print(" ===> DAYNIGHT CYCLE CHECK " + (this.DayNightCycle == null).ToString() + " <====== ");
-            Debug.Print(" ===> DAYNIGHT CYCLE CHECK " + (this.DayNightCycle == null).ToString() + " <====== ");
-            Debug.Print(" ===> DAYNIGHT CYCLE CHECK " + (this.DayNightCycle == null).ToString() + " <====== ");
-            Debug.Print(" ===> DAYNIGHT CYCLE CHECK " + (this.DayNightCycle == null).ToString() + " <====== ");
-
         }
         public override void OnRemoveBehavior()
         {
@@ -33,6 +30,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator player)
         {
             base.OnPlayerConnectedToServer(player);
+
             if (this.DayNightCycle != null)
             {
                 Debug.Print(" ===> DAYNIGHT CYCLE TIME SENT " + (this.DayNightCycle.TimeOfDay).ToString() + " <====== ");
@@ -53,8 +51,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             }
         }
-
-
 
         private void HandleSetDayTimeFromServer(SetDayTime message)
         {
