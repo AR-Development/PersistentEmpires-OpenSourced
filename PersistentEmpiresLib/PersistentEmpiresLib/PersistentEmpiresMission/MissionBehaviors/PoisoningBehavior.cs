@@ -28,6 +28,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
             if (this.LastCheckedAt + this.DamageIntervalSeconds < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             {
                 this.LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();

@@ -218,7 +218,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+            
             if (this._ongoingPolls == null) return;
+
             foreach (FactionPoll ongoingPolls in this._ongoingPolls.Values.ToList())
             {
                 if (ongoingPolls.IsOpen)

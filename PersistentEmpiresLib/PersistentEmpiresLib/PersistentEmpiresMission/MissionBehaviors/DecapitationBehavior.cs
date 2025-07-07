@@ -51,8 +51,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (GameNetwork.IsServer) return;
-
+#if SERVER
             foreach (Agent headAgent in this.headAgentDict.Keys.ToList())
             {
                 if (headAgent.AgentVisuals == null || headAgent.AgentVisuals.GetSkeleton() == null)
@@ -95,6 +94,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
 
             }
+
             foreach (Agent bodyAgent in this.bodyAgentDict.Keys.ToList())
             {
 
@@ -128,6 +128,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
+#endif
         }
 
         private void HandleBehadeAgentPacketFromServer(BehadeAgentPacket message)

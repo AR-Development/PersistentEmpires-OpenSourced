@@ -160,15 +160,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+#if SERVER
+        public static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
-            if (GameNetwork.IsServer)
-            {
-                this.ReduceHungerLoop();
-                this.StarvingCheckLoop();
-                this.EatingActionLoop();
-            }
+            if (++_counter < 5)
+                return;
+            // Reset counter
+            _counter = 0;
+            ReduceHungerLoop();
+            StarvingCheckLoop();
+            EatingActionLoop();
         }
+#endif
+
         public bool HasRefillHealthNode(XmlNode node)
         {
             return node.ChildNodes.Cast<XmlNode>().Any(x => x.Name == "RefillHealth");

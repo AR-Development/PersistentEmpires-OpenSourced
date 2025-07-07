@@ -27,14 +27,19 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+            
             foreach (Agent a in pickedAgents.Keys.ToList())
             {
                 if (pickedAgents.ContainsKey(a) == false) continue;
+
                 pickedAgents[a]--;
+                
                 if (pickedAgents[a] == 0)
                 {
                     pickedAgents.Remove(a);
+
                     EquipmentIndex index = a.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+                    
                     if (index != EquipmentIndex.None)
                     {
                         a.RemoveEquippedWeapon(index);

@@ -629,6 +629,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             // Auto save
             base.OnMissionTick(dt);
+
             if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
                 _running = true;

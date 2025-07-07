@@ -97,10 +97,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return true;
         }
 
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
+            if (++_counter < 5)
+                return;
+            // Reset counter
+            _counter = 0;
+
             if (GameNetwork.IsClientOrReplay) return;
+            
             foreach (PE_MoneyBag moneyBag in this.MoneyBagCreatedAt.Keys.ToList())
             {
                 if (this.MoneyBagCreatedAt[moneyBag] + 600 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())

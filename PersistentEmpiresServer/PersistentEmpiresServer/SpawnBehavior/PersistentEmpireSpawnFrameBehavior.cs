@@ -77,7 +77,6 @@ namespace PersistentEmpiresServer.SpawnBehavior
             return frame.GameEntity.GetGlobalFrame();
         }
 
-
         public void OverridenOnTick(float dt)
         {
             foreach (NetworkCommunicator networkCommunicator in GameNetwork.NetworkPeers)

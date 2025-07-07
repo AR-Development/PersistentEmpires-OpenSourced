@@ -98,9 +98,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.DestroyChance = ConfigManager.GetIntConfig("ItemDestroyChanceOnDeath", 5);
         }
 
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
+            if (++_counter < 10)
+                return;
+            // Reset counter
+            _counter = 0;
 
             foreach (string inventoryId in this.LootableCreatedAt.Keys.ToArray())
             {

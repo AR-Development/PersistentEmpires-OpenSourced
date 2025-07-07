@@ -158,6 +158,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
             this.ProcessSyncQueue(peerSyncDestructableHitPointsQueue, "DestructableHitPoints");
             this.ProcessSyncQueue(peerSyncItemGatheringQueue, "ItemGatherings");
             this.ProcessSyncQueue(peerSyncDestructableWithItemsQueue, "DestructibleWithItems");

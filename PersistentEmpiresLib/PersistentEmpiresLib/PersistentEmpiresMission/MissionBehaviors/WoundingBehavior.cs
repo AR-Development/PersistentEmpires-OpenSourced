@@ -119,11 +119,17 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
 
             if (!WoundingEnabled) return;
+
+            if (++_counter < 10)
+                return;
+            // Reset counter
+            _counter = 0;
 
             foreach (string player in WoundedUntil.Keys.ToList())
             {

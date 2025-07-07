@@ -76,6 +76,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
             if (GameNetwork.IsClient) return;
 
             foreach (PE_TradeCenter tradeCenter in this.RandomizeTimer.Keys.ToList())

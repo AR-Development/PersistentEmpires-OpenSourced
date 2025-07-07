@@ -101,10 +101,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
             return true;
         }
+
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (GameNetwork.IsServer) return;
+
+#if SERVER
+            if (++_counter < 10)
+                return;
+            // Reset counter
+            _counter = 0;
+
             foreach (Agent key in this.AgentsPlayingSound.Keys.ToList())
             {
                 if (key != null && key.IsActive())
@@ -112,7 +120,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     this.AgentsPlayingSound[key].SetPosition(key.Position);
                 }
             }
-
+#endif
         }
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
         {

@@ -42,9 +42,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
 
         private static bool needToBeTrigged = true;
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
+            if (++_counter < 5)
+                return;
+            // Reset counter
+            _counter = 0;
 
             if (_restartAt == 0)
             {

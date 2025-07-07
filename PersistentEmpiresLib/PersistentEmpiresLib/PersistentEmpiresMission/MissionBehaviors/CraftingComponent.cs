@@ -50,8 +50,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (GameNetwork.IsClient) return;
+#if SERVER
             if (this.craftings == null) return;
+
             foreach (NetworkCommunicator player in craftings.Keys.ToList())
             {
                 PersistentEmpireRepresentative persistentEmpireRepresentative = player.GetComponent<PersistentEmpireRepresentative>();
@@ -127,6 +128,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     this.craftings.Remove(player);
                 }
             }
+#endif
         }
         public void OnUsedCrafting(Inventory playerInventory, PE_CraftingStation craftingStation)
         {
