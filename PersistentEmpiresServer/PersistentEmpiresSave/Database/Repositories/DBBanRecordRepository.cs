@@ -4,6 +4,7 @@ using PersistentEmpiresLib.Data;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Helpers;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresServer.ServerMissions;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -29,12 +30,12 @@ namespace PersistentEmpiresSave.Database.Repositories
         {
             var admin = GameNetwork.NetworkPeers.FirstOrDefault(x => x.VirtualPlayer?.ToPlayerId() == adminId);
 
-            if(admin == null)
+            if (admin == null)
             {
                 return;
             }
 
-            if(UnBanPlayer(playerId, adminId))
+            if (UnBanPlayer(playerId, adminId))
             {
                 LoggerHelper.LogAnAction(admin, LogAction.PlayerBansPlayer, null, new object[] { playerId });
                 InformationComponent.Instance.SendMessage("Player was unbanned", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
@@ -44,20 +45,28 @@ namespace PersistentEmpiresSave.Database.Repositories
                 InformationComponent.Instance.SendMessage("Something went wrong", new Color(0f, 0f, 1f).ToUnsignedInteger(), admin);
             }
         }
-        
+
         public static void BanPlayer(string playerId, string playerName, long banEndsAt, string banReason)
         {
-            DBBanRecord banRecord = new DBBanRecord
+            try
             {
-                PlayerId = playerId,
-                PlayerName = playerName,
-                CreatedAt = DateTime.UtcNow,
-                BanEndsAt = DateTimeOffset.FromUnixTimeSeconds(banEndsAt).UtcDateTime,
-                BanReason = banReason
-            };
+                DBBanRecord banRecord = new DBBanRecord
+                {
+                    PlayerId = playerId,
+                    PlayerName = playerName,
+                    CreatedAt = DateTime.UtcNow,
+                    BanEndsAt = DateTimeOffset.FromUnixTimeSeconds(banEndsAt).UtcDateTime,
+                    BanReason = banReason
+                };
 
-            string insertSql = "INSERT INTO BanRecords(PlayerId, PlayerName, BanReason, CreatedAt, BanEndsAt) VALUES(@PlayerId, @PlayerName, @BanReason, @CreatedAt, @BanEndsAt)";
-            DBConnection.Connection.Execute(insertSql, banRecord);
+                string insertSql = "INSERT INTO BanRecords(PlayerId, PlayerName, BanReason, CreatedAt, BanEndsAt) VALUES(@PlayerId, @PlayerName, @BanReason, @CreatedAt, @BanEndsAt)";
+
+                DBConnection.Connection.Execute(insertSql, banRecord);
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+            }
         }
 
         public static bool UnBanPlayer(string playerId, string adminId)
@@ -80,6 +89,7 @@ namespace PersistentEmpiresSave.Database.Repositories
             }
             catch (Exception ex)
             {
+                DiscordBehavior.NotifyException(ex);
                 return false;
             }
             finally
@@ -101,26 +111,47 @@ namespace PersistentEmpiresSave.Database.Repositories
                 }
                 return false;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+                return false;
+            }
         }
-        
+
         public static void UnbanPlayer(string playerId, string unbanReason)
         {
-            string updateSql = "UPDATE BanRecords SET BanEndsAt = 0, UnbanReason = @UnbanReason WHERE PlayerId = @PlayerId";
-            DBConnection.Connection.Execute(updateSql, new
+            try
             {
-                UnbanReason = unbanReason,
-                PlayerId = playerId
-            });
+                string updateSql = "UPDATE BanRecords SET BanEndsAt = 0, UnbanReason = @UnbanReason WHERE PlayerId = @PlayerId";
+                DBConnection.Connection.Execute(updateSql, new
+                {
+                    UnbanReason = unbanReason,
+                    PlayerId = playerId
+                });
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+            }
         }
+
         public static bool IsPlayerBanned(string playerId)
         {
-            int count = DBConnection.Connection.Query("SELECT * FROM BanRecords WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId", new
+            try
             {
-                CurrentTime = DateTime.UtcNow,
-                PlayerId = playerId
-            }).Count();
-            return count > 0;
+                int count = DBConnection.Connection.Query("SELECT * FROM BanRecords WHERE BanEndsAt >= @CurrentTime AND PlayerId = @PlayerId", new
+                {
+                    CurrentTime = DateTime.UtcNow,
+                    PlayerId = playerId
+                }).Count();
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+                
+                return false;
+            }
         }
     }
 }

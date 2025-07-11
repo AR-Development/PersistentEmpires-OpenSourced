@@ -3,6 +3,8 @@ using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresLib.SceneScripts;
 using PersistentEmpiresLib.SceneScripts.Extensions;
+using PersistentEmpiresServer.ServerMissions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Library;
@@ -29,39 +31,64 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static IEnumerable<DBStockpileMarket> GetAllStockpileMarkets()
         {
-            Debug.Print("[Save Module] LOADING ALL STOCKPILE MARKETS FROM DB");
-            return DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets");
+            try
+            {
+                Debug.Print("[Save Module] LOADING ALL STOCKPILE MARKETS FROM DB");
+                return DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets");
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+
+                return null;
+            }
         }
         public static DBStockpileMarket GetStockpileMarket(PE_StockpileMarket stockpileMarket)
         {
-            Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ")");
-            IEnumerable<DBStockpileMarket> result = DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets WHERE MissionObjectHash = @MissionObjectHash", new { MissionObjectHash = stockpileMarket.GetMissionObjectHash() });
-            Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ") RESULT COUNT " + result.Count());
-            if (result.Count() == 0) return null;
-            return result.First();
+            try
+            {
+                Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ")");
+                IEnumerable<DBStockpileMarket> result = DBConnection.Connection.Query<DBStockpileMarket>("SELECT * FROM StockpileMarkets WHERE MissionObjectHash = @MissionObjectHash", new { MissionObjectHash = stockpileMarket.GetMissionObjectHash() });
+                Debug.Print("[Save Module] LOAD STOCKPILE FROM DB (" + stockpileMarket.GetMissionObjectHash() + ") RESULT COUNT " + result.Count());
+                if (result.Count() == 0) return null;
+                return result.First();
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+
+                return null;
+            }
         }
         public static void UpsertStockpileMarkets(List<PE_StockpileMarket> markets)
         {
-            Debug.Print($"[Save Module] INSERT/UPDATE FOR {markets.Count()} MARKETS TO DB");
-            if (markets.Any())
+            try
             {
-                string query = @"
+                Debug.Print($"[Save Module] INSERT/UPDATE FOR {markets.Count()} MARKETS TO DB");
+                if (markets.Any())
+                {
+                    string query = @"
             INSERT INTO StockpileMarkets (MissionObjectHash, MarketItemsSerialized)
             VALUES ";
 
-                foreach (var market in markets)
-                {
-                    var dbMarket = CreateDBStockpileMarket(market);
+                    foreach (var market in markets)
+                    {
+                        var dbMarket = CreateDBStockpileMarket(market);
 
-                    query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
-                }
-                // remove last ","
-                query = query.TrimEnd(',');
-                query += @" 
+                        query += $"('{dbMarket.MissionObjectHash}', '{dbMarket.MarketItemsSerialized}'),";
+                    }
+                    // remove last ","
+                    query = query.TrimEnd(',');
+                    query += @" 
                     ON DUPLICATE KEY UPDATE
                     MarketItemsSerialized = VALUES(MarketItemsSerialized)";
 
-                DBConnection.Connection.Execute(query);
+                    DBConnection.Connection.Execute(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
             }
         }
     }

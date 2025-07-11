@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PersistentEmpiresLib.Helpers;
 using TaleWorlds.MountAndBlade;
+using PersistentEmpiresServer.ServerMissions;
+using System;
 
 namespace PersistentEmpiresSave.Database.Repositories
 {
@@ -29,32 +31,57 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static int QueryBankBalance(NetworkCommunicator player)
         {
-            IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
+            try
             {
-                PlayerId = player.VirtualPlayer.ToPlayerId()
-            });
-            return collection.First().BankAmount;
+                IEnumerable<DBPlayer> collection = DBConnection.Connection.Query<DBPlayer>("SELECT BankAmount FROM Players WHERE PlayerId = @PlayerId", new
+                {
+                    PlayerId = player.VirtualPlayer.ToPlayerId()
+                });
+                return collection.First().BankAmount;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+            }
+
+            return 0;
         }
 
         public static void DepositToBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId", new
+            try
             {
-                PlayerId = player.VirtualPlayer.ToPlayerId(),
-                Amount = (amount * Tax_Rate) / 100
-            });
+                DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount + @Amount WHERE PlayerId = @PlayerId", new
+                {
+                    PlayerId = player.VirtualPlayer.ToPlayerId(),
+                    Amount = (amount * Tax_Rate) / 100
+                });
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+            }
         }
 
         public static int WithdrawFromBank(NetworkCommunicator player, int amount)
         {
-            DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId", new
+            try
             {
-                PlayerId = player.VirtualPlayer.ToPlayerId(),
-                CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
-                Amount = amount
-            });
+                DBConnection.Connection.Execute("UPDATE Players SET BankAmount = BankAmount - @Amount WHERE PlayerId = @PlayerId", new
+                {
+                    PlayerId = player.VirtualPlayer.ToPlayerId(),
+                    CustomName = player.VirtualPlayer.UserName.EncodeSpecialMariaDbChars(),
+                    Amount = amount
+                });
 
-            return amount;
+                return amount;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+            }
+
+            return 0;
         }
     }
 }
