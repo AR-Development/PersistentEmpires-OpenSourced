@@ -42,7 +42,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
         {
             if (WoundingBehavior.Instance.WoundedUntil.ContainsKey(player.VirtualPlayer?.ToPlayerId()) == false)
             {
-                this.SendMessageToPlayers(player, _distance, "You are not wounded", Color, _bubble, LogAction.Wounds);
+                this.SendMessageToPlayer(player, "You are not wounded", Color, _bubble, LogAction.Wounds);
             }
             else
             {
@@ -50,7 +50,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 tmp = tmp.AddSeconds(WoundingBehavior.Instance.WoundedUntil[player.VirtualPlayer?.ToPlayerId()].Value);
                 var diff = DateTime.UtcNow - tmp;
                 
-                this.SendMessageToPlayers(player, _distance, $"You will be unwounded in {diff.Hours} houers and {diff.Minutes} minutes.", Color, _bubble, LogAction.Wounds);
+                this.SendMessageToPlayer(player, $"You will be unwounded in {diff.Hours} houers and {diff.Minutes} minutes.", Color, _bubble, LogAction.Wounds);
             }
 
             return true;

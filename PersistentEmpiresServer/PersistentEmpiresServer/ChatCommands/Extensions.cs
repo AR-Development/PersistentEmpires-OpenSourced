@@ -40,7 +40,33 @@ namespace PersistentEmpiresServer.ChatCommands
                 }
             }
             if (string.IsNullOrEmpty(logAction))
+            {
                 logAction = LogAction.LocalChat;
+            }
+
+            LoggerHelper.LogAnAction(player, logAction, affectedPlayers.ToArray(), new object[] { message });
+        }
+
+        internal static void SendMessageToPlayer(this Command command, NetworkCommunicator player, string message, uint color, bool bubble, string logAction)
+        {
+            var position = player.ControlledAgent.Position;
+            var affectedPlayers = new List<AffectedPlayer>();
+
+            if (player.ControlledAgent == null) return;
+
+            InformationComponent.Instance.SendMessage(message, color, player);
+
+            if (bubble)
+            {
+                GameNetwork.BeginModuleEventAsServer(player);
+                GameNetwork.WriteMessage(new CustomBubbleMessage(player, message, color));
+                GameNetwork.EndModuleEventAsServer();
+            }
+
+            if (string.IsNullOrEmpty(logAction))
+            {
+                logAction = LogAction.LocalChat;
+            }
 
             LoggerHelper.LogAnAction(player, logAction, affectedPlayers.ToArray(), new object[] { message });
         }
