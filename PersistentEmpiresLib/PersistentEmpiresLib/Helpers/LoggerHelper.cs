@@ -14,8 +14,9 @@ namespace PersistentEmpiresLib.Helpers
 {
     public static class LogAction
     {
-        public static readonly string DiceCommand = "DiceCommand";
-        public static readonly string DoCommand = "DoCommand";
+        public static readonly string TeleportToPosition = "TeleportToPosition";// Done
+        public static readonly string DiceCommand = "DiceCommand";// Done
+        public static readonly string DoCommand = "DoCommand";// Done
         public static readonly string MeCommand = "MeCommand";// Done
         public static readonly string RollCommand = "RollCommand"; // Done
         public static readonly string LocalChat = "LocalChat"; // Done
@@ -263,6 +264,8 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayer{(string)oParams[0]}";
                 case nameof(LogAction.UpsertPlayerInventory):
                     return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayerInventory{(string)oParams[0]}";
+                    case nameof(LogAction.TeleportToPosition):
+                        return $"{FormatLogForPlayer(issuer, dateTime)} Teleported to position {oParams[0]}";
                 default:
                     return actionType;
             }
