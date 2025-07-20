@@ -43,16 +43,9 @@ namespace PersistentEmpiresSave
             DBConnection.InitializeSqlConnection(ConnectionString);
             IServiceProvider serviceProvider = CreateServices();
 
-            try
-            {
-                IMigrationRunner runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-                runner.ListMigrations();
-                runner.MigrateUp();
-            }
-            catch(Exception e)
-            {
-                Debug.Print($"[Persistent Empires Save System] Migration failed: {e.Message}");
-            }
+            IMigrationRunner runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+            runner.ListMigrations();
+            runner.MigrateUp();
 
             DBBanRecordRepository.Initialize();
             DBLogRepository.Initialize();
