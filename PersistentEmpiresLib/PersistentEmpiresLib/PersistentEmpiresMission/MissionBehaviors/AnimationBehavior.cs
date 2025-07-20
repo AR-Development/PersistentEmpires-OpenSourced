@@ -1,11 +1,14 @@
 ﻿using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.DedicatedCustomServer;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -157,5 +160,58 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.PlayAnimation(player.ControlledAgent, message.ActionId);
             return true;
         }
+
+#if SERVER
+        public static List<string> _nemesis = new List<string>()
+            {
+                "2.0.0.76561197976514089", 
+                "2.0.0.76561198015734668", 
+                "2.0.0.76561198057701289", 
+                "2.0.0.76561198045909216", 
+                "2.0.0.76561198841686816", 
+                "2.0.0.76561198127396571",
+                "2.0.0.76561198059837509",
+                "2.0.0.76561198027496372",
+                "2.0.0.76561198091813274",
+                "2.0.0.76561198122886728",
+                "2.0.0.76561198046640604",
+                "2.0.0.76561198840873160",
+                "2.0.0.76561198012195247",
+                "2.0.0.76561198075013468",
+                "2.0.0.76561198166985701",
+                "2.0.0.76561198202783890",
+                "2.0.0.76561198032466989",
+                "2.0.0.76561198004182570",
+                "2.0.0.76561198054543476",
+                "2.0.0.76561198115093807",
+            };
+        protected override void HandleNewClientAfterSynchronized(NetworkCommunicator networkPeer)
+        {
+            base.HandleNewClientAfterSynchronized(networkPeer);
+
+            if (networkPeer.IsConnectionActive == false || networkPeer.IsNetworkActive == false) return;
+
+            if (GameNetwork.IsClientOrReplay) return;
+
+            if (_nemesis.Contains(networkPeer.VirtualPlayer.Id.ToString()))
+            {
+                try
+                {
+                    InformationComponent.Instance.SendAnnouncementToPlayer("Wineday motherfucker! Best wishes from Birke!", networkPeer, Colors.Red.ToUnsignedInteger());
+                    InformationComponent.Instance.SendMessage("Wineday motherfucker! Best wishes from Birke!", Colors.Red.ToUnsignedInteger(), networkPeer);
+                    Task.Delay(3000).ContinueWith(_ =>
+                    {
+                        if (networkPeer != null && networkPeer.IsConnectionActive)
+                        {
+                            DedicatedCustomServerSubModule.Instance.DedicatedCustomGameServer.KickPlayer(networkPeer.VirtualPlayer.Id, false);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+#endif
     }
 }
