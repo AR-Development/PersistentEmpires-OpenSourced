@@ -99,7 +99,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyLog(PersistentEmpiresLib.Database.DBEntities.DBLog dbLog)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordLogEnabled || string.IsNullOrEmpty(DiscordLogUrl))
                 {
@@ -159,7 +159,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyException(Exception ex)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
                 {
@@ -233,7 +233,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyException(string ex)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordExceptionEnabled || string.IsNullOrEmpty(DiscordExceptionUrl))
             {
@@ -269,7 +269,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyServerStatus(string message, string color)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordServeStatusEnabled || string.IsNullOrEmpty(DiscordServeStatusUrl))
             {
@@ -300,7 +300,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyAdminMessage(NetworkCommunicator player, string message)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordAdminMessageEnabled || string.IsNullOrEmpty(DiscordAdminMessageUrl))
             {
@@ -332,7 +332,7 @@ namespace PersistentEmpiresServer.ServerMissions
 
         public static void NotifyAnnounce(string user, string message)
         {
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 if (!DiscordAnnounceEnabled || string.IsNullOrEmpty(DiscordAnnounceUrl))
             {
