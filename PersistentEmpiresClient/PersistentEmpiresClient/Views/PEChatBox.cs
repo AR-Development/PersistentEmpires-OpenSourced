@@ -3,8 +3,10 @@ using System;
 using System.Linq;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.InputSystem;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.MissionViews;
+using TaleWorlds.MountAndBlade.ViewModelCollection.Multiplayer;
 using TaleWorlds.ScreenSystem;
 
 namespace PersistentEmpires.Views.Views
@@ -15,6 +17,7 @@ namespace PersistentEmpires.Views.Views
         private static int _minHeight = 300;
         private static int _maxWidth = 1000;
         private static int _minWidth = 460;
+        private bool isInit = false;
 
         public override void OnMissionScreenTick(float dt)
         {
@@ -27,12 +30,12 @@ namespace PersistentEmpires.Views.Views
                 {
                     if (layer.MoviesAndDataSources[0].Item2 is TaleWorlds.MountAndBlade.ViewModelCollection.Multiplayer.MPChatVM mpChatVM)
                     {
-                        if(mpChatVM.IsTypingText)
+                        if(!isInit)
                         {
-                            GameNetwork.BeginModuleEventAsClient();
-                            GameNetwork.WriteMessage(new PlayerIsTypingMessage());
-                            GameNetwork.EndModuleEventAsClient();
+                            isInit = true;
+                            mpChatVM.PropertyChangedWithValue += PropertyChangedWithValue;
                         }
+                        
                         var tmp = layer.MoviesAndDataSources[0].Item1 as TaleWorlds.GauntletUI.Data.GeneratedGauntletMovie;
                         if (tmp == null) return;
                         try
@@ -114,6 +117,34 @@ namespace PersistentEmpires.Views.Views
                         }
                     }
                 }
+            }
+        }
+
+        private void PropertyChangedWithValue(object sender, PropertyChangedWithValueEventArgs e)
+        {
+            try
+            {
+                if (sender == null)
+                    return;
+
+                var mpChatVM = sender as TaleWorlds.MountAndBlade.ViewModelCollection.Multiplayer.MPChatVM;
+                
+                if (mpChatVM != null)
+                {
+                    if (e.PropertyName == "WrittenText")
+                    {
+                        if(mpChatVM.WrittenText != e.Value)
+                        {
+                            GameNetwork.BeginModuleEventAsClient();
+                            GameNetwork.WriteMessage(new PlayerIsTypingMessage());
+                            GameNetwork.EndModuleEventAsClient();
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
         }
     }
