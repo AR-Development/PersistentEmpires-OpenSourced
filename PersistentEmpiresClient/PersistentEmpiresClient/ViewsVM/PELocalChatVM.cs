@@ -1,4 +1,5 @@
 ﻿using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -12,19 +13,28 @@ namespace PersistentEmpires.Views.ViewsVM
         [DataSourceProperty]
         public string TextInput
         {
-            get => this._textInput;
+            get => _textInput;
             set
             {
-                if (value.Length > 500)
+                if (value != _textInput)
                 {
-                    value = $"{value.Substring(0, 500)}...";
-                    base.OnPropertyChangedWithValue(value, "TextInput");
-                }
-                
-                if (value != this._textInput)
-                {
-                    this._textInput = value;
-                    base.OnPropertyChangedWithValue(value, "TextInput");
+                    if (value.Length > 500)
+                    {
+                        value = $"{value.Substring(0, 500)}...";
+                        OnPropertyChangedWithValue(value, "TextInput");
+                    }
+                    else
+                    {
+                        _textInput = value;
+                        OnPropertyChangedWithValue(value, "TextInput");
+                    }
+
+                    if(!string.IsNullOrEmpty(value))
+                    {
+                        GameNetwork.BeginModuleEventAsClient();
+                        GameNetwork.WriteMessage(new PlayerIsTypingMessage());
+                        GameNetwork.EndModuleEventAsClient();
+                    }
                 }
             }
         }

@@ -18,7 +18,7 @@
           HorizontalAlignment="Center" VerticalAlignment="Center">
           <Children>
             <ListPanel DataSource="{ChatMessages}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-              StackLayout.LayoutMethod="VerticalBottomToTop">
+              IsVisible="@IsTextVisible" StackLayout.LayoutMethod="VerticalBottomToTop">
               <ItemTemplate>
                 <TextWidget Id="NameTextWidget" WidthSizePolicy="Fixed" SuggestedWidth="400"
                   HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
@@ -26,7 +26,8 @@
                   OverrideDefaultStateSwitchingEnabled="true" Text="@Message" />
               </ItemTemplate>
             </ListPanel>
-          </Children>
+			<Widget IsVisible="@IsIconVisible" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="40" MarginTop="8" MarginLeft="4" Sprite="SPGeneral\GameMenu\conversation_icon"/>
+		  </Children>
         </Widget>
       </Children>
     </MultiplayerMissionMarkerListPanel>

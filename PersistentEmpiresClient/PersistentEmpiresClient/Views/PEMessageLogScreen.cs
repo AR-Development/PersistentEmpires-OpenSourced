@@ -46,7 +46,7 @@ namespace PersistentEmpires.Views.Views
             if (GameNetwork.IsClient)
             {
                 networkMessageHandlerRegisterer.Register<LocalMessageServer>(this.HandleLocalMessageFromServerForLog);
-                networkMessageHandlerRegisterer.Register<ShoutMessageServer>(this.HandleShoutMessageFromServerForLog);
+                networkMessageHandlerRegisterer.Register<ShoutMessageServer>(this.HandleShoutMessageFromServerForLog);                
             }
         }
 
