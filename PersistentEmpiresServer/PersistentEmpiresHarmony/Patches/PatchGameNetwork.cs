@@ -15,7 +15,7 @@ namespace PersistentEmpiresHarmony.Patches
         public static bool PrefixAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)
         {
             if (OnAddNewPlayerOnServer != null) OnAddNewPlayerOnServer(ref playerConnectionInfo, serverPeer, isAdmin);
-            File.AppendAllText("network.txt", "== Add New Player " + playerConnectionInfo.Name + " ==\n");
+            //File.AppendAllText("network.txt", "== Add New Player " + playerConnectionInfo.Name + " ==\n");
 
             return true;
         }
@@ -28,19 +28,14 @@ namespace PersistentEmpiresHarmony.Patches
 
         public static bool PrefixWriteMessage(GameNetworkMessage message)
         {
-            Debug.Print("** PE Network ** " + message.GetType().FullName, 0, Debug.DebugColor.Cyan);
-
-            File.AppendAllText("network.txt", message.GetType().FullName + "\n");
-
+            //Debug.Print("** PE Network ** " + message.GetType().FullName, 0, Debug.DebugColor.Cyan);
+            //File.AppendAllText("network.txt", message.GetType().FullName + "\n");
             if (message is SynchronizeMissionObject)
             {
-                Debug.Print("** PE SYNCRONIZEMISSION ** " + message.GetType().FullName, 0, Debug.DebugColor.Cyan);
+                //Debug.Print("** PE SYNCRONIZEMISSION ** " + message.GetType().FullName, 0, Debug.DebugColor.Cyan);
                 SynchronizeMissionObject sMessage = (SynchronizeMissionObject)message;
                 SynchedMissionObject missionObject = (SynchedMissionObject)Mission.MissionNetworkHelper.GetMissionObjectFromMissionObjectId(sMessage.MissionObjectId);
-
-                File.AppendAllText("network.txt", "  => Mission Object Is " + missionObject.GetType().Name + "\n");
-
-
+                //File.AppendAllText("network.txt", "  => Mission Object Is " + missionObject.GetType().Name + "\n");
             }
             return true;
         }

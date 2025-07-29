@@ -190,7 +190,8 @@ namespace PersistentEmpiresAPI.Controllers
         [HttpPost("announce")]
         public ActionResult<ResultDTO> Announce(AnnounceDTO request)
         {
-            InformationComponent.Instance.BroadcastAnnouncement(request.Message);
+            InformationComponent.Instance.BroadcastAnnouncement(request.Message, Color.ConvertStringToColor("#FFFF6666").ToUnsignedInteger());
+
             return new ResultDTO
             {
                 Status = true,

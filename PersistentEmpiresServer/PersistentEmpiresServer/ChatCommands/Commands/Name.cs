@@ -13,6 +13,21 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 {
     public class Name : Command
     {
+        private uint? _color = null;
+
+        public uint Color
+        {
+            get
+            {
+                if (_color == null)
+                {
+                    _color = TaleWorlds.Library.Color.ConvertStringToColor(ConfigManager.GetStrConfig("NameColor", ChatCommandSystem.Instance.DefaultMessageColor)).ToUnsignedInteger();
+                }
+
+                return _color.Value;
+            }
+        }
+
         public bool CanUse(NetworkCommunicator networkPeer)
         {
             return true;
@@ -20,12 +35,7 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 
         public string Command()
         {
-            return "!name";
-        }
-
-        public string Description()
-        {
-            return "Change your name";
+            return $"{ChatCommandSystem.Instance.CommandPrefix}name";
         }
 
         private bool checkAlphaNumeric(String name)
@@ -52,20 +62,26 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 }
             }
 
+            if (args == null)
+            {
+                InformationComponent.Instance.SendMessage("Custom name cannot be empty", Color, networkPeer);
+                return false;
+            }
+
             string newName = String.Join(" ", args);
             if (newName.Length == 0)
             {
-                InformationComponent.Instance.SendMessage("Custom name cannot be empty", Colors.Red.ToUnsignedInteger(), networkPeer);
+                InformationComponent.Instance.SendMessage("Custom name cannot be empty", Color, networkPeer);
                 return false;
             }
             if (!checkAlphaNumeric(newName))
             {
-                InformationComponent.Instance.SendMessage("Custom name should be alpha numeric", Colors.Red.ToUnsignedInteger(), networkPeer);
+                InformationComponent.Instance.SendMessage("Custom name should be alpha numeric", Color, networkPeer);
                 return false;
             }
             if (persistentEmpireRepresentative.HaveEnoughGold(AdminServerBehavior.Instance.nameChangeGold) == false)
             {
-                InformationComponent.Instance.SendMessage("You need " + AdminServerBehavior.Instance.nameChangeGold + " gold.", Colors.Red.ToUnsignedInteger(), networkPeer);
+                InformationComponent.Instance.SendMessage("You need " + AdminServerBehavior.Instance.nameChangeGold + " gold.", Color, networkPeer);
                 return false;
             }
             bool result = SaveSystemBehavior.HandlePlayerUpdateCustomName(networkPeer, newName);
@@ -74,12 +90,34 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
                 InformationComponent.Instance.SendMessage("You can't set this name", Colors.Red.ToUnsignedInteger(), networkPeer);
                 return false;
             }
+
             persistentEmpireRepresentative.ReduceIfHaveEnoughGold(AdminServerBehavior.Instance.nameChangeGold);
             //InformationComponent.Instance.SendMessage("Your name is changed. You need to relog to take effect.", Colors.Green.ToUnsignedInteger(), networkPeer);
             LoggerHelper.LogAnAction(networkPeer, LogAction.PlayerChangedName, null, new object[] { newName });
             AdminServerBehavior.Instance.LastChangedName[networkPeer] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             return true;
+        }
+
+        public string Description()
+        {
+            return "Change your name";
+        }
+
+        public string DetailedDescription()
+        {
+            return $"Usage: {Command()} [Name]{Environment.NewLine}" +
+                    $"Parameter: [Name] new name for player{Environment.NewLine}" +
+                    $"Color: Same as this message{Environment.NewLine}" +
+                    $"Cost: {AdminServerBehavior.Instance.nameChangeGold}{Environment.NewLine}" +
+                    $"Cooldown: {AdminServerBehavior.Instance.cooldown}.{Environment.NewLine}" +
+                    $"Description: Changes name fhe player to custom one.{Environment.NewLine}" +
+                    $"Example: {Command()} Player1{Environment.NewLine}";
+        }
+
+        public bool IsEnabled()
+        {
+            return ConfigManager.GetBoolConfig("NameEnabled", true);
         }
     }
 }

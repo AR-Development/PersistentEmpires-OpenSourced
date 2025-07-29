@@ -73,7 +73,7 @@ namespace PersistentEmpiresLib.SceneScripts
 
         protected void LoadSpawnableItems()
         {
-            string SpawnPath = ModuleHelper.GetXmlPath("PersistentEmpires", "PrefabSpawner/" + this.SpawningPrefabsXml);
+            string SpawnPath = ModuleHelper.GetXmlPath(Main.ModuleName, "PrefabSpawner/" + this.SpawningPrefabsXml);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(SpawnPath);
             foreach (XmlNode node in xmlDocument.SelectNodes("/SpawnItems/SpawnItem"))
@@ -222,7 +222,7 @@ namespace PersistentEmpiresLib.SceneScripts
                         }
                         else
                         {
-                            InformationComponent.Instance.SendMessage("You don't have enough room", new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
+                            InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), peer);
                         }
                     }
                 }

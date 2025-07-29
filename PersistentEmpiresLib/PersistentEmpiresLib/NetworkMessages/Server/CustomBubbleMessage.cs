@@ -7,14 +7,16 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
     public sealed class CustomBubbleMessage : GameNetworkMessage
     {
         public CustomBubbleMessage() { }
-        public CustomBubbleMessage(NetworkCommunicator sender, string Message)
+        public CustomBubbleMessage(NetworkCommunicator sender, string message, uint color)
         {
-            this.Message = Message;
-            this.Sender = sender;
+            Message = message;
+            Sender = sender;
+            Color = color;
         }
 
         public string Message { get; private set; }
         public NetworkCommunicator Sender { get; private set; }
+        public uint Color { get; private set; }
 
         protected override MultiplayerMessageFilter OnGetLogFilter()
         {
@@ -29,8 +31,10 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         protected override bool OnRead()
         {
             bool result = true;
-            this.Message = GameNetworkMessage.ReadStringFromPacket(ref result);
-            this.Sender = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+            Message = GameNetworkMessage.ReadStringFromPacket(ref result);
+            Sender = GameNetworkMessage.ReadNetworkPeerReferenceFromPacket(ref result);
+            Color = GameNetworkMessage.ReadUintFromPacket(CompressionBasic.ColorCompressionInfo, ref result);
+
             return true;
         }
 
@@ -38,6 +42,7 @@ namespace PersistentEmpiresLib.NetworkMessages.Server
         {
             GameNetworkMessage.WriteStringToPacket(this.Message);
             GameNetworkMessage.WriteNetworkPeerReferenceToPacket(this.Sender);
+            GameNetworkMessage.WriteUintToPacket(Color, CompressionBasic.ColorCompressionInfo);
         }
     }
 }

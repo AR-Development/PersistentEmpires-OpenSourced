@@ -16,22 +16,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             InformationComponent.Instance = this;
         }
 
-        public void BroadcastQuickInformation(String text)
+        public void BroadcastQuickInformation(String text, uint color)
         {
             GameNetwork.BeginBroadcastModuleEvent();
-            GameNetwork.WriteMessage(new QuickInformation(text));
+            GameNetwork.WriteMessage(new QuickInformation(text, color));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
-        public void SendQuickInformationToPlayer(String text, NetworkCommunicator player)
+        public void SendQuickInformationToPlayer(String text, NetworkCommunicator player, uint color)
         {
             GameNetwork.BeginModuleEventAsServer(player);
-            GameNetwork.WriteMessage(new QuickInformation(text));
+            GameNetwork.WriteMessage(new QuickInformation(text, color));
             GameNetwork.EndModuleEventAsServer();
         }
-        public void SendAnnouncementToPlayer(String text, NetworkCommunicator player)
+        public void SendAnnouncementToPlayer(String text, NetworkCommunicator player, uint color)
         {
             GameNetwork.BeginModuleEventAsServer(player);
-            GameNetwork.WriteMessage(new Announcement(text));
+            GameNetwork.WriteMessage(new Announcement(text, color));
             GameNetwork.EndModuleEventAsServer();
         }
         public void SendMessage(String text, uint color, NetworkCommunicator player)
@@ -46,15 +46,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             GameNetwork.WriteMessage(new PEInformationMessage(text, color));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
-        public void BroadcastAnnouncement(String text)
+        public void BroadcastAnnouncement(String text, uint color)
         {
             GameNetwork.BeginBroadcastModuleEvent();
-            GameNetwork.WriteMessage(new Announcement(text));
+            GameNetwork.WriteMessage(new Announcement(text, color));
             GameNetwork.EndBroadcastModuleEvent(GameNetwork.EventBroadcastFlags.None);
         }
 
         public void HandleOnAnnouncementFromServer(Announcement announcement)
         {
+            InformationManager.ClearAllMessages();
             InformationManager.AddSystemNotification(announcement.Message);
         }
 

@@ -13,6 +13,7 @@ using TaleWorlds.MountAndBlade.Multiplayer.ViewModelCollection;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
 using PersistentEmpiresLib.Helpers;
+using PersistentEmpires.Views.Views;
 
 namespace PersistentEmpires.Views.Views
 {
@@ -48,7 +49,7 @@ namespace PersistentEmpires.Views.Views
             this._factionPollComponent = base.Mission.GetMissionBehavior<FactionPollComponent>();
             this._adminBehavior = base.Mission.GetMissionBehavior<AdminClientBehavior>();
             this._proximityChatComponent = base.Mission.GetMissionBehavior<ProximityChatComponent>();
-            TextObject title = new TextObject("Persistent Empires");
+            TextObject title = GameTexts.FindText("EscapeMenuCaption", null);
             this.DataSource = new MPEscapeMenuVM(null, title);
         }
 
@@ -72,7 +73,7 @@ namespace PersistentEmpires.Views.Views
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             if (this._proximityChatComponent != null)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Voice Chat Options", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuVC", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     this._proximityChatComponent.HandleOption();
@@ -80,7 +81,7 @@ namespace PersistentEmpires.Views.Views
             }
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.IsAdmin)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Admin Panel", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuAdmin", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     this._adminBehavior.HandleAdminPanelClick();
@@ -90,7 +91,7 @@ namespace PersistentEmpires.Views.Views
 
             if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFaction() != null && (_persistentEmpireRepresentative.GetFaction().lordId == GameNetwork.MyPeer.VirtualPlayer.ToPlayerId() || _persistentEmpireRepresentative.GetFaction().marshalls.Contains(GameNetwork.MyPeer.VirtualPlayer.ToPlayerId())))
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Manage Your Faction", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuFaction", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     if (this._factionManagementComponent == null)
@@ -100,9 +101,9 @@ namespace PersistentEmpires.Views.Views
                     this._factionManagementComponent.OnFactionManagementClickHandler();
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             }
-            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.GetFactionIndex() > 1)
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.CanUsePoll && _persistentEmpireRepresentative.GetFactionIndex() > 1)
             {
-                list.Add(new EscapeMenuItemVM(new TextObject("Poll A Lord", null), delegate (object o)
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenuPollLord", null), delegate (object o)
                 {
                     base.OnEscapeMenuToggled(false);
                     if (this._factionManagementComponent == null)
@@ -114,24 +115,47 @@ namespace PersistentEmpires.Views.Views
                     this._factionManagementComponent.OnFactionLordPollClickHandler();
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             }
-            list.Add(new EscapeMenuItemVM(new TextObject("Commit Suicide", null), delegate (object o)
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.CanUseSuicide)
             {
-                InquiryData inquiry = new InquiryData("Are you sure ?", "You will die and lose your items. Are you sure ?", true, true, "Yes", "No", () =>
-                    {
-                        base.OnEscapeMenuToggled(false);
-                        if (Agent.Main != null)
-                        {
-                            GameNetwork.BeginModuleEventAsClient();
-                            GameNetwork.WriteMessage(new RequestSuicide());
-                            GameNetwork.EndModuleEventAsClient();
-                        }
-                    },
-                () =>
+                list.Add(new EscapeMenuItemVM(new TextObject("Commit Suicide", null), delegate (object o)
                 {
+                    InquiryData inquiry = new InquiryData("Are you sure ?", "You will die and lose your items. Are you sure ?", true, true, "Yes", "No", () =>
+                        {
+                            base.OnEscapeMenuToggled(false);
+                            if (Agent.Main != null)
+                            {
+                                GameNetwork.BeginModuleEventAsClient();
+                                GameNetwork.WriteMessage(new RequestSuicide());
+                                GameNetwork.EndModuleEventAsClient();
+                            }
+                        },
+                    () =>
+                    {
 
-                });
-                InformationManager.ShowInquiry(inquiry);
-            }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+                    });
+                    InformationManager.ShowInquiry(inquiry);
+                }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+            }
+            //list.Add(new EscapeMenuItemVM(new TextObject("Respawn", null), delegate (object o)
+            //{
+            //    base.OnEscapeMenuToggled(false);
+            //    if (Agent.Main != null)
+            //    {
+            //        GameNetwork.BeginModuleEventAsClient();
+            //        GameNetwork.WriteMessage(new RequestRespawn("me"));
+            //        GameNetwork.EndModuleEventAsClient();
+            //    }
+            //}, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+
+            if (_persistentEmpireRepresentative != null && _persistentEmpireRepresentative.IsAdmin)
+            {
+                list.Add(new EscapeMenuItemVM(GameTexts.FindText("EscapeMenUnban", null), delegate (object o)
+                {
+                    base.OnEscapeMenuToggled(false);
+                    this._adminBehavior.HandleUnbanPlayerClick();
+
+                }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
+            }
 
             list.Add(new EscapeMenuItemVM(new TextObject("{=InGwtrWt}Quit", null), delegate (object o)
             {
@@ -145,20 +169,20 @@ namespace PersistentEmpires.Views.Views
                         GameTexts.FindText("str_yes", null).ToString(),
                         GameTexts.FindText("str_no", null).ToString(),
                         delegate ()
-                {
-                    LobbyClient gameClient = NetworkMain.GameClient;
-                    if (gameClient.CurrentState == LobbyClient.State.InCustomGame)
-                    {
-                        gameClient.QuitFromCustomGame();
-                        return;
-                    }
-                    if (gameClient.CurrentState == LobbyClient.State.HostingCustomGame)
-                    {
-                        gameClient.EndCustomGame();
-                        return;
-                    }
-                    gameClient.QuitFromMatchmakerGame();
-                }, null, "", 0f, null), false, false);
+                        {
+                            LobbyClient gameClient = NetworkMain.GameClient;
+                            if (gameClient.CurrentState == LobbyClient.State.InCustomGame)
+                            {
+                                gameClient.QuitFromCustomGame();
+                                return;
+                            }
+                            if (gameClient.CurrentState == LobbyClient.State.HostingCustomGame)
+                            {
+                                gameClient.EndCustomGame();
+                                return;
+                            }
+                            gameClient.QuitFromMatchmakerGame();
+                        }, null, "", 0f, null), false, false);
             }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty), false));
             return list;
         }

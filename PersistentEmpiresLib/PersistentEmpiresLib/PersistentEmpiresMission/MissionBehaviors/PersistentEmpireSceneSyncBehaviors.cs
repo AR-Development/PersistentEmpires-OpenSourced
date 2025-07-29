@@ -59,11 +59,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.RepairTimeoutAfterHit = ConfigManager.GetIntConfig("RepairTimeoutAfterHit", 5 * 60);
-                this.InitializeSyncMessages();
-            }
+#if SERVER
+            this.RepairTimeoutAfterHit = ConfigManager.GetIntConfig("RepairTimeoutAfterHit", 5 * 60);
+            this.InitializeSyncMessages();
+#endif
         }
 
         public void InitializeSyncMessages()
@@ -159,6 +158,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
             this.ProcessSyncQueue(peerSyncDestructableHitPointsQueue, "DestructableHitPoints");
             this.ProcessSyncQueue(peerSyncItemGatheringQueue, "ItemGatherings");
             this.ProcessSyncQueue(peerSyncDestructableWithItemsQueue, "DestructibleWithItems");

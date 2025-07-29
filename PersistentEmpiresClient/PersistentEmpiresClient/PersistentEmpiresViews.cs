@@ -1,6 +1,7 @@
 ﻿using PersistentEmpires.Views.Views;
 using PersistentEmpires.Views.Views.AdminPanel;
 using PersistentEmpires.Views.Views.FactionManagement;
+using PersistentEmpiresLib;
 using System.Collections.Generic;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Multiplayer.View.MissionViews;
@@ -12,12 +13,12 @@ namespace PersistentEmpires.Views
     [ViewCreatorModule]
     public class PersistentEmpireViews
     {
-        [ViewMethod("PersistentEmpires")]
+        [ViewMethod("PERP")]
         public static MissionView[] OpenPersistentEmpires(Mission mission)
         {
             List<MissionView> list = new List<MissionView>();
             list.Add(MultiplayerViewCreator.CreateMissionServerStatusUIHandler());
-            list.Add(new PEEscapeMenu("Persistent Empires"));
+            list.Add(new PEEscapeMenu(Main.ModuleName));
             list.Add(ViewCreator.CreateOptionsUIHandler());
             list.Add(ViewCreator.CreateMissionBoundaryCrossingView());
             list.Add(ViewCreator.CreateMissionMainAgentEquipDropView(mission));

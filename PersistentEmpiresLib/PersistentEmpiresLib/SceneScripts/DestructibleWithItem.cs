@@ -202,7 +202,7 @@ namespace PersistentEmpiresLib.SceneScripts
                     InformationComponent.Instance.SendMessage("You gathered " + dropItem.DropAmount + "*" + item.Name.ToString(), Colors.Green.ToUnsignedInteger(), attackerAgent.MissionPeer.GetNetworkPeer());
                     if (inventory.HasEnoughRoomFor(item, dropItem.DropAmount) == false)
                     {
-                        InformationComponent.Instance.SendMessage("You don't have enough room. Items will be dropped on the ground", Colors.Red.ToUnsignedInteger(), attackerAgent.MissionPeer.GetNetworkPeer());
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Enough_Space_Drop", null).ToString(), Colors.Red.ToUnsignedInteger(), attackerAgent.MissionPeer.GetNetworkPeer());
                     }
                     for (int i = 0; i < dropItem.DropAmount; i++)
                     {

@@ -10,7 +10,7 @@ namespace PersistentEmpires.Views.ViewsVM
 {
     public class PETabMenuVM : ViewModel
     {
-        Dictionary<NetworkCommunicator, TabPlayerVM> peerToPlayerVM;
+        public Dictionary<NetworkCommunicator, TabPlayerVM> peerToPlayerVM;
         public PETabMenuVM()
         {
             GameKey gameKey = HotKeyManager.GetCategory("ScoreboardHotKeyCategory").GetGameKey(35);

@@ -13,11 +13,14 @@ namespace PersistentEmpiresServer.ServerMissions
 {
     public class ChatCommandSystem : MissionNetwork
     {
-        public Dictionary<string, Command> commands;
+        internal Dictionary<string, Command> commands;
         public static ChatCommandSystem Instance;
-        public bool DisableGlobalChat;
-        private PatreonRegistryBehavior patreonRegistry;
-        public Dictionary<NetworkCommunicator, bool> Muted;
+        internal bool DisableGlobalChat;
+        internal PatreonRegistryBehavior patreonRegistry;
+        internal Dictionary<NetworkCommunicator, bool> Muted;
+        public string CommandPrefix;
+        internal string DefaultMessageColor = "#FFFDFDFD";
+
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
@@ -27,15 +30,17 @@ namespace PersistentEmpiresServer.ServerMissions
             PatchGlobalChat.OnClientEventPlayerMessageAll += PatchGlobalChat_OnClientEventPlayerMessageAll;
             LocalChatComponent localChat = base.Mission.GetMissionBehavior<LocalChatComponent>();
             localChat.OnPrefixHandleLocalChatFromClient += this.OnPrefixHandleLocalChatFromClient;
+            patreonRegistry = base.Mission.GetMissionBehavior<PatreonRegistryBehavior>();
+            CommandPrefix = ConfigManager.GetStrConfig("MessagePrefix", "!");
+            DefaultMessageColor = ConfigManager.GetStrConfig("DefaultMessageColor", "#FFFDFDFD");
 
-            this.patreonRegistry = base.Mission.GetMissionBehavior<PatreonRegistryBehavior>();
-            this.Initialize();
+            Initialize();
         }
 
         private bool OnPrefixHandleLocalChatFromClient(NetworkCommunicator Sender, string Message, bool shout)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = Sender.GetComponent<PersistentEmpireRepresentative>();
-            if (Message.StartsWith("!"))
+            if (Message.StartsWith(CommandPrefix))
             {
                 string[] argsWithCommand = Message.Split(' ');
                 string command = argsWithCommand[0];
@@ -49,7 +54,7 @@ namespace PersistentEmpiresServer.ServerMissions
         private bool PatchGlobalChat_OnClientEventPlayerMessageAll(NetworkCommunicator networkPeer, PlayerMessageAll message)
         {
             PersistentEmpireRepresentative persistentEmpireRepresentative = networkPeer.GetComponent<PersistentEmpireRepresentative>();
-            if (message.Message.StartsWith("!"))
+            if (message.Message.StartsWith(CommandPrefix))
             {
                 string[] argsWithCommand = message.Message.Split(' ');
                 string command = argsWithCommand[0];
@@ -96,7 +101,7 @@ namespace PersistentEmpiresServer.ServerMissions
                  .Where(mytype => mytype.GetInterfaces().Contains(typeof(Command))))
             {
                 Command command = (Command)Activator.CreateInstance(mytype);
-                if (!commands.ContainsKey(command.Command()))
+                if (!commands.ContainsKey(command.Command()) && command.IsEnabled())
                 {
                     Debug.Print("** Chat Command " + command.Command() + " have been initiated !", 0, Debug.DebugColor.Green);
                     commands.Add(command.Command(), command);

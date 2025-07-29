@@ -29,11 +29,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+#if SERVER
 
-            if (GameNetwork.IsServer)
-            {
-                this.DropPercentage = ConfigManager.GetIntConfig("DeathMoneyDropPercentage", 25);
-            }
+            this.DropPercentage = ConfigManager.GetIntConfig("DeathMoneyDropPercentage", 25);
+#endif
         }
         public override void OnRemoveBehavior()
         {
@@ -56,7 +55,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private void HandleRevealMoneyPouchServer(RevealMoneyPouchServer message)
         {
-            InformationManager.DisplayMessage(new InformationMessage(message.Player.UserName + " revealed his money pouch (" + message.Gold + "g)", Color.ConvertStringToColor("#FFEB3BFF")));
+            InformationManager.DisplayMessage(new InformationMessage(message.Player.UserName + GameTexts.FindText("MoneyPouchBehavior1", null).ToString() + message.Gold + GameTexts.FindText("MoneyPouchBehavior2", null).ToString(), Color.ConvertStringToColor("#FFEB3BFF")));
 
             if (this.OnRevealedMoneyPouch != null)
             {
@@ -98,10 +97,18 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return true;
         }
 
+        private static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
+            if (++_counter < 5)
+                return;
+            // Reset counter
+            _counter = 0;
+
             if (GameNetwork.IsClientOrReplay) return;
+            
             foreach (PE_MoneyBag moneyBag in this.MoneyBagCreatedAt.Keys.ToList())
             {
                 if (this.MoneyBagCreatedAt[moneyBag] + 600 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())

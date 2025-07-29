@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<!--PERP-->
+	<string id="str_multiplayer_official_game_type_name.PERP" text="{=PERPstr00}Persistent Empires Roleplay" />
+	<string id="str_multiplayer_game_type.PERP" text="{=PERPstr0}Persistent Empires Roleplay" />
+	<string id="str_multiplayer_official_game_type_description.PERP" text="{=PERPstr1}This is a Persistent Empires Roleplay server. Please ensure you are familiar with the rules before playing  (press F1 when spawned). Loading may take a while the first time you join." />
+	<string id="str_multiplayer_official_game_type_explainer.PERP" text="{=PERPstr2}This is a Persistent Empires Roleplay server. Please ensure you are familiar with the rules before playing  (press F1 when spawned). Loading may take a while the first time you join." />
+	<string id="str_multiplayer_official_game_type_objective_info.PERP" text="{=PERPstr3}This is a Persistent Empires Roleplay server. Please ensure you are familiar with the rules before playing  (press F1 when spawned). Loading may take a while the first time you join." />
+	<!--Persistent Empires old-->
+	<string id="str_multiplayer_official_game_type_name.PersistentEmpires" text="{=PEstr00}Persistent Empires" />
+	<string id="str_multiplayer_game_type.PersistentEmpires" text="{=PEstr0}Persistent Empires" />
+	<string id="str_multiplayer_official_game_type_description.PersistentEmpires" text="{=PEstr1}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
+	<string id="str_multiplayer_official_game_type_explainer.PersistentEmpires" text="{=PEstr2}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
+	<string id="str_multiplayer_official_game_type_objective_info.PersistentEmpires" text="{=PEstr3}Jump straight into the drama in this so called Roleplay mod and get RDMed. The Loading screen may take a while the first time you join." />
+</strings>

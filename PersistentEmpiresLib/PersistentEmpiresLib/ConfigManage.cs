@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if SERVER
+using System.IO;
 using System.Xml;
 using TaleWorlds.ModuleManager;
 
@@ -7,9 +8,7 @@ namespace PersistentEmpiresLib
     public class ConfigManager
     {
         public static string XmlFile = "GeneralConfig";
-
         internal static string RulesXmlFile = "Rules";
-
         public static int StartingGold { get; private set; }
         public static bool VoiceChatEnabled { get; private set; }
         public static bool DontOverrideMangonelHit { get; private set; }
@@ -19,30 +18,25 @@ namespace PersistentEmpiresLib
         {
             get
             {
-#if SERVER
+
                 if(_xmlDocument == null)
                 {
-                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
+                    string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Configs/" + XmlFile);
                     _xmlDocument = new XmlDocument();
                     _xmlDocument.Load(xmlPath);
                 }
 
                 return _xmlDocument;
-#endif
-#if CLIENT
-                return null;
-#endif
             }
         }
 
-#if SERVER
         public static XmlDocument Rules
         {
             get
             {
                 if (_rulesDocument == null)
                 {
-                    string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + RulesXmlFile);
+                    string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Configs/" + RulesXmlFile);
                     if (File.Exists(xmlPath))
                     {
                         _rulesDocument = new XmlDocument();
@@ -53,7 +47,6 @@ namespace PersistentEmpiresLib
                 return _rulesDocument;
             }
         }
-#endif
 
         public static void Initialize()
         {
@@ -87,6 +80,7 @@ namespace PersistentEmpiresLib
             XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);
             return portElement == null ? defValue : int.Parse(portElement.InnerText);
         }
+
         public static string GetStrConfig(string config, string defValue)
         {
             XmlNode portElement = XmlDocument.SelectSingleNode("/GeneralConfig/" + config);
@@ -94,3 +88,4 @@ namespace PersistentEmpiresLib
         }
     }
 }
+#endif

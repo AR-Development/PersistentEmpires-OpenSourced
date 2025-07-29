@@ -50,7 +50,12 @@ namespace PersistentEmpires.Views.Views
                     tabFactionVM.ShowWarIcon = tabfaction.factionObj.warDeclaredTo.Contains(tabFactionVM.FactionIndex) || tabFactionVM.factionObj.warDeclaredTo.Contains(tabfaction.FactionIndex);
                 }
             });
-            this._dataSource.Factions.Add(tbv);
+
+            if (!this._dataSource.Factions.Any(x=> x.FactionIndex == factionIndex))
+            {
+                this._dataSource.Factions.Add(tbv);
+            }
+
             if (this._dataSource.SelectedFaction == null)
             {
                 tbv.IsSelected = true;
@@ -154,7 +159,10 @@ namespace PersistentEmpires.Views.Views
             CastleVM castleVM = new CastleVM(castle);
             if (this._dataSource.Factions.Count > factionIndex)
             {
-                this._dataSource.Factions[factionIndex].Castles.Add(castleVM);
+                if (!this._dataSource.Factions[factionIndex].Castles.Any(x => x.GetCastleBanner().CastleIndex ==  castle.CastleIndex))
+                {
+                    this._dataSource.Factions[factionIndex].Castles.Add(castleVM);
+                }
             }
         }
         private void OnUpdateCastle(PE_CastleBanner castle)

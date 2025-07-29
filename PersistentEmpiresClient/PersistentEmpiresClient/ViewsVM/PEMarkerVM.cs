@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -37,6 +38,16 @@ namespace PersistentEmpires.Views.ViewsVM
             }
         }
 
+        public void NotifyTyping(NetworkCommunicator Sender)
+        {
+            MissionPeer missionPeer = Sender.GetComponent<MissionPeer>();
+
+            if (this._peerToMarker.ContainsKey(missionPeer))
+            {
+                this._peerToMarker[missionPeer].NotifyTyping();
+            }
+        }
+
         public void Tick(float dt)
         {
             // this.OnRefreshPeerMarkers();
@@ -50,6 +61,10 @@ namespace PersistentEmpires.Views.ViewsVM
                 {
                     pt.UpdateScreenPosition(this._missionCamera);
                     pt.FadeOldMessages();
+                }
+                else if(pt.IsIconVisible)
+                {
+                    pt.FadeOldIcon();
                 }
             });
             // this.PeerTargets.Sort(this._distanceComparer);

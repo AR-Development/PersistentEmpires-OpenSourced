@@ -267,7 +267,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 if (!playerHasAllItems)
                 {
                     //TODO: Inform player
-                    InformationComponent.Instance.SendMessage("Required Items:", 0x02ab89d9, player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Required_Items", null).ToString(), 0x02ab89d9, player);
                     foreach (RepairReceipt r in this.receipt)
                     {
                         InformationComponent.Instance.SendMessage(r.NeededCount + " * " + r.RepairItem.Name.ToString(), 0x02ab89d9, player);

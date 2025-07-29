@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<!--Common-->
+	<string id="PE_InquiryData_Yes" text="Yes" />
+	<string id="PE_InquiryData_No" text="No" />
+	<string id="PE_InquiryData_Select" text="Select" />
+	<string id="PE_InquiryData_Cancel" text="Cancel" />
+	<string id="PE_Not_Enough_Gold" text="You don't have enough money" />
+	<string id="PE_Not_Qualified" text="You are not qualified enough." />
+	<string id="PE_Not_Enough_Space" text="You don't have enough space" />
+	<string id="PE_Required_Items" text="Required Items:" />
+	<string id="PE_Already_In_Use" text="Someone is using it already..." />
+	<string id="PE_Not_Enough_Space_Drop" text="You don't have enough room. Items will be dropped on the ground" />
+	<string id="PE_Empty_Your_Hands" text="You need to empty your hands." />
+	<string id="PE_Dont_Have_Keys" text="You don't have the keys" />
+	<!--PEAdminMenuItemVM-->
+	<string id="AdminVMPlayerManagement" text="Player Management" />
+	<string id="AdminVMItemManagement" text="Item Management" />
+	<string id="AdminVMFactionManagement" text="Faction Management" />
+	<string id="AdminVMGiveMoney" text="Give Yourself Money" />
+	<string id="AdminVMBecameGodlike" text="Became Godlike" />
+	<string id="AdminVMRemoveUnusedBoats" text="Remove Unused Boats" />
+	<string id="AdminVMRemoveUnusedAttachable" text="Remove Unused Attachable" />
+	<string id="AdminVMTpToLocation" text="Teleport to locations" />
+	<!--PEFactionManagementMenu-->
+	<string id="FactionManagementChangeBanner" text="Change Faction Banner" />
+	<string id="FactionManagementChangeFactionName" text="Change Faction Name" />
+	<string id="FactionManagementAssignMarshall" text="Assign Marshall" />
+	<string id="FactionManagementTransferLordship" text="Transfer Lordship" />
+	<string id="FactionManagementKickFromFaction" text="Kick Someone From Faction" />
+	<string id="FactionManagementDiplomacy" text="Diplomacy Menu" />
+	<string id="FactionManagementManageDoorKeys" text="Manage door keys" />
+	<string id="FactionManagementManageChestKeys" text="Manage chest keys" />
+	<string id="FactionManagementClose" text="Close" />
+	<!--PEFactionTransferLordship-->
+	<string id="TransferLordshipVerifyCaption" text="Are you sure ?" />
+	<string id="TransferLordshipVerify" text="Are you sure to transfer your lordship to another player ?" />
+	<!--PEBankView-->
+	<string id="PEBankViewError1" text="You can't do this action while dead" />
+	<string id="PEBankViewError2" text="You can't deposit 0 amount" />
+	<string id="PEBankViewError3" text="You are away from the bank" />
+	<string id="PEBankViewError5" text="You can't do this action while dead" />
+	<string id="PEBankViewError6" text="You can't withdraw 0 amount" />
+	<string id="PEBankViewError7" text="You are away from the bank." />
+	<!--PEDiscordView-->
+	<string id="PEDiscordViewError1" text="Unable to connect discord." />
+	<!--PEEscapeMenu-->
+	<string id="EscapeMenuCaption" text="Mod menu" />
+	<string id="EscapeMenuVC" text="Voice Chat Options" />
+	<string id="EscapeMenuAdmin" text="Admin Panel" />
+	<string id="EscapeMenuFaction" text="Manage Your Faction" />
+	<string id="EscapeMenuPollLord" text="Poll A Lord" />
+	<string id="EscapeMenUnban" text="Unban player" />
+	<!--PEMoneyChestView-->
+	<string id="PEMoneyChestViewError1" text="You can't do this action while dead" />
+	<string id="PEMoneyChestViewError2" text="You can't deposit 0 amount" />
+	<string id="PEMoneyChestViewError3" text="You are away from the money chest." />
+	<string id="PEMoneyChestViewError5" text="You dont have permission" />
+	<string id="PEMoneyChestViewError6" text="You can't do this action while dead" />
+	<string id="PEMoneyChestViewError7" text="You can't deposit 0 amount" />
+	<string id="PEMoneyChestViewError8" text="You are away from the money chest." />	
+	<string id="PEMoneyChestViewError10" text="You dont have permission" />
+	<!--PlayerVoiceData-->
+	<string id="PlayerVoiceDataError" text="Invalid microphone please change it from your options menu." />
+	<!--Admin Buttons-->
+	<string id="PEAdminButtonFade" text="Fade" />
+	<string id="PEAdminButtonFreeze" text="Freeze/Unfreeze" />
+	<string id="PEAdminButtonHeal" text="Heal" />
+	<string id="PEAdminButtonKick" text="Kick" />
+	<string id="PEAdminButtonKill" text="Kill" />
+	<string id="PEAdminButtonMakeLord" text="Make lord" />
+	<string id="PEAdminButtonMakeLordInqCaption" text="Faction selection" />
+	<string id="PEAdminButtonMakeLordInqText" text="Choose faction" />
+	<string id="PEAdminButtonPermBan" text="Perm ban" />
+	<string id="PEAdminButtonTempBan" text="Temp ban" />
+	<string id="PEAdminButtonTp" text="Tp to" />
+	<string id="PEAdminButtonTpToMe" text="Tp to me" />
+	<string id="PEAdminButtonunWound" text="Unwound" />
+	<!--PEAdminItemPanelVM-->
+	<string id="PEAdminItemPanelInqCaption" text="Choose item" />
+	<string id="PEAdminItemPanelInqText" text="Which item did you look for?" />
+	<!--PECraftingStationVM-->
+	<string id="PECraftingStationCompleted" text="Crafting completed!" />
+	<!--PEInventoryVM-->
+	<string id="PEInventoryInqCaption" text="Are you sure ?" />
+	<string id="PEInventoryInqText1" text="You are about to drop " />
+	<string id="PEInventoryInqText2" text="x" />
+	<string id="PEInventoryInqText3" text=" to the ground. Are you sure ?" />
+	<!--AdminClientBehavior-->
+	<string id="AdminClientBehaviorInqCaption" text="Unban player" />
+	<string id="AdminClientBehaviorInqText" text="Write players id" />
+	<string id="AdminClientBehaviorError1" text="Wrong format" />
+	<string id="AdminClientBehaviorError2" text="Id must be a sting of valid characters" />
+	<string id="AdminClientBehaviorError3" text="Id is not valid" />
+	<!--AutorestartBehavior-->
+	<string id="AutorestartBehavior1" text="Server will be restarted in 3 hours." />
+	<string id="AutorestartBehavior2" text="Server will be restarted in 1 hour." />
+	<string id="AutorestartBehavior3" text="Server will be restarted in 30 minutes." />
+	<string id="AutorestartBehavior4" text="Server will be restarted in 15 minutes." />
+	<string id="AutorestartBehavior5" text="Server will be restarted in 5 minutes." />
+	<string id="AutorestartBehavior6" text="Server will be restarted in 1 minute." />
+	<string id="AutorestartBehavior7" text="Server will be restarted in 30 seconds." />
+	<string id="AutorestartBehavior8" text="Server will be restarted in 20 seconds." />
+	<string id="AutorestartBehavior9" text="Log the fuck off before you lose yo shit." />
+	<!--BankingComponent-->
+	<string id="BankingComponent1" text="You can't have that much money in your bank." />
+	<!--CombatlogBehavior-->
+	<string id="CombatlogBehavior1" text="You can be healed now." />
+	<string id="CombatlogBehavior2" text="You are in combat ! You will not be healed for " />
+	<string id="CombatlogBehavior3" text=" seconds" />
+	<!--CraftingComponent-->
+	<string id="CraftingComponent1" text="You don't have all of the items required." />
+	<string id="CraftingComponent2" text="Upgrade the building first" />
+	<string id="CraftingComponent3" text="You already in crafting" />		
+	<string id="CraftingComponent6" text="You don't have all of the items required." />
+	<!--FactionPollComponent-->
+	<string id="FactionPollComponent1" text="Lord poll is disabled" />
+	<string id="FactionPollComponent2" text="Target player not found" />
+	<string id="FactionPollComponent3" text="Target player not found" />
+	<string id="FactionPollComponent4" text="You can't poll yourself" />
+	<string id="FactionPollComponent5" text="You are in one of the default factions. You cant create a lord poll" />
+	<string id="FactionPollComponent6" text="Your candidate is not in the same faction with you" />
+	<string id="FactionPollComponent7" text="You can't poll a different lord in 24 hours." />
+	<string id="FactionPollComponent8" text="You can't make a validation poll because you already made one. Wait 24h to validate your lordship" />
+	<string id="FactionPollComponent9" text="You need " />
+	<string id="FactionPollComponent10" text=" dinar to start a poll" />
+	<string id="FactionPollComponent11" text="There is already an on going poll" />
+	<string id="FactionPollComponent12" text="Please wait a little to create a new poll" />
+	<!--FactionsBehavior-->
+	<string id="FactionsBehavior1" text="You don't have permission to do this." />
+	<string id="FactionsBehavior2" text="You can't kick yourself or the lord." />
+	<string id="FactionsBehavior3" text="You can't kick the lord" />
+	<string id="FactionsBehavior4" text="You can't kick another marshall" />
+	<string id="FactionsBehavior5" text="This player is not in same faction with you" />
+	<string id="FactionsBehavior6" text="You don't have permission to do that" />
+	<string id="FactionsBehavior7" text="Banner length is too much." />
+	<string id="FactionsBehavior8" text="This banner code is invalid. One of the icons is not valid " />
+	<string id="FactionsBehavior9" text="This banner code is invalid. One of the icon's or banner's color is invalid " />
+	<string id="FactionsBehavior10" text="This banner code is invalid. One of the icon size is too big " />
+	<string id="FactionsBehavior11" text="This banner code is invalid. One of the icon size is too small " />
+	<string id="FactionsBehavior12" text="This banner code is invalid. One of the icon size is too big " />
+	<string id="FactionsBehavior13" text="This banner code is invalid. One of the icon size is too small " />
+	<string id="FactionsBehavior14" text="This banner code is invalid. One of the icon position is invalid " />
+	<string id="FactionsBehavior15" text="This banner code is invalid. One of the icon's rotation is invalid " />
+	<string id="FactionsBehavior16" text="An error hapened while parsing banner code." />
+	<string id="FactionsBehavior17" text="You don't have permission to do that" />
+	<string id="FactionsBehavior18" text="Chest keys taken" />
+	<string id="FactionsBehavior19" text="Chest keys taken from " />
+	<string id="FactionsBehavior20" text="Chest keys given" />
+	<string id="FactionsBehavior21" text="Chest keys given to " />
+	<string id="FactionsBehavior22" text="Door is locked" />
+	<string id="FactionsBehavior23" text="Door keys taken" />
+	<string id="FactionsBehavior24" text="Door keys taken from " />
+	<string id="FactionsBehavior25" text="Door keys given" />
+	<string id="FactionsBehavior26" text="Door keys given to " />
+	<string id="FactionsBehavior27" text="You are not the lord" />
+	<string id="FactionsBehavior28" text="You can't declare war to yourself" />
+	<string id="FactionsBehavior29" text="You can't do that" />
+	<string id="FactionsBehavior30" text="You already declared a war to this faction" />
+	<string id="FactionsBehavior31" text="Please wait 30 sec to declare a new war." />
+	<string id="FactionsBehavior32" text="You can't make peace with yourself" />
+	<string id="FactionsBehavior33" text="You didn't declared a war." />
+	<string id="FactionsBehavior34" text="Please wait 30 secs to declare a peace." />
+	<!--ImportExportComponent-->	
+	<string id="ImportExportComponent3" text="You don't have this item" />
+	<!--LocalChatComponent-->
+	<string id="LocalChatComponent1" text="[SHOUT] " />
+	<string id="LocalChatComponent2" text="[LOCAL] " />
+	<!--LockpickingBehavior-->
+	<string id="LockpickingBehavior1" text="Lockpicked successfully but your lockpick destroyed" />
+	<string id="LockpickingBehavior2" text="Lockpicked successfully" />
+	<string id="LockpickingBehavior3" text="Try again" />
+	<string id="LockpickingBehavior4" text="Your lockpick destroyed" />
+	<!--MoneyPouchBehavior-->
+	<string id="MoneyPouchBehavior1" text=" revealed his money pouch (" />
+	<string id="MoneyPouchBehavior2" text="g)" />
+	<!--StockpileMarketComponent-->
+	<string id="StockpileMarketComponent1" text="Crafting box imported your reward is " />
+	<string id="StockpileMarketComponent2" text=" denar." />
+	<string id="StockpileMarketComponent3" text="There is no stocks" />
+	<string id="StockpileMarketComponent4" text="Inventory is full" />
+	<string id="StockpileMarketComponent6" text="You don't have that item in your inventory" />
+	<string id="StockpileMarketComponent7" text="You can't sell not filled ammo packs" />
+	<!--TradingCenterBehavior-->	
+	<string id="TradingCenterBehavior2" text="Price List" />
+	<string id="TradingCenterBehavior3" text=" gold at " />
+	<string id="TradingCenterBehavior4" text="You don't have that item in your inventory" />
+	<string id="TradingCenterBehavior5" text="You can't sell not filled ammo packs" />
+	<string id="TradingCenterBehavior6" text="There is no stocks" />
+	<string id="TradingCenterBehavior7" text="Inventory is full" />
+	<!--WoundingBehavior-->
+	<string id="WoundingBehavior1" text="You are now wounded." />
+	<string id="WoundingBehavior2" text="You are no longer wounded." />
+	<!--PE_AnimalSpawner-->
+	<string id="PE_AnimalSpawner1" text="Spawner maxed out" />
+	<!--PE_Bed-->
+	<string id="PE_Bed1" text="You need to eat something" />
+	<string id="PE_Bed2" text="Horse too wounded" />
+</strings>

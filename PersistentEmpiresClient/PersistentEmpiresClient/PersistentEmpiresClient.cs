@@ -1,4 +1,5 @@
 ﻿using PersistentEmpires.Views;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.GameModes;
 using PersistentEmpiresLib.PersistentEmpiresGameModels;
 using System;
@@ -37,7 +38,7 @@ namespace PersistentEmpiresClient
             PersistentEmpiresGameMode.OnStartMultiplayerGame += MissionManager.OpenPersistentEmpires;
 
 
-            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode("PersistentEmpires"));
+            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode(Main.ModuleName));
         }
         protected override void OnSubModuleLoad()
         {

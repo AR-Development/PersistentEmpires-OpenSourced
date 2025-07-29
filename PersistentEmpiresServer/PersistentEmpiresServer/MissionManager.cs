@@ -1,4 +1,5 @@
-﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+﻿using PersistentEmpiresLib;
+using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresServer.ServerMissions;
 using PersistentEmpiresServer.SpawnBehavior;
 using TaleWorlds.Core;
@@ -13,7 +14,7 @@ namespace PersistentEmpiresServer
         [MissionMethod]
         public static void OpenPersistentEmpires(string scene)
         {
-            MissionState.OpenNew("PersistentEmpires", new MissionInitializerRecord(scene), delegate (Mission missionController)
+            MissionState.OpenNew(Main.ModuleName, new MissionInitializerRecord(scene), delegate (Mission missionController)
             {
                 return new MissionBehavior[]
                     {
@@ -61,6 +62,7 @@ namespace PersistentEmpiresServer
                         new MissionScoreboardComponent(new TDMScoreboardData()),
                         new MissionAgentPanicHandler(), // APTAL ERAYIN İŞLERİ
 						new AdminServerBehavior(),
+                        new DiscordBehavior(),
                         new BankingComponent(),
                         new PatreonRegistryBehavior(),
                         new TradingCenterBehavior(),

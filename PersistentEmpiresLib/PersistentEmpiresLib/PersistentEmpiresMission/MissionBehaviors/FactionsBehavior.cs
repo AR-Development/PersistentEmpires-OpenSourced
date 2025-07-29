@@ -41,7 +41,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public event FactionKeyFetchedHandler OnFactionKeyFetched;
         public Dictionary<int, Faction> Factions { get; set; }
         public Dictionary<int, PEFactionBanner> FactionBanners { get; set; }
-
         public Dictionary<int, long> FactionDeclaredWarLast { get; set; }
 
         /* Configs */
@@ -49,6 +48,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public int WarDeclareTimeOut = 30; // ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
         public int PeaceDeclareTimeOut = 30; // ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
         public int MaxBannerLength = 100; // ConfigManager.GetIntConfig("MaxBannerLength", 100);
+        public static bool CanUseDiplomacy = true;
 
         public override void OnBehaviorInitialize()
         {
@@ -58,16 +58,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.FactionDeclaredWarLast = new Dictionary<int, long>();
             this._informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-
-            if (GameNetwork.IsServer)
-            {
-                this.WarDeclareTimeOut = ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
-                this.PeaceDeclareTimeOut = ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
-                this.MaxBannerLength = ConfigManager.GetIntConfig("MaxBannerLength", 100);
-
-
-            }
-
+#if SERVER
+            this.WarDeclareTimeOut = ConfigManager.GetIntConfig("WarDeclareTimeOut", 30);
+            this.PeaceDeclareTimeOut = ConfigManager.GetIntConfig("PeaceDeclareTimeOut", 30);
+            this.MaxBannerLength = ConfigManager.GetIntConfig("MaxBannerLength", 100);
+            CanUseDiplomacy = ConfigManager.GetBoolConfig("CanUseDiplomacy", true);
+#endif
         }
 
         public static bool PatchGlobalChat_OnClientEventPlayerMessageTeam(NetworkCommunicator networkPeer, PlayerMessageTeam message)
@@ -82,7 +78,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 {
                     if (n.IsConnectionActive && n.IsNetworkActive)
                     {
-                        InformationComponent.Instance.SendQuickInformationToPlayer("[" + networkPeer.UserName + "] " + updated, n);
+                        InformationComponent.Instance.SendQuickInformationToPlayer("[" + networkPeer.UserName + "] " + updated, n, Colors.Red.ToUnsignedInteger());
                     }
                 }
 
@@ -107,85 +103,81 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 this.FactionBanners[factionBanner.FactionIndex] = factionBanner;
             }
 
-            if (GameNetwork.IsServer)
+#if SERVER
+            BasicCultureObject commonerCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("CommonerCulture", "empire"));
+            BasicCultureObject outlawCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>(ConfigManager.GetStrConfig("OutlawCulture", "empire"));
+
+            Banner banner = new Banner(ConfigManager.GetStrConfig("CommonerBanner", "17.1.148.1836.1836.765.786.1.0.-30.100.0.143.-295.425.764.764.1.0.0"));
+            Banner banner2 = new Banner(ConfigManager.GetStrConfig("OutlawBanner", "24.193.116.1536.1536.768.768.1.0.0"));
+
+            Faction commoners = new Faction(commonerCulture, banner, ConfigManager.GetStrConfig("CommonerName", "Commoners"));
+            Faction outlaws = new Faction(outlawCulture, banner2, ConfigManager.GetStrConfig("OutlawName", "Outlaws"));
+
+            //Factions Setup
+
+            commoners.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, commonerCulture.BackgroundColor1, commonerCulture.ForegroundColor1, banner);
+            outlaws.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, outlawCulture.BackgroundColor1, outlawCulture.ForegroundColor1, banner2);
+            outlaws.team.SetIsEnemyOf(outlaws.team, true);
+            outlaws.team.SetIsEnemyOf(commoners.team, true);
+            commoners.team.SetIsEnemyOf(commoners.team, true);
+
+            this.AddFaction(0, commoners);
+            this.AddFaction(1, outlaws);
+
+            List<GameEntity> _gameEntites = new List<GameEntity>();
+            base.Mission.Scene.GetAllEntitiesWithScriptComponent<PEFactionBanner>(ref _gameEntites);
+            List<DBFactions> dbFactions = SaveSystemBehavior.HandleGetFactions().ToList();
+            Dictionary<int, DBFactions> savedFactions = new Dictionary<int, DBFactions>();
+            foreach (DBFactions dbFaction in dbFactions)
             {
-                BasicCultureObject commonerCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
-                BasicCultureObject outlawCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
-
-                Banner banner = new Banner(commonerCulture.BannerKey, commonerCulture.BackgroundColor1, commonerCulture.ForegroundColor1);
-                Banner banner2 = new Banner("24.193.116.1536.1536.768.768.1.0.0");
-
-                Faction commoners = new Faction(commonerCulture, banner, "Commoners");
-                Faction outlaws = new Faction(outlawCulture, banner2, "Outlaws");
-
-                //Factions Setup
-
-                commoners.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, commonerCulture.BackgroundColor1, commonerCulture.ForegroundColor1, banner);
-                outlaws.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, outlawCulture.BackgroundColor1, outlawCulture.ForegroundColor1, banner2);
-                outlaws.team.SetIsEnemyOf(outlaws.team, true);
-                outlaws.team.SetIsEnemyOf(commoners.team, true);
-                commoners.team.SetIsEnemyOf(commoners.team, true);
-
-                this.AddFaction(0, commoners);
-                this.AddFaction(1, outlaws);
-
-                List<GameEntity> _gameEntites = new List<GameEntity>();
-                base.Mission.Scene.GetAllEntitiesWithScriptComponent<PEFactionBanner>(ref _gameEntites);
-                List<DBFactions> dbFactions = SaveSystemBehavior.HandleGetFactions().ToList();
-                Dictionary<int, DBFactions> savedFactions = new Dictionary<int, DBFactions>();
-                foreach (DBFactions dbFaction in dbFactions)
+                savedFactions[dbFaction.FactionIndex] = dbFaction;
+            }
+            if (_gameEntites.Count > 0)
+            {
+                foreach (GameEntity _factionBanner in _gameEntites)
                 {
-                    savedFactions[dbFaction.FactionIndex] = dbFaction;
-                }
-                if (_gameEntites.Count > 0)
-                {
-                    foreach (GameEntity _factionBanner in _gameEntites)
+                    PEFactionBanner peFactionBanner = _factionBanner.GetFirstScriptOfType<PEFactionBanner>();
+                    if (this.Factions.ContainsKey(peFactionBanner.FactionIndex))
                     {
-                        PEFactionBanner peFactionBanner = _factionBanner.GetFirstScriptOfType<PEFactionBanner>();
-                        if (this.Factions.ContainsKey(peFactionBanner.FactionIndex))
-                        {
-                            continue;
-                        }
-                        BasicCultureObject factionCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
-
-                        Banner factBanner;
-                        Faction fact;
-
-                        if (savedFactions.ContainsKey(peFactionBanner.FactionIndex))
-                        {
-                            factBanner = new Banner(savedFactions[peFactionBanner.FactionIndex].BannerKey);
-                            fact = new Faction(factionCulture, factBanner, savedFactions[peFactionBanner.FactionIndex].Name);
-                            fact.lordId = savedFactions[peFactionBanner.FactionIndex].LordId;
-                            fact.LoadMarshallsFromSerialized(savedFactions[peFactionBanner.FactionIndex].Marshalls);
-                        }
-                        else
-                        {
-                            factBanner = new Banner(peFactionBanner.GetBannerKey());
-                            fact = new Faction(factionCulture, factBanner, peFactionBanner.FactionName);
-                        }
-
-
-                        fact.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, factBanner.GetPrimaryColor(), factBanner.GetSecondaryColor(), factBanner);
-                        this.AddFaction(peFactionBanner.FactionIndex, fact);
+                        continue;
                     }
-                }
-                List<Faction> factions = this.Factions.Values.ToList();
+                    BasicCultureObject factionCulture = MBObjectManager.Instance.GetObject<BasicCultureObject>("empire");
+                    Banner factBanner;
+                    Faction fact;
 
-                for (int i = 0; i < factions.Count; i++)
-                {
-                    Faction fact1 = factions[i];
-                    for (int j = 0; j < factions.Count; j++)
+                    if (savedFactions.ContainsKey(peFactionBanner.FactionIndex))
                     {
-                        Faction fact2 = factions[j];
+                        factBanner = new Banner(savedFactions[peFactionBanner.FactionIndex].BannerKey);
+                        fact = new Faction(factionCulture, factBanner, savedFactions[peFactionBanner.FactionIndex].Name);
+                        fact.lordId = savedFactions[peFactionBanner.FactionIndex].LordId;
+                        fact.LoadMarshallsFromSerialized(savedFactions[peFactionBanner.FactionIndex].Marshalls);
+                    }
+                    else
+                    {
+                        factBanner = new Banner(peFactionBanner.GetBannerKey());
+                        fact = new Faction(factionCulture, factBanner, peFactionBanner.FactionName);
+                    }
 
-                        if (!fact1.team.IsEnemyOf(fact2.team))
-                        {
-                            fact1.team.SetIsEnemyOf(fact2.team, true);
-                        }
+                    fact.team = Mission.Current.Teams.Add(BattleSideEnum.Attacker, factBanner.GetPrimaryColor(), factBanner.GetSecondaryColor(), factBanner);
+                    this.AddFaction(peFactionBanner.FactionIndex, fact);
+                }
+            }
+            List<Faction> factions = this.Factions.Values.ToList();
+
+            for (int i = 0; i < factions.Count; i++)
+            {
+                Faction fact1 = factions[i];
+                for (int j = 0; j < factions.Count; j++)
+                {
+                    Faction fact2 = factions[j];
+
+                    if (!fact1.team.IsEnemyOf(fact2.team))
+                    {
+                        fact1.team.SetIsEnemyOf(fact2.team, true);
                     }
                 }
             }
-
+#endif
         }
 
         public void AddFaction(int factionIndex, Faction f)
@@ -278,7 +270,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Faction f = persistentEmpireRepresentative.GetFaction();
             if (f.lordId != sender.VirtualPlayer.ToPlayerId() && f.marshalls.Contains(sender.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do this.", sender);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior1", null).ToString(), sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             NetworkCommunicator targetPlayer = message.Target;
@@ -286,22 +278,22 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             if (targetRepresentative == null) return false;
             if (targetPlayer.Equals(sender) && f.lordId != targetPlayer.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick yourself or the lord.", sender);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior2", null).ToString(), sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.lordId == targetPlayer.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick the lord", sender);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior3", null).ToString(), sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.marshalls.Contains(targetPlayer.VirtualPlayer.ToPlayerId()))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't kick another marshall", sender);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior4", null).ToString(), sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (targetRepresentative.GetFactionIndex() != persistentEmpireRepresentative.GetFactionIndex())
             {
-                this._informationComponent.SendAnnouncementToPlayer("This player is not in same faction with you", sender);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior5", null).ToString(), sender, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             this.SetPlayerFaction(targetPlayer, 0, targetRepresentative.GetFactionIndex());
@@ -351,7 +343,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior6", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             //if(updateFactionBanner.BannerCode.Split('.').Length % 10 != 0)
@@ -361,7 +353,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             //}
             if (updateFactionBanner.BannerCode.Length > this.MaxBannerLength)
             {
-                InformationComponent.Instance.SendMessage("Banner length is too much.", Colors.Red.ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior7", null).ToString(), Colors.Red.ToUnsignedInteger(), player);
                 return false;
             }
             try
@@ -372,85 +364,85 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     BannerData bannerData = bannerDatas[i];
                     if (bannerData.MeshId > CompressionBasic.BannerDataMeshIdCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icons is not valid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior8", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if (bannerData.MeshId < 0)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icons is not valid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior8", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if (bannerData.ColorId > CompressionBasic.BannerDataColorIndexCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's or banner's color is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior9", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if (bannerData.ColorId < 0)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's or banner's color is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior9", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
 
                     if (bannerData.ColorId2 > CompressionBasic.BannerDataColorIndexCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's or banner's color is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior9", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if (bannerData.ColorId2 < 0)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's or banner's color is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior9", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
 
                     if ((int)bannerData.Size.X > CompressionBasic.BannerDataSizeCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon size is too big " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior10", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Size.X < -8000)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon size is too small " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior11", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Size.Y > CompressionBasic.BannerDataSizeCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon size is too big " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior12", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Size.Y < -8000)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon size is too small " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior13", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
 
                     if ((int)bannerData.Position.X > CompressionBasic.BannerDataSizeCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon position is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior14", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Position.X < -8000)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon position is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior14", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Position.Y > CompressionBasic.BannerDataSizeCompressionInfo.GetMaximumValue())
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon position is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior14", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Position.Y < -8000)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon position is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior14", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Rotation > 360)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's rotation is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior15", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                     if ((int)bannerData.Rotation < -360)
                     {
-                        InformationComponent.Instance.SendMessage("This banner code is invalid. One of the icon's rotation is invalid " + i, Colors.Red.ToUnsignedInteger(), player);
+                        InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior15", null).ToString() + i, Colors.Red.ToUnsignedInteger(), player);
                         return false;
                     }
                 }
@@ -459,7 +451,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             catch (Exception e)
             {
-                InformationComponent.Instance.SendMessage("An error hapened while parsing banner code.", Colors.Red.ToUnsignedInteger(), player);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionsBehavior16", null).ToString(), Colors.Red.ToUnsignedInteger(), player);
                 return false;
             }
 
@@ -474,21 +466,21 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior17", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             Faction f = this.Factions[factionIndex];
             if (f.chestManagers.Contains(message.Player.VirtualPlayer.ToPlayerId()))
             {
                 f.chestManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys taken from " + message.Player.UserName, player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior18", null).ToString(), message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior19", null).ToString() + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             else
             {
                 f.chestManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys given", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Chest keys given to " + message.Player.UserName, player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior20", null).ToString(), message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior21", null).ToString() + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             return true;
         }
@@ -499,7 +491,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId() && this.Factions[factionIndex].marshalls.Contains(player.VirtualPlayer.ToPlayerId()) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Door is locked", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior22", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             Faction f = this.Factions[factionIndex];
@@ -507,15 +499,15 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             {
                 f.doorManagers.Remove(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
-                    this._informationComponent.SendAnnouncementToPlayer("Door keys taken", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Door keys taken from " + message.Player.UserName, player);
+                    this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior23", null).ToString(), message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior24", null).ToString() + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             else
             {
                 f.doorManagers.Add(message.Player.VirtualPlayer.ToPlayerId());
                 if (message.Player.IsConnectionActive)
-                    this._informationComponent.SendAnnouncementToPlayer("Door keys given", message.Player);
-                this._informationComponent.SendAnnouncementToPlayer("Door keys given to " + message.Player.UserName, player);
+                    this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior25", null).ToString(), message.Player, Colors.Red.ToUnsignedInteger());
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior26", null).ToString() + message.Player.UserName, player, Colors.Red.ToUnsignedInteger());
             }
             return true;
         }
@@ -527,7 +519,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             int factionIndex = persistentEmpireRepresentative.GetFactionIndex();
             if (this.Factions[factionIndex].lordId != player.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendAnnouncementToPlayer("You don't have permission to do that", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior17", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             this.UpdateFactionName(factionIndex, updateFactionName.NewName);
@@ -542,27 +534,27 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior27", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex == playerFactionIndex)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't declare war to yourself", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior28", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior29", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (f.warDeclaredTo.Contains(message.FactionIndex))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You already declared a war to this faction", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior30", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (FactionDeclaredWarLast.ContainsKey(playerFactionIndex) && DateTimeOffset.UtcNow.ToUnixTimeSeconds() < FactionDeclaredWarLast[playerFactionIndex] + WarDeclareTimeOut)
             {
-                this._informationComponent.SendMessage("Please wait 30 sec to declare a new war.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
+                this._informationComponent.SendMessage(GameTexts.FindText("FactionsBehavior31", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                 return false;
             }
             FactionDeclaredWarLast[playerFactionIndex] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -583,27 +575,27 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             string playerId = player.VirtualPlayer.ToPlayerId();
             if (f.lordId != playerId && f.marshalls.Contains(playerId) == false)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are not the lord", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior27", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex == playerFactionIndex)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't make peace with yourself", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior32", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (message.FactionIndex <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You can't do that", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior29", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (!f.warDeclaredTo.Contains(message.FactionIndex))
             {
-                this._informationComponent.SendAnnouncementToPlayer("You didn't declared a war.", player);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionsBehavior33", null).ToString(), player, Colors.Red.ToUnsignedInteger());
                 return false;
             }
             if (FactionDeclaredWarLast.ContainsKey(playerFactionIndex) && DateTimeOffset.UtcNow.ToUnixTimeSeconds() < FactionDeclaredWarLast[playerFactionIndex] + PeaceDeclareTimeOut)
             {
-                this._informationComponent.SendMessage("Please wait 30 secs to declare a peace.", new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
+                this._informationComponent.SendMessage(GameTexts.FindText("FactionsBehavior34", null).ToString(), new Color(1f, 0f, 0f).ToUnsignedInteger(), player);
                 return false;
             }
             FactionDeclaredWarLast[playerFactionIndex] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -662,15 +654,28 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         }
                     }
                 }
-                this.Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(player);
+
+                var tmpMember = Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x=> x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
+                if (tmpMember == null)
+                {
+                    tmpMember = Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Where(x => x.VirtualPlayer?.Id == player.VirtualPlayer?.Id).FirstOrDefault();
+                }
+                if (tmpMember != null)
+                {
+                    Factions[persistentEmpireRepresentative.GetFactionIndex()].members.Remove(tmpMember);
+                }
             }
             if (factionIndex != -1)
             {
                 LoggerHelper.LogAnAction(player, LogAction.PlayerFactionChange, null, new object[] { persistentEmpireRepresentative.GetFaction(), this.Factions[factionIndex] });
                 persistentEmpireRepresentative.SetFaction(this.Factions[factionIndex], factionIndex);
                 player.VirtualPlayer.BannerCode = this.Factions[factionIndex].banner.Serialize();
-                if(!Factions[factionIndex].members.Contains(player))
+
+                var tmpMember = this.Factions[factionIndex].members.Where(x => x.VirtualPlayer?.ToPlayerId() == player.VirtualPlayer?.ToPlayerId()).FirstOrDefault();
+                if(tmpMember == null)
+                {
                     Factions[factionIndex].members.Add(player);
+                }
             }
             else
             {
@@ -913,7 +918,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected void HandlePlayerJoinedFaction(PlayerJoinedFaction packet)
         {
             this.SetPlayerFaction(packet.player, packet.factionIndex, packet.joinedFrom);
-            if (packet.player.IsMine)
+            if (packet.player.IsMine && packet.factionIndex >= 0 && packet.factionIndex < this.Factions.Count())
             {
                 Faction f = this.Factions[packet.factionIndex];
                 InformationManager.DisplayMessage(new InformationMessage("You have joined " + f.name, Color.FromUint(f.banner.GetPrimaryColor())));

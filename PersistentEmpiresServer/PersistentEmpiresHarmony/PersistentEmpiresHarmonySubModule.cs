@@ -50,6 +50,7 @@ namespace PersistentEmpiresHarmony
         protected override void OnApplicationTick(float dt)
         {
             base.OnApplicationTick(dt);
+
             PatchMissionNetworkComponent.OnTick();
         }
         public override void OnBeforeMissionBehaviorInitialize(Mission mission)

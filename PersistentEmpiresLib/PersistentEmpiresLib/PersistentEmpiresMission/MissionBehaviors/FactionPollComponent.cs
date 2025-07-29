@@ -5,6 +5,7 @@ using PersistentEmpiresLib.NetworkMessages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -17,6 +18,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 
         private int LordPollRequiredGold = 1000; /// ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
         private int LordPollTimeOut = 60; /// ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+        internal static bool LordPollEnabled = true;
+
         public class FactionPoll
         {
             private List<NetworkCommunicator> _participantsToVote;
@@ -176,17 +179,16 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            this._ongoingPolls = new Dictionary<int, FactionPoll>();
-            this._informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
-            this._factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
-            this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            _ongoingPolls = new Dictionary<int, FactionPoll>();
+            _informationComponent = base.Mission.GetMissionBehavior<InformationComponent>();
+            _factionsBehavior = base.Mission.GetMissionBehavior<FactionsBehavior>();
+            AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+#if SERVER
 
-            if (GameNetwork.IsServer)
-            {
-                this.LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
-                this.LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
-            }
-
+            LordPollRequiredGold = ConfigManager.GetIntConfig("LordPollRequiredGold", 1000);
+            LordPollTimeOut = ConfigManager.GetIntConfig("LordPollTimeOut", 60);
+            LordPollEnabled = ConfigManager.GetBoolConfig("LordPollEnabled", true);
+#endif
         }
 
         public override void OnRemoveBehavior()
@@ -216,7 +218,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+            
             if (this._ongoingPolls == null) return;
+
             foreach (FactionPoll ongoingPolls in this._ongoingPolls.Values.ToList())
             {
                 if (ongoingPolls.IsOpen)
@@ -227,6 +231,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         }
         public void OpenLordPollServer(NetworkCommunicator pollCreatorPeer, NetworkCommunicator targetPeer)
         {
+            if(!LordPollEnabled)
+            {
+                _informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent1", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
+                return;
+            }
+
             if (pollCreatorPeer == null)
             {
                 // Reject return
@@ -234,7 +244,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (targetPeer == null)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent2", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             if (!pollCreatorPeer.IsConnectionActive)
@@ -244,7 +254,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
             if (!targetPeer.IsConnectionActive)
             {
-                this._informationComponent.SendAnnouncementToPlayer("Target player not found", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent3", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             MissionPeer creatorMPeer = pollCreatorPeer.GetComponent<MissionPeer>();
@@ -258,45 +268,45 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Faction f = targetRepresentative.GetFaction();
             if (pollCreatorPeer.Index == targetPeer.Index && f.lordId != targetPeer.VirtualPlayer.ToPlayerId() && targetRepresentative.IsAdmin == false)
             {
-                InformationComponent.Instance.SendMessage("You can't poll yourself", Color.ConvertStringToColor("#d32f2fff").ToUnsignedInteger(), pollCreatorPeer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionPollComponent4", null).ToString(), Color.ConvertStringToColor("#d32f2fff").ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
             if (targetRepresentative.GetFactionIndex() <= 1 || pollCreatorRepresentative.GetFactionIndex() <= 1)
             {
-                this._informationComponent.SendAnnouncementToPlayer("You are in one of the default factions. You cant create a lord poll", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent5", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
             if (targetRepresentative.GetFactionIndex() != pollCreatorRepresentative.GetFactionIndex())
             {
-                this._informationComponent.SendAnnouncementToPlayer("Your candidate is not in the same faction with you", pollCreatorPeer);
+                this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent6", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                 return;
             }
 
             if (f.pollUnlockedAt > DateTimeOffset.UtcNow.ToUnixTimeSeconds() && f.lordId != targetPeer.VirtualPlayer.ToPlayerId())
             {
-                this._informationComponent.SendMessage("You can't poll a different lord in 24 hours.", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
+                this._informationComponent.SendMessage(GameTexts.FindText("FactionPollComponent7", null).ToString(), Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
             if (f.lordId == targetPeer.VirtualPlayer.ToPlayerId() && f.pollUnlockedAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() > 86400)//24 * 60 * 60)
             {
-                this._informationComponent.SendMessage("You can't make a validation poll because you already made one. Wait 24h to validate your lordship", Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
+                this._informationComponent.SendMessage(GameTexts.FindText("FactionPollComponent8", null).ToString(), Color.ConvertStringToColor("#FF0000FF").ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
             if (!pollCreatorRepresentative.ReduceIfHaveEnoughGold(LordPollRequiredGold))
             {
-                InformationComponent.Instance.SendMessage("You need " + LordPollRequiredGold.ToString() + " dinar to start a poll", (new Color(1f, 0, 0)).ToUnsignedInteger(), pollCreatorPeer);
+                InformationComponent.Instance.SendMessage(GameTexts.FindText("FactionPollComponent9", null).ToString() + LordPollRequiredGold.ToString() + GameTexts.FindText("FactionPollComponent10", null).ToString(), (new Color(1f, 0, 0)).ToUnsignedInteger(), pollCreatorPeer);
                 return;
             }
             if (this._ongoingPolls.ContainsKey(targetRepresentative.GetFactionIndex()))
             {
                 if (this._ongoingPolls[targetRepresentative.GetFactionIndex()].IsOpen)
                 {
-                    this._informationComponent.SendAnnouncementToPlayer("There is already an on going poll", pollCreatorPeer);
+                    this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent11", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                     return;
                 }
                 if (Environment.TickCount - this._ongoingPolls[targetRepresentative.GetFactionIndex()].CloseTime < LordPollTimeOut * 1000)
                 {
-                    this._informationComponent.SendAnnouncementToPlayer("Please wait a little to create a new poll", pollCreatorPeer);
+                    this._informationComponent.SendAnnouncementToPlayer(GameTexts.FindText("FactionPollComponent12", null).ToString(), pollCreatorPeer, Colors.Red.ToUnsignedInteger());
                     return;
                 }
             }

@@ -301,7 +301,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 bool playerHasAllItems = this.receipt.All(r => persistentEmpireRepresentative.GetInventory().IsInventoryIncludes(r.RepairItem, r.NeededCount));
                 if (!playerHasAllItems)
                 {
-                    InformationComponent.Instance.SendMessage("Required Items:", 0x02ab89d9, player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Required_Items", null).ToString(), 0x02ab89d9, player);
                     foreach (RepairReceipt r in this.receipt)
                     {
                         InformationComponent.Instance.SendMessage($"{r.NeededCount} * {r.RepairItem.Name}", 0x02ab89d9, player);

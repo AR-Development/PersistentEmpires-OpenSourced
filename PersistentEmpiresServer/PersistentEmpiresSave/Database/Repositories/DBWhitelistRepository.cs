@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresServer.ServerMissions;
+using System;
 using System.Linq;
 
 namespace PersistentEmpiresSave.Database.Repositories
@@ -20,11 +22,20 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static bool IsPlayerWhitelisted(string playerId)
         {
-            int count = DBConnection.Connection.Query("SELECT * FROM Whitelist WHERE PlayerId = @PlayerId AND Active = 1", new
+            try
             {
-                PlayerId = playerId
-            }).Count();
-            return count > 0;
+                int count = DBConnection.Connection.Query("SELECT * FROM Whitelist WHERE PlayerId = @PlayerId AND Active = 1", new
+                {
+                    PlayerId = playerId
+                }).Count();
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+
+                return false;
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         // public static string ServerSignature = "";
         private static string _defaultClass = "pe_peasant";
         public static string DefaultClass { get { return _defaultClass; } }
+        public static PersistentEmpireBehavior Instanse = null;
 
         public static void SetDefaultClass(string defaultClass)
         {
@@ -79,6 +80,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         protected override void HandleEarlyNewClientAfterLoadingFinished(NetworkCommunicator networkPeer)
         {
             networkPeer.AddComponent<PersistentEmpireRepresentative>();
+
+#if SERVER
+            GameNetwork.BeginModuleEventAsServer(networkPeer);
+            GameNetwork.WriteMessage(new EnableVoiceChat(ConfigManager.VoiceChatEnabled));
+            GameNetwork.EndModuleEventAsServer();
+#endif
         }
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent, in MissionWeapon affectorWeapon, in Blow blow, in AttackCollisionData attackCollisionData)
         {
@@ -250,11 +257,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             Regex rg = new Regex(@"^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ.\s,\[,\],\(,\),_,-,\p{IsCJKUnifiedIdeographs}]*$");
             return rg.IsMatch(name);
         }
-
+#if SERVER
         public static void SyncPlayer(NetworkCommunicator networkPeer)
         {
-            var thisInstance = Mission.Current.GetMissionBehavior<PersistentEmpireBehavior>();
-            thisInstance.HandleLateNewClientAfterSynchronized(networkPeer);
+            Instanse.HandleLateNewClientAfterSynchronized(networkPeer);
         }
 
         protected override void HandleLateNewClientAfterSynchronized(NetworkCommunicator networkPeer)
@@ -308,7 +314,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                         Faction f = persistentEmpireRepresentative1.GetFaction();
 
                         GameNetwork.BeginModuleEventAsServer(networkPeer);
-                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.ToPlayerId())));
+                        GameNetwork.WriteMessage(new SyncMember(player, persistentEmpireRepresentative1.GetFactionIndex(), f == null ? false : f.marshalls.Contains(player.VirtualPlayer.ToPlayerId()), FactionPollComponent.LordPollEnabled, FactionsBehavior.CanUseDiplomacy, AdminClientBehavior.CanUseSuicide));
                         GameNetwork.EndModuleEventAsServer();
                     }
                 }
@@ -410,11 +416,12 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             SendRulesToNewClient(networkPeer);
 #endif
         }
-
+#endif
         public override void AfterStart()
         {
             Mission.Current.SetMissionCorpseFadeOutTimeInSeconds(60);
 #if SERVER
+            Instanse = this;
             ConfigManager.Initialize();
             this.agentLabelEnabled = ConfigManager.GetBoolConfig("AgentLabelEnabled", true);
 #endif

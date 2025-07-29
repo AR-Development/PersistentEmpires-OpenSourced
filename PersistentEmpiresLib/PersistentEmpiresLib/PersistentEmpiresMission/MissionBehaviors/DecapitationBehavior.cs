@@ -25,11 +25,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
             inventoryComponent = base.Mission.GetMissionBehavior<PlayerInventoryComponent>();
             moneyPouchBehavior = base.Mission.GetMissionBehavior<MoneyPouchBehavior>();
-            if (GameNetwork.IsServer)
-            {
-                dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
-            }
+#if SERVER
+            dropChance = ConfigManager.GetIntConfig("DecapitationChance", 25);
+#endif
         }
+
         public override void OnRemoveBehavior()
         {
             base.OnRemoveBehavior();
@@ -51,8 +51,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (GameNetwork.IsServer) return;
-
+#if SERVER
             foreach (Agent headAgent in this.headAgentDict.Keys.ToList())
             {
                 if (headAgent.AgentVisuals == null || headAgent.AgentVisuals.GetSkeleton() == null)
@@ -95,6 +94,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 }
 
             }
+
             foreach (Agent bodyAgent in this.bodyAgentDict.Keys.ToList())
             {
 
@@ -128,6 +128,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     }
                 }
             }
+#endif
         }
 
         private void HandleBehadeAgentPacketFromServer(BehadeAgentPacket message)

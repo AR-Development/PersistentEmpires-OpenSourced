@@ -328,7 +328,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 }
                 if (attackerAgent.Character.GetSkillValue(DefaultSkills.Engineering) < this.GetRequiredEngineeringForUpgrade())
                 {
-                    InformationComponent.Instance.SendMessage("You are not qualified enough", new Color(1f, 0, 0).ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Not_Qualified", null).ToString(), new Color(1f, 0, 0).ToUnsignedInteger(), player);
                     return false;
                 }
 
@@ -341,7 +341,7 @@ namespace PersistentEmpiresLib.SceneScripts
                 bool isUpgradeInventoryHasAllItems = nextUpgradeReceipts.All((r) => upgradeInv.IsInventoryIncludes(r.UpgradeItem, r.NeededCount));
                 if (!isUpgradeInventoryHasAllItems)
                 {
-                    InformationComponent.Instance.SendMessage("Required Items:", 0x02ab89d9, player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("PE_Required_Items", null).ToString(), 0x02ab89d9, player);
                     foreach (UpgradeReceipt r in nextUpgradeReceipts)
                     {
                         InformationComponent.Instance.SendMessage(r.NeededCount + " * " + r.UpgradeItem.Name.ToString(), 0x02ab89d9, player);

@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresServer.ServerMissions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,9 +25,18 @@ namespace PersistentEmpiresSave.Database.Repositories
         }
         public static DBCastle GetCastle(int castleIndex)
         {
-            IEnumerable<DBCastle> factions = DBConnection.Connection.Query<DBCastle>("SELECT * FROM Castles WHERE CastleIndex = @CastleIndex", new { CastleIndex = castleIndex });
-            if (factions.Count() == 0) return null;
-            return factions.First();
+            try
+            {
+                IEnumerable<DBCastle> factions = DBConnection.Connection.Query<DBCastle>("SELECT * FROM Castles WHERE CastleIndex = @CastleIndex", new { CastleIndex = castleIndex });
+                if (factions.Count() == 0) return null;
+                return factions.First();
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+
+                return null;
+            }
         }
 
         private static DBCastle CreateOrSaveCastle(int castleIndex, int factionIndex)
@@ -41,23 +52,49 @@ namespace PersistentEmpiresSave.Database.Repositories
 
         private static DBCastle SaveCastle(int castleIndex, int factionIndex)
         {
-            DBCastle dbFaction = CreateDBCastle(castleIndex, factionIndex);
-            string updateSql = "UPDATE Castles SET FactionIndex = @FactionIndex WHERE CastleIndex = @CastleIndex";
-            DBConnection.Connection.Execute(updateSql, dbFaction);
-            return dbFaction;
+            try
+            {
+                DBCastle dbFaction = CreateDBCastle(castleIndex, factionIndex);
+                string updateSql = "UPDATE Castles SET FactionIndex = @FactionIndex WHERE CastleIndex = @CastleIndex";
+                DBConnection.Connection.Execute(updateSql, dbFaction);
+                return dbFaction;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+                
+                return null;
+            }
         }
 
         private static DBCastle CreateCastle(int castleIndex, int factionIndex)
         {
-            DBCastle dbFaction = CreateDBCastle(castleIndex, factionIndex);
-            string insertSql = "INSERT INTO Castles (CastleIndex, FactionIndex) VALUES (@CastleIndex,@FactionIndex)";
-            DBConnection.Connection.Execute(insertSql, dbFaction);
-            return dbFaction;
+            try
+            {
+                DBCastle dbFaction = CreateDBCastle(castleIndex, factionIndex);
+                string insertSql = "INSERT INTO Castles (CastleIndex, FactionIndex) VALUES (@CastleIndex,@FactionIndex)";
+                DBConnection.Connection.Execute(insertSql, dbFaction);
+                return dbFaction;
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+                return null;
+            }
         }
 
         private static IEnumerable<DBCastle> GetCastles()
         {
-            return DBConnection.Connection.Query<DBCastle>("SELECT * FROM Castles");
+            try
+            {
+                return DBConnection.Connection.Query<DBCastle>("SELECT * FROM Castles");
+            }
+            catch (Exception ex)
+            {
+                DiscordBehavior.NotifyException(ex);
+
+                return null;
+            }
         }
     }
 }

@@ -28,6 +28,9 @@ namespace PersistentEmpiresLib
         public bool KickedFromFaction = false;
         public long DisconnectedAt = 0;
         public bool LoadFromDb = false;
+        public bool CanUsePoll = false;
+        public bool CanUseDiplomacy = false;
+        public bool CanUseSuicide = false;
         public Vec3 LoadedDbPosition;
         public Equipment LoadedSpawnEquipment;
         public string AttachToAgentId { get; set; } 
@@ -189,6 +192,21 @@ namespace PersistentEmpiresLib
         {
             return WoundedUntil;
         }
-    }
 
+        internal void SetCanUsePoll(bool canUseLordPoll)
+        {
+            CanUsePoll = canUseLordPoll;
+        }
+
+        internal void SetCanUseDiplomacy(bool canUseDiplomacy)
+        {
+            CanUseDiplomacy = canUseDiplomacy;
+        }
+
+        internal void SetCanUseSuicide(bool canUseSuicide)
+        {
+            CanUseSuicide = canUseSuicide;
+        }
+        
+    }
 }

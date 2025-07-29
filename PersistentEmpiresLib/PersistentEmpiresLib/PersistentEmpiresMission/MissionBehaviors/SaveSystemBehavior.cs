@@ -1,4 +1,7 @@
-﻿using PersistentEmpiresLib.Database.DBEntities;
+﻿#if SERVER
+using PersistentEmpiresServer.ServerMissions;
+#endif
+using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.Factions;
 using PersistentEmpiresLib.SceneScripts;
 using System;
@@ -9,6 +12,7 @@ using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using System.Xml.Linq;
 
 namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
 {
@@ -26,6 +30,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public delegate DBPlayer GetPlayer(string playerId);
         public delegate bool UpdateCustomName(NetworkCommunicator peer, string customName);
         public delegate void UpdateWoundedUntil(NetworkCommunicator peer, long woundedUntil);
+        public delegate void SavePlayerEquipmentOnDeath(string playerId, Equipment equipment);
         public delegate void SaveDefaultsForNewPlayer(NetworkCommunicator peer, Equipment equipment);
         public delegate long? GetWoundedUntil(NetworkCommunicator peer);
 
@@ -78,6 +83,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public static event GetPlayer OnGetPlayer;
         public static event UpdateCustomName OnPlayerUpdateCustomName;
         public static event UpdateWoundedUntil OnPlayerUpdateWoundedUntil;
+        //public static event SavePlayerEquipmentOnDeath OnSavePlayerEquipmentOnDeath;
         public static event SaveDefaultsForNewPlayer OnSaveDefaultsForNewPlayer;
         public static event GetWoundedUntil OnGetWoundedUntil;
         
@@ -286,9 +292,19 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             return null;
         }
 
+        //public static void HandleSavePlayerEquipmentOnDeath(string playerId, Equipment equipment)
+        //{
+        //    Debug.Print("[Save System] Is OnSavePlayerEquipmentOnDeath null ? " + (OnSavePlayerEquipmentOnDeath == null).ToString());
+        //    long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        //    if (OnSavePlayerEquipmentOnDeath != null)
+        //    {
+        //        OnSavePlayerEquipmentOnDeath(playerId, equipment);
+        //    }
+        //}
+        
         public static void HandleSaveDefaultsForNewPlayer(NetworkCommunicator networkCommunicator, Equipment equipment)
         {
-            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnCreateOrSavePlayer == null).ToString());
+            Debug.Print("[Save System] Is OnSaveDefaultsForNewPlayerr null ? " + (OnSaveDefaultsForNewPlayer == null).ToString());
             long rightNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             if (OnSaveDefaultsForNewPlayer != null)
             {
@@ -507,7 +523,9 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             base.OnMissionResultReady(missionResult);
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
-                if (peer.ControlledAgent != null)
+                var persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+
+                if (peer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
                 {
                     HandleCreateOrSavePlayer(peer);
                     HandleCreateOrSavePlayerInventory(peer);
@@ -529,15 +547,23 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 Debug.Print(e.InnerException.StackTrace);
                 Debug.Print(e.InnerException.ToString());
             }
+#if SERVER
+            DiscordBehavior.NotifyException(e);
+#endif
             HandleApplicationExit(sender, args);
         }
 
         private void HandleApplicationExit(object sender, EventArgs e)
         {
+#if SERVER
+            DiscordBehavior.NotifyServerStatus("SERVER CRASH DETECTED", DiscordBehavior.ColorRed);
+#endif
             Debug.Print("! SERVER CRASH DETECTED. SAVING PLAYER DATA ONLY !!!");
             foreach (NetworkCommunicator peer in GameNetwork.NetworkPeers)
             {
-                if (peer.ControlledAgent != null)
+                var persistentEmpireRepresentative = peer.GetComponent<PersistentEmpireRepresentative>();
+
+                if (peer.ControlledAgent != null && persistentEmpireRepresentative.IsFirstAgentSpawned)
                 {
                     HandleCreateOrSavePlayer(peer);
                     HandleCreateOrSavePlayerInventory(peer);
@@ -548,20 +574,32 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
+#if SERVER
             AppDomain.CurrentDomain.ProcessExit += HandleApplicationExit;
             AppDomain.CurrentDomain.UnhandledException += HandleExceptionalExit;
 
             SaveDuration = ConfigManager.GetIntConfig("AutosaveDuration", 600);
-
             HandleStartMigration();
-
+#endif
         }
 
         public static void OnAddNewPlayerOnServer(ref PlayerConnectionInfo playerConnectionInfo, bool serverPeer, bool isAdmin)
         {
             if (OnGetPlayer != null && playerConnectionInfo != null)
             {
-                DBPlayer player = OnGetPlayer(playerConnectionInfo.PlayerID.ToString());
+                DBPlayer player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}_{playerConnectionInfo.Name}");
+                if(player == null)
+                {
+                    player = OnGetPlayer($"{playerConnectionInfo.PlayerID.ToString()}%");
+
+                    if (player != null)
+                    {
+                        if (string.IsNullOrEmpty(player.CustomName))
+                        {
+                            player.CustomName = player.Name;
+                        }
+                    }
+                }
                 if (player != null && player.CustomName != null && player.CustomName != "" && player.CustomName.IsEmpty() == false)
                 {
                     playerConnectionInfo.Name = player.CustomName;
@@ -585,11 +623,13 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             // Define your error logging logic
         }
 
+        public static bool IsRunning { get { return _running; } }
         private static bool _running = false;
         public override void OnMissionTick(float dt)
         {
             // Auto save
             base.OnMissionTick(dt);
+
             if (!_running && DateTimeOffset.Now.ToUnixTimeSeconds() > LastSaveAt + SaveDuration)
             {
                 _running = true;

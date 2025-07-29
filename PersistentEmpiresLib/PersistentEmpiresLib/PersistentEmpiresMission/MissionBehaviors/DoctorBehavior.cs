@@ -10,12 +10,11 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         public string ItemId = "pe_doctorscalpel";
         public override void OnBehaviorInitialize()
         {
-            if (GameNetwork.IsServer)
-            {
-                this.RequiredMedicineSkillForHealing = ConfigManager.GetIntConfig("RequiredMedicineSkillForHealing", 50);
-                this.MedicineHealingAmount = ConfigManager.GetIntConfig("MedicineHealingAmount", 15);
-                this.ItemId = ConfigManager.GetStrConfig("MedicineItemId", "pe_doctorscalpel");
-            }
+#if SERVER
+            this.RequiredMedicineSkillForHealing = ConfigManager.GetIntConfig("RequiredMedicineSkillForHealing", 50);
+            this.MedicineHealingAmount = ConfigManager.GetIntConfig("MedicineHealingAmount", 15);
+            this.ItemId = ConfigManager.GetStrConfig("MedicineItemId", "pe_doctorscalpel");
+#endif
             Instance = this;
         }
 

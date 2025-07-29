@@ -13,6 +13,9 @@ namespace PersistentEmpires.Views.ViewsVM
         private MBBindingList<PEChatBubbleVM> _chatMessages;
 
         public MissionPeer TargetPeer { get; private set; }
+        public bool _isTextVisible { get; set; } = false;
+        public bool _isIconVisible { get; set; } = true;
+        public long _iconVisibleAt { get; set; } = 0;
 
         public PEPeerMarkerVM(MissionPeer peer) : base(MissionMarkerType.Peer)
         {
@@ -24,6 +27,8 @@ namespace PersistentEmpires.Views.ViewsVM
 
         public void AddMessage(string message, string color)
         {
+            IsTextVisible = true;
+            IsIconVisible = false;
             if (this.ChatMessages.Count > 5)
             {
                 this.ChatMessages.RemoveAt(0);
@@ -31,14 +36,50 @@ namespace PersistentEmpires.Views.ViewsVM
             this.ChatMessages.Add(new PEChatBubbleVM(message, color));
         }
 
+        public void NotifyTyping()
+        {
+            _iconVisibleAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            if (ChatMessages.Count > 0)
+            {
+                IsTextVisible = true;
+                IsIconVisible = false;
+            }
+            else
+            {
+                IsTextVisible = false;
+                IsIconVisible = true;
+            }
+        }
+        
+
         public void FadeOldMessages()
         {
             foreach (PEChatBubbleVM bubble in this.ChatMessages.ToList())
             {
                 if (bubble.CreatedAt + 3 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
-                    this.ChatMessages.Remove(bubble);
+                    ChatMessages.Remove(bubble);
                 }
+            }
+
+            if (ChatMessages.Count == 0)
+            {
+                IsTextVisible = false;
+
+                if(_iconVisibleAt + 3 >= DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                {
+                    IsIconVisible = true;
+                }
+            }
+        }
+
+        public void FadeOldIcon()
+        {
+            if (_iconVisibleAt + 3 < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            {
+                IsTextVisible = true;
+                IsIconVisible = false;
             }
         }
 
@@ -98,6 +139,34 @@ namespace PersistentEmpires.Views.ViewsVM
                 {
                     this._chatMessages = value;
                     base.OnPropertyChangedWithValue(value, "ChatMessages");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsTextVisible
+        {
+            get => _isTextVisible;
+            set
+            {
+                if (value != _isTextVisible)
+                {
+                    _isTextVisible = value;
+                    OnPropertyChangedWithValue(value, "IsTextVisible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsIconVisible
+        {
+            get => _isIconVisible;
+            set
+            {
+                if (value != _isIconVisible)
+                {
+                    _isIconVisible = value;
+                    OnPropertyChangedWithValue(value, "IsIconVisible");
                 }
             }
         }

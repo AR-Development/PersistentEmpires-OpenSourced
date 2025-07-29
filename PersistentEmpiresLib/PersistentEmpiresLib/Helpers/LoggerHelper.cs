@@ -6,11 +6,20 @@ using System;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-
+#if SERVER
+using PersistentEmpiresServer.ServerMissions;
+using static PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors.SaveSystemBehavior;
+#endif
 namespace PersistentEmpiresLib.Helpers
 {
     public static class LogAction
     {
+        public static readonly string Wounds = "Wounds";// Done
+        public static readonly string TeleportToPosition = "TeleportToPosition";// Done
+        public static readonly string DiceCommand = "DiceCommand";// Done
+        public static readonly string DoCommand = "DoCommand";// Done
+        public static readonly string MeCommand = "MeCommand";// Done
+        public static readonly string RollCommand = "RollCommand"; // Done
         public static readonly string LocalChat = "LocalChat"; // Done
         public static readonly string TeamChat = "TeamChat"; // Done
         public static readonly string PlayerHitToAgent = "PlayerHitAgent"; // Done
@@ -27,6 +36,10 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerClosesChest = "PlayerClosesChest"; // Done
         public static readonly string PlayerTransferredItemToChest = "PlayerTransferredItemToChest"; // Done
         public static readonly string PlayerTransferredItemFromChest = "PlayerTransferredItemFromChest"; // Done
+        public static readonly string PlayerEquipedItemFromChest = "PlayerEquipedItemFromChest"; // Done        
+        public static readonly string PlayerEquiptedFromInventory = "PlayerEquiptedFromInventory"; // Done        
+        public static readonly string PlayerTransferredItemToInventory = "PlayerTransferredItemToInventory"; // Done
+        public static readonly string PlayerTransferredItemFromInventory = "PlayerTransferredItemFromInventory"; // Done
         public static readonly string PlayerOpensStockpile = "PlayerOpensStockpile";// Done
         public static readonly string PlayerClosesStockpile = "PlayerClosesStockpile";// Done
         public static readonly string PlayerBuysStockpile = "PlayerBuysStockpile";// Done
@@ -43,6 +56,7 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerSpawnsItem = "PlayerSpawnsItem"; // Done
         public static readonly string PlayerItemGathers = "PlayerItemGathers"; // Done
         public static readonly string PlayerBansPlayer = "PlayerBansPlayer"; // Done
+        public static readonly string PlayerUnBansPlayer = "PlayerUnBansPlayer"; // Done
         public static readonly string PlayerKicksPlayer = "PlayerKicksPlayer"; // Done
         public static readonly string PlayerTempBanPlayer = "PlayerTempBanPlayer"; // Done
         public static readonly string PlayerFadesPlayer = "PlayerFadesPlayer"; // Done
@@ -64,6 +78,9 @@ namespace PersistentEmpiresLib.Helpers
         public static readonly string PlayerMountedHorse = "PlayerMountedHorse";
         public static readonly string PlayerDismountedHorse = "PlayerDismountedHorse";
         public static readonly string PlayerChangedName = "PlayerChangedName";
+        public static readonly string OnSaveDefaultsForNewPlayer = "OnSaveDefaultsForNewPlayer";
+        public static readonly string UpsertPlayer = "UpsertPlayer";
+        public static readonly string UpsertPlayerInventory = "UpsertPlayerInventory";
     }
 
     public class LoggerHelper
@@ -131,6 +148,10 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} joined to the server.";
                 case nameof(LogAction.PlayerDisconnected):
                     return $"{FormatLogForPlayer(issuer, dateTime)} disconnected from the server.";
+                case nameof(LogAction.MeCommand):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(string)oParams[0]} Receivers: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.RollCommand):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {(string)oParams[0]} Receivers: {AffectedPlayersToString(affectedPlayers)}";
                 case nameof(LogAction.LocalChat):
                 case nameof(LogAction.TeamChat):
                     return $"{FormatLogForPlayer(issuer, dateTime)} said \"[{(string)oParams[0]}]\". Receivers: {AffectedPlayersToString(affectedPlayers)}";
@@ -153,10 +174,18 @@ namespace PersistentEmpiresLib.Helpers
                 case nameof(LogAction.PlayerOpensChest):
                 case nameof(LogAction.PlayerClosesChest):
                     return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensChest ? "opened" : "closed")} a chest/loot of {((Inventory)oParams[0]).InventoryId}";
+                case nameof(LogAction.PlayerEquipedItemFromChest):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} equipted {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
+                case nameof(LogAction.PlayerEquiptedFromInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} equipted {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the inventory ({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemToChest):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to the chest({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from {(string)oParams[3]} inventory to the chest({(string)oParams[0]})";
                 case nameof(LogAction.PlayerTransferredItemFromChest):
-                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]})";
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from the chest({(string)oParams[0]} to I inventory)";
+                case nameof(LogAction.PlayerTransferredItemToInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} from I inventory to the inventory({(string)oParams[0]})";
+                case nameof(LogAction.PlayerTransferredItemFromInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} transferred {((ItemObject)oParams[1])?.Name.ToString() ?? "null"}*{(int)oParams[2]} to I inventory from the inventory({(string)oParams[0]})";
                 case nameof(LogAction.PlayerOpensStockpile):
                 case nameof(LogAction.PlayerClosesStockpile):
                     return $"{FormatLogForPlayer(issuer, dateTime)} {(actionType == LogAction.PlayerOpensStockpile ? "accessed to" : "closed")} a stockpile market. Xml file of market is {((PE_StockpileMarket)oParams[0]).XmlFile}";
@@ -190,6 +219,8 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForPlayer(issuer, dateTime)} gathered an item from ItemGathering script {((ItemObject)oParams[0]).Name}";
                 case nameof(LogAction.PlayerBansPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} banned a player: {AffectedPlayersToString(affectedPlayers)}";
+                case nameof(LogAction.PlayerUnBansPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} unbanned a player: {(string)oParams[0]}";
                 case nameof(LogAction.PlayerTempBanPlayer):
                     return $"{FormatLogForPlayer(issuer, dateTime)} temp banned a player: {AffectedPlayersToString(affectedPlayers)}";
                 case nameof(LogAction.PlayerKicksPlayer):
@@ -228,6 +259,16 @@ namespace PersistentEmpiresLib.Helpers
                     return $"{FormatLogForAgent((Agent)oParams[0], dateTime)} dismounted a horse";
                 case nameof(LogAction.PlayerChangedName):
                     return $"{FormatLogForPlayer(issuer, dateTime)} changed his name to {(string)oParams[0]}";
+                case nameof(LogAction.OnSaveDefaultsForNewPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} OnSaveDefaultsForNewPlayer{(string)oParams[0]}";
+                case nameof(LogAction.UpsertPlayer):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayer{(string)oParams[0]}";
+                case nameof(LogAction.UpsertPlayerInventory):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} UpsertPlayerInventory{(string)oParams[0]}";
+                case nameof(LogAction.TeleportToPosition):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} Teleported to position {oParams[0]}";
+                case nameof(LogAction.Wounds):
+                    return $"{FormatLogForPlayer(issuer, dateTime)} {oParams[0]}";
                 default:
                     return actionType;
             }
@@ -299,7 +340,7 @@ namespace PersistentEmpiresLib.Helpers
             oParams = oParams ?? new object[] { };
 
             string logMessage = GenerateActionMessage(issuer, actionType, DateTime.UtcNow, affectedPlayers, oParams);
-
+            
             DBLog dbLog = new DBLog()
             {
                 ActionType = actionType,
@@ -307,10 +348,13 @@ namespace PersistentEmpiresLib.Helpers
                 CreatedAt = DateTime.UtcNow,
                 IssuerCoordinates = GetCoordinatesOfPlayer(issuer),
                 IssuerPlayerId = issuer.VirtualPlayer.ToPlayerId(),
-                IssuerPlayerName = issuer.UserName,
-                LogMessage = logMessage
+                IssuerPlayerName = issuer.UserName.EncodeSpecialMariaDbChars(),
+                LogMessage = logMessage.EncodeSpecialMariaDbChars()
             };
-            if (OnLogAction != null)
+#if SERVER
+            DiscordBehavior.NotifyLog(dbLog);
+#endif
+                if (OnLogAction != null)
             {
                 OnLogAction(dbLog);
             }

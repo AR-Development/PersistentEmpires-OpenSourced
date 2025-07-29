@@ -280,17 +280,20 @@ namespace PersistentEmpiresHarmony.Patches
         public static void OnTick()
         {
             if (peerSyncingQueue.Count <= 0) return;
+
             SyncingTrack syncingTrack = peerSyncingQueue.Peek();
+            
             if (syncingTrack.peer.IsConnectionActive == false)
             {
                 peerSyncingQueue.Dequeue();
                 return;
             }
 
-
             List<MissionObject> toBeSend = chunkedMissionObjects[syncingTrack.chunkIndex];
+            
             SynchronizeMissionObjectsToPeer(syncingTrack.peer, toBeSend);
             syncingTrack.chunkIndex = syncingTrack.chunkIndex + 1;
+            
             if (syncingTrack.chunkIndex >= chunkedMissionObjects.Count)
             {
                 peerSyncingQueue.Dequeue();

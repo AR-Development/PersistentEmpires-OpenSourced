@@ -2,6 +2,7 @@
 using PersistentEmpiresLib.NetworkMessages.Client;
 using PersistentEmpiresLib.NetworkMessages.Server;
 using PersistentEmpiresLib.SceneScripts;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -30,11 +31,10 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
         {
             base.OnBehaviorInitialize();
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.BankAmountLimit = ConfigManager.GetIntConfig("BankAmountLimit", 0);
-                this.BankTaxRate = 100 - ConfigManager.GetIntConfig("BankTaxRate", 10);
-            }
+#if SERVER
+            this.BankAmountLimit = ConfigManager.GetIntConfig("BankAmountLimit", 0);
+            this.BankTaxRate = 100 - ConfigManager.GetIntConfig("BankTaxRate", 10);
+#endif
         }
 
         private void AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode mode)
@@ -68,7 +68,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 int amount = BankingComponent.OnBankQuery(player);
                 if (amount + message.Amount > this.BankAmountLimit)
                 {
-                    InformationComponent.Instance.SendMessage("You can't have that much money in your bank.", Colors.Red.ToUnsignedInteger(), player);
+                    InformationComponent.Instance.SendMessage(GameTexts.FindText("BankingComponent1", null).ToString(), Colors.Red.ToUnsignedInteger(), player);
                     return false;
                 }
             }

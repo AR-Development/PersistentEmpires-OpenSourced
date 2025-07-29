@@ -22,10 +22,12 @@ namespace PersistentEmpiresServer.ServerMissions
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
+
             if (_lastCheckedAt + _checkTimeInterval > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             {
                 return;
             }
+
             _lastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             List<PlayerId> requestedPlayerIds = new List<PlayerId>();
             List<PlayerId> customBattlePlayers = new List<PlayerId>();

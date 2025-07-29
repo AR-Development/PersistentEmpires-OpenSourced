@@ -1,4 +1,6 @@
-﻿using TaleWorlds.Library;
+﻿using PersistentEmpiresLib.NetworkMessages.Client;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 
 namespace PersistentEmpires.Views.ViewsVM
 {
@@ -12,13 +14,28 @@ namespace PersistentEmpires.Views.ViewsVM
         [DataSourceProperty]
         public string TextInput
         {
-            get => this._textInput;
+            get => _textInput;
             set
             {
-                if (value != this._textInput)
+                if (value != _textInput)
                 {
-                    this._textInput = value;
-                    base.OnPropertyChangedWithValue(value, "TextInput");
+                    if (value.Length > 500)
+                    {
+                        value = $"{value.Substring(0, 500)}...";
+                        OnPropertyChangedWithValue(value, "TextInput");
+                    }
+                    else
+                    {
+                        _textInput = value;
+                        OnPropertyChangedWithValue(value, "TextInput");
+                    }
+
+                    if(!string.IsNullOrEmpty(value))
+                    {
+                        GameNetwork.BeginModuleEventAsClient();
+                        GameNetwork.WriteMessage(new PlayerIsTypingMessage());
+                        GameNetwork.EndModuleEventAsClient();
+                    }
                 }
             }
         }
@@ -27,7 +44,7 @@ namespace PersistentEmpires.Views.ViewsVM
         {
             get => this._isFocused;
             set
-            {
+            {                
                 if (value != this._isFocused)
                 {
                     this._isFocused = value;

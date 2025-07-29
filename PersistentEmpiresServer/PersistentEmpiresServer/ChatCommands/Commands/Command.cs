@@ -4,9 +4,18 @@ namespace PersistentEmpiresServer.ChatCommands.Commands
 {
     public interface Command
     {
-        string Command();
-        bool CanUse(NetworkCommunicator networkPeer);
-        bool Execute(NetworkCommunicator networkPeer, string[] args);
-        string Description();
+        public string Command();
+
+        public bool CanUse(NetworkCommunicator networkPeer);
+
+        public bool Execute(NetworkCommunicator networkPeer, string[] args);
+
+        public string Description();
+
+        public string DetailedDescription();
+
+        public bool IsEnabled();
+
+        public uint Color { get; }
     }
 }

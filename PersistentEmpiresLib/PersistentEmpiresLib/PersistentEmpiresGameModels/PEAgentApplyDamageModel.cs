@@ -22,6 +22,7 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
             return 0;
         }
 
+        #if SERVER
         public override bool DecideAgentDismountedByBlow(Agent attackerAgent, Agent victimAgent, in AttackCollisionData collisionData, WeaponComponentData attackerWeapon, in Blow blow)
         {
             if (attackerAgent == null || attackerWeapon == null || victimAgent == null)
@@ -118,5 +119,6 @@ namespace PersistentEmpiresLib.PersistentEmpiresGameModels
 
             return baseDamage;
         }
+#endif
     }
 }

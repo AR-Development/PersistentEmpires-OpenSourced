@@ -1,5 +1,6 @@
 ﻿using PersistentEmpiresHarmony;
 using PersistentEmpiresHarmony.Patches;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.GameModes;
 using PersistentEmpiresLib.PersistentEmpiresGameModels;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
@@ -26,9 +27,6 @@ namespace PersistentEmpiresServer
             CompressionBasic.PositionCompressionInfo = new CompressionInfo.Float(-200f, 10385f, 22);
             CompressionBasic.PlayerCompressionInfo = new CompressionInfo.Integer(-1, 1048576, true);
 
-
-
-
             starterObject.AddModel(new PEAgentStatCalculateModel());
             starterObject.AddModel(new DefaultItemValueModel());
             starterObject.AddModel(new PEAgentApplyDamageModel());
@@ -37,7 +35,7 @@ namespace PersistentEmpiresServer
         }
 
         public override void OnMultiplayerGameStart(Game game, object starterObject)
-        {
+        {            
             InformationManager.DisplayMessage(new InformationMessage("** Persistent Empires, Multiplayer Game Start Loading..."));
             Debug.Print("** Persistent Empires, Multiplayer Game Start Loading...");
 
@@ -49,8 +47,22 @@ namespace PersistentEmpiresServer
 
             AdminServerBehavior.OnIsPlayerBanned += DBBanRecordRepository.IsPlayerBanned;
             AdminServerBehavior.OnBanPlayer += DBBanRecordRepository.AdminServerBehavior_OnBanPlayer;
+            AdminServerBehavior.OnUnBanPlayer += DBBanRecordRepository.AdminServerBehavior_OnUnBanPlayer;
 
-            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode("PersistentEmpires"));
+            TaleWorlds.MountAndBlade.Module.CurrentModule.AddMultiplayerGameMode(new PersistentEmpiresGameMode(Main.ModuleName));
         }
+#if SERVER
+        protected override void OnSubModuleLoad()
+        {
+            base.OnSubModuleLoad();
+            DiscordBehavior.NotifyServerStatus("Restarting server...", DiscordBehavior.ColorYellow);
+        }
+
+        public override void OnGameInitializationFinished(Game game)
+        {
+            base.OnGameInitializationFinished(game);
+            DiscordBehavior.NotifyServerStatus("Server is runing", DiscordBehavior.ColorGreen);
+        }
+#endif
     }
 }

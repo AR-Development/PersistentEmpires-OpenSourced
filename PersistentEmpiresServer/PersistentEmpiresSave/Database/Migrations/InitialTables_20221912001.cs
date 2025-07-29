@@ -1,6 +1,25 @@
 ﻿using FluentMigrator;
+using Org.BouncyCastle.Utilities;
 using PersistentEmpiresLib;
+using PersistentEmpiresLib.Data;
+using PersistentEmpiresLib.Database.DBEntities;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using PersistentEmpiresLib.SceneScripts.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
+using static TaleWorlds.MountAndBlade.MultiplayerOptions;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System;
+using TaleWorlds.Core;
+using TaleWorlds.PlayerServices;
+using PersistentEmpiresLib.NetworkMessages.Client;
+using System.Security.AccessControl;
+using System.Xml.Linq;
+using PersistentEmpiresLib.Factions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using System.Runtime.InteropServices;
+using FluentMigrator.Runner.Versioning;
+using static PersistentEmpiresSave.Database.Repositories.DBWhitelistRepository;
 
 namespace PersistentEmpiresSave.Database.Migrations
 {
@@ -67,6 +86,22 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("WoundedUntil").AsInt64().Nullable();
 
             Execute.Sql("ALTER TABLE Players MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Armor_Body` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Armor_Cape` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Armor_Gloves` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Armor_Head` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Armor_Leg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Class` varchar(255) DEFAULT '\'perp_peasant\'' CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `CustomName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `DiscordId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Equipment_0` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Equipment_1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Equipment_2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Equipment_3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Horse` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `HorseHarness` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `Name` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `players` MODIFY `PlayerId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");            
 
             Create.Table("Inventories")
                 .WithColumn("InventoryId").AsString().PrimaryKey().NotNullable()
@@ -75,6 +110,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE Inventories MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            Execute.Sql("ALTER TABLE `inventories` MODIFY `InventoryId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("Factions")
                 .WithColumn("FactionIndex").AsInt32().PrimaryKey().NotNullable()
@@ -84,6 +120,10 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("PollUnlockedAt").AsInt64().WithDefaultValue(0)
                 .WithColumn("Marshalls").AsCustom("TEXT").Nullable();
 
+            Execute.Sql("ALTER TABLE `factions` MODIFY `BannerKey` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `factions` MODIFY `LordId` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `factions` MODIFY `Name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            
             Create.Table("Castles")
                 .WithColumn("CastleIndex").AsInt32().PrimaryKey().NotNullable()
                 .WithColumn("FactionIndex").AsInt32().NotNullable().WithDefaultValue(0);
@@ -95,6 +135,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE UpgradeableBuildings MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            Execute.Sql("ALTER TABLE `upgradeablebuildings` MODIFY `MissionObjectHash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("StockpileMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
@@ -102,6 +143,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE StockpileMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            Execute.Sql("ALTER TABLE `stockpilemarkets` MODIFY `MissionObjectHash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("HorseMarkets")
                 .WithColumn("MissionObjectHash").AsString().PrimaryKey().NotNullable()
@@ -109,6 +151,7 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE HorseMarkets MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+            Execute.Sql("ALTER TABLE `horsemarkets` MODIFY `MissionObjectHash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("Logs")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
@@ -120,6 +163,11 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("LogMessage").AsCustom("TEXT")
                 .WithColumn("AffectedPlayers").AsCustom("JSON");
 
+            Execute.Sql("ALTER TABLE `logs` MODIFY `ActionType` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `logs` MODIFY `IssuerCoordinates` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `logs` MODIFY `IssuerPlayerId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `logs` MODIFY `IssuerPlayerName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+                        
             Create.Table("BanRecords")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("PlayerId").AsString()
@@ -129,15 +177,24 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("BannedBy").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
                 .WithColumn("BanEndsAt").AsDateTime().Nullable();
+            
+            Execute.Sql("ALTER TABLE `banrecords` MODIFY `BannedBy` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `banrecords` MODIFY `PlayerId` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `banrecords` MODIFY `PlayerName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("PlayerNames")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("PlayerName").AsString()
                 .WithColumn("PlayerId").AsString();
 
+            Execute.Sql("ALTER TABLE `playernames` MODIFY `PlayerId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `playernames` MODIFY `PlayerName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+
             Create.Table("Whitelist")
                 .WithColumn("PlayerId").AsString().PrimaryKey()
                 .WithColumn("Active").AsBoolean().WithDefaultValue(true);
+
+            Execute.Sql("ALTER TABLE `whitelist` MODIFY `PlayerId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
 
             Create.Table("Identifiers")
                 .WithColumn("Identifier").AsString().NotNullable().PrimaryKey()
@@ -147,7 +204,8 @@ namespace PersistentEmpiresSave.Database.Migrations
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE Identifiers MODIFY COLUMN UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
-
+            Execute.Sql("ALTER TABLE `identifiers` MODIFY `Identifier` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;");
+            Execute.Sql("ALTER TABLE `identifiers` MODIFY `IdentifierType` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
+using PersistentEmpiresLib;
 using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
 using PersistentEmpiresSave.Database;
 using PersistentEmpiresSave.Database.Migrations;
@@ -18,7 +19,7 @@ namespace PersistentEmpiresSave
         public static string ConnectionString = "";
         public static string GetConnectionString()
         {
-            string xmlPath = ModuleHelper.GetXmlPath("PersistentEmpires", "Configs/" + XmlFile);
+            string xmlPath = ModuleHelper.GetXmlPath(Main.ModuleName, "Configs/" + XmlFile);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlPath);
             XmlNode element = xmlDocument.SelectSingleNode("/DatabaseConfig/ConnectionString");
@@ -41,6 +42,7 @@ namespace PersistentEmpiresSave
             Debug.Print("[Persistent Empires Save System] Initializing Save System !");
             DBConnection.InitializeSqlConnection(ConnectionString);
             IServiceProvider serviceProvider = CreateServices();
+
             IMigrationRunner runner = serviceProvider.GetRequiredService<IMigrationRunner>();
             runner.ListMigrations();
             runner.MigrateUp();

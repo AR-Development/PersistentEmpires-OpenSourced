@@ -1,4 +1,5 @@
 ﻿using PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using TaleWorlds.Core;
@@ -27,7 +28,7 @@ namespace PersistentEmpiresLib.SceneScripts
     public class PE_ImportExport : PE_UsableFromDistance
     {
         public string XmlFile = "importexport";
-        public string ModuleFolder = "PersistentEmpires";
+        public string ModuleFolder = Main.ModuleName;
         public string TradeableItems { get; private set; }
         private List<GoodItem> goodItems;
         private ImportExportComponent importExportComponent;
@@ -40,22 +41,29 @@ namespace PersistentEmpiresLib.SceneScripts
             TextObject descriptionMessage = new TextObject("Press {KEY} To Export/Import");
             descriptionMessage.SetTextVariable("KEY", HyperlinkTexts.GetKeyHyperlinkText(HotKeyManager.GetHotKeyId("CombatHotKeyCategory", 13)));
             base.DescriptionMessage = descriptionMessage;
-            Debug.Print("Initiating ImportExport Market With " + this.ModuleFolder + " Module");
-            string xmlPath = ModuleHelper.GetXmlPath(this.ModuleFolder, "Markets/" + this.XmlFile);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlPath);
-
-            this.TradeableItems = xmlDocument.DocumentElement.InnerText.Trim();
             this.goodItems = new List<GoodItem>();
-            foreach (string goodStr in this.TradeableItems.Split('|'))
+
+            try
             {
-                string[] goodSplitted = goodStr.Split(',');
-                ItemObject itemObject = MBObjectManager.Instance.GetObject<ItemObject>(goodSplitted[0]);
-                if (itemObject == null) continue;
-                int exportPrice = int.Parse(goodSplitted[1]);
-                int importPrice = int.Parse(goodSplitted[2]);
-                this.goodItems.Add(new GoodItem(itemObject, exportPrice, importPrice));
+                Debug.Print("Initiating ImportExport Market With " + this.ModuleFolder + " Module");
+                string xmlPath = ModuleHelper.GetXmlPath(this.ModuleFolder, "Markets/" + this.XmlFile);
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(xmlPath);
+
+                this.TradeableItems = xmlDocument.DocumentElement.InnerText.Trim();
+
+                foreach (string goodStr in this.TradeableItems.Split('|'))
+                {
+                    string[] goodSplitted = goodStr.Split(',');
+                    ItemObject itemObject = MBObjectManager.Instance.GetObject<ItemObject>(goodSplitted[0]);
+                    if (itemObject == null) continue;
+                    int exportPrice = int.Parse(goodSplitted[1]);
+                    int importPrice = int.Parse(goodSplitted[2]);
+                    this.goodItems.Add(new GoodItem(itemObject, exportPrice, importPrice));
+                }
             }
+            catch(Exception)
+            { }
         }
 
         public List<GoodItem> GetGoodItems()

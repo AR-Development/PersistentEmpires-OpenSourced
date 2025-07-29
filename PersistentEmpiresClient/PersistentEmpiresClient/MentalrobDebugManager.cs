@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using PersistentEmpiresLib;
+using System.IO;
 using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
 
@@ -15,7 +16,7 @@ namespace PersistentEmpires.Views
 
         private static void OnPrint(string arg1, ulong arg2)
         {
-            var path = Path.Combine(ModuleHelper.GetModuleFullPath("PersistentEmpires"), "debugLog.txt");
+            var path = Path.Combine(ModuleHelper.GetModuleFullPath(Main.ModuleName), "debugLog.txt");
             File.AppendAllText(path, arg1 + "\n");
         }
     }

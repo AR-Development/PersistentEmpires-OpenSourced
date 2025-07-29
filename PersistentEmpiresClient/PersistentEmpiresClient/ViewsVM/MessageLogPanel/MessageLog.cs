@@ -60,7 +60,7 @@ namespace PersistentEmpiresClient.ViewsVM.MessageLogPanel
                 if (value == _items)
                     return;
                 _items = value;
-                OnPropertyChanged(nameof(Items));
+                OnPropertyChangedWithValue(_items, nameof(Items));
             }
         }
     }

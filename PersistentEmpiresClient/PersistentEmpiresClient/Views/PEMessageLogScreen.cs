@@ -15,12 +15,12 @@ namespace PersistentEmpires.Views.Views
     [DefaultView]
     public class PEMessageLogScreen : TaleWorlds.MountAndBlade.View.MissionViews.MissionView
     {
-        private static List<KeyValuePair<string, string>> _log = new List<KeyValuePair<string, string>>();
-        private static int _counter = 0;
-        private static int _logSize = 100;
+        private List<KeyValuePair<string, string>> _log = new List<KeyValuePair<string, string>>();
+        private int _counter = 0;
+        private int _logSize = 100;
         private GauntletLayer _gauntletLayer;
         private MessageLog _dataSource = new MessageLog();
-        private static bool IsActive = false;
+        private bool IsActive = false;
 
         public PEMessageLogScreen()
         {
@@ -31,6 +31,7 @@ namespace PersistentEmpires.Views.Views
         {
             base.OnBehaviorInitialize();
             AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
+            _log = new List<KeyValuePair<string, string>>();
         }
 
         public override void OnRemoveBehavior()
@@ -45,7 +46,7 @@ namespace PersistentEmpires.Views.Views
             if (GameNetwork.IsClient)
             {
                 networkMessageHandlerRegisterer.Register<LocalMessageServer>(this.HandleLocalMessageFromServerForLog);
-                networkMessageHandlerRegisterer.Register<ShoutMessageServer>(this.HandleShoutMessageFromServerForLog);
+                networkMessageHandlerRegisterer.Register<ShoutMessageServer>(this.HandleShoutMessageFromServerForLog);                
             }
         }
 
@@ -110,12 +111,12 @@ namespace PersistentEmpires.Views.Views
 
         private void HandleShoutMessageFromServerForLog(ShoutMessageServer message)
         {
-            AddToLog($"{message.Sender.UserName}: {message.Message}");
+            AddToLog($"{message.Message}");
         }
 
         private void HandleLocalMessageFromServerForLog(LocalMessageServer message)
         {
-            AddToLog($"{message.Sender.UserName}: {message.Message}");
+            AddToLog($"{message.Message}");
         }
 
         public void AddToLog(string message)

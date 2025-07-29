@@ -109,7 +109,8 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                     if (persistentEmpireRepresentative == null) continue;
                     if (persistentEmpireRepresentative.GetHunger() > 0) continue;
                     if (peer.ControlledAgent.Health <= 10) continue;
-                    float reduceAmount = peer.ControlledAgent.Health - 10 > 10 ? 10 : 10 - peer.ControlledAgent.Health;
+                    //float reduceAmount = peer.ControlledAgent.Health - 10 > 10 ? 10 : 10 - peer.ControlledAgent.Health;
+                    float reduceAmount = peer.ControlledAgent.Health > 10 ? 2 : 0;
                     peer.ControlledAgent.Health -= reduceAmount;
                 }
                 this.LastStarvingCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -159,15 +160,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
             }
         }
 
+#if SERVER
+        public static int _counter = 0;
         public override void OnMissionTick(float dt)
         {
-            if (GameNetwork.IsServer)
-            {
-                this.ReduceHungerLoop();
-                this.StarvingCheckLoop();
-                this.EatingActionLoop();
-            }
+            if (++_counter < 5)
+                return;
+            // Reset counter
+            _counter = 0;
+            ReduceHungerLoop();
+            StarvingCheckLoop();
+            EatingActionLoop();
         }
+#endif
+
         public bool HasRefillHealthNode(XmlNode node)
         {
             return node.ChildNodes.Cast<XmlNode>().Any(x => x.Name == "RefillHealth");
@@ -202,21 +208,20 @@ namespace PersistentEmpiresLib.PersistentEmpiresMission.MissionBehaviors
                 Instance = this;
             }
             this.AddRemoveMessageHandlers(GameNetwork.NetworkMessageHandlerRegisterer.RegisterMode.Add);
-            if (GameNetwork.IsServer)
-            {
-                this.HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
-                this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
-                this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
-                this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
-                this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
-                this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
-            }
+#if SERVER
+            this.HungerInterval = ConfigManager.GetIntConfig("HungerInterval", 72); // 60 secs
+            this.HungerReduceAmount = ConfigManager.GetIntConfig("HungerReduceAmount", 1);
+            this.HungerRefillHealthLowerBoundary = ConfigManager.GetIntConfig("HungerRefillHealthLowerBoundary", 25);
+            this.HungerHealingAmount = ConfigManager.GetIntConfig("HungerHealingAmount", 10);
+            this.HungerHealingReduceAmount = ConfigManager.GetIntConfig("HungerHealingReduceAmount", 5);
+            this.HungerStartHealingUnderHealthPct = ConfigManager.GetIntConfig("HungerStartHealingUnderHealthPct", 75) / 100;
+#endif
             Debug.Print("[PE] LOADING EATABLES...");
-            this.LoadEatables("PersistentEmpires");
+            this.LoadEatables(Main.ModuleName);
 
             foreach (ModuleInfo module in ModuleHelper.GetModules())
             {
-                if (module.Id == "PersistentEmpires") continue;
+                if (module.Id == Main.ModuleName) continue;
                 this.LoadEatables(module.Id);
             }
         }

@@ -89,25 +89,25 @@ namespace PersistentEmpires.Views.Views
         {
             if (GameNetwork.MyPeer.ControlledAgent == null)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You can't do this action while dead", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError1", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             if (vm.Amount <= 0)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You can't deposit 0 amount", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError2", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             Vec3 myPos = GameNetwork.MyPeer.ControlledAgent.Position;
             Vec3 bankPos = this.ActiveEntity.GameEntity.GetGlobalFrame().origin;
             if (bankPos.Distance(myPos) > 5)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You are away from the bank.", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError3", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             PersistentEmpireRepresentative representative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
             if (representative.HaveEnoughGold(vm.Amount) == false)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You dont have enough money", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PE_Not_Enough_Gold", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             GameNetwork.BeginModuleEventAsClient();
@@ -120,19 +120,19 @@ namespace PersistentEmpires.Views.Views
         {
             if (GameNetwork.MyPeer.ControlledAgent == null)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You can't do this action while dead", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError5", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             if (vm.Amount <= 0)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You can't withdraw 0 amount", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError6", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             Vec3 myPos = GameNetwork.MyPeer.ControlledAgent.Position;
             Vec3 bankPos = this.ActiveEntity.GameEntity.GetGlobalFrame().origin;
             if (bankPos.Distance(myPos) > 5)
             {
-                InformationManager.DisplayMessage(new InformationMessage("You are away from the bank.", Color.ConvertStringToColor("#FF0000FF")));
+                InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("PEBankViewError7", null).ToString(), Color.ConvertStringToColor("#FF0000FF")));
                 return;
             }
             PersistentEmpireRepresentative representative = GameNetwork.MyPeer.GetComponent<PersistentEmpireRepresentative>();
