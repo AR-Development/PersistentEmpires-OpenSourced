@@ -97,58 +97,123 @@ This file could be empty, you can use this configuration file below if you wish 
 GeneralConfig.xml
 ```xml
 <GeneralConfig>
-  <VoiceChatEnabled>true</VoiceChatEnabled>
-  <StartingGold>1000</StartingGold>
-
-  <!-- Auto Restart Settings -->
-  <AutorestartActive>true</AutorestartActive>
-  <AutorestartIntervalHours>24</AutorestartIntervalHours>
-
-  <!-- Bank Settings -->
-  <BankAmountLimit>1000000</BankAmountLimit>
-
-  <!-- Combat Log System -->
-  <CombatlogDuration>5</CombatlogDuration>
-
-  <!-- Doctor Settings -->
-  <RequiredMedicineSkillForHealing>50</RequiredMedicineSkillForHealing>
-  <MedicineHealingAmount>15</MedicineHealingAmount>
-  <MedicineItemId>pe_doctorscalpel</MedicineItemId>
-
-  <!-- Hunger Settings -->
-  <HungerInterval>72</HungerInterval>
-  <HungerReduceAmount>1</HungerReduceAmount>
-  <HungerRefillHealthLowerBoundary>25</HungerRefillHealthLowerBoundary>
-  <HungerHealingAmount>10</HungerHealingAmount>
-  <HungerHealingReduceAmount>5</HungerHealingReduceAmount>
-  <HungerStartHealingUnderHealthPct>75</HungerStartHealingUnderHealthPct>
-
-  <!-- Lord Poll Settings -->
-  <LordPollRequiredGold>1000</LordPollRequiredGold>
-  <LordPollTimeOut>60</LordPollTimeOut>
-
-  <!-- Politics -->
-  <WarDeclareTimeOut>30</WarDeclareTimeOut>
-  <PeaceDeclareTimeOut>30</PeaceDeclareTimeOut>
-  <MaxBannerLength>100</MaxBannerLength>
-
-  <!-- Thief -->
-  <LockpickItem>pe_lockpick</LockpickItem>
-  <PickpocketingItem>pe_stealing_dagger</PickpocketingItem>
-  <RequiredPickpocketing>10</RequiredPickpocketing>
-  <PoisonItemId>pe_poison_dagger</PoisonItemId>
-  <AntidoteItemId>pe_antidote</AntidoteItemId>
-  <PickpocketingPercentageThousands>10</PickpocketingPercentageThousands>
-  <DeathMoneyDropPercentage>25</DeathMoneyDropPercentage>
-
-  <!-- Misc -->
-  <AnimationsEnabled>true</AnimationsEnabled>
-  <AgentLabelEnabled>true</AgentLabelEnabled> <!-- Banners on top of head -->
-  <DontOverrideMangonelHit>false</DontOverrideMangonelHit> <!-- Decide to override mangonel damage to the players -->
-  <NameChangeGold>5000</NameChangeGold> <!-- Name changing gold -->
-  <NameChangeCooldownInSeconds>3600</NameChangeCooldownInSeconds> <!-- Name changing cooldown -->
-  <RepairTimeoutAfterHit>60</RepairTimeoutAfterHit> <!-- Cooldown for repairs after damage -->
-  <DecapitationChance>25</DecapitationChance>
+	<!-- Autos -->
+	<AutorestartActive>true</AutorestartActive>
+	<AutorestartIntervalHours>12</AutorestartIntervalHours>
+	<AutosaveDuration>600</AutosaveDuration><!--In seconds-->
+	<!--Other-->
+	<VoiceChatEnabled>false</VoiceChatEnabled>
+	<DontOverrideMangonelHit>false</DontOverrideMangonelHit>
+	<AnimationsEnabled>true</AnimationsEnabled>
+	<WhitelistEnabled>false</WhitelistEnabled>
+	<AgentLabelEnabled>false</AgentLabelEnabled><!-- Banners on top of head -->
+	<PersistDisconnectPosition>false</PersistDisconnectPosition>	
+	<CombatlogDuration>60</CombatlogDuration>
+	<DecapitationChance>0</DecapitationChance>
+	<RepairTimeoutAfterHit>60</RepairTimeoutAfterHit><!-- Cooldown for repairs after damage -->
+	<ItemDestroyChanceOnDeath>0</ItemDestroyChanceOnDeath>
+	<CanUseSuicide>true</CanUseSuicide>
+	<!--Money-->
+	<StartingGold>0</StartingGold>
+	<DeathMoneyDropPercentage>0</DeathMoneyDropPercentage>
+	<PickpocketingPercentageThousands>0</PickpocketingPercentageThousands>
+	<RequiredPickpocketing>10</RequiredPickpocketing>
+	<!--Autopay-->
+	<AutoPayEnabled>true</AutoPayEnabled>
+	<AutoPayTimeMinutes>20</AutoPayTimeMinutes>
+	<AutoPayGold>10</AutoPayGold>
+	<!--Name change-->
+	<NameChangeGold>0</NameChangeGold>
+	<NameChangeCooldownInSeconds>1800</NameChangeCooldownInSeconds>
+	<!--Bank-->
+	<BankAmountLimit>1</BankAmountLimit>
+	<BankTaxRate>0</BankTaxRate>
+	<!--Polls-->
+	<LordPollEnabled>true</LordPollEnabled>
+	<LordPollRequiredGold>100000</LordPollRequiredGold>
+	<LordPollTimeOut>60</LordPollTimeOut>
+	<WarDeclareTimeOut>30</WarDeclareTimeOut>
+	<PeaceDeclareTimeOut>30</PeaceDeclareTimeOut>
+	<!--Health-->
+	<RequiredMedicineSkillForHealing>50</RequiredMedicineSkillForHealing>
+	<MedicineHealingAmount>15</MedicineHealingAmount>
+	<WoundingEnabled>true</WoundingEnabled>
+	<WoundingTimeMinutes>720</WoundingTimeMinutes>
+	<!--Hunger-->
+	<HungerInterval>300</HungerInterval>
+	<HungerReduceAmount>1</HungerReduceAmount>
+	<HungerRefillHealthLowerBoundary>0</HungerRefillHealthLowerBoundary>
+	<HungerHealingAmount>1</HungerHealingAmount>
+	<HungerHealingReduceAmount>0</HungerHealingReduceAmount>
+	<HungerStartHealingUnderHealthPct>100</HungerStartHealingUnderHealthPct>
+	<!--Items-->
+	<MedicineItemId>pe_doctorscalpel</MedicineItemId>
+	<LockpickItem>pe_lockpick</LockpickItem>
+	<PickpocketingItem>pe_stealing_dagger</PickpocketingItem>
+	<PoisonItemId>pe_poison_dagger</PoisonItemId>
+	<AntidoteItemId>pe_antidote</AntidoteItemId>
+	<!--Factions-->
+	<CommonerCulture>empire</CommonerCulture>
+	<OutlawCulture>empire</OutlawCulture>
+	<CommonerBanner>17.1.148.1836.1836.765.786.1.0.-30.100.0.143.-295.425.764.764.1.0.0</CommonerBanner>
+	<OutlawBanner>24.193.116.1536.1536.768.768.1.0.0</OutlawBanner>
+	<CommonerName>Commoners</CommonerName>
+	<OutlawName>Outlaws</OutlawName>
+	<CanUseDiplomacy>false</CanUseDiplomacy>
+	<MaxBannerLengt>100</MaxBannerLengt>
+	<WarDeclareTimeOut>30</WarDeclareTimeOut>
+	<PeaceDeclareTimeOut>30</PeaceDeclareTimeOut>
+	<MaxBannerLength>250</MaxBannerLength>
+	<!--Commands-->
+	<MessagePrefix>/</MessagePrefix>
+	<DefaultMessageColor>#FFFDFDFD</DefaultMessageColor>
+	<AnnounceEnabled>true</AnnounceEnabled>
+	<AnnounceColor>#FF0800FF</AnnounceColor>
+	<CommandsEnabled>true</CommandsEnabled>
+	<CommandsColor>#FFFDFDFD</CommandsColor>
+	<DiceEnabled>true</DiceEnabled>
+	<DiceColor>#FFFF6666</DiceColor>
+	<DisableEnabled>true</DisableEnabled>
+	<DisableColor>#FFFF6666</DisableColor>
+	<DiceDistance>30</DiceDistance>
+	<DiceBubble>true</DiceBubble>
+	<DoEnabled>true</DoEnabled>
+	<DoColor>#FFFF6666</DoColor>
+	<DoDistance>30</DoDistance>
+	<DoBubble>true</DoBubble>
+	<HelpEnabled>true</HelpEnabled>
+	<HelpColor>#FFFF6666</HelpColor>
+	<MeEnabled>true</MeEnabled>
+	<MeColor>#FFFF6666</MeColor>
+	<MeDistance>30</MeDistance>
+	<MeBubble>true</MeBubble>
+	<MuteEnabled>true</MuteEnabled>
+	<MuteColor>#FFFF6666</MuteColor>
+	<NameEnabled>true</NameEnabled>
+	<NameColor>#FFFF6666</NameColor>
+	<RollEnabled>true</RollEnabled>
+	<RollColor>#FFFF6666</RollColor>
+	<RollDistance>30</RollDistance>
+	<RollBubble>true</RollBubble>
+	<VMuteEnabled>true</VMuteEnabled>
+	<VmuteColor>#FFFF6666</VmuteColor>
+	<WoundsEnabled>true</WoundsEnabled>
+	<WoundsColor>#FFFF6666</WoundsColor>
+	<WoundsDistance>0</WoundsDistance>
+	<WoundsBubble>false</WoundsBubble>
+	<TeleportToPositionColor>#FFFF6666</TeleportToPositionColor>
+	<TeleportToPositionEnabled>true</TeleportToPositionEnabled>
+	<!--Discord-->
+	<DiscordAdminMessageEnabled>false</DiscordAdminMessageEnabled>
+	<DiscordAdminMessageUrl></DiscordAdminMessageUrl>
+	<DiscordAnnounceEnabled>false</DiscordAnnounceEnabled>
+	<DiscordAnnounceUrl></DiscordAnnounceUrl>
+	<DiscordServeStatusEnabled>false</DiscordServeStatusEnabled>
+	<DiscordServeStatusUrl></DiscordServeStatusUrl>
+	<DiscordExceptionEnabled>false</DiscordExceptionEnabled>
+	<DiscordExceptionUrl></DiscordExceptionUrl>
+	<DiscordLogEnabled>false</DiscordLogEnabled>
+	<DiscordLogUrl></DiscordLogUrl>
 </GeneralConfig>
 ```
 
